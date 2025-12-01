@@ -245,6 +245,39 @@
   gap: 8px;
 }
 
+/* Profile Image Styles */
+.user-profile-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.user-profile-img svg {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.mobile-user-profile-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.mobile-user-profile-img svg {
+  color: rgba(255, 255, 255, 0.9);
+}
+
 .action-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   transform: translateY(-3px) scale(1.05);
@@ -486,18 +519,53 @@
   }
 
   .user-btn {
-    padding: 0 12px;
+    padding: 0 10px;
+  }
+
+  .user-profile-img {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .user-profile-img svg {
+    width: 18px;
+    height: 18px;
   }
 }
 
 @media (max-width: 480px) {
   .user-btn {
-    width: 40px;
-    padding: 0;
+    width: auto;
+    min-width: 40px;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .user-btn svg:last-child {
-    display: none;
+  .user-profile-img {
+    width: 26px;
+    height: 26px;
+    display: flex !important;
+    visibility: visible !important;
+  }
+  
+  .user-profile-img svg {
+    width: 16px;
+    height: 16px;
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  /* Ensure mobile user profile is always visible */
+  .mobile-user-profile-img {
+    display: flex !important;
+    visibility: visible !important;
+  }
+  
+  .mobile-user-profile-img svg {
+    display: block !important;
+    visibility: visible !important;
   }
 }
 

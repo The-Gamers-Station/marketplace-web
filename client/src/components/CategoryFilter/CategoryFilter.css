@@ -46,7 +46,7 @@
   animation: slideInTop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   transition: all 0.3s ease;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .category-filter::before {
@@ -73,17 +73,55 @@
 
 /* Platform Pills */
 .platform-pills {
-  display: grid;
-  grid-template-columns: repeat(13, minmax(0, 1fr)); /* 4 أعمدة */
+  display: flex;
   gap: 10px;
   margin-bottom: 20px;
   align-items: center;
   animation: fadeInScale 0.6s ease;
- 
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 5px 5px 8px 5px;
+  position: relative;
+  margin-top: -5px;
 }
 
+/* Fade effect for scrollable content on mobile */
+@media (max-width: 768px) {
+  .platform-pills::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 5px;
+    bottom: 8px;
+    width: 30px;
+    background: linear-gradient(to right, transparent, rgba(15, 24, 35, 0.95));
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+  
+  .platform-pills:hover::after {
+    opacity: 0;
+  }
+}
+
+/* Custom scrollbar for platform pills */
 .platform-pills::-webkit-scrollbar {
-  display: none;
+  height: 4px;
+}
+
+.platform-pills::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+}
+
+.platform-pills::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.platform-pills::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .platform-pill {
@@ -103,6 +141,7 @@
   overflow: hidden;
   animation: fadeInScale 0.5s ease;
   animation-fill-mode: both;
+  flex-shrink: 0;
 }
 
 .platform-pill:nth-child(1) { animation-delay: 0.1s; }
@@ -139,21 +178,15 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-@keyframes activePulse {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
-  }
-}
-
 .platform-pill.active {
   background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 150, 255, 0.2) 100%);
   border-color: rgba(0, 212, 255, 0.4);
   color: #00d4ff;
-  animation: activePulse 2s ease-in-out infinite, pillPulse 3s ease-in-out infinite;
+  animation: pillPulse 3s ease-in-out infinite;
   transform: scale(1.05);
+  position: relative;
+  z-index: 2;
+  border-radius: 25px;
 }
 
 .platform-pill.active:hover {
@@ -341,7 +374,6 @@
   border-color: rgba(0, 212, 255, 0.3);
   color: #00d4ff;
   animation: pillPulse 2s ease-in-out infinite;
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
 }
 
 .view-btn:active {
@@ -381,8 +413,14 @@
   }
   
   .platform-pills {
-    grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4 columns for tablets */
     gap: 8px;
+    justify-content: flex-start;
+    scroll-behavior: smooth;
+  }
+  
+  .platform-pill {
+    padding: 8px 16px;
+    font-size: 13px;
   }
   
   .filter-tags {
@@ -396,30 +434,33 @@
 
 @media (max-width: 480px) {
   .platform-pills {
-    grid-template-columns: repeat(5, minmax(0, 1fr)); /* 5 columns for mobile phones */
     gap: 5px;
     margin-bottom: 15px;
+    -webkit-overflow-scrolling: touch;
   }
   
   .platform-pill {
-    padding: 6px 8px;
-    font-size: 11px;
+    padding: 7px 14px;
+    font-size: 12px;
   }
   
   .filter-tag {
     padding: 6px 12px;
     font-size: 12px;
   }
+  
+  .nav-arrow {
+    display: none;
+  }
 }
 
 @media (max-width: 360px) {
   .platform-pills {
-    grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 columns for very small screens */
     gap: 4px;
   }
   
   .platform-pill {
-    padding: 5px 6px;
-    font-size: 10px;
+    padding: 6px 12px;
+    font-size: 11px;
   }
 }

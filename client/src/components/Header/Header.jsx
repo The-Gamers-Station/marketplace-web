@@ -130,7 +130,9 @@ const Header = memo(() => {
         <div className="header-actions">
           <LanguageSwitcher />
           <button className="action-btn user-btn">
-            <User size={22} />
+            <div className="user-profile-img">
+              <User size={22} />
+            </div>
             {/* <ChevronDown size={16} /> */}
           </button>
         </div>
@@ -166,7 +168,9 @@ const Header = memo(() => {
           {/* Mobile User Section */}
           <div className="mobile-user-section">
             <button className="mobile-action-btn">
-              <User size={20} />
+              <div className="mobile-user-profile-img">
+                <User size={20} />
+              </div>
               <span>{t('header.myAccount')}</span>
             </button>
              

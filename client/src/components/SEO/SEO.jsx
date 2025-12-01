@@ -1,0 +1,136 @@
+import React from 'react';
+import { Helmet } from 'react-helmet-async';
+
+const SEO = ({ 
+  title = '',
+  description = 'اكتشف أفضل الألعاب والأجهزة والإكسسوارات من تجار موثوقين. PlayStation، Xbox، Nintendo، وأجهزة الكمبيوتر. توصيل سريع وأسعار تنافسية.',
+  keywords = 'ألعاب إلكترونية, بلايستيشن, إكس بوكس, نينتندو, ألعاب كمبيوتر, PS5, Xbox Series X, gaming, مصر',
+  image = 'https://gamersstation.eg/og-image.jpg',
+  url = 'https://gamersstation.eg',
+  type = 'website',
+  author = 'GamersStation',
+  structuredData = null,
+  canonicalUrl = null,
+  alternateLinks = [],
+  noindex = false,
+  nofollow = false
+}) => {
+  const siteTitle = 'GamersStation - أكبر سوق للألعاب الإلكترونية في مصر';
+  const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
+  const currentUrl = canonicalUrl || `${url}${typeof window !== 'undefined' ? window.location.pathname : ''}`;
+  
+  // Default structured data for Organization
+  const defaultStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "GamersStation",
+    "url": "https://gamersstation.eg",
+    "logo": "https://gamersstation.eg/logo.svg",
+    "description": "أكبر سوق للألعاب الإلكترونية في مصر",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "EG",
+      "addressRegion": "القاهرة"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+20-100-123-4567",
+      "contactType": "customer service",
+      "availableLanguage": ["Arabic", "English"]
+    },
+    "sameAs": [
+      "https://www.facebook.com/gamersstation",
+      "https://www.twitter.com/gamersstation",
+      "https://www.instagram.com/gamersstation",
+      "https://www.youtube.com/gamersstation"
+    ]
+  };
+
+  const finalStructuredData = structuredData || defaultStructuredData;
+
+  return (
+    <Helmet>
+      {/* Basic Meta Tags */}
+      <title>{fullTitle}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content={keywords} />
+      <meta name="author" content={author} />
+      
+      {/* Robots Meta Tags */}
+      <meta 
+        name="robots" 
+        content={`${noindex ? 'noindex' : 'index'}, ${nofollow ? 'nofollow' : 'follow'}, max-image-preview:large, max-snippet:-1, max-video-preview:-1`} 
+      />
+      <meta 
+        name="googlebot" 
+        content={`${noindex ? 'noindex' : 'index'}, ${nofollow ? 'nofollow' : 'follow'}, max-image-preview:large, max-snippet:-1, max-video-preview:-1`} 
+      />
+      
+      {/* Canonical URL */}
+      <link rel="canonical" href={currentUrl} />
+      
+      {/* Alternate Language Links */}
+      <link rel="alternate" hreflang="ar-EG" href={currentUrl} />
+      <link rel="alternate" hreflang="en-EG" href={`${url}/en${typeof window !== 'undefined' ? window.location.pathname : ''}`} />
+      {alternateLinks.map((link, index) => (
+        <link key={index} rel="alternate" hreflang={link.hreflang} href={link.href} />
+      ))}
+      
+      {/* Open Graph Meta Tags */}
+      <meta property="og:type" content={type} />
+      <meta property="og:url" content={currentUrl} />
+      <meta property="og:title" content={fullTitle} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={image} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:locale" content="ar_EG" />
+      <meta property="og:locale:alternate" content="en_EG" />
+      <meta property="og:site_name" content="GamersStation" />
+      
+      {/* Twitter Card Meta Tags */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@gamersstation" />
+      <meta name="twitter:creator" content="@gamersstation" />
+      <meta name="twitter:url" content={currentUrl} />
+      <meta name="twitter:title" content={fullTitle} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={image} />
+      <meta name="twitter:image:alt" content={title || 'GamersStation'} />
+      
+      {/* Article Meta Tags (for blog posts or product pages) */}
+      {type === 'article' && (
+        <>
+          <meta property="article:author" content={author} />
+          <meta property="article:published_time" content={new Date().toISOString()} />
+        </>
+      )}
+      
+      {/* Product Meta Tags */}
+      {type === 'product' && (
+        <>
+          <meta property="product:availability" content="in stock" />
+          <meta property="product:condition" content="new" />
+          <meta property="product:price:currency" content="EGP" />
+        </>
+      )}
+      
+      {/* Additional SEO Meta Tags */}
+      <meta name="theme-color" content="#0a1628" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      <meta name="apple-mobile-web-app-title" content="GamersStation" />
+      <meta name="application-name" content="GamersStation" />
+      <meta name="msapplication-TileColor" content="#0a1628" />
+      
+      {/* Structured Data */}
+      {finalStructuredData && (
+        <script type="application/ld+json">
+          {JSON.stringify(finalStructuredData)}
+        </script>
+      )}
+    </Helmet>
+  );
+};
+
+export default SEO;

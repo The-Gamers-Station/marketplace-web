@@ -1,0 +1,142 @@
+{
+  "header": {
+    "home": "Home",
+    "merchants": "Merchants",
+    "contact": "Contact Us",
+    "faq": "FAQ",
+    "searchPlaceholder": "Search for a game or product...",
+    "myAccount": "My Account",
+    "toggleNavigation": "Toggle navigation menu"
+  },
+  "hero": {
+    "mainTitle": "Your Gaming World",
+    "subtitle": "Discover the latest games and devices from the best merchants",
+    "browseGames": "Browse Games",
+    "viewOffers": "View Offers"
+  },
+  "categoryFilter": {
+    "all": "All",
+    "playstation": "PlayStation",
+    "xbox": "Xbox",
+    "nintendo": "Nintendo",
+    "pc": "PC",
+    "accessories": "Accessories"
+  },
+  "productCard": {
+    "new": "New",
+    "sale": "Sale",
+    "addToCart": "Add to Cart",
+    "viewDetails": "View Details",
+    "sar": "SAR"
+  },
+  "anonymous": "Anonymous",
+  "reviews": "reviews",
+  "noDescription": "No description available",
+  "currency": "SAR",
+  "footer": {
+    "features": {
+      "latestGames": "Latest Games",
+      "latestGamesDesc": "Get the latest games and exclusive releases",
+      "securePayment": "Secure Payment",
+      "securePaymentDesc": "Safe and encrypted transactions with highest security standards",
+      "fastShipping": "Fast Shipping",
+      "fastShippingDesc": "Quick delivery to all regions of the Kingdom",
+      "multiplePayment": "Multiple Payment Methods",
+      "multiplePaymentDesc": "Pay the way that suits you"
+    },
+    "about": {
+      "description": "Your premier platform for games and digital products in Saudi Arabia. We provide you with the latest games and best offers with quality and security guarantee."
+    },
+    "quickLinks": {
+      "title": "Quick Links",
+      "home": "Home",
+      "merchants": "Merchants",
+      "categories": "Categories",
+      "offers": "Special Offers",
+      "newArrivals": "New Arrivals"
+    },
+    "customerService": {
+      "title": "Customer Service",
+      "faq": "FAQ",
+      "contact": "Contact Us",
+      "shipping": "Shipping & Delivery",
+      "returns": "Return Policy",
+      "warranty": "Warranty"
+    },
+    "legal": {
+      "title": "Legal Information",
+      "terms": "Terms & Conditions",
+      "privacy": "Privacy Policy",
+      "cookies": "Cookie Policy",
+      "about": "About GamersStation"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "location": "Riyadh, Saudi Arabia",
+      "newsletterTitle": "Subscribe to Newsletter",
+      "newsletterDesc": "Get the latest offers and news",
+      "emailPlaceholder": "Your email",
+      "subscribe": "Subscribe"
+    },
+    "payment": {
+      "title": "Available Payment Methods:"
+    },
+    "bottom": {
+      "copyright": "© {{year}} GamersStation. All rights reserved.",
+      "sitemap": "Sitemap",
+      "accessibility": "Accessibility",
+      "helpCenter": "Help Center"
+    }
+  },
+  "pages": {
+    "landing": {
+      "featuredProducts": "Featured Products",
+      "viewAll": "View All"
+    },
+    "merchants": {
+      "title": "Merchants",
+      "searchPlaceholder": "Search for a merchant...",
+      "verified": "Verified",
+      "rating": "Rating",
+      "products": "products",
+      "joinedDate": "Joined {{date}}"
+    },
+    "productDetails": {
+      "addToCart": "Add to Cart",
+      "buyNow": "Buy Now",
+      "inStock": "In Stock",
+      "outOfStock": "Out of Stock",
+      "description": "Description",
+      "specifications": "Specifications",
+      "reviews": "Reviews",
+      "relatedProducts": "Related Products"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "searchPlaceholder": "Search questions..."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "noResults": "No results found",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "language": "Language"
+  }
+}

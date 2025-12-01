@@ -1,42 +1,31 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './CategoryFilter.css';
 
 const CategoryFilter = () => {
-  const [selectedPlatform, setSelectedPlatform] = useState('بلايستيشن');
+  const { t, i18n } = useTranslation();
+  const [selectedPlatform, setSelectedPlatform] = useState('PlayStation');
   const [selectedFilters, setSelectedFilters] = useState({
-    country: 'اكسسوارات',
-    console: 'كونسل',
-    region: 'اشرطة',
-    categories: 'الكونسولات',
+    country: 'accessories',
+    console: 'console',
+    region: 'games',
+    categories: 'consoles',
   });
 
   const platforms = [
-    { name: 'بلايستيشن', active: true },
-    { name: 'PC', active: false },
-    { name: 'XBOX', active: false },
-    { name: 'TV', active: false },
-    { name: 'PC', active: false },
-    { name: 'XBOX', active: false },
-    { name: 'TV', active: false },
-    { name: 'PC', active: false },
-    { name: 'XBOX', active: false },
-    { name: 'TV', active: false },
-    { name: 'PC', active: false },
-    { name: 'XBOX', active: false },
+    { name: t('categoryFilter.playstation'), key: 'playstation', active: true },
+    { name: t('categoryFilter.pc'), key: 'pc', active: false },
+    { name: t('categoryFilter.xbox'), key: 'xbox', active: false },
+    { name: t('categoryFilter.nintendo'), key: 'nintendo', active: false },
+    { name: t('categoryFilter.accessories'), key: 'accessories', active: false },
   ];
 
   const filters = [
-    { key: 'country', label: 'اكسسوارات' },
-    { key: 'categories', label: 'الكونسولات' },
-    { key: 'console', label: 'كونسل' },
-    { key: 'region', label: 'اشرطة' },
-    { key: 'subcategories', label: 'الكونسولات' },
-    { key: 'console2', label: 'كونسل' },
-    { key: 'region2', label: 'اشرطة' },
-    { key: 'categories2', label: 'الكونسولات' },
-    { key: 'console3', label: 'كونسل' },
-    { key: 'region3', label: 'اشرطة' },
-    { key: 'categories3', label: 'الكونسولات' },
+    { key: 'accessories', label: t('categoryFilter.accessories') },
+    { key: 'categories', label: i18n.language === 'ar' ? 'الكونسولات' : 'Consoles' },
+    { key: 'console', label: i18n.language === 'ar' ? 'كونسل' : 'Console' },
+    { key: 'region', label: i18n.language === 'ar' ? 'اشرطة' : 'Games' },
+    { key: 'subcategories', label: i18n.language === 'ar' ? 'الفئات الفرعية' : 'Subcategories' },
   ];
 
   return (
@@ -48,7 +37,7 @@ const CategoryFilter = () => {
             <button
               key={index}
               className={`platform-pill ${platform.active ? 'active' : ''}`}
-              onClick={() => setSelectedPlatform(platform.name)}
+              onClick={() => setSelectedPlatform(platform.key)}
             >
               {platform.name}
             </button>
@@ -69,7 +58,9 @@ const CategoryFilter = () => {
           <div className="view-toggle">
             <button className="view-btn active">⊞</button>
             <button className="view-btn">☰</button>
-            <span className="results-text">أظهر حسب الحصل بطاقة</span>
+            <span className="results-text">
+              {i18n.language === 'ar' ? 'أظهر حسب البطاقة' : 'Show as cards'}
+            </span>
           </div>
         </div>
       </div>

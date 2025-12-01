@@ -1,89 +1,260 @@
+/* Scroll-triggered animations for ProductGrid */
+@keyframes gridFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes staggerIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .product-grid {
-  padding: 40px 0;
+  padding: 60px 0;
+  animation: gridFadeIn 0.8s ease;
+  position: relative;
+}
+
+.product-grid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ff6b35, transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .grid-container {
-  max-width: 1400px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 32px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 32px;
+  perspective: 1000px;
+}
+
+/* Scroll-triggered animation for grid items */
+.grid-container > * {
+  opacity: 0;
+  transform: translateY(50px) scale(0.9);
+  animation: staggerIn 0.6s ease forwards;
+  animation-delay: calc(var(--item-index, 0) * 0.1s);
+}
+
+/* Manual stagger for first 8 items */
+.grid-container > *:nth-child(1) {
+  --item-index: 1;
+  animation-delay: 0.1s;
+}
+.grid-container > *:nth-child(2) {
+  --item-index: 2;
+  animation-delay: 0.2s;
+}
+.grid-container > *:nth-child(3) {
+  --item-index: 3;
+  animation-delay: 0.3s;
+}
+.grid-container > *:nth-child(4) {
+  --item-index: 4;
+  animation-delay: 0.4s;
+}
+.grid-container > *:nth-child(5) {
+  --item-index: 5;
+  animation-delay: 0.5s;
+}
+.grid-container > *:nth-child(6) {
+  --item-index: 6;
+  animation-delay: 0.6s;
+}
+.grid-container > *:nth-child(7) {
+  --item-index: 7;
+  animation-delay: 0.7s;
+}
+.grid-container > *:nth-child(8) {
+  --item-index: 8;
+  animation-delay: 0.8s;
+}
+
+/* Parallax effect on scroll */
+.grid-container.scrolled > * {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.grid-container.scrolled > *:hover {
+  transform: translateY(-10px) scale(1.02) rotateY(5deg);
 }
 
 /* Load More Button */
 .load-more {
   display: flex;
   justify-content: center;
-  margin-top: 50px;
-  padding-bottom: 50px;
+  margin-top: 64px;
+  padding-bottom: 80px;
+}
+
+@keyframes loadMorePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 107, 53, 0);
+  }
 }
 
 .load-more-btn {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 30px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 25px;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 14px;
+  gap: 12px;
+  padding: 16px 40px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 100px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+  animation: floatUp 0.8s ease;
+  animation-delay: 1s;
+  animation-fill-mode: both;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.load-more-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 107, 53, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.load-more-btn:hover::before {
+  width: 200px;
+  height: 200px;
 }
 
 .load-more-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.8);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
+  animation: loadMorePulse 1s ease infinite;
+}
+
+.load-more-btn:active {
+  transform: translateY(0) scale(0.98);
 }
 
 .arrow-down {
   font-size: 12px;
-  transition: transform 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .load-more-btn:hover .arrow-down {
-  transform: translateY(2px);
+  transform: translateY(5px);
+  animation: bounce 0.5s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(5px);
+  }
 }
 
 /* Responsive Grid */
 @media (max-width: 1400px) {
   .grid-container {
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 28px;
+    padding: 0 28px;
   }
 }
 
 @media (max-width: 1200px) {
   .grid-container {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    padding: 0 24px;
   }
 }
 
 @media (max-width: 768px) {
   .product-grid {
-    padding: 30px 0;
+    padding: 40px 0;
   }
   
   .grid-container {
-    padding: 0 15px;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 15px;
+    padding: 0 20px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
   }
   
   .load-more {
-    margin-top: 30px;
-    padding-bottom: 30px;
+    margin-top: 40px;
+    padding-bottom: 40px;
+  }
+  
+  .load-more-btn {
+    padding: 14px 32px;
+    font-size: 14px;
   }
 }
 
 @media (max-width: 480px) {
   .grid-container {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 0 16px;
+  }
+  
+  .product-grid {
+    padding: 32px 0;
   }
 }

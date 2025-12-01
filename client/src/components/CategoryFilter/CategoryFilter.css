@@ -1,24 +1,85 @@
+/* Modern animations for CategoryFilter */
+@keyframes slideInTop {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pillPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes shimmerEffect {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+
 .category-filter {
   background: rgba(15, 24, 35, 0.95);
   padding: 20px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  animation: slideInTop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.category-filter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(0, 212, 255, 0.05),
+    transparent);
+  animation: shimmerEffect 3s infinite;
 }
 
 .filter-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 20px;
+  position: relative;
+  z-index: 1;
 }
 
 /* Platform Pills */
 .platform-pills {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(13, minmax(0, 1fr)); /* 4 أعمدة */
   gap: 10px;
   margin-bottom: 20px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding-bottom: 5px;
   align-items: center;
+  animation: fadeInScale 0.6s ease;
+ 
 }
 
 .platform-pills::-webkit-scrollbar {
@@ -34,23 +95,78 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   white-space: nowrap;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInScale 0.5s ease;
+  animation-fill-mode: both;
+}
+
+.platform-pill:nth-child(1) { animation-delay: 0.1s; }
+.platform-pill:nth-child(2) { animation-delay: 0.15s; }
+.platform-pill:nth-child(3) { animation-delay: 0.2s; }
+.platform-pill:nth-child(4) { animation-delay: 0.25s; }
+.platform-pill:nth-child(5) { animation-delay: 0.3s; }
+.platform-pill:nth-child(6) { animation-delay: 0.35s; }
+.platform-pill:nth-child(7) { animation-delay: 0.4s; }
+.platform-pill:nth-child(8) { animation-delay: 0.45s; }
+
+.platform-pill::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.platform-pill:hover::before {
+  width: 100px;
+  height: 100px;
 }
 
 .platform-pill:hover {
   background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.8);
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes activePulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+  }
 }
 
 .platform-pill.active {
   background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 150, 255, 0.2) 100%);
   border-color: rgba(0, 212, 255, 0.4);
   color: #00d4ff;
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+  animation: activePulse 2s ease-in-out infinite, pillPulse 3s ease-in-out infinite;
+  transform: scale(1.05);
+}
+
+.platform-pill.active:hover {
+  transform: translateY(-3px) scale(1.1);
+}
+
+@keyframes arrowBounce {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(3px);
+  }
 }
 
 .nav-arrow {
@@ -62,16 +178,33 @@
   color: rgba(255, 255, 255, 0.6);
   font-size: 18px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: fadeInScale 0.6s ease;
+  animation-delay: 0.5s;
+  animation-fill-mode: both;
 }
 
 .nav-arrow:hover {
   background: rgba(255, 255, 255, 0.1);
-  transform: translateX(2px);
+  transform: rotate(360deg) scale(1.1);
+  color: #00d4ff;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+}
+
+.nav-arrow:active {
+  transform: scale(0.95);
+}
+
+.nav-arrow.left:hover {
+  animation: arrowBounce 0.5s ease infinite reverse;
+}
+
+.nav-arrow.right:hover {
+  animation: arrowBounce 0.5s ease infinite;
 }
 
 /* Filter Tags */
@@ -80,6 +213,20 @@
   gap: 12px;
   align-items: center;
   flex-wrap: wrap;
+  animation: fadeInScale 0.7s ease;
+  animation-delay: 0.3s;
+  animation-fill-mode: both;
+}
+
+@keyframes tagSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .filter-tag {
@@ -91,13 +238,44 @@
   font-size: 13px;
   font-weight: 400;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+  animation: tagSlide 0.5s ease;
+  animation-fill-mode: both;
+}
+
+.filter-tag:nth-child(1) { animation-delay: 0.1s; }
+.filter-tag:nth-child(2) { animation-delay: 0.15s; }
+.filter-tag:nth-child(3) { animation-delay: 0.2s; }
+.filter-tag:nth-child(4) { animation-delay: 0.25s; }
+.filter-tag:nth-child(5) { animation-delay: 0.3s; }
+
+.filter-tag::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.filter-tag:hover::after {
+  left: 100%;
 }
 
 .filter-tag:hover {
   background: rgba(255, 255, 255, 0.06);
   color: rgba(255, 255, 255, 0.7);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.filter-tag:active {
+  transform: translateY(0) scale(0.98);
 }
 
 /* View Toggle */
@@ -106,6 +284,18 @@
   gap: 10px;
   align-items: center;
   margin-left: auto;
+  animation: fadeInScale 0.8s ease;
+  animation-delay: 0.6s;
+  animation-fill-mode: both;
+}
+
+@keyframes iconRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .view-btn {
@@ -117,21 +307,56 @@
   color: rgba(255, 255, 255, 0.5);
   font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+
+.view-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  background: rgba(0, 212, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.view-btn:hover::before {
+  opacity: 1;
 }
 
 .view-btn:hover {
   background: rgba(255, 255, 255, 0.06);
   color: rgba(255, 255, 255, 0.7);
+  animation: iconRotate 0.5s ease;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
 .view-btn.active {
   background: rgba(0, 212, 255, 0.1);
   border-color: rgba(0, 212, 255, 0.3);
   color: #00d4ff;
+  animation: pillPulse 2s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+}
+
+.view-btn:active {
+  transform: scale(0.95);
+}
+
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .results-text {
@@ -139,6 +364,14 @@
   font-size: 12px;
   margin-right: 10px;
   white-space: nowrap;
+  animation: countUp 0.6s ease;
+  animation-delay: 0.7s;
+  animation-fill-mode: both;
+  transition: color 0.3s ease;
+}
+
+.results-text:hover {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* Responsive */
@@ -147,11 +380,46 @@
     padding: 0 15px;
   }
   
+  .platform-pills {
+    grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4 columns for tablets */
+    gap: 8px;
+  }
+  
   .filter-tags {
     gap: 8px;
   }
   
   .view-toggle {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .platform-pills {
+    grid-template-columns: repeat(5, minmax(0, 1fr)); /* 5 columns for mobile phones */
+    gap: 5px;
+    margin-bottom: 15px;
+  }
+  
+  .platform-pill {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+  
+  .filter-tag {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .platform-pills {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 columns for very small screens */
+    gap: 4px;
+  }
+  
+  .platform-pill {
+    padding: 5px 6px;
+    font-size: 10px;
   }
 }

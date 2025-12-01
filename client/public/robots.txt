@@ -1,0 +1,84 @@
+# GamersStation Robots.txt
+# https://gamersstation.eg/
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Specific directives for major search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 0
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 0
+
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 0
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Disallow access to admin and private areas
+User-agent: *
+Disallow: /admin/
+Disallow: /api/admin/
+Disallow: /api/auth/
+Disallow: /private/
+Disallow: /checkout/
+Disallow: /cart/
+Disallow: /account/
+Disallow: /*.json$
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+Disallow: /*?*page=
+Allow: /api/products
+Allow: /api/categories
+Allow: /api/merchants
+
+# Allow access to assets
+Allow: /*.js
+Allow: /*.css
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.gif
+Allow: /*.png
+Allow: /*.svg
+Allow: /*.webp
+Allow: /*.woff
+Allow: /*.woff2
+Allow: /*.ttf
+Allow: /*.eot
+
+# Sitemap location
+Sitemap: https://gamersstation.eg/sitemap.xml
+Sitemap: https://gamersstation.eg/sitemap-products.xml
+Sitemap: https://gamersstation.eg/sitemap-categories.xml
+Sitemap: https://gamersstation.eg/sitemap-merchants.xml
+
+# Cache control for crawlers
+# Visit-time: 0000-0600

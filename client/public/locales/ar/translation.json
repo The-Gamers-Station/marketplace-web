@@ -1,0 +1,142 @@
+{
+  "header": {
+    "home": "الرئيسية",
+    "merchants": "التجار",
+    "contact": "تواصل معنا",
+    "faq": "الأسئلة الشائعة",
+    "searchPlaceholder": "ابحث عن لعبة أو منتج...",
+    "myAccount": "حسابي",
+    "toggleNavigation": "تبديل قائمة التنقل"
+  },
+  "hero": {
+    "mainTitle": "عالمك للألعاب",
+    "subtitle": "اكتشف أحدث الألعاب والأجهزة من أفضل التجار",
+    "browseGames": "تصفح الألعاب",
+    "viewOffers": "عرض العروض"
+  },
+  "categoryFilter": {
+    "all": "الكل",
+    "playstation": "بلايستيشن",
+    "xbox": "إكس بوكس",
+    "nintendo": "نينتندو",
+    "pc": "كمبيوتر",
+    "accessories": "إكسسوارات"
+  },
+  "productCard": {
+    "new": "جديد",
+    "sale": "تخفيض",
+    "addToCart": "أضف للسلة",
+    "viewDetails": "عرض التفاصيل",
+    "sar": "ر.س"
+  },
+  "anonymous": "مجهول",
+  "reviews": "تقييمات",
+  "noDescription": "لا يوجد وصف متاح",
+  "currency": "ر.س",
+  "footer": {
+    "features": {
+      "latestGames": "أحدث الألعاب",
+      "latestGamesDesc": "احصل على أحدث الألعاب والإصدارات الحصرية",
+      "securePayment": "دفع آمن",
+      "securePaymentDesc": "معاملات آمنة ومشفرة بأعلى معايير الحماية",
+      "fastShipping": "شحن سريع",
+      "fastShippingDesc": "توصيل سريع لجميع أنحاء المملكة",
+      "multiplePayment": "طرق دفع متعددة",
+      "multiplePaymentDesc": "ادفع بالطريقة التي تناسبك"
+    },
+    "about": {
+      "description": "منصتك الأولى للألعاب والمنتجات الرقمية في المملكة العربية السعودية. نوفر لك أحدث الألعاب وأفضل العروض مع ضمان الجودة والأمان."
+    },
+    "quickLinks": {
+      "title": "روابط سريعة",
+      "home": "الرئيسية",
+      "merchants": "التجار",
+      "categories": "الأقسام",
+      "offers": "العروض الخاصة",
+      "newArrivals": "وصل حديثاً"
+    },
+    "customerService": {
+      "title": "خدمة العملاء",
+      "faq": "الأسئلة الشائعة",
+      "contact": "تواصل معنا",
+      "shipping": "الشحن والتوصيل",
+      "returns": "سياسة الإرجاع",
+      "warranty": "الضمان"
+    },
+    "legal": {
+      "title": "معلومات قانونية",
+      "terms": "الشروط والأحكام",
+      "privacy": "سياسة الخصوصية",
+      "cookies": "سياسة الكوكيز",
+      "about": "عن GamersStation"
+    },
+    "contact": {
+      "title": "تواصل معنا",
+      "location": "الرياض، المملكة العربية السعودية",
+      "newsletterTitle": "اشترك في النشرة البريدية",
+      "newsletterDesc": "احصل على آخر العروض والأخبار",
+      "emailPlaceholder": "بريدك الإلكتروني",
+      "subscribe": "اشترك"
+    },
+    "payment": {
+      "title": "طرق الدفع المتاحة:"
+    },
+    "bottom": {
+      "copyright": "© {{year}} GamersStation. جميع الحقوق محفوظة.",
+      "sitemap": "خريطة الموقع",
+      "accessibility": "إمكانية الوصول",
+      "helpCenter": "مركز المساعدة"
+    }
+  },
+  "pages": {
+    "landing": {
+      "featuredProducts": "المنتجات المميزة",
+      "viewAll": "عرض الكل"
+    },
+    "merchants": {
+      "title": "التجار",
+      "searchPlaceholder": "ابحث عن تاجر...",
+      "verified": "موثق",
+      "rating": "التقييم",
+      "products": "منتجات",
+      "joinedDate": "انضم في {{date}}"
+    },
+    "productDetails": {
+      "addToCart": "أضف إلى السلة",
+      "buyNow": "اشتر الآن",
+      "inStock": "متوفر",
+      "outOfStock": "نفذ المخزون",
+      "description": "الوصف",
+      "specifications": "المواصفات",
+      "reviews": "التقييمات",
+      "relatedProducts": "منتجات ذات صلة"
+    },
+    "faq": {
+      "title": "الأسئلة الشائعة",
+      "searchPlaceholder": "ابحث في الأسئلة..."
+    },
+    "contact": {
+      "title": "تواصل معنا",
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "subject": "الموضوع",
+      "message": "الرسالة",
+      "send": "إرسال"
+    }
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ",
+    "retry": "إعادة المحاولة",
+    "noResults": "لا توجد نتائج",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "close": "إغلاق",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "language": "اللغة"
+  }
+}

@@ -59,7 +59,8 @@
   overflow: hidden;
   padding: 100px 20px 60px;
   direction: rtl;
-  animation: heroEntrance 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  animation: heroEntrance 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: transform, opacity;
 }
 
 /* Background Elements */
@@ -260,10 +261,12 @@
   flex-wrap: wrap;
   opacity: 0;
   transform: translateY(20px);
+  animation-fill-mode: both;
+  will-change: transform, opacity;
 }
 
 .hero-badges.animate-in {
-  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards, elasticScale 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both, elasticScale 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 @keyframes elasticScale {
@@ -347,10 +350,12 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
 }
 
 .hero-title.animate-in {
-  animation: fadeInUp 0.8s 0.1s cubic-bezier(0.4, 0, 0.2, 1) forwards, textGlow 3s ease-in-out infinite alternate;
+  animation: fadeInUp 0.8s 0.1s cubic-bezier(0.4, 0, 0.2, 1) both, textGlow 3s 0.8s ease-in-out infinite alternate;
 }
 
 @keyframes textGlow {
@@ -420,10 +425,12 @@
   line-height: 1.8;
   opacity: 0;
   transform: translateY(20px);
+  animation-fill-mode: both;
+  will-change: transform, opacity;
 }
 
 .hero-subtitle.animate-in {
-  animation: fadeInUp 0.8s 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: fadeInUp 0.8s 0.2s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 /* Stats */
@@ -434,10 +441,12 @@
   opacity: 0;
   transform: translateY(20px);
   padding: 20px 0;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
 }
 
 .hero-stats.animate-in {
-  animation: fadeInUp 0.8s 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: fadeInUp 0.8s 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 .stat {
@@ -474,10 +483,12 @@
   flex-wrap: wrap;
   opacity: 0;
   transform: translateY(20px);
+  animation-fill-mode: both;
+  will-change: transform, opacity;
 }
 
 .hero-actions.animate-in {
-  animation: fadeInUp 0.8s 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: fadeInUp 0.8s 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 .btn-primary,
@@ -568,10 +579,12 @@
   gap: 25px;
   opacity: 0;
   transform: translateY(20px);
+  animation-fill-mode: both;
+  will-change: transform, opacity;
 }
 
 .trust-badges.animate-in {
-  animation: fadeInUp 0.8s 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: fadeInUp 0.8s 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 .trust-item {
@@ -601,10 +614,12 @@
   transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
   opacity: 0;
   animation-delay: 0.6s;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
 }
 
 .hero-image-wrapper.animate-in {
-  animation: fadeInScale 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: fadeInScale 1s 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 /* Gaming Visual */
@@ -858,6 +873,10 @@
 
 /* Animations */
 @keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
   to {
     opacity: 1;
     transform: translateY(0);
@@ -865,6 +884,10 @@
 }
 
 @keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
   to {
     opacity: 1;
     transform: scale(1);

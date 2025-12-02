@@ -51,7 +51,7 @@ i18n
     
     // React optimizations
     react: {
-      useSuspense: true, // Enable suspense for better loading
+      useSuspense: false, // Disable suspense to prevent loading issues
       bindI18n: 'languageChanged loaded',
       bindI18nStore: 'added removed',
       transEmptyNodeValue: '',

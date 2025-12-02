@@ -1,0 +1,123 @@
+/* Scroll to Top Button Styles */
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B35 0%, #FF8E53 100%);
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.scroll-to-top-btn:hover {
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: 0 8px 30px rgba(255, 107, 53, 0.6);
+  background: linear-gradient(135deg, #FF8E53 0%, #FF6B35 100%);
+}
+
+.scroll-to-top-btn:active {
+  transform: translateY(-2px) scale(0.95);
+}
+
+.scroll-to-top-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.scroll-to-top-btn:hover svg {
+  transform: translateY(-2px);
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Pulse animation on hover */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4);
+  }
+  50% {
+    box-shadow: 0 5px 30px rgba(255, 107, 53, 0.8);
+  }
+  100% {
+    box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4);
+  }
+}
+
+.scroll-to-top-btn:hover {
+  animation: pulse 1.5s infinite;
+}
+
+/* RTL Support - button appears on the right for Arabic */
+body[dir="rtl"] .scroll-to-top-btn {
+  left: auto;
+  right: 30px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .scroll-to-top-btn {
+    bottom: 20px;
+    left: 20px;
+    width: 45px;
+    height: 45px;
+  }
+  
+  .scroll-to-top-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  body[dir="rtl"] .scroll-to-top-btn {
+    left: auto;
+    right: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .scroll-to-top-btn {
+    bottom: 15px;
+    left: 15px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .scroll-to-top-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  body[dir="rtl"] .scroll-to-top-btn {
+    left: auto;
+    right: 15px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .scroll-to-top-btn {
+    background: linear-gradient(135deg, #FF8E53 0%, #FFB347 100%);
+  }
+  
+  .scroll-to-top-btn:hover {
+    background: linear-gradient(135deg, #FFB347 0%, #FF8E53 100%);
+  }
+}

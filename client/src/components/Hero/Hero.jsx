@@ -18,7 +18,10 @@ const Hero = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    setIsVisible(true);
+    // Add a small delay to ensure DOM is ready and avoid initial flicker
+    const timer = requestAnimationFrame(() => {
+      setIsVisible(true);
+    });
 
     const handleMouseMove = (e) => {
       const { clientX, clientY } = e;
@@ -28,7 +31,11 @@ const Hero = () => {
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      cancelAnimationFrame(timer);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
 
   return (
@@ -73,13 +80,13 @@ const Hero = () => {
           <h1 className={`hero-title ${isVisible ? 'animate-in' : ''}`}>
             <span className="title-line">
               <span className="gradient-text">
-                {i18n.language === 'ar' ? 'منصتك الأولى' : 'Your Premier Platform'}
+                {t('hero.platform')}
               </span>
             </span>
             <span className="title-line">
-              {i18n.language === 'ar' ? 'للألعاب والمنتجات' : 'for Games and Digital'}
+              {t('hero.forGames')}
               <span className="highlight">
-                {i18n.language === 'ar' ? ' الرقمية' : ' Products'}
+                {t('hero.products')}
               </span>
             </span>
           </h1>
@@ -99,17 +106,17 @@ const Hero = () => {
           <div className={`hero-stats ${isVisible ? 'animate-in' : ''}`}>
             <div className="stat">
               <span className="stat-number">10K+</span>
-              <span className="stat-label">{i18n.language === 'ar' ? 'منتج' : 'Products'}</span>
+              <span className="stat-label">{t('hero.productsCount')}</span>
             </div>
             <div className="stat-divider"></div>
             <div className="stat">
               <span className="stat-number">500+</span>
-              <span className="stat-label">{i18n.language === 'ar' ? 'تاجر موثوق' : 'Trusted Merchants'}</span>
+              <span className="stat-label">{t('hero.trustedMerchants')}</span>
             </div>
             <div className="stat-divider"></div>
             <div className="stat">
               <span className="stat-number">50K+</span>
-              <span className="stat-label">{i18n.language === 'ar' ? 'عميل سعيد' : 'Happy Customers'}</span>
+              <span className="stat-label">{t('hero.happyCustomers')}</span>
             </div>
           </div>
 

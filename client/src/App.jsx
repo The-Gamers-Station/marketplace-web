@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useEffect, memo } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import './App.css';
 
 // Lazy load pages for better performance with preloading
@@ -21,15 +22,27 @@ const ProductDetailsPage = lazy(() =>
   import(/* webpackChunkName: "product" */ './pages/ProductDetailsPage/ProductDetailsPage')
 );
 
-// Loading component with better UX
-const PageLoader = memo(() => (
-  <div className="page-loader">
-    <div className="loader-container">
-      <div className="loader-spinner"></div>
-      <p className="loader-text">Loading...</p>
+// Modern Loading component with professional design
+const PageLoader = memo(() => {
+  const { t } = useTranslation();
+  
+  return (
+    <div className="page-loader">
+      <div className="loader-container">
+        <div className="modern-loader">
+          <div className="loader-ring">
+            <div className="loader-ring-inner"></div>
+          </div>
+          <img src="/logo.svg" alt="GamersStation" className="loader-logo" />
+        </div>
+        <div className="loader-progress">
+          <div className="loader-progress-bar"></div>
+        </div>
+        <p className="loader-text">{t('common.loading')}</p>
+      </div>
     </div>
-  </div>
-));
+  );
+});
 
 PageLoader.displayName = 'PageLoader';
 
@@ -75,6 +88,7 @@ function App() {
               <Route path="/product/:id" element={<ProductDetailsPage />} />
             </Routes>
           </Suspense>
+          <ScrollToTop />
         </div>
       </Router>
     </HelmetProvider>

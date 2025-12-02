@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   ChevronLeft,
   ChevronRight,
@@ -29,6 +30,7 @@ import SEO from '../../components/SEO/SEO';
 import './ProductDetailsPage.css';
 
 const ProductDetailsPage = () => {
+  const { t, i18n } = useTranslation();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
@@ -248,11 +250,9 @@ const ProductDetailsPage = () => {
       {/* Breadcrumb */}
       <div className="breadcrumb">
         <div className="container">
-          <a href="/">الرئيسية</a>
+          <a href="/">{t('pages.productDetails.home')}</a>
           <ChevronLeft size={16} />
-          {/* <a href="/category">أجهزة الألعاب</a> */}
-          {/* <ChevronLeft size={16} /> */}
-          <span>{product.name}</span>
+          <span>{i18n.language === 'ar' ? product.arabicName : product.name}</span>
         </div>
       </div>
 
@@ -266,11 +266,11 @@ const ProductDetailsPage = () => {
                 <div className="badges">
                   <span className="badge-bestseller">
                     <Zap size={14} />
-                    الأكثر مبيعاً
+                    {t('pages.productDetails.bestSeller')}
                   </span>
                   <span className="badge-verified">
                     <Check size={14} />
-                    منتج أصلي
+                    {t('pages.productDetails.originalProduct')}
                   </span>
                 </div>
                 <h1 className="product-title">{product.name}</h1>
@@ -288,12 +288,12 @@ const ProductDetailsPage = () => {
                       ))}
                     </div>
                     <span className="rating-value">{product.rating}</span>
-                    <span className="reviews-count">({product.reviews} تقييم)</span>
+                    <span className="reviews-count">({product.reviews} {t('pages.productDetails.reviews')})</span>
                   </div>
                   <div className="meta-separator">•</div>
                   <div className="sold-count">
                     <Package size={16} />
-                    <span>{product.sold} قطعة بيعت</span>
+                    <span>{product.sold} {t('pages.productDetails.itemsSold')}</span>
                   </div>
                   <div className="meta-separator">•</div>
                   <div className="sku">
@@ -306,20 +306,20 @@ const ProductDetailsPage = () => {
                 <div className="price-container">
                   <div className="current-price">
                     <span className="price-value">{product.price}</span>
-                    <span className="currency">ر.س</span>
+                    <span className="currency">{t('currency')}</span>
                   </div>
                   <div className="original-price">
-                    <span>{product.originalPrice} ر.س</span>
+                    <span>{product.originalPrice} {t('currency')}</span>
                   </div>
                   <div className="savings">
-                    وفر {product.originalPrice - product.price} ر.س
+                    {t('pages.productDetails.save')} {product.originalPrice - product.price} {t('currency')}
                   </div>
                 </div>
               </div>
 
               {/* Variants */}
               <div className="variants-section">
-                <h3>الخيارات المتاحة:</h3>
+                <h3>{t('pages.productDetails.availableOptions')}</h3>
                 <div className="variants-list">
                   {product.variants.map((variant) => (
                     <button
@@ -329,8 +329,8 @@ const ProductDetailsPage = () => {
                       disabled={!variant.available}
                     >
                       <span className="variant-name">{variant.name}</span>
-                      <span className="variant-price">{variant.price} ر.س</span>
-                      {!variant.available && <span className="out-of-stock">نفذ المخزون</span>}
+                      <span className="variant-price">{variant.price} {t('currency')}</span>
+                      {!variant.available && <span className="out-of-stock">{t('pages.productDetails.outOfStock')}</span>}
                     </button>
                   ))}
                 </div>
@@ -341,22 +341,22 @@ const ProductDetailsPage = () => {
                 <div className="feature-item">
                   <Shield className="feature-icon" />
                   <div className="feature-text">
-                    <strong>ضمان أصلي</strong>
-                    <span>سنة كاملة</span>
+                    <strong>{t('pages.productDetails.originalWarranty')}</strong>
+                    <span>{t('pages.productDetails.fullYear')}</span>
                   </div>
                 </div>
                 <div className="feature-item">
                   <Truck className="feature-icon" />
                   <div className="feature-text">
-                    <strong>توصيل سريع</strong>
-                    <span>خلال 2-3 أيام</span>
+                    <strong>{t('pages.productDetails.fastDelivery')}</strong>
+                    <span>{t('pages.productDetails.within2to3Days')}</span>
                   </div>
                 </div>
                 <div className="feature-item">
                   <RefreshCw className="feature-icon" />
                   <div className="feature-text">
-                    <strong>إرجاع مجاني</strong>
-                    <span>خلال 14 يوم</span>
+                    <strong>{t('pages.productDetails.freeReturns')}</strong>
+                    <span>{t('pages.productDetails.within14Days')}</span>
                   </div>
                 </div>
               </div>
@@ -364,7 +364,7 @@ const ProductDetailsPage = () => {
               {/* Purchase Section */}
               <div className="purchase-section">
                 <div className="quantity-selector">
-                  <label>الكمية:</label>
+                  <label>{t('pages.productDetails.quantity')}</label>
                   <div className="quantity-controls">
                     <button onClick={() => handleQuantityChange('decrease')}>
                       <Minus size={18} />
@@ -379,10 +379,10 @@ const ProductDetailsPage = () => {
                 <div className="action-buttons">
                   <button className="btn-add-cart">
                     <ShoppingCart size={20} />
-                    أضف للسلة
+                    {t('pages.productDetails.addToCart')}
                   </button>
                   <button className="btn-buy-now">
-                    اشتري الآن
+                    {t('pages.productDetails.buyNow')}
                   </button>
                   <button 
                     className={`btn-wishlist ${isWishlisted ? 'active' : ''}`}
@@ -400,20 +400,20 @@ const ProductDetailsPage = () => {
               <div className="delivery-info">
                 <MapPin size={18} />
                 <div>
-                  <strong>التوصيل إلى:</strong>
-                  <a href="#">الرياض - حي النخيل</a>
-                  <span className="delivery-time">التوصيل خلال 2-3 أيام عمل</span>
+                  <strong>{t('pages.productDetails.deliverTo')}</strong>
+                  <a href="#">{t('pages.productDetails.riyadhNakhil')}</a>
+                  <span className="delivery-time">{t('pages.productDetails.deliveryTime')}</span>
                 </div>
               </div>
 
               {/* Seller Info */}
               <div className="seller-info">
                 <div className="seller-header">
-                  <h3>البائع</h3>
+                  <h3>{t('pages.productDetails.seller')}</h3>
                   {product.seller.verified && (
                     <span className="verified-badge">
                       <Award size={14} />
-                      موثق
+                      {t('pages.productDetails.verified')}
                     </span>
                   )}
                 </div>
@@ -425,11 +425,11 @@ const ProductDetailsPage = () => {
                       {product.seller.rating}
                     </span>
                     <span>•</span>
-                    <span>{product.seller.products} منتج</span>
+                    <span>{product.seller.products} {t('pages.productDetails.product')}</span>
                     <span>•</span>
-                    <span>رد خلال {product.seller.responseTime}</span>
+                    <span>{t('pages.productDetails.responseWithin')} {product.seller.responseTime}</span>
                   </div>
-                  <a href="#" className="visit-store">زيارة المتجر</a>
+                  <a href="#" className="visit-store">{t('pages.productDetails.visitStore')}</a>
                 </div>
               </div>
             </div>
@@ -489,35 +489,35 @@ const ProductDetailsPage = () => {
                 className={`tab-btn ${activeTab === 'description' ? 'active' : ''}`}
                 onClick={() => setActiveTab('description')}
               >
-                الوصف
+                {t('pages.productDetails.description')}
               </button>
               <button 
                 className={`tab-btn ${activeTab === 'features' ? 'active' : ''}`}
                 onClick={() => setActiveTab('features')}
               >
-                المميزات
+                {t('pages.productDetails.features')}
               </button>
               <button 
                 className={`tab-btn ${activeTab === 'specifications' ? 'active' : ''}`}
                 onClick={() => setActiveTab('specifications')}
               >
-                المواصفات
+                {t('pages.productDetails.specifications')}
               </button>
               <button 
                 className={`tab-btn ${activeTab === 'reviews' ? 'active' : ''}`}
                 onClick={() => setActiveTab('reviews')}
               >
-                التقييمات ({product.reviews})
+                {t('pages.productDetails.reviews')} ({product.reviews})
               </button>
             </div>
 
             <div className="tabs-content">
               {activeTab === 'description' && (
                 <div className="tab-panel description-panel">
-                  <h2>وصف المنتج</h2>
+                  <h2>{t('pages.productDetails.productDescription')}</h2>
                   <p>{product.description}</p>
                   <div className="highlights">
-                    <h3>أهم المميزات:</h3>
+                    <h3>{t('pages.productDetails.keyFeatures')}</h3>
                     <ul>
                       {product.features.slice(0, 4).map((feature, index) => (
                         <li key={index}>
@@ -532,7 +532,7 @@ const ProductDetailsPage = () => {
 
               {activeTab === 'features' && (
                 <div className="tab-panel features-panel">
-                  <h2>مميزات المنتج</h2>
+                  <h2>{t('pages.productDetails.productFeatures')}</h2>
                   <div className="features-grid">
                     {product.features.map((feature, index) => (
                       <div key={index} className="feature-card">
@@ -548,7 +548,7 @@ const ProductDetailsPage = () => {
 
               {activeTab === 'specifications' && (
                 <div className="tab-panel specifications-panel">
-                  <h2>المواصفات الفنية</h2>
+                  <h2>{t('pages.productDetails.technicalSpecs')}</h2>
                   <table className="specs-table">
                     <tbody>
                       {Object.entries(product.specifications).map(([key, value], index) => (
@@ -565,10 +565,10 @@ const ProductDetailsPage = () => {
               {activeTab === 'reviews' && (
                 <div className="tab-panel reviews-panel">
                   <div className="reviews-header">
-                    <h2>تقييمات العملاء</h2>
+                    <h2>{t('pages.productDetails.customerReviews')}</h2>
                     <button className="write-review-btn">
                       <MessageSquare size={18} />
-                      اكتب تقييم
+                      {t('pages.productDetails.writeReview')}
                     </button>
                   </div>
                   
@@ -584,7 +584,7 @@ const ProductDetailsPage = () => {
                           />
                         ))}
                       </div>
-                      <div className="total-reviews">بناءً على {product.reviews} تقييم</div>
+                      <div className="total-reviews">{t('pages.productDetails.basedOn')} {product.reviews} {t('pages.productDetails.review')}</div>
                     </div>
                     
                     <div className="rating-bars">
@@ -639,7 +639,7 @@ const ProductDetailsPage = () => {
                         <div className="review-footer">
                           <button className="helpful-btn">
                             <ThumbsUp size={16} />
-                            مفيد ({review.helpful})
+                            {t('pages.productDetails.helpful')} ({review.helpful})
                           </button>
                         </div>
                       </div>
@@ -655,17 +655,17 @@ const ProductDetailsPage = () => {
             <div className="related-header">
               <div className="related-title-section">
                 <h2 className="related-title">
-                  <span className="title-text">منتجات ذات صلة</span>
+                  <span className="title-text">{t('pages.productDetails.relatedProducts')}</span>
                   <span className="title-decoration"></span>
                 </h2>
-                <p className="related-subtitle">اكتشف المزيد من المنتجات المميزة التي قد تعجبك</p>
+                <p className="related-subtitle">{t('pages.productDetails.discoverMore')}</p>
               </div>
               
               <div className="related-controls">
-                <button className="control-btn prev" onClick={prevImage} aria-label="السابق">
+                <button className="control-btn prev" onClick={prevImage} aria-label={t('pages.productDetails.previous')}>
                   <ChevronRight size={20} />
                 </button>
-                <button className="control-btn next" onClick={nextImage} aria-label="التالي">
+                <button className="control-btn next" onClick={nextImage} aria-label={t('pages.productDetails.next')}>
                   <ChevronLeft size={20} />
                 </button>
               </div>
@@ -684,11 +684,11 @@ const ProductDetailsPage = () => {
                       {index === 0 && (
                         <span className="badge badge-hot">
                           <Zap size={12} />
-                          عرض ساخن
+                          {t('pages.productDetails.hotDeal')}
                         </span>
                       )}
                       {index === 1 && (
-                        <span className="badge badge-new">جديد</span>
+                        <span className="badge badge-new">{t('pages.productDetails.new')}</span>
                       )}
                       {item.rating >= 4.5 && (
                         <span className="badge badge-rating">
@@ -736,18 +736,18 @@ const ProductDetailsPage = () => {
                           <span className="rating-text">{item.rating}</span>
                         </div>
                         <span className="separator">•</span>
-                        <span className="sold-count">{Math.floor(Math.random() * 100) + 50} تم البيع</span>
+                        <span className="sold-count">{Math.floor(Math.random() * 100) + 50} {t('pages.productDetails.sold')}</span>
                       </div>
                       
                       {/* Price Section */}
                       <div className="price-area">
                         <div className="price-group">
                           {index === 0 && (
-                            <span className="original-price">{item.price + 100} ر.س</span>
+                            <span className="original-price">{item.price + 100} {t('currency')}</span>
                           )}
                           <div className="current-price">
                             <span className="price-number">{item.price}</span>
-                            <span className="price-currency">ر.س</span>
+                            <span className="price-currency">{t('currency')}</span>
                           </div>
                         </div>
                         
@@ -770,10 +770,10 @@ const ProductDetailsPage = () => {
                       <Package size={56} />
                       <div className="icon-bg-circle"></div>
                     </div>
-                    <h3>استكشف المزيد</h3>
-                    <p className="products-count">+100 منتج رائع</p>
+                    <h3>{t('pages.productDetails.exploreMore')}</h3>
+                    <p className="products-count">{t('pages.productDetails.amazingProducts')}</p>
                     <button className="explore-btn">
-                      <span>عرض جميع المنتجات</span>
+                      <span>{t('pages.productDetails.viewAllProducts')}</span>
                       <ChevronLeft size={18} />
                     </button>
                   </div>

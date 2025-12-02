@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { User, MapPin, Star, StarHalf } from 'lucide-react';
 import './ProductCard.css';
@@ -9,7 +8,6 @@ const ProductCard = ({
   title,
   description,
   price,
-  originalPrice,
   image,
   platforms,
   isHighlighted,
@@ -19,11 +17,12 @@ const ProductCard = ({
   rating = 0,
   reviewCount = 0
 }) => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
   
-  const handleCardClick = () => {
-    navigate(`/product/${id}`);
+  const handleCardClick = (e) => {
+    e.preventDefault();
+    // Force page refresh by using window.location
+    window.location.href = `/product/${id}`;
   };
   // Function to render rating stars
   const renderStars = (rating) => {
@@ -54,7 +53,7 @@ const ProductCard = ({
   };
 
   return (
-    <div className={`product-card ${isHighlighted ? 'highlighted' : ''}`} onClick={handleCardClick}>
+    <a href={`/product/${id}`} className={`product-card ${isHighlighted ? 'highlighted' : ''}`} onClick={handleCardClick} style={{ textDecoration: 'none', color: 'inherit' }}>
       {badge && (
         <div className="badge-container">
           <span className="product-badge">{badge}</span>
@@ -121,19 +120,12 @@ const ProductCard = ({
         )}
 
         {/* Price Section - At Bottom of Card */}
-        
-           
-          
-            <div className="current-price">
-              <span className="price-currency">{t('currency')}</span>
-              <span className="price-value">{price || '0'}</span>
-            </div>
-             
-          </div>
-  
-
-      
-    </div>
+        <div className="current-price">
+          <span className="price-currency">{t('currency')}</span>
+          <span className="price-valuee">{price || '0'}</span>
+        </div>
+      </div>
+    </a>
   );
 };
 

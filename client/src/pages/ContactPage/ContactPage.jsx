@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Send, 
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
   MessageSquare,
   Clock,
   Facebook,
@@ -16,11 +16,14 @@ import {
   Headphones,
   ArrowLeft
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import SEO from '../../components/SEO/SEO';
 import './ContactPage.css';
 
 const ContactPage = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -37,23 +40,23 @@ const ContactPage = () => {
     const newErrors = {};
     
     if (!formData.name.trim()) {
-      newErrors.name = 'الاسم مطلوب';
+      newErrors.name = t('pages.contact.nameRequired');
     }
     
     if (!formData.email.trim()) {
-      newErrors.email = 'البريد الإلكتروني مطلوب';
+      newErrors.email = t('pages.contact.emailRequired');
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'البريد الإلكتروني غير صحيح';
+      newErrors.email = t('pages.contact.emailInvalid');
     }
     
     if (!formData.subject.trim()) {
-      newErrors.subject = 'الموضوع مطلوب';
+      newErrors.subject = t('pages.contact.subjectRequired');
     }
     
     if (!formData.message.trim()) {
-      newErrors.message = 'الرسالة مطلوبة';
+      newErrors.message = t('pages.contact.messageRequired');
     } else if (formData.message.length < 10) {
-      newErrors.message = 'الرسالة يجب أن تكون 10 أحرف على الأقل';
+      newErrors.message = t('pages.contact.messageTooShort');
     }
     
     return newErrors;
@@ -106,6 +109,12 @@ const ContactPage = () => {
 
   return (
     <div className="contact-page">
+      <SEO
+        title={t('pages.contact.title', 'تواصل معنا')}
+        description={t('pages.contact.subtitle', 'نحن هنا لمساعدتك')}
+        keywords="اتصل بنا, دعم العملاء, خدمة العملاء, GamersStation, تواصل معنا"
+        url="https://gamersstation.eg/contact"
+      />
       <Header />
       
       {/* Hero Section */}
@@ -118,10 +127,10 @@ const ContactPage = () => {
           <div className="hero-content">
             <h1 className="hero-title">
               <MessageSquare className="title-icon" />
-              تواصل معنا
+              {t('pages.contact.title', 'تواصل معنا')}
             </h1>
             <p className="hero-subtitle">
-              نحن هنا لمساعدتك. تواصل معنا في أي وقت وسنرد عليك في أسرع وقت ممكن
+              {t('pages.contact.subtitle', 'نحن هنا لمساعدتك. تواصل معنا في أي وقت وسنرد عليك في أسرع وقت ممكن')}
             </p>
           </div>
         </div>
@@ -134,14 +143,14 @@ const ContactPage = () => {
             {/* Contact Form */}
             <div className="contact-form-wrapper">
               <div className="form-header">
-                <h2>أرسل لنا رسالة</h2>
-                <p>املأ النموذج أدناه وسنتواصل معك قريباً</p>
+                <h2>{t('pages.contact.sendMessage')}</h2>
+                <p>{t('pages.contact.welcomeInquiries')}</p>
               </div>
 
               {submitSuccess && (
                 <div className="success-message">
                   <CheckCircle size={20} />
-                  <span>تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.</span>
+                  <span>{t('pages.contact.successMessage')} {t('pages.contact.contactSoon')}</span>
                 </div>
               )}
 
@@ -150,7 +159,7 @@ const ContactPage = () => {
                   <div className="form-group">
                     <label htmlFor="name">
                       <User size={16} />
-                      الاسم الكامل
+                      {t('pages.contact.fullName')}
                     </label>
                     <input
                       type="text"
@@ -158,7 +167,7 @@ const ContactPage = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      placeholder="أدخل اسمك الكامل"
+                      placeholder={t('pages.contact.fullName')}
                       className={errors.name ? 'error' : ''}
                     />
                     {errors.name && <span className="error-message">{errors.name}</span>}
@@ -167,7 +176,7 @@ const ContactPage = () => {
                   <div className="form-group">
                     <label htmlFor="email">
                       <Mail size={16} />
-                      البريد الإلكتروني
+                      {t('pages.contact.email')}
                     </label>
                     <input
                       type="email"
@@ -187,7 +196,7 @@ const ContactPage = () => {
                   <div className="form-group">
                     <label htmlFor="phone">
                       <Phone size={16} />
-                      رقم الهاتف (اختياري)
+                      {t('pages.contact.phone')} ({t('common.optional')})
                     </label>
                     <input
                       type="tel"
@@ -203,7 +212,7 @@ const ContactPage = () => {
                   <div className="form-group">
                     <label htmlFor="subject">
                       <MessageCircle size={16} />
-                      الموضوع
+                      {t('pages.contact.subject')}
                     </label>
                     <select
                       id="subject"
@@ -212,13 +221,13 @@ const ContactPage = () => {
                       onChange={handleChange}
                       className={errors.subject ? 'error' : ''}
                     >
-                      <option value="">اختر الموضوع</option>
-                      <option value="general">استفسار عام</option>
-                      <option value="order">الطلبات</option>
-                      <option value="technical">دعم فني</option>
-                      <option value="complaint">شكوى</option>
-                      <option value="suggestion">اقتراح</option>
-                      <option value="partnership">شراكة</option>
+                      <option value="">{t('pages.contact.chooseSubject')}</option>
+                      <option value="general">{t('pages.contact.generalInquiry')}</option>
+                      <option value="order">{t('pages.contact.orders')}</option>
+                      <option value="technical">{t('pages.contact.technicalSupport')}</option>
+                      <option value="complaint">{t('pages.contact.complaint')}</option>
+                      <option value="suggestion">{t('pages.contact.suggestion')}</option>
+                      <option value="partnership">{t('pages.contact.partnership')}</option>
                     </select>
                     {errors.subject && <span className="error-message">{errors.subject}</span>}
                   </div>
@@ -227,14 +236,14 @@ const ContactPage = () => {
                 <div className="form-group">
                   <label htmlFor="message">
                     <MessageSquare size={16} />
-                    الرسالة
+                    {t('pages.contact.message')}
                   </label>
                   <textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    placeholder="اكتب رسالتك هنا..."
+                    placeholder={t('pages.contact.writeMessage')}
                     rows="6"
                     className={errors.message ? 'error' : ''}
                   />
@@ -250,12 +259,12 @@ const ContactPage = () => {
                   {isSubmitting ? (
                     <>
                       <span className="spinner"></span>
-                      جاري الإرسال...
+                      {t('pages.contact.sending')}
                     </>
                   ) : (
                     <>
                       <Send size={18} />
-                      إرسال الرسالة
+                      {t('pages.contact.send')}
                       <ArrowLeft size={18} className="arrow-icon" />
                     </>
                   )}
@@ -267,25 +276,15 @@ const ContactPage = () => {
             <div className="contact-info-wrapper">
               {/* Quick Contact */}
               <div className="info-card">
-                <h3>معلومات التواصل</h3>
+                <h3>{t('pages.contact.contactInfo')}</h3>
                 <div className="info-items">
-                  <div className="info-item">
-                    <div className="info-icon">
-                      <Phone size={20} />
-                    </div>
-                    <div className="info-content">
-                      <span className="info-label">اتصل بنا</span>
-                      <a href="tel:+966501234567" dir="ltr">+966 50 123 4567</a>
-                    </div>
-                  </div>
-
                   <div className="info-item">
                     <div className="info-icon">
                       <Mail size={20} />
                     </div>
                     <div className="info-content">
-                      <span className="info-label">البريد الإلكتروني</span>
-                      <a href="mailto:support@gamersstation.sa">support@gamersstation.sa</a>
+                      <span className="info-label">{t('pages.contact.email')}</span>
+                      <a href="mailto:contact@thegamersstation.com">contact@thegamersstation.com</a>
                     </div>
                   </div>
 
@@ -294,19 +293,8 @@ const ContactPage = () => {
                       <MapPin size={20} />
                     </div>
                     <div className="info-content">
-                      <span className="info-label">العنوان</span>
-                      <span>الرياض، المملكة العربية السعودية</span>
-                    </div>
-                  </div>
-
-                  <div className="info-item">
-                    <div className="info-icon">
-                      <Clock size={20} />
-                    </div>
-                    <div className="info-content">
-                      <span className="info-label">ساعات العمل</span>
-                      <span>السبت - الخميس: 9 ص - 10 م</span>
-                      <span>الجمعة: 2 م - 10 م</span>
+                      <span className="info-label">{t('pages.contact.address')}</span>
+                      <span>{t('footer.contact.location')}</span>
                     </div>
                   </div>
                 </div>
@@ -314,21 +302,21 @@ const ContactPage = () => {
 
               {/* Social Media */}
               <div className="info-card">
-                <h3>تابعنا على</h3>
+                <h3>{t('pages.contact.followUs')}</h3>
                 <div className="social-grid">
-                  <a href="#" className="social-card facebook">
+                  <a href="https://www.facebook.com/GamersStationApp" className="social-card facebook" target="_blank" rel="noopener noreferrer">
                     <Facebook size={24} />
                     <span>Facebook</span>
                   </a>
-                  <a href="#" className="social-card twitter">
+                  <a href="https://www.twitter.com/GamersStationApp" className="social-card twitter" target="_blank" rel="noopener noreferrer">
                     <Twitter size={24} />
                     <span>Twitter</span>
                   </a>
-                  <a href="#" className="social-card instagram">
+                  <a href="https://www.instagram.com/GamersStationApp" className="social-card instagram" target="_blank" rel="noopener noreferrer">
                     <Instagram size={24} />
                     <span>Instagram</span>
                   </a>
-                  <a href="#" className="social-card youtube">
+                  <a href="https://www.youtube.com/GamersStationApp" className="social-card youtube" target="_blank" rel="noopener noreferrer">
                     <Youtube size={24} />
                     <span>Youtube</span>
                   </a>
@@ -337,21 +325,21 @@ const ContactPage = () => {
 
               {/* Support Options */}
               <div className="info-card">
-                <h3>طرق أخرى للتواصل</h3>
+                <h3>{t('pages.contact.otherWays')}</h3>
                 <div className="support-options">
                   <a href="#" className="support-option">
                     <Headphones size={20} />
                     <div>
-                      <strong>الدعم المباشر</strong>
-                      <span>دردشة مباشرة مع فريق الدعم</span>
+                      <strong>{t('pages.contact.liveSupport')}</strong>
+                      <span>{t('pages.contact.liveSupportDesc')}</span>
                     </div>
                     <ArrowLeft size={16} />
                   </a>
                   <a href="/faq" className="support-option">
                     <MessageCircle size={20} />
                     <div>
-                      <strong>الأسئلة الشائعة</strong>
-                      <span>إجابات سريعة لأسئلتك</span>
+                      <strong>{t('header.faq')}</strong>
+                      <span>{t('pages.contact.faqDesc')}</span>
                     </div>
                     <ArrowLeft size={16} />
                   </a>
@@ -363,16 +351,18 @@ const ContactPage = () => {
           {/* Map Section */}
           <div className="map-section">
             <div className="map-container">
-              <div className="map-overlay">
-                <div className="location-marker">
-                  <MapPin size={30} />
-                  <span>موقعنا الرئيسي</span>
-                </div>
-              </div>
-              {/* Placeholder for actual map */}
-              <div className="map-placeholder">
-                <p>الخريطة التفاعلية</p>
-              </div>
+              {/* Google Maps Iframe */}
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d464843.0891421265!2d46.54313544267577!3d24.724302369843767!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f03890d489399%3A0xba974d1c98e79fd5!2sRiyadh%20Saudi%20Arabia!5e0!3m2!1sen!2ssa!4v1701427200000!5m2!1sen!2ssa"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title={t('pages.contact.ourLocation')}
+                className="map-iframe"
+              />
             </div>
           </div>
         </div>

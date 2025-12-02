@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import {
   Facebook,
   Twitter,
@@ -90,24 +89,24 @@ const Footer = () => {
           <div className="footer-content">
             {/* Company Info */}
             <div className="footer-section footer-about">
-              <div className="footer-logo">
+              <a href="/" className="footer-logo">
                 <img src="/logo.svg" alt="GamersStation" className="footer-logo-icon" />
                 <span className="footer-logo-text">GamersStation</span>
-              </div>
+              </a>
               <p className="footer-description">
                 {t('footer.about.description')}
               </p>
               <div className="social-links">
-                <a href="#" className="social-link" aria-label="Facebook">
+                <a href="https://www.facebook.com/GamersStationApp" className="social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
                   <Facebook size={18} />
                 </a>
-                <a href="#" className="social-link" aria-label="Twitter">
+                <a href="https://www.twitter.com/GamersStationApp" className="social-link" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
                   <Twitter size={18} />
                 </a>
-                <a href="#" className="social-link" aria-label="Instagram">
+                <a href="https://www.instagram.com/GamersStationApp" className="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
                   <Instagram size={18} />
                 </a>
-                <a href="#" className="social-link" aria-label="Youtube">
+                <a href="https://www.youtube.com/GamersStationApp" className="social-link" aria-label="Youtube" target="_blank" rel="noopener noreferrer">
                   <Youtube size={18} />
                 </a>
               </div>
@@ -132,11 +131,11 @@ const Footer = () => {
                 )}
               </h3>
               <ul className={`footer-links ${isMobile && collapsedSections.quickLinks ? 'mobile-collapsed' : ''}`}>
-                <li><Link to="/">{t('footer.quickLinks.home')}</Link></li>
-                <li><Link to="/merchants">{t('footer.quickLinks.merchants')}</Link></li>
-                <li><Link to="/categories">{t('footer.quickLinks.categories')}</Link></li>
-                <li><Link to="/offers">{t('footer.quickLinks.offers')}</Link></li>
-                <li><Link to="/new-arrivals">{t('footer.quickLinks.newArrivals')}</Link></li>
+                <li><a href="/">{t('footer.quickLinks.home')}</a></li>
+                <li><a href="/merchants">{t('footer.quickLinks.merchants')}</a></li>
+                <li><a href="/categories">{t('footer.quickLinks.categories')}</a></li>
+                <li><a href="/offers">{t('footer.quickLinks.offers')}</a></li>
+                <li><a href="/new-arrivals">{t('footer.quickLinks.newArrivals')}</a></li>
               </ul>
             </div>
 
@@ -159,11 +158,11 @@ const Footer = () => {
                 )}
               </h3>
               <ul className={`footer-links ${isMobile && collapsedSections.customerService ? 'mobile-collapsed' : ''}`}>
-                <li><Link to="/faq">{t('footer.customerService.faq')}</Link></li>
-                <li><Link to="/contact">{t('footer.customerService.contact')}</Link></li>
-                <li><Link to="/shipping">{t('footer.customerService.shipping')}</Link></li>
-                <li><Link to="/returns">{t('footer.customerService.returns')}</Link></li>
-                <li><Link to="/warranty">{t('footer.customerService.warranty')}</Link></li>
+                <li><a href="/faq">{t('footer.customerService.faq')}</a></li>
+                <li><a href="/contact">{t('footer.customerService.contact')}</a></li>
+                <li><a href="/shipping">{t('footer.customerService.shipping')}</a></li>
+                <li><a href="/returns">{t('footer.customerService.returns')}</a></li>
+                <li><a href="/warranty">{t('footer.customerService.warranty')}</a></li>
               </ul>
             </div>
 
@@ -186,10 +185,10 @@ const Footer = () => {
                 )}
               </h3>
               <ul className={`footer-links ${isMobile && collapsedSections.legal ? 'mobile-collapsed' : ''}`}>
-                <li><Link to="/terms">{t('footer.legal.terms')}</Link></li>
-                <li><Link to="/privacy">{t('footer.legal.privacy')}</Link></li>
-                <li><Link to="/cookies">{t('footer.legal.cookies')}</Link></li>
-                <li><Link to="/about">{t('footer.legal.about')}</Link></li>
+                <li><a href="/terms">{t('footer.legal.terms')}</a></li>
+                <li><a href="/privacy">{t('footer.legal.privacy')}</a></li>
+                <li><a href="/cookies">{t('footer.legal.cookies')}</a></li>
+                <li><a href="/about">{t('footer.legal.about')}</a></li>
               </ul>
             </div>
 
@@ -198,12 +197,8 @@ const Footer = () => {
               <h3 className="footer-title">{t('footer.contact.title')}</h3>
               <div className="contact-items">
                 <div className="contact-item">
-                  <Phone size={16} />
-                  <span dir="ltr">+966 50 123 4567</span>
-                </div>
-                <div className="contact-item">
                   <Mail size={16} />
-                  <span>support@gamersstation.sa</span>
+                  <span>contact@thegamersstation.com</span>
                 </div>
                 <div className="contact-item">
                   <MapPin size={16} />
@@ -238,11 +233,37 @@ const Footer = () => {
           <div className="payment-section">
             <span className="payment-label">{t('footer.payment.title')}</span>
             <div className="payment-methods">
-              <img src="https://via.placeholder.com/50x30/1a2332/ffffff?text=Visa" alt="Visa" className="payment-icon" />
-              <img src="https://via.placeholder.com/50x30/1a2332/ffffff?text=Master" alt="Mastercard" className="payment-icon" />
-              <img src="https://via.placeholder.com/50x30/1a2332/ffffff?text=Mada" alt="Mada" className="payment-icon" />
-              <img src="https://via.placeholder.com/50x30/1a2332/ffffff?text=STC" alt="STC Pay" className="payment-icon" />
-              <img src="https://via.placeholder.com/50x30/1a2332/ffffff?text=Apple" alt="Apple Pay" className="payment-icon" />
+              <div className="payment-icon-wrapper">
+                <svg width="50" height="30" viewBox="0 0 50 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="50" height="30" rx="4" fill="#1434CB"/>
+                  <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">VISA</text>
+                </svg>
+              </div>
+              <div className="payment-icon-wrapper">
+                <svg width="50" height="30" viewBox="0 0 50 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="50" height="30" rx="4" fill="#EB001B"/>
+                  <circle cx="20" cy="15" r="8" fill="#FF5F00" opacity="0.8"/>
+                  <circle cx="30" cy="15" r="8" fill="#F79E1B" opacity="0.8"/>
+                </svg>
+              </div>
+              <div className="payment-icon-wrapper">
+                <svg width="50" height="30" viewBox="0 0 50 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="50" height="30" rx="4" fill="#00897B"/>
+                  <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">Mada</text>
+                </svg>
+              </div>
+              <div className="payment-icon-wrapper">
+                <svg width="50" height="30" viewBox="0 0 50 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="50" height="30" rx="4" fill="#5E35B1"/>
+                  <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">STC</text>
+                </svg>
+              </div>
+              <div className="payment-icon-wrapper">
+                <svg width="50" height="30" viewBox="0 0 50 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="50" height="30" rx="4" fill="#000000"/>
+                  <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">Apple Pay</text>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
@@ -256,11 +277,11 @@ const Footer = () => {
               {t('footer.bottom.copyright', { year: currentYear })}
             </p>
             <div className="footer-bottom-links">
-              <Link to="/sitemap">{t('footer.bottom.sitemap')}</Link>
+              <a href="/sitemap">{t('footer.bottom.sitemap')}</a>
               {!isMobile && <span className="separator">•</span>}
-              <Link to="/accessibility">{t('footer.bottom.accessibility')}</Link>
+              <a href="/accessibility">{t('footer.bottom.accessibility')}</a>
               {!isMobile && <span className="separator">•</span>}
-              <Link to="/help">{t('footer.bottom.helpCenter')}</Link>
+              <a href="/help">{t('footer.bottom.helpCenter')}</a>
             </div>
           </div>
         </div>

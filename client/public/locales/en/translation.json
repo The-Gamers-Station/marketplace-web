@@ -12,7 +12,22 @@
     "mainTitle": "Your Gaming World",
     "subtitle": "Discover the latest games and devices from the best merchants",
     "browseGames": "Browse Games",
-    "viewOffers": "View Offers"
+    "viewOffers": "View Offers",
+    "platform": "Your Premier Platform",
+    "forGames": "for Games and Digital",
+    "products": "Products",
+    "discover": "Discover the best games and exclusive offers from over 500 trusted merchants",
+    "productsCount": "Products",
+    "trustedMerchants": "Trusted Merchants",
+    "happyCustomers": "Happy Customers",
+    "shopNow": "Shop Now",
+    "exploreCategories": "Explore Categories",
+    "rating": "4.8 out of 5",
+    "securePayment": "Secure Payment",
+    "fastDelivery": "Fast Delivery",
+    "newBadge": "New",
+    "hotBadge": "Hot",
+    "trendingBadge": "Trending"
   },
   "categoryFilter": {
     "all": "All",
@@ -20,7 +35,8 @@
     "xbox": "Xbox",
     "nintendo": "Nintendo",
     "pc": "PC",
-    "accessories": "Accessories"
+    "accessories": "Accessories",
+    "showAsCards": "Show as cards"
   },
   "productCard": {
     "new": "New",
@@ -33,6 +49,7 @@
   "reviews": "reviews",
   "noDescription": "No description available",
   "currency": "SAR",
+  "loading": "Loading...",
   "footer": {
     "features": {
       "latestGames": "Latest Games",
@@ -91,7 +108,8 @@
   "pages": {
     "landing": {
       "featuredProducts": "Featured Products",
-      "viewAll": "View All"
+      "viewAll": "View All",
+      "loadMore": "Load More"
     },
     "merchants": {
       "title": "Merchants",
@@ -99,29 +117,286 @@
       "verified": "Verified",
       "rating": "Rating",
       "products": "products",
-      "joinedDate": "Joined {{date}}"
+      "joinedDate": "Joined {{date}}",
+      "trustedPlatform": "Trusted Platform",
+      "discoverMerchants": "Discover the best trusted merchants for all gaming needs",
+      "verifiedMerchants": "Verified Merchant",
+      "availableProducts": "Available Product",
+      "successfulSales": "Successful Sale",
+      "filters": "Filters",
+      "search": "Search",
+      "categories": "Categories",
+      "all": "All",
+      "sortBy": "Sort By",
+      "mostPopular": "Most Popular",
+      "highestRated": "Highest Rated",
+      "newest": "Newest",
+      "bestSelling": "Best Selling",
+      "availableMerchants": "Available Merchants",
+      "trending": "Trending",
+      "discount": "Discount",
+      "sales": "Sales",
+      "customerSatisfaction": "Customer Satisfaction",
+      "specialties": "Specialties",
+      "quickResponse": "Quick Response",
+      "viewStore": "View Store",
+      "joinUs": "Are you a merchant? Join us",
+      "startSelling": "Start selling on the largest gaming platform in the region",
+      "professionalTools": "Professional management tools",
+      "continuousSupport": "Continuous support from our team",
+      "competitiveCommission": "Competitive commission",
+      "accessToBuyers": "Access to thousands of buyers",
+      "registerNow": "Register as a merchant now"
     },
     "productDetails": {
+      "home": "Home",
+      "bestSeller": "Best Seller",
+      "originalProduct": "Original Product",
+      "review": "review",
+      "reviews": "reviews",
+      "itemsSold": "items sold",
+      "save": "Save",
+      "availableOptions": "Available Options:",
+      "outOfStock": "Out of Stock",
+      "originalWarranty": "Original Warranty",
+      "fullYear": "Full Year",
+      "fastDelivery": "Fast Delivery",
+      "within2to3Days": "Within 2-3 days",
+      "freeReturns": "Free Returns",
+      "within14Days": "Within 14 days",
+      "quantity": "Quantity:",
       "addToCart": "Add to Cart",
       "buyNow": "Buy Now",
       "inStock": "In Stock",
-      "outOfStock": "Out of Stock",
+      "deliverTo": "Deliver to:",
+      "riyadhNakhil": "Riyadh - Al Nakhil",
+      "deliveryTime": "Delivery within 2-3 business days",
+      "seller": "Seller",
+      "verified": "Verified",
+      "product": "product",
+      "responseWithin": "Response within",
+      "visitStore": "Visit Store",
       "description": "Description",
+      "features": "Features",
       "specifications": "Specifications",
-      "reviews": "Reviews",
-      "relatedProducts": "Related Products"
+      "productDescription": "Product Description",
+      "keyFeatures": "Key Features:",
+      "productFeatures": "Product Features",
+      "technicalSpecs": "Technical Specifications",
+      "customerReviews": "Customer Reviews",
+      "writeReview": "Write a Review",
+      "basedOn": "Based on",
+      "helpful": "Helpful",
+      "relatedProducts": "Related Products",
+      "discoverMore": "Discover more featured products you might like",
+      "previous": "Previous",
+      "next": "Next",
+      "hotDeal": "Hot Deal",
+      "new": "New",
+      "sold": "Sold",
+      "exploreMore": "Explore More",
+      "amazingProducts": "100+ Amazing Products",
+      "viewAllProducts": "View All Products",
+      "scrollToTop": "Back to top"
     },
     "faq": {
       "title": "Frequently Asked Questions",
-      "searchPlaceholder": "Search questions..."
+      "searchPlaceholder": "Search questions...",
+      "subtitle": "Answers to all your questions about GamersStation",
+      "searchHere": "Search for your question here...",
+      "search": "Search",
+      "sectionsTitle": "Sections",
+      "sections": {
+        "general": "General",
+        "shopping": "Shopping",
+        "payment": "Payment",
+        "shipping": "Shipping & Delivery",
+        "returns": "Returns & Exchange",
+        "sellers": "Sellers",
+        "support": "Technical Support",
+        "warranty": "Warranty & Protection"
+      },
+      "questions": {
+        "g1": {
+          "question": "What is GamersStation?",
+          "answer": "GamersStation is the largest gaming platform in the region, where you can buy and sell games, devices and gaming accessories. We provide a safe and reliable environment for both players and merchants."
+        },
+        "g2": {
+          "question": "How can I register on the site?",
+          "answer": "You can easily register by clicking the 'Sign Up' button at the top of the page. You'll just need to enter your mobile number and we'll send you a verification code via SMS."
+        },
+        "g3": {
+          "question": "Is the site secure?",
+          "answer": "Yes, we use the latest security and encryption technologies to protect your personal data and financial transactions. All transactions are protected and we verify all merchants before allowing them to sell on the platform."
+        },
+        "g4": {
+          "question": "Which areas do you cover?",
+          "answer": "We cover all governorates of Egypt, with delivery services available in most major cities. You can check service availability in your area when entering your address."
+        },
+        "s1": {
+          "question": "How can I search for a specific product?",
+          "answer": "Use the search bar at the top of the page to search for any game or product. You can also use filters to specify category, price, condition, and region."
+        },
+        "s2": {
+          "question": "How do I know if the product is authentic?",
+          "answer": "All merchants on our platform are verified and we require them to provide authenticity guarantees. You can also read reviews from previous buyers and contact the seller directly for more information."
+        },
+        "s3": {
+          "question": "Can I reserve a product before purchasing?",
+          "answer": "Yes, you can contact the seller to reserve the product for a specific period. Some sellers accept reservations with a small deposit."
+        },
+        "s4": {
+          "question": "What if I find a better price elsewhere?",
+          "answer": "Our prices are competitive and we encourage sellers to offer the best prices. You can negotiate directly with the seller or look for other offers on the platform."
+        },
+        "p1": {
+          "question": "What payment methods are available?",
+          "answer": "We accept cash on delivery, credit cards (Visa and Mastercard), e-wallets (Vodafone Cash, Orange Cash, Etisalat Cash), and bank transfer."
+        },
+        "p2": {
+          "question": "Is cash on delivery available?",
+          "answer": "Yes, cash on delivery is available in most areas. Small additional fees may apply for this service depending on your location."
+        },
+        "p3": {
+          "question": "Is my credit card information secure?",
+          "answer": "Yes, we use SSL encryption and follow PCI DSS standards to ensure payment information security. We don't store your credit card details on our servers."
+        },
+        "p4": {
+          "question": "Can I pay in installments?",
+          "answer": "Yes, we offer installment options through our partnerships with various banks. You can choose the appropriate installment plan when paying."
+        },
+        "sh1": {
+          "question": "How long does delivery take?",
+          "answer": "Delivery usually takes 2-5 business days depending on your location. For products in the same city, delivery may be same-day or next day."
+        },
+        "sh2": {
+          "question": "How much is shipping?",
+          "answer": "Shipping costs vary by product size, weight, and distance. The exact cost will appear before completing your purchase. We also offer free shipping on orders above a certain amount."
+        },
+        "sh3": {
+          "question": "Can I track my order?",
+          "answer": "Yes, once your order ships, we'll send you a tracking number via SMS and email. You can use it to track your order anytime."
+        },
+        "sh4": {
+          "question": "What if I'm not available during delivery?",
+          "answer": "The delivery agent will try to contact you. If you're not available, delivery will be reattempted the next day or you can arrange to pick up the package from the nearest collection point."
+        },
+        "r1": {
+          "question": "What is the return policy?",
+          "answer": "You can return products within 14 days of receipt as long as they're in original condition with all accessories and packaging. Some products like digital games are non-returnable."
+        },
+        "r2": {
+          "question": "How do I request a return?",
+          "answer": "You can request a return through your account in the 'My Orders' section or contact customer service. We'll send you return instructions and a return shipping number."
+        },
+        "r3": {
+          "question": "When will I get my refund?",
+          "answer": "Once we receive the returned product and verify its condition, the refund will be processed within 5-10 business days depending on the original payment method."
+        },
+        "r4": {
+          "question": "Can I exchange a product instead of returning it?",
+          "answer": "Yes, you can request to exchange the product for another of the same value or pay the difference. Exchange is subject to availability of the replacement product."
+        },
+        "se1": {
+          "question": "How do I become a seller on GamersStation?",
+          "answer": "You can easily register as a seller by clicking 'Become a Seller' and filling out the required form. We'll review your application within 24-48 hours and notify you of approval."
+        },
+        "se2": {
+          "question": "What commission is required?",
+          "answer": "We charge a simple commission ranging from 5-10% depending on product category and sales volume. You'll get full details when registering as a seller."
+        },
+        "se3": {
+          "question": "How do I get my money from sales?",
+          "answer": "You can withdraw your earnings weekly via bank transfer or e-wallets. The minimum withdrawal amount is 500 EGP."
+        },
+        "se4": {
+          "question": "Do you provide support for sellers?",
+          "answer": "Yes, we have a dedicated support team for sellers to help you manage your store, improve your sales, and resolve any issues you might face."
+        },
+        "su1": {
+          "question": "How can I contact customer service?",
+          "answer": "You can contact us via live chat on the website or email at contact@thegamersstation.com."
+        },
+        "su2": {
+          "question": "I have a problem with my account, what should I do?",
+          "answer": "You can reset your password from the login page, or contact support team with your registered phone number and we'll help you recover your account."
+        },
+        "su3": {
+          "question": "How do I report a fraudulent product or seller?",
+          "answer": "You can report directly from the product or seller page by clicking 'Report'. We'll review the report within 24 hours and take appropriate action."
+        },
+        "su4": {
+          "question": "Can I submit a suggestion to improve the site?",
+          "answer": "Absolutely! We welcome all suggestions and feedback. You can send them via email at contact@thegamersstation.com or through the 'Contact Us' form."
+        },
+        "w1": {
+          "question": "Are products guaranteed?",
+          "answer": "Yes, all new products come with manufacturer warranty. Used products may come with limited warranty from the seller. Make sure to read warranty details before purchasing."
+        },
+        "w2": {
+          "question": "What does the warranty cover?",
+          "answer": "Warranty covers manufacturing defects and malfunctions not caused by misuse. Warranty doesn't cover damage from drops, liquids, or unauthorized modifications."
+        },
+        "w3": {
+          "question": "How do I claim warranty?",
+          "answer": "Keep your invoice and contact customer service or the seller directly. We'll guide you through the warranty claim process and product shipment for repair or replacement."
+        },
+        "w4": {
+          "question": "Can I purchase additional warranty?",
+          "answer": "Yes, we offer additional protection plans to extend the warranty period and cover more incidents. You can add them when purchasing."
+        }
+      },
+      "noAnswer": "Didn't find an answer to your question?",
+      "supportReady": "Support team is ready to help you anytime",
+      "support247": "24/7 Support",
+      "askQuestion": "Ask your question",
+      "liveChat": "Live Chat",
+      "contactNow": "Contact Now",
+      "replyWithin24h": "Reply within 24 hours",
+      "instantChat": "Instant chat",
+      "available247": "Available 24/7"
     },
     "contact": {
       "title": "Contact Us",
+      "subtitle": "We are here to help you. Contact us anytime and we'll respond as soon as possible",
+      "sendMessage": "Send us a message",
+      "welcomeInquiries": "Fill the form below and we'll contact you soon",
+      "successMessage": "Your message has been sent successfully!",
+      "contactSoon": "We will contact you soon",
       "name": "Name",
+      "fullName": "Full Name",
       "email": "Email",
+      "phone": "Phone Number",
       "subject": "Subject",
+      "chooseSubject": "Choose Subject",
+      "generalInquiry": "General Inquiry",
+      "orders": "Orders",
+      "technicalSupport": "Technical Support",
+      "complaint": "Complaint",
+      "suggestion": "Suggestion",
+      "partnership": "Partnership",
       "message": "Message",
-      "send": "Send"
+      "writeMessage": "Write your message here...",
+      "sending": "Sending...",
+      "send": "Send Message",
+      "contactInfo": "Contact Information",
+      "address": "Address",
+      "followUs": "Follow us on",
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "instagram": "Instagram",
+      "youtube": "YouTube",
+      "otherWays": "Other Ways to Contact",
+      "liveSupport": "Live Support",
+      "liveSupportDesc": "Live chat with support team",
+      "faqDesc": "Quick answers to your questions",
+      "ourLocation": "Our location in Riyadh",
+      "nameRequired": "Name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Email is invalid",
+      "subjectRequired": "Subject is required",
+      "messageRequired": "Message is required",
+      "messageTooShort": "Message must be at least 10 characters"
     }
   },
   "common": {
@@ -137,6 +412,7 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
-    "language": "Language"
+    "language": "Language",
+    "optional": "optional"
   }
 }

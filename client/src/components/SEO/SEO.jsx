@@ -34,15 +34,15 @@ const SEO = ({
     },
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+20-100-123-4567",
+      "email": "contact@thegamersstation.com",
       "contactType": "customer service",
       "availableLanguage": ["Arabic", "English"]
     },
     "sameAs": [
-      "https://www.facebook.com/gamersstation",
-      "https://www.twitter.com/gamersstation",
-      "https://www.instagram.com/gamersstation",
-      "https://www.youtube.com/gamersstation"
+      "https://www.facebook.com/GamersStationApp",
+      "https://www.twitter.com/GamersStationApp",
+      "https://www.instagram.com/GamersStationApp",
+      "https://www.youtube.com/GamersStationApp"
     ]
   };
 
@@ -90,8 +90,8 @@ const SEO = ({
       
       {/* Twitter Card Meta Tags */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content="@gamersstation" />
-      <meta name="twitter:creator" content="@gamersstation" />
+      <meta name="twitter:site" content="@GamersStationApp" />
+      <meta name="twitter:creator" content="@GamersStationApp" />
       <meta name="twitter:url" content={currentUrl} />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />

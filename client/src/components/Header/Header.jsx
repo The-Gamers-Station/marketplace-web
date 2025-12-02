@@ -5,28 +5,34 @@ import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import './Header.css';
 
-// Memoized navigation link component
+// Memoized navigation link component - Using regular anchor tag for page refresh
 const NavLink = memo(({ to, isActive, onClick, children }) => (
-  <Link
-    to={to}
+  <a
+    href={to}
     className={`nav-link ${isActive ? 'active' : ''}`}
-    onClick={onClick}
+    onClick={() => {
+      // Let browser handle navigation naturally for page refresh
+      onClick && onClick();
+    }}
   >
     {children}
-  </Link>
+  </a>
 ));
 
 NavLink.displayName = 'NavLink';
 
-// Memoized mobile navigation link component
+// Memoized mobile navigation link component - Using regular anchor tag for page refresh
 const MobileNavLink = memo(({ to, isActive, onClick, children }) => (
-  <Link
-    to={to}
+  <a
+    href={to}
     className={`mobile-nav-link ${isActive ? 'active' : ''}`}
-    onClick={onClick}
+    onClick={() => {
+      // Let browser handle navigation naturally for page refresh
+      onClick && onClick();
+    }}
   >
     {children}
-  </Link>
+  </a>
 ));
 
 MobileNavLink.displayName = 'MobileNavLink';
@@ -96,11 +102,11 @@ const Header = memo(() => {
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        {/* Logo */}
-        <div className="header-logo">
+        {/* Logo - Using regular anchor tag for page refresh */}
+        <a href="/" className="header-logo">
           <img src="/logo.svg" alt="GamersStation" className="logo-icon" loading="eager" />
           <span className="logo-text">GamersStation</span>
-        </div>
+        </a>
 
         {/* Navigation */}
         <nav className="header-nav">

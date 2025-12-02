@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, HelpCircle, ShoppingBag, Truck, Shield, CreditCard, RotateCcw, PhoneCall, User } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import SEO from '../../components/SEO/SEO';
 import './FAQPage.css';
 
 const FAQPage = () => {
+  const { t } = useTranslation();
   const [activeSection, setActiveSection] = useState('general');
   const [openItems, setOpenItems] = useState({});
 
@@ -17,210 +20,210 @@ const FAQPage = () => {
 
   const faqSections = {
     general: {
-      title: 'عام',
+      title: t('pages.faq.sections.general'),
       icon: <HelpCircle size={20} />,
       questions: [
         {
           id: 'g1',
-          question: 'ما هو GamersStation؟',
-          answer: 'GamersStation هو أكبر منصة للألعاب في المنطقة، حيث يمكنك شراء وبيع الألعاب والأجهزة والإكسسوارات الخاصة بالألعاب. نحن نوفر بيئة آمنة وموثوقة للاعبين والتجار على حد سواء.'
+          question: t('pages.faq.questions.g1.question'),
+          answer: t('pages.faq.questions.g1.answer')
         },
         {
           id: 'g2',
-          question: 'كيف يمكنني التسجيل في الموقع؟',
-          answer: 'يمكنك التسجيل بسهولة عن طريق النقر على زر "تسجيل" في أعلى الصفحة. ستحتاج فقط إلى إدخال رقم هاتفك المحمول وسنرسل لك رمز التحقق عبر رسالة نصية.'
+          question: t('pages.faq.questions.g2.question'),
+          answer: t('pages.faq.questions.g2.answer')
         },
         {
           id: 'g3',
-          question: 'هل الموقع آمن؟',
-          answer: 'نعم، نحن نستخدم أحدث تقنيات الأمان والتشفير لحماية بياناتك الشخصية ومعاملاتك المالية. جميع المعاملات محمية وندقق في جميع التجار قبل السماح لهم بالبيع على المنصة.'
+          question: t('pages.faq.questions.g3.question'),
+          answer: t('pages.faq.questions.g3.answer')
         },
         {
           id: 'g4',
-          question: 'ما هي المناطق التي تغطونها؟',
-          answer: 'نحن نغطي جميع محافظات مصر، مع توفر خدمات التوصيل في معظم المدن الرئيسية. يمكنك التحقق من توفر الخدمة في منطقتك عند إدخال عنوانك.'
+          question: t('pages.faq.questions.g4.question'),
+          answer: t('pages.faq.questions.g4.answer')
         }
       ]
     },
     shopping: {
-      title: 'الشراء',
+      title: t('pages.faq.sections.shopping'),
       icon: <ShoppingBag size={20} />,
       questions: [
         {
           id: 's1',
-          question: 'كيف يمكنني البحث عن منتج معين؟',
-          answer: 'استخدم شريط البحث في أعلى الصفحة للبحث عن أي لعبة أو منتج. يمكنك أيضًا استخدام الفلاتر لتحديد الفئة، السعر، الحالة، والمنطقة.'
+          question: t('pages.faq.questions.s1.question'),
+          answer: t('pages.faq.questions.s1.answer')
         },
         {
           id: 's2',
-          question: 'كيف أعرف أن المنتج أصلي؟',
-          answer: 'جميع التجار على منصتنا موثقون ونطلب منهم تقديم ضمانات الأصالة. كما يمكنك قراءة تقييمات المشترين السابقين والتواصل مع البائع مباشرة للحصول على المزيد من المعلومات.'
+          question: t('pages.faq.questions.s2.question'),
+          answer: t('pages.faq.questions.s2.answer')
         },
         {
           id: 's3',
-          question: 'هل يمكنني حجز المنتج قبل الشراء؟',
-          answer: 'نعم، يمكنك التواصل مع البائع لحجز المنتج لفترة محددة. بعض البائعين يقبلون الحجز مع دفع عربون صغير.'
+          question: t('pages.faq.questions.s3.question'),
+          answer: t('pages.faq.questions.s3.answer')
         },
         {
           id: 's4',
-          question: 'ماذا لو وجدت سعرًا أفضل في مكان آخر؟',
-          answer: 'أسعارنا تنافسية ونشجع البائعين على تقديم أفضل الأسعار. يمكنك التفاوض مع البائع مباشرة أو البحث عن عروض أخرى على المنصة.'
+          question: t('pages.faq.questions.s4.question'),
+          answer: t('pages.faq.questions.s4.answer')
         }
       ]
     },
     payment: {
-      title: 'الدفع',
+      title: t('pages.faq.sections.payment'),
       icon: <CreditCard size={20} />,
       questions: [
         {
           id: 'p1',
-          question: 'ما هي طرق الدفع المتاحة؟',
-          answer: 'نقبل الدفع نقدًا عند الاستلام، البطاقات الائتمانية (فيزا وماستركارد)، المحافظ الإلكترونية (فودافون كاش، اورانج كاش، اتصالات كاش)، والتحويل البنكي.'
+          question: t('pages.faq.questions.p1.question'),
+          answer: t('pages.faq.questions.p1.answer')
         },
         {
           id: 'p2',
-          question: 'هل الدفع عند الاستلام متاح؟',
-          answer: 'نعم، الدفع عند الاستلام متاح في معظم المناطق. قد تطبق رسوم إضافية بسيطة على هذه الخدمة حسب موقعك.'
+          question: t('pages.faq.questions.p2.question'),
+          answer: t('pages.faq.questions.p2.answer')
         },
         {
           id: 'p3',
-          question: 'هل معلومات بطاقتي الائتمانية آمنة؟',
-          answer: 'نعم، نحن نستخدم تشفير SSL ونتبع معايير PCI DSS لضمان أمان معلومات الدفع. لا نحتفظ بتفاصيل بطاقتك الائتمانية على خوادمنا.'
+          question: t('pages.faq.questions.p3.question'),
+          answer: t('pages.faq.questions.p3.answer')
         },
         {
           id: 'p4',
-          question: 'هل يمكنني الدفع بالتقسيط؟',
-          answer: 'نعم، نوفر خيارات التقسيط من خلال شراكاتنا مع البنوك المختلفة. يمكنك اختيار خطة التقسيط المناسبة لك عند الدفع.'
+          question: t('pages.faq.questions.p4.question'),
+          answer: t('pages.faq.questions.p4.answer')
         }
       ]
     },
     shipping: {
-      title: 'الشحن والتوصيل',
+      title: t('pages.faq.sections.shipping'),
       icon: <Truck size={20} />,
       questions: [
         {
           id: 'sh1',
-          question: 'كم تستغرق عملية التوصيل؟',
-          answer: 'عادة ما يتم التوصيل خلال 2-5 أيام عمل حسب موقعك. للمنتجات الموجودة في نفس المدينة، قد يتم التوصيل في نفس اليوم أو اليوم التالي.'
+          question: t('pages.faq.questions.sh1.question'),
+          answer: t('pages.faq.questions.sh1.answer')
         },
         {
           id: 'sh2',
-          question: 'كم تكلفة الشحن؟',
-          answer: 'تختلف تكلفة الشحن حسب حجم ووزن المنتج والمسافة. ستظهر لك التكلفة الدقيقة قبل إتمام عملية الشراء. كما نوفر شحن مجاني للطلبات فوق مبلغ معين.'
+          question: t('pages.faq.questions.sh2.question'),
+          answer: t('pages.faq.questions.sh2.answer')
         },
         {
           id: 'sh3',
-          question: 'هل يمكنني تتبع طلبي؟',
-          answer: 'نعم، بمجرد شحن طلبك، سنرسل لك رقم التتبع عبر رسالة نصية والبريد الإلكتروني. يمكنك استخدامه لتتبع طلبك في أي وقت.'
+          question: t('pages.faq.questions.sh3.question'),
+          answer: t('pages.faq.questions.sh3.answer')
         },
         {
           id: 'sh4',
-          question: 'ماذا لو لم أكن موجودًا عند التوصيل؟',
-          answer: 'سيحاول مندوب التوصيل الاتصال بك. إذا لم تكن متاحًا، سيتم إعادة محاولة التوصيل في اليوم التالي أو يمكنك الترتيب لاستلام الطرد من أقرب نقطة تجميع.'
+          question: t('pages.faq.questions.sh4.question'),
+          answer: t('pages.faq.questions.sh4.answer')
         }
       ]
     },
     returns: {
-      title: 'الإرجاع والاستبدال',
+      title: t('pages.faq.sections.returns'),
       icon: <RotateCcw size={20} />,
       questions: [
         {
           id: 'r1',
-          question: 'ما هي سياسة الإرجاع؟',
-          answer: 'يمكنك إرجاع المنتج خلال 14 يومًا من تاريخ الاستلام بشرط أن يكون في حالته الأصلية مع جميع الملحقات والعبوة. بعض المنتجات مثل الألعاب الرقمية غير قابلة للإرجاع.'
+          question: t('pages.faq.questions.r1.question'),
+          answer: t('pages.faq.questions.r1.answer')
         },
         {
           id: 'r2',
-          question: 'كيف أطلب إرجاع منتج؟',
-          answer: 'يمكنك طلب الإرجاع من خلال حسابك في قسم "طلباتي" أو التواصل مع خدمة العملاء. سنرسل لك تعليمات الإرجاع ورقم الشحنة المرتجعة.'
+          question: t('pages.faq.questions.r2.question'),
+          answer: t('pages.faq.questions.r2.answer')
         },
         {
           id: 'r3',
-          question: 'متى سأحصل على المبلغ المسترد؟',
-          answer: 'بمجرد استلامنا للمنتج المرتجع والتحقق من حالته، سيتم رد المبلغ خلال 5-10 أيام عمل حسب طريقة الدفع الأصلية.'
+          question: t('pages.faq.questions.r3.question'),
+          answer: t('pages.faq.questions.r3.answer')
         },
         {
           id: 'r4',
-          question: 'هل يمكنني استبدال المنتج بدلاً من إرجاعه؟',
-          answer: 'نعم، يمكنك طلب استبدال المنتج بآخر من نفس القيمة أو دفع الفرق. يخضع الاستبدال لتوفر المنتج البديل.'
+          question: t('pages.faq.questions.r4.question'),
+          answer: t('pages.faq.questions.r4.answer')
         }
       ]
     },
     sellers: {
-      title: 'البائعون',
+      title: t('pages.faq.sections.sellers'),
       icon: <User size={20} />,
       questions: [
         {
           id: 'se1',
-          question: 'كيف أصبح بائعًا على GamersStation؟',
-          answer: 'يمكنك التسجيل كبائع بسهولة من خلال النقر على "كن بائعًا" وملء النموذج المطلوب. سنراجع طلبك خلال 24-48 ساعة وسنبلغك بالموافقة.'
+          question: t('pages.faq.questions.se1.question'),
+          answer: t('pages.faq.questions.se1.answer')
         },
         {
           id: 'se2',
-          question: 'ما هي العمولة المطلوبة؟',
-          answer: 'نحتسب عمولة بسيطة تتراوح بين 5-10% حسب فئة المنتج وحجم المبيعات. ستحصل على تفاصيل كاملة عند التسجيل كبائع.'
+          question: t('pages.faq.questions.se2.question'),
+          answer: t('pages.faq.questions.se2.answer')
         },
         {
           id: 'se3',
-          question: 'كيف أحصل على أموالي من المبيعات؟',
-          answer: 'يمكنك سحب أرباحك أسبوعيًا عبر التحويل البنكي أو المحافظ الإلكترونية. الحد الأدنى للسحب هو 500 جنيه.'
+          question: t('pages.faq.questions.se3.question'),
+          answer: t('pages.faq.questions.se3.answer')
         },
         {
           id: 'se4',
-          question: 'هل توفرون دعمًا للبائعين؟',
-          answer: 'نعم، لدينا فريق دعم مخصص للبائعين لمساعدتك في إدارة متجرك، تحسين مبيعاتك، وحل أي مشاكل قد تواجهها.'
+          question: t('pages.faq.questions.se4.question'),
+          answer: t('pages.faq.questions.se4.answer')
         }
       ]
     },
     support: {
-      title: 'الدعم الفني',
+      title: t('pages.faq.sections.support'),
       icon: <PhoneCall size={20} />,
       questions: [
         {
           id: 'su1',
-          question: 'كيف يمكنني التواصل مع خدمة العملاء؟',
-          answer: 'يمكنك التواصل معنا عبر الدردشة المباشرة على الموقع، البريد الإلكتروني support@gamersstation.com، أو الاتصال على 16789 من الأحد إلى الخميس من 9 صباحًا حتى 9 مساءً.'
+          question: t('pages.faq.questions.su1.question'),
+          answer: t('pages.faq.questions.su1.answer')
         },
         {
           id: 'su2',
-          question: 'لدي مشكلة في حسابي، ماذا أفعل؟',
-          answer: 'يمكنك إعادة تعيين كلمة المرور من صفحة تسجيل الدخول، أو التواصل مع فريق الدعم مع ذكر رقم هاتفك المسجل وسنساعدك في استعادة حسابك.'
+          question: t('pages.faq.questions.su2.question'),
+          answer: t('pages.faq.questions.su2.answer')
         },
         {
           id: 'su3',
-          question: 'كيف أبلغ عن منتج مخالف أو بائع محتال؟',
-          answer: 'يمكنك الإبلاغ مباشرة من صفحة المنتج أو البائع بالنقر على "إبلاغ". سنراجع البلاغ خلال 24 ساعة ونتخذ الإجراء المناسب.'
+          question: t('pages.faq.questions.su3.question'),
+          answer: t('pages.faq.questions.su3.answer')
         },
         {
           id: 'su4',
-          question: 'هل يمكنني تقديم اقتراح لتحسين الموقع؟',
-          answer: 'بالتأكيد! نرحب بجميع الاقتراحات والآراء. يمكنك إرسالها عبر البريد الإلكتروني feedback@gamersstation.com أو من خلال نموذج "اتصل بنا".'
+          question: t('pages.faq.questions.su4.question'),
+          answer: t('pages.faq.questions.su4.answer')
         }
       ]
     },
     warranty: {
-      title: 'الضمان والحماية',
+      title: t('pages.faq.sections.warranty'),
       icon: <Shield size={20} />,
       questions: [
         {
           id: 'w1',
-          question: 'هل المنتجات مضمونة؟',
-          answer: 'نعم، جميع المنتجات الجديدة تأتي مع ضمان المصنع. المنتجات المستعملة قد تأتي مع ضمان محدود من البائع. تأكد من قراءة تفاصيل الضمان قبل الشراء.'
+          question: t('pages.faq.questions.w1.question'),
+          answer: t('pages.faq.questions.w1.answer')
         },
         {
           id: 'w2',
-          question: 'ماذا يغطي الضمان؟',
-          answer: 'الضمان يغطي عيوب الصناعة والأعطال غير الناتجة عن سوء الاستخدام. لا يغطي الضمان الأضرار الناتجة عن السقوط، السوائل، أو التعديلات غير المصرح بها.'
+          question: t('pages.faq.questions.w2.question'),
+          answer: t('pages.faq.questions.w2.answer')
         },
         {
           id: 'w3',
-          question: 'كيف أطالب بالضمان؟',
-          answer: 'احتفظ بالفاتورة وتواصل مع خدمة العملاء أو البائع مباشرة. سنرشدك خلال عملية المطالبة بالضمان وإرسال المنتج للصيانة أو الاستبدال.'
+          question: t('pages.faq.questions.w3.question'),
+          answer: t('pages.faq.questions.w3.answer')
         },
         {
           id: 'w4',
-          question: 'هل يمكنني شراء ضمان إضافي؟',
-          answer: 'نعم، نوفر خطط حماية إضافية لتمديد فترة الضمان وتغطية المزيد من الحوادث. يمكنك إضافتها عند الشراء.'
+          question: t('pages.faq.questions.w4.question'),
+          answer: t('pages.faq.questions.w4.answer')
         }
       ]
     }
@@ -242,26 +245,32 @@ const FAQPage = () => {
 
   return (
     <div className="faq-page">
+      <SEO
+        title={t('pages.faq.title')}
+        description={t('pages.faq.subtitle')}
+        keywords="الأسئلة الشائعة, FAQ, مساعدة, دعم العملاء, GamersStation, أسئلة وأجوبة"
+        url="https://gamersstation.eg/faq"
+      />
       <Header />
       
       <div className="faq-hero">
         <div className="hero-content">
-          <h1>الأسئلة الشائعة</h1>
-          <p>إجابات على جميع استفساراتك حول GamersStation</p>
+          <h1>{t('pages.faq.title')}</h1>
+          <p>{t('pages.faq.subtitle')}</p>
           <div className="search-box">
-            <input 
-              type="text" 
-              placeholder="ابحث عن سؤالك هنا..."
+            <input
+              type="text"
+              placeholder={t('pages.faq.searchHere')}
               className="faq-search-input"
             />
-            <button className="search-btn">بحث</button>
+            <button className="search-btn">{t('pages.faq.search')}</button>
           </div>
         </div>
       </div>
 
       <div className="faq-container">
         <aside className="faq-sidebar">
-          <h3>الأقسام</h3>
+          <h3>{t('pages.faq.sectionsTitle')}</h3>
           <nav className="faq-nav">
             {Object.entries(faqSections).map(([key, section]) => (
               <button
@@ -297,26 +306,20 @@ const FAQPage = () => {
 
       <section className="contact-section">
         <div className="contact-container">
-          <h2>لم تجد إجابة لسؤالك؟</h2>
-          <p>فريق الدعم جاهز لمساعدتك في أي وقت</p>
+          <h2>{t('pages.faq.noAnswer')}</h2>
+          <p>{t('pages.faq.supportReady')}</p>
           <div className="contact-options">
             <div className="contact-card">
-              <PhoneCall size={32} />
-              <h3>اتصل بنا</h3>
-              <p>16789</p>
-              <small>من 9 ص إلى 9 م</small>
-            </div>
-            <div className="contact-card">
               <Shield size={32} />
-              <h3>البريد الإلكتروني</h3>
-              <p>support@gamersstation.com</p>
-              <small>رد خلال 24 ساعة</small>
+              <h3>{t('pages.contact.email')}</h3>
+              <p>contact@thegamersstation.com</p>
+              <small>{t('pages.faq.replyWithin24h')}</small>
             </div>
             <div className="contact-card">
               <HelpCircle size={32} />
-              <h3>الدردشة المباشرة</h3>
-              <p>دردشة فورية</p>
-              <small>متاح 24/7</small>
+              <h3>{t('pages.faq.liveChat')}</h3>
+              <p>{t('pages.faq.instantChat')}</p>
+              <small>{t('pages.faq.available247')}</small>
             </div>
           </div>
         </div>

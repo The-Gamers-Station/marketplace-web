@@ -14,11 +14,14 @@ const FAQPage = lazy(() =>
 const ContactPage = lazy(() =>
   import(/* webpackChunkName: "contact" */ './pages/ContactPage/ContactPage')
 );
-const MerchantsPage = lazy(() =>
-  import(/* webpackChunkName: "merchants" */ './pages/MerchantsPage/MerchantsPage')
-);
 const ProductDetailsPage = lazy(() =>
   import(/* webpackChunkName: "product" */ './pages/ProductDetailsPage/ProductDetailsPage')
+);
+const LoginPage = lazy(() =>
+  import(/* webpackChunkName: "login" */ './pages/LoginPage/LoginPage')
+);
+const RegisterPage = lazy(() =>
+  import(/* webpackChunkName: "register" */ './pages/RegisterPage/RegisterPage')
 );
 
 // Loading component with better UX
@@ -50,8 +53,10 @@ function App() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Preload frequently accessed pages
-      import(/* webpackChunkName: "merchants" */ './pages/MerchantsPage/MerchantsPage');
       import(/* webpackChunkName: "product" */ './pages/ProductDetailsPage/ProductDetailsPage');
+      // Preload auth pages for better UX
+      import(/* webpackChunkName: "login" */ './pages/LoginPage/LoginPage');
+      import(/* webpackChunkName: "register" */ './pages/RegisterPage/RegisterPage');
     };
     
     preloadPages();
@@ -71,8 +76,9 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/contact" element={<ContactPage />} />
-              <Route path="/merchants" element={<MerchantsPage />} />
               <Route path="/product/:id" element={<ProductDetailsPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
             </Routes>
           </Suspense>
         </div>

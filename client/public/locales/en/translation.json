@@ -1,12 +1,15 @@
 {
   "header": {
     "home": "Home",
-    "merchants": "Merchants",
     "contact": "Contact Us",
     "faq": "FAQ",
     "searchPlaceholder": "Search for a game or product...",
     "myAccount": "My Account",
-    "toggleNavigation": "Toggle navigation menu"
+    "toggleNavigation": "Toggle navigation menu",
+    "myProfile": "My Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
   },
   "hero": {
     "mainTitle": "Your Gaming World",
@@ -50,7 +53,6 @@
     "quickLinks": {
       "title": "Quick Links",
       "home": "Home",
-      "merchants": "Merchants",
       "categories": "Categories",
       "offers": "Special Offers",
       "newArrivals": "New Arrivals"
@@ -93,14 +95,6 @@
       "featuredProducts": "Featured Products",
       "viewAll": "View All"
     },
-    "merchants": {
-      "title": "Merchants",
-      "searchPlaceholder": "Search for a merchant...",
-      "verified": "Verified",
-      "rating": "Rating",
-      "products": "products",
-      "joinedDate": "Joined {{date}}"
-    },
     "productDetails": {
       "addToCart": "Add to Cart",
       "buyNow": "Buy Now",
@@ -138,5 +132,80 @@
     "delete": "Delete",
     "edit": "Edit",
     "language": "Language"
+  },
+  "auth": {
+    "login": {
+      "pageTitle": "Login",
+      "pageDescription": "Login to your GamersStation account to access exclusive features and offers",
+      "welcomeBack": "Welcome Back!",
+      "enterCredentials": "Enter your credentials to access your account",
+      "signIn": "Sign In",
+      "signUp": "Sign Up",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "orContinueWith": "Or continue with",
+      "googleSignIn": "Sign in with Google",
+      "facebookSignIn": "Sign in with Facebook",
+      "noAccount": "Don't have an account?",
+      "successMessage": "Login successful! Redirecting..."
+    },
+    "register": {
+      "pageTitle": "Create Account",
+      "pageDescription": "Join GamersStation to start shopping for your favorite games and products",
+      "createAccount": "Create Account",
+      "joinCommunity": "Join our gaming community today",
+      "personalInfo": "Personal Info",
+      "accountDetails": "Account Details",
+      "nextStep": "Next Step",
+      "prevStep": "Previous",
+      "orSignUpWith": "Or sign up with",
+      "googleSignUp": "Sign up with Google",
+      "facebookSignUp": "Sign up with Facebook",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign In",
+      "agreeToTerms": "I agree to the",
+      "termsOfService": "Terms of Service",
+      "privacyPolicy": "Privacy Policy",
+      "and": "and",
+      "successTitle": "Welcome to GamersStation!",
+      "successMessage": "Your account has been created successfully. Redirecting...",
+      "passwordWeak": "Weak",
+      "passwordFair": "Fair",
+      "passwordGood": "Good",
+      "passwordStrong": "Strong",
+      "passwordVeryStrong": "Very Strong"
+    },
+    "fields": {
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phone": "Phone Number"
+    },
+    "placeholders": {
+      "email": "Enter your email address",
+      "password": "Enter your password",
+      "confirmPassword": "Enter your password again",
+      "firstName": "Enter your first name",
+      "lastName": "Enter your last name",
+      "phone": "Enter your phone number"
+    },
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Password is required",
+      "passwordShort": "Password must be at least 8 characters",
+      "passwordWeak": "Password must contain uppercase, lowercase and numbers",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordMismatch": "Passwords do not match",
+      "firstNameRequired": "First name is required",
+      "firstNameShort": "First name must be at least 2 characters",
+      "lastNameRequired": "Last name is required",
+      "lastNameShort": "Last name must be at least 2 characters",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Please enter a valid phone number",
+      "termsRequired": "You must agree to the terms and conditions"
+    }
   }
 }

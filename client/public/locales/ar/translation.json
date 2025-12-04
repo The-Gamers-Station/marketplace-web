@@ -1,12 +1,15 @@
 {
   "header": {
     "home": "الرئيسية",
-    "merchants": "التجار",
     "contact": "تواصل معنا",
     "faq": "الأسئلة الشائعة",
     "searchPlaceholder": "ابحث عن لعبة أو منتج...",
     "myAccount": "حسابي",
-    "toggleNavigation": "تبديل قائمة التنقل"
+    "toggleNavigation": "تبديل قائمة التنقل",
+    "myProfile": "ملفي الشخصي",
+    "logout": "تسجيل الخروج",
+    "login": "دخول",
+    "register": "تسجيل"
   },
   "hero": {
     "mainTitle": "عالمك للألعاب",
@@ -50,7 +53,6 @@
     "quickLinks": {
       "title": "روابط سريعة",
       "home": "الرئيسية",
-      "merchants": "التجار",
       "categories": "الأقسام",
       "offers": "العروض الخاصة",
       "newArrivals": "وصل حديثاً"
@@ -93,14 +95,6 @@
       "featuredProducts": "المنتجات المميزة",
       "viewAll": "عرض الكل"
     },
-    "merchants": {
-      "title": "التجار",
-      "searchPlaceholder": "ابحث عن تاجر...",
-      "verified": "موثق",
-      "rating": "التقييم",
-      "products": "منتجات",
-      "joinedDate": "انضم في {{date}}"
-    },
     "productDetails": {
       "addToCart": "أضف إلى السلة",
       "buyNow": "اشتر الآن",
@@ -138,5 +132,80 @@
     "delete": "حذف",
     "edit": "تعديل",
     "language": "اللغة"
+  },
+  "auth": {
+    "login": {
+      "pageTitle": "تسجيل الدخول",
+      "pageDescription": "سجل دخولك إلى حساب GamersStation للوصول إلى المزايا والعروض الحصرية",
+      "welcomeBack": "مرحباً بعودتك!",
+      "enterCredentials": "أدخل بياناتك للوصول إلى حسابك",
+      "signIn": "تسجيل الدخول",
+      "signUp": "إنشاء حساب",
+      "rememberMe": "تذكرني",
+      "forgotPassword": "هل نسيت كلمة المرور؟",
+      "orContinueWith": "أو المتابعة باستخدام",
+      "googleSignIn": "تسجيل الدخول بحساب جوجل",
+      "facebookSignIn": "تسجيل الدخول بحساب فيسبوك",
+      "noAccount": "ليس لديك حساب؟",
+      "successMessage": "تم تسجيل الدخول بنجاح! جاري التحويل..."
+    },
+    "register": {
+      "pageTitle": "إنشاء حساب",
+      "pageDescription": "انضم إلى GamersStation لبدء التسوق لألعابك ومنتجاتك المفضلة",
+      "createAccount": "إنشاء حساب",
+      "joinCommunity": "انضم إلى مجتمع الألعاب اليوم",
+      "personalInfo": "المعلومات الشخصية",
+      "accountDetails": "تفاصيل الحساب",
+      "nextStep": "الخطوة التالية",
+      "prevStep": "السابق",
+      "orSignUpWith": "أو التسجيل باستخدام",
+      "googleSignUp": "التسجيل بحساب جوجل",
+      "facebookSignUp": "التسجيل بحساب فيسبوك",
+      "haveAccount": "لديك حساب بالفعل؟",
+      "signIn": "تسجيل الدخول",
+      "agreeToTerms": "أوافق على",
+      "termsOfService": "شروط الخدمة",
+      "privacyPolicy": "سياسة الخصوصية",
+      "and": "و",
+      "successTitle": "مرحباً بك في GamersStation!",
+      "successMessage": "تم إنشاء حسابك بنجاح. جاري التحويل...",
+      "passwordWeak": "ضعيف",
+      "passwordFair": "مقبول",
+      "passwordGood": "جيد",
+      "passwordStrong": "قوي",
+      "passwordVeryStrong": "قوي جداً"
+    },
+    "fields": {
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "phone": "رقم الجوال"
+    },
+    "placeholders": {
+      "email": "أدخل بريدك الإلكتروني",
+      "password": "أدخل كلمة المرور",
+      "confirmPassword": "أدخل كلمة المرور مرة أخرى",
+      "firstName": "أدخل اسمك الأول",
+      "lastName": "أدخل اسم العائلة",
+      "phone": "أدخل رقم جوالك"
+    },
+    "errors": {
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "emailInvalid": "الرجاء إدخال بريد إلكتروني صحيح",
+      "passwordRequired": "كلمة المرور مطلوبة",
+      "passwordShort": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+      "passwordWeak": "كلمة المرور يجب أن تحتوي على أحرف كبيرة وصغيرة وأرقام",
+      "confirmPasswordRequired": "الرجاء تأكيد كلمة المرور",
+      "passwordMismatch": "كلمات المرور غير متطابقة",
+      "firstNameRequired": "الاسم الأول مطلوب",
+      "firstNameShort": "الاسم الأول يجب أن يكون حرفين على الأقل",
+      "lastNameRequired": "اسم العائلة مطلوب",
+      "lastNameShort": "اسم العائلة يجب أن يكون حرفين على الأقل",
+      "phoneRequired": "رقم الجوال مطلوب",
+      "phoneInvalid": "الرجاء إدخال رقم جوال صحيح",
+      "termsRequired": "يجب الموافقة على الشروط والأحكام"
+    }
   }
 }

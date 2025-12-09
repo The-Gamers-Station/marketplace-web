@@ -70,6 +70,11 @@
 .header-container > *:nth-child(4) { animation-delay: 0.4s; }
 
 /* Logo */
+.header-logo-link {
+  text-decoration: none;
+  color: inherit;
+}
+
 .header-logo {
   display: flex;
   align-items: center;
@@ -78,7 +83,7 @@
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.header-logo:hover {
+.header-logo-link:hover .header-logo {
   transform: scale(1.05) rotate(-2deg);
 }
 
@@ -90,7 +95,7 @@
   transition: all 0.4s ease;
 }
 
-.header-logo:hover .logo-icon {
+.header-logo-link:hover .logo-icon {
   animation: glow 1.5s ease-in-out infinite;
   transform: rotate(360deg);
 }
@@ -103,7 +108,7 @@
   transition: all 0.3s ease;
 }
 
-.header-logo:hover .logo-text {
+.header-logo-link:hover .logo-text {
   text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
 }
 
@@ -243,6 +248,16 @@
   width: auto;
   padding: 0 15px;
   gap: 8px;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* Profile Image Styles */

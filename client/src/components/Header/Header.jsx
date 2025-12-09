@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, User, ChevronDown, Menu, X, LogIn, UserPlus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
+import { authService } from '../../services/authService';
 import './Header.css';
 
 // Memoized navigation link component
@@ -37,6 +38,7 @@ const Header = memo(() => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState('/');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const location = useLocation();
 
   // Update active link based on current location
@@ -47,15 +49,35 @@ const Header = memo(() => {
   // Check authentication status
   useEffect(() => {
     const checkAuth = () => {
-      const authStatus = localStorage.getItem('isAuthenticated') === 'true';
+      const authStatus = authService.isAuthenticated();
       setIsAuthenticated(authStatus);
+      
+      if (authStatus) {
+        const user = authService.getCurrentUser();
+        setCurrentUser(user);
+      } else {
+        setCurrentUser(null);
+      }
     };
 
     checkAuth();
+    
     // Listen for storage changes (login/logout in other tabs)
     window.addEventListener('storage', checkAuth);
     
-    return () => window.removeEventListener('storage', checkAuth);
+    // Listen for custom auth events
+    const handleAuthChange = (event) => {
+      if (event.detail && event.detail.type === 'login') {
+        checkAuth();
+      }
+    };
+    
+    window.addEventListener('authStateChanged', handleAuthChange);
+    
+    return () => {
+      window.removeEventListener('storage', checkAuth);
+      window.removeEventListener('authStateChanged', handleAuthChange);
+    };
   }, []);
 
   const toggleMobileMenu = useCallback(() => {
@@ -90,12 +112,9 @@ const Header = memo(() => {
   }, [toggleMobileMenu]);
 
   const handleLogout = useCallback(() => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('rememberMe');
-    localStorage.removeItem('authProvider');
+    authService.logout();
     setIsAuthenticated(false);
+    setCurrentUser(null);
     navigate('/');
   }, [navigate]);
   
@@ -122,10 +141,12 @@ const Header = memo(() => {
         </button>
 
         {/* Logo */}
-        <div className="header-logo">
-          <img src="/logo.svg" alt="GamersStation" className="logo-icon" loading="eager" />
-          <span className="logo-text">GamersStation</span>
-        </div>
+        <Link to="/" className="header-logo-link" onClick={() => handleLinkClick('/')}>
+          <div className="header-logo">
+            <img src="/logo.svg" alt="GamersStation" className="logo-icon" loading="eager" />
+            <span className="logo-text">GamersStation</span>
+          </div>
+        </Link>
 
         {/* Navigation */}
         <nav className="header-nav">
@@ -160,6 +181,9 @@ const Header = memo(() => {
                 <div className="user-profile-img">
                   <User size={22} />
                 </div>
+                {currentUser?.username && (
+                  <span className="user-name">{currentUser.username}</span>
+                )}
                 <ChevronDown size={16} />
               </button>
               <div className="dropdown-menu">
@@ -223,7 +247,7 @@ const Header = memo(() => {
                   <div className="mobile-user-profile-img">
                     <User size={20} />
                   </div>
-                  <span>{t('header.myAccount')}</span>
+                  <span>{currentUser?.username || t('header.myAccount')}</span>
                 </button>
                 <button onClick={handleLogout} className="mobile-action-btn logout-btn">
                   <LogIn size={20} />

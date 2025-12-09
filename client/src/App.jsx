@@ -23,6 +23,9 @@ const LoginPage = lazy(() =>
 const RegisterPage = lazy(() =>
   import(/* webpackChunkName: "register" */ './pages/RegisterPage/RegisterPage')
 );
+const ProfileCompletePage = lazy(() =>
+  import(/* webpackChunkName: "profile-complete" */ './pages/ProfileCompletePage/ProfileCompletePage')
+);
 
 // Loading component with better UX
 const PageLoader = memo(() => (
@@ -79,6 +82,7 @@ function App() {
               <Route path="/product/:id" element={<ProductDetailsPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/profile/complete" element={<ProfileCompletePage />} />
             </Routes>
           </Suspense>
         </div>

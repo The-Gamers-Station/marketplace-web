@@ -139,7 +139,15 @@
       "pageDescription": "Login to your GamersStation account to access exclusive features and offers",
       "welcomeBack": "Welcome Back!",
       "enterCredentials": "Enter your credentials to access your account",
+      "enterPhone": "Enter your phone number to continue",
+      "enterOtp": "Enter the verification code",
       "signIn": "Sign In",
+      "requestOtp": "Send Verification Code",
+      "verifyAndSignIn": "Verify & Sign In",
+      "otpSentTo": "Verification code sent to",
+      "changePhone": "Change phone number",
+      "resendOtp": "Resend Code",
+      "resendIn": "Resend code in",
       "signUp": "Sign Up",
       "rememberMe": "Remember me",
       "forgotPassword": "Forgot password?",
@@ -150,6 +158,12 @@
       "successMessage": "Login successful! Redirecting..."
     },
     "register": {
+      "requestOtp": "Send Verification Code",
+      "otpSentTo": "Verification code sent to",
+      "changePhone": "Change phone number",
+      "resendIn": "Resend code in",
+      "resendOtp": "Resend Code",
+      "verifyAndContinue": "Verify & Continue",
       "pageTitle": "Create Account",
       "pageDescription": "Join GamersStation to start shopping for your favorite games and products",
       "createAccount": "Create Account",
@@ -181,7 +195,9 @@
       "confirmPassword": "Confirm Password",
       "firstName": "First Name",
       "lastName": "Last Name",
-      "phone": "Phone Number"
+      "phone": "Phone Number",
+      "phoneNumber": "Phone Number",
+      "otpCode": "Verification Code"
     },
     "placeholders": {
       "email": "Enter your email address",
@@ -189,7 +205,9 @@
       "confirmPassword": "Enter your password again",
       "firstName": "Enter your first name",
       "lastName": "Enter your last name",
-      "phone": "Enter your phone number"
+      "phone": "Enter your phone number",
+      "phoneNumber": "e.g., 501234567",
+      "otpCode": "Enter 4-digit code"
     },
     "errors": {
       "emailRequired": "Email is required",
@@ -204,8 +222,43 @@
       "lastNameRequired": "Last name is required",
       "lastNameShort": "Last name must be at least 2 characters",
       "phoneRequired": "Phone number is required",
-      "phoneInvalid": "Please enter a valid phone number",
-      "termsRequired": "You must agree to the terms and conditions"
+      "phoneInvalid": "Please enter a valid Saudi phone number",
+      "termsRequired": "You must agree to the terms and conditions",
+      "otpRequired": "Verification code is required",
+      "otpInvalid": "Please enter a valid 4-digit code",
+      "requestOtpFailed": "Failed to send verification code. Please try again.",
+      "verifyOtpFailed": "Invalid or expired verification code. Please try again.",
+      "usernameRequired": "Username is required",
+      "usernameShort": "Username must be at least 3 characters",
+      "usernameInvalid": "Username can only contain letters, numbers, and underscores",
+      "cityRequired": "City is required"
     }
+  },
+  "profileComplete": {
+    "pageTitle": "Complete Your Profile",
+    "pageDescription": "Complete your profile to enjoy all features of GamersStation",
+    "title": "Almost there!",
+    "subtitle": "Complete your profile to start buying and selling",
+    "fields": {
+      "username": "Username",
+      "email": "Email (Optional)",
+      "city": "City"
+    },
+    "placeholders": {
+      "username": "Choose a unique username",
+      "email": "Enter your email address",
+      "city": "Select your city"
+    },
+    "skipForNow": "Skip for now",
+    "saving": "Saving...",
+    "complete": "Complete Profile",
+    "infoText": "You can always update your profile later from settings",
+    "errors": {
+      "updateFailed": "Failed to update profile. Please try again."
+    }
+  },
+  "productGrid": {
+    "noSearchResults": "No results found for '{{query}}'",
+    "noProducts": "No products available at the moment"
   }
 }

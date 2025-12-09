@@ -139,7 +139,15 @@
       "pageDescription": "سجل دخولك إلى حساب GamersStation للوصول إلى المزايا والعروض الحصرية",
       "welcomeBack": "مرحباً بعودتك!",
       "enterCredentials": "أدخل بياناتك للوصول إلى حسابك",
+      "enterPhone": "أدخل رقم الهاتف للمتابعة",
+      "enterOtp": "أدخل رمز التحقق",
       "signIn": "تسجيل الدخول",
+      "requestOtp": "إرسال رمز التحقق",
+      "verifyAndSignIn": "تحقق وسجل الدخول",
+      "otpSentTo": "تم إرسال رمز التحقق إلى",
+      "changePhone": "تغيير رقم الهاتف",
+      "resendOtp": "إعادة إرسال الرمز",
+      "resendIn": "إعادة الإرسال بعد",
       "signUp": "إنشاء حساب",
       "rememberMe": "تذكرني",
       "forgotPassword": "هل نسيت كلمة المرور؟",
@@ -150,6 +158,12 @@
       "successMessage": "تم تسجيل الدخول بنجاح! جاري التحويل..."
     },
     "register": {
+      "requestOtp": "إرسال رمز التحقق",
+      "otpSentTo": "تم إرسال رمز التحقق إلى",
+      "changePhone": "تغيير رقم الهاتف",
+      "resendIn": "إعادة الإرسال بعد",
+      "resendOtp": "إعادة إرسال الرمز",
+      "verifyAndContinue": "التحقق والمتابعة",
       "pageTitle": "إنشاء حساب",
       "pageDescription": "انضم إلى GamersStation لبدء التسوق لألعابك ومنتجاتك المفضلة",
       "createAccount": "إنشاء حساب",
@@ -181,7 +195,9 @@
       "confirmPassword": "تأكيد كلمة المرور",
       "firstName": "الاسم الأول",
       "lastName": "اسم العائلة",
-      "phone": "رقم الجوال"
+      "phone": "رقم الجوال",
+      "phoneNumber": "رقم الهاتف",
+      "otpCode": "رمز التحقق"
     },
     "placeholders": {
       "email": "أدخل بريدك الإلكتروني",
@@ -189,7 +205,9 @@
       "confirmPassword": "أدخل كلمة المرور مرة أخرى",
       "firstName": "أدخل اسمك الأول",
       "lastName": "أدخل اسم العائلة",
-      "phone": "أدخل رقم جوالك"
+      "phone": "أدخل رقم جوالك",
+      "phoneNumber": "مثال: 501234567",
+      "otpCode": "أدخل الرمز المكون من 4 أرقام"
     },
     "errors": {
       "emailRequired": "البريد الإلكتروني مطلوب",
@@ -204,8 +222,43 @@
       "lastNameRequired": "اسم العائلة مطلوب",
       "lastNameShort": "اسم العائلة يجب أن يكون حرفين على الأقل",
       "phoneRequired": "رقم الجوال مطلوب",
-      "phoneInvalid": "الرجاء إدخال رقم جوال صحيح",
-      "termsRequired": "يجب الموافقة على الشروط والأحكام"
+      "phoneInvalid": "يرجى إدخال رقم هاتف سعودي صحيح",
+      "termsRequired": "يجب الموافقة على الشروط والأحكام",
+      "otpRequired": "رمز التحقق مطلوب",
+      "otpInvalid": "يرجى إدخال رمز مكون من 4 أرقام",
+      "requestOtpFailed": "فشل إرسال رمز التحقق. يرجى المحاولة مرة أخرى.",
+      "verifyOtpFailed": "رمز التحقق غير صحيح أو منتهي الصلاحية. يرجى المحاولة مرة أخرى.",
+      "usernameRequired": "اسم المستخدم مطلوب",
+      "usernameShort": "اسم المستخدم يجب أن يكون 3 أحرف على الأقل",
+      "usernameInvalid": "اسم المستخدم يمكن أن يحتوي على أحرف وأرقام وشرطة سفلية فقط",
+      "cityRequired": "المدينة مطلوبة"
     }
+  },
+  "profileComplete": {
+    "pageTitle": "أكمل ملفك الشخصي",
+    "pageDescription": "أكمل ملفك الشخصي للاستمتاع بجميع مزايا GamersStation",
+    "title": "أوشكت على الانتهاء!",
+    "subtitle": "أكمل ملفك الشخصي لبدء البيع والشراء",
+    "fields": {
+      "username": "اسم المستخدم",
+      "email": "البريد الإلكتروني (اختياري)",
+      "city": "المدينة"
+    },
+    "placeholders": {
+      "username": "اختر اسم مستخدم فريد",
+      "email": "أدخل بريدك الإلكتروني",
+      "city": "اختر مدينتك"
+    },
+    "skipForNow": "تخطي الآن",
+    "saving": "جاري الحفظ...",
+    "complete": "إكمال الملف الشخصي",
+    "infoText": "يمكنك تحديث ملفك الشخصي في أي وقت من الإعدادات",
+    "errors": {
+      "updateFailed": "فشل تحديث الملف الشخصي. يرجى المحاولة مرة أخرى."
+    }
+  },
+  "productGrid": {
+    "noSearchResults": "لا توجد نتائج للبحث '{{query}}'",
+    "noProducts": "لا توجد منتجات متاحة حالياً"
   }
 }

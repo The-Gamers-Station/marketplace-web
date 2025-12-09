@@ -46,7 +46,7 @@
   animation: slideInTop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   transition: all 0.3s ease;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .category-filter::before {
@@ -79,10 +79,13 @@
   align-items: center;
   animation: fadeInScale 0.6s ease;
   overflow-x: auto;
-  overflow-y: visible;
+  overflow-y: hidden;
   padding: 5px 5px 8px 5px;
   position: relative;
   margin-top: -5px;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
 /* Fade effect for scrollable content on mobile */

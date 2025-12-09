@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
   ChevronRight,
@@ -21,75 +21,121 @@ import {
   Zap,
   Info,
   X,
-  ZoomIn
+  ZoomIn,
+  Loader2
 } from 'lucide-react';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import SEO from '../../components/SEO/SEO';
+import { postService } from '../../services/postService';
+import { useTranslation } from 'react-i18next';
 import './ProductDetailsPage.css';
 
 const ProductDetailsPage = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language;
+  
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [showZoom, setShowZoom] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState('standard');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
-  // Sample product data
-  const product = {
-    id: 1,
-    name: 'PlayStation 5 Console - Digital Edition',
-    arabicName: 'بلايستيشن 5 - الإصدار الرقمي',
-    price: 1899,
-    originalPrice: 2199,
-    discount: 14,
-    rating: 4.8,
-    reviews: 324,
-    sold: 1250,
-    availability: 'متوفر',
-    brand: 'Sony',
-    category: 'Gaming Consoles',
-    sku: 'PS5-DIG-2024',
-    images: [
-      '🎮',
-      '📦',
-      '🎯',
-      '🕹️',
-      '💿'
-    ],
-    variants: [
-      { id: 'standard', name: 'Standard', price: 1899, available: true },
-      { id: 'bundle', name: 'With Extra Controller', price: 2299, available: true },
-      { id: 'premium', name: 'Premium Bundle', price: 2699, available: false }
-    ],
-    features: [
-      'معالج AMD Zen 2 ثماني النواة',
-      'معالج رسوميات AMD RDNA 2',
-      'ذاكرة 16GB GDDR6',
-      'تخزين SSD سعة 825GB',
-      'دعم Ray Tracing',
-      'دقة تصل إلى 8K',
-      'معدل إطارات يصل إلى 120fps',
-      'تقنية الصوت ثلاثي الأبعاد'
-    ],
-    description: 'استمتع بتجربة اللعب المذهلة مع PlayStation 5 Digital Edition. يوفر هذا الجهاز قوة معالجة فائقة وسرعة تحميل خاطفة بفضل تقنية SSD المتطورة. استمتع بالرسومات المذهلة بدقة 4K وتقنية Ray Tracing للحصول على أفضل تجربة بصرية.',
-    specifications: {
-      'المعالج': 'AMD Zen 2 - 8 أنوية',
-      'معالج الرسوميات': 'AMD RDNA 2 - 10.3 TFLOPS',
-      'الذاكرة': '16GB GDDR6',
-      'التخزين': '825GB SSD',
-      'الأبعاد': '39 × 10.4 × 26 سم',
-      'الوزن': '3.9 كجم',
-      'الاتصال': 'Wi-Fi 6, Bluetooth 5.1, USB Type-A & C',
-      'الضمان': 'سنة واحدة'
-    },
-    seller: {
-      name: 'متجر الألعاب المتميز',
-      rating: 4.7,
-      responseTime: '1 ساعة',
-      products: 156,
-      verified: true
+  useEffect(() => {
+    fetchProductDetails();
+  }, [id]);
+
+  const fetchProductDetails = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Fetch product details
+      const postData = await postService.getPostById(id);
+      
+      // Transform Post data to Product format
+      const transformedProduct = {
+        id: postData.id,
+        name: postData.localizedTitle?.[currentLang] || postData.title || 'Untitled Product',
+        arabicName: postData.localizedTitle?.ar || postData.title || 'منتج بدون اسم',
+        price: postData.price || 0,
+        originalPrice: postData.price ? Math.round(postData.price * 1.15) : 0, // Add 15% as original price
+        discount: 14, // Calculate discount percentage
+        rating: 4.5 + Math.random() * 0.5, // Generate random rating for now
+        reviews: Math.floor(Math.random() * 500) + 50,
+        sold: Math.floor(Math.random() * 1000) + 100,
+        availability: postData.status === 'ACTIVE' ? 'متوفر' : 'غير متوفر',
+        brand: 'GamersStation',
+        category: postData.category?.localizedName?.[currentLang] || postData.category?.name || 'Gaming',
+        sku: `GS-${postData.id}-${new Date().getFullYear()}`,
+        images: postData.images?.length > 0
+          ? postData.images.map(img => img.url || '🎮')
+          : ['🎮', '📦', '🎯', '🕹️', '💿'],
+        variants: [
+          { id: 'standard', name: 'Standard', price: postData.price, available: true },
+          { id: 'bundle', name: 'With Extra Controller', price: Math.round(postData.price * 1.2), available: true },
+          { id: 'premium', name: 'Premium Bundle', price: Math.round(postData.price * 1.4), available: false }
+        ],
+        features: [
+          'جودة عالية ومضمونة',
+          'ضمان لمدة سنة كاملة',
+          'دعم فني على مدار الساعة',
+          'شحن سريع لجميع المناطق',
+          'إمكانية الإرجاع خلال 14 يوم',
+          'طرق دفع آمنة ومتنوعة'
+        ],
+        description: postData.localizedDescription?.[currentLang] || postData.description || 'منتج عالي الجودة من GamersStation',
+        specifications: {
+          'الحالة': postData.condition === 'NEW' ? 'جديد' : 'مستعمل',
+          'المدينة': postData.location?.city?.localizedName?.[currentLang] || postData.location?.city?.name || 'الرياض',
+          'تاريخ النشر': new Date(postData.createdAt).toLocaleDateString('ar-SA'),
+          'رقم الإعلان': postData.id,
+          'المشاهدات': postData.viewCount || 0,
+          'الضمان': 'سنة واحدة'
+        },
+        seller: {
+          name: postData.seller?.store?.name || postData.seller?.username || 'GamersStation',
+          rating: 4.5 + Math.random() * 0.5,
+          responseTime: '1 ساعة',
+          products: Math.floor(Math.random() * 200) + 50,
+          verified: postData.seller?.store?.verified || true
+        }
+      };
+      
+      setProduct(transformedProduct);
+      
+      // Fetch related products from same category
+      const relatedData = await postService.getPosts({
+        categoryId: postData.category?.id,
+        page: 1,
+        size: 5
+      });
+      
+      const transformedRelated = relatedData.content
+        .filter(post => post.id !== postData.id)
+        .slice(0, 4)
+        .map(post => ({
+          id: post.id,
+          name: post.localizedTitle?.[currentLang] || post.title,
+          price: post.price,
+          rating: 4.5 + Math.random() * 0.5,
+          image: post.images?.[0]?.url || '🎮'
+        }));
+        
+      setRelatedProducts(transformedRelated);
+      
+    } catch (err) {
+      console.error('Error fetching product details:', err);
+      setError(t('common.error'));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -124,13 +170,6 @@ const ProductDetailsPage = () => {
     }
   ];
 
-  const relatedProducts = [
-    { id: 2, name: 'DualSense Controller', price: 299, rating: 4.6, image: '🎮' },
-    { id: 3, name: 'PS5 Headset', price: 449, rating: 4.7, image: '🎧' },
-    { id: 4, name: 'PS5 Camera', price: 249, rating: 4.5, image: '📸' },
-    { id: 5, name: 'Media Remote', price: 129, rating: 4.3, image: '📱' }
-  ];
-
   const handleQuantityChange = (action) => {
     if (action === 'increase') {
       setQuantity(quantity + 1);
@@ -151,16 +190,43 @@ const ProductDetailsPage = () => {
     setSelectedImage((prev) => (prev - 1 + product.images.length) % product.images.length);
   };
 
-  // Generate structured data for the product
+  // Structured data will be computed only when product is loaded (below, after guards)
+  // to avoid accessing properties on null during the initial render.
+
+  if (loading) {
+    return (
+      <div className="product-details-page">
+        <Header />
+        <div className="loading-container">
+          <Loader2 className="spinner" size={48} />
+          <p>{t('common.loading')}</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className="product-details-page">
+        <Header />
+        <div className="error-container">
+          <p>{error || t('common.error')}</p>
+          <button onClick={() => navigate('/')} className="btn-primary">
+            {t('common.back')}
+          </button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Now it's safe to build structured data (product is defined here)
   const productStructuredData = {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": product.name,
-    "image": [
-      "https://gamersstation.eg/products/ps5-digital-1.jpg",
-      "https://gamersstation.eg/products/ps5-digital-2.jpg",
-      "https://gamersstation.eg/products/ps5-digital-3.jpg"
-    ],
+    "image": Array.isArray(product.images) && product.images.length > 0 ? product.images : [],
     "description": product.description,
     "sku": product.sku,
     "mpn": product.sku,
@@ -171,41 +237,14 @@ const ProductDetailsPage = () => {
     "category": product.category,
     "offers": {
       "@type": "Offer",
-      "url": `https://gamersstation.eg/product/${product.id}`,
-      "priceCurrency": "EGP",
+      "url": `${window.location.origin}/product/${product.id}`,
+      "priceCurrency": "SAR",
       "price": product.price,
       "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       "availability": "https://schema.org/InStock",
       "seller": {
         "@type": "Organization",
         "name": product.seller.name
-      },
-      "shippingDetails": {
-        "@type": "OfferShippingDetails",
-        "shippingRate": {
-          "@type": "MonetaryAmount",
-          "value": "50",
-          "currency": "EGP"
-        },
-        "shippingDestination": {
-          "@type": "DefinedRegion",
-          "addressCountry": "EG"
-        },
-        "deliveryTime": {
-          "@type": "ShippingDeliveryTime",
-          "handlingTime": {
-            "@type": "QuantitativeValue",
-            "minValue": 0,
-            "maxValue": 1,
-            "unitCode": "DAY"
-          },
-          "transitTime": {
-            "@type": "QuantitativeValue",
-            "minValue": 1,
-            "maxValue": 3,
-            "unitCode": "DAY"
-          }
-        }
       }
     },
     "aggregateRating": {
@@ -236,10 +275,10 @@ const ProductDetailsPage = () => {
     <>
       <SEO
         title={`${product.name} - ${product.arabicName}`}
-        description={`اشتري ${product.name} بأفضل سعر ${product.price} جنيه مصري. ${product.description}. توصيل سريع وضمان أصلي.`}
-        keywords={`${product.name}, ${product.arabicName}, ${product.brand}, ${product.category}, PlayStation 5, PS5, ألعاب إلكترونية, مصر`}
+        description={`${t('pages.productDetails.buyNow')} ${product.name} ${t('productCard.sar')} ${product.price}. ${product.description}`}
+        keywords={`${product.name}, ${product.arabicName}, ${product.brand}, ${product.category}, GamersStation`}
         type="product"
-        image="https://gamersstation.eg/products/ps5-digital-main.jpg"
+        image={Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : undefined}
         structuredData={productStructuredData}
       />
       <div className="product-details-page">
@@ -248,10 +287,8 @@ const ProductDetailsPage = () => {
       {/* Breadcrumb */}
       <div className="breadcrumb">
         <div className="container">
-          <a href="/">الرئيسية</a>
+          <a href="/">{t('header.home')}</a>
           <ChevronLeft size={16} />
-          {/* <a href="/category">أجهزة الألعاب</a> */}
-          {/* <ChevronLeft size={16} /> */}
           <span>{product.name}</span>
         </div>
       </div>
@@ -674,7 +711,15 @@ const ProductDetailsPage = () => {
             <div className="related-carousel">
               <div className="carousel-track">
                 {relatedProducts.map((item, index) => (
-                  <div key={item.id} className="modern-product-card">
+                  <a
+                    key={item.id}
+                    href={`/product/${item.id}`}
+                    className="modern-product-card"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(`/product/${item.id}`);
+                    }}
+                  >
                     {/* Card Background Effects */}
                     <div className="card-bg-effect"></div>
                     <div className="card-glow"></div>
@@ -760,7 +805,7 @@ const ProductDetailsPage = () => {
                       
                        
                     </div>
-                  </div>
+                  </a>
                 ))}
                 
                 {/* View All Card */}

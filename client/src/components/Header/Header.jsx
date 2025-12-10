@@ -97,7 +97,7 @@ const Header = memo(() => {
         </button>
 
         {/* Logo */}
-        <div className="header-logo">
+        <div onClick={() => handleLinkClick('/')} className="header-logo">
           <img src="/logo.svg" alt="GamersStation" className="logo-icon" loading="eager" />
           <span className="logo-text">GamersStation</span>
         </div>

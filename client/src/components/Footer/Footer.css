@@ -737,13 +737,33 @@
 
   .footer-links {
     padding: 10px 0;
-    gap: 10px;
+    gap: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .footer-links li {
+    animation: none;
   }
 
   .footer-links li a {
-    padding: 5px 10px;
-    display: block;
+    padding: 6px 12px;
+    display: inline-block;
     font-size: 13px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .footer-links li a:hover {
+    background: rgba(255, 107, 53, 0.1);
+    border-color: var(--primary-color);
+    padding-right: 12px;
+  }
+
+  .footer-links li a::before {
+    display: none;
   }
 
   .footer-contact {
@@ -905,17 +925,20 @@
     display: none;
   }
 
+  .footer-links {
+    gap: 6px;
+  }
+
   .footer-links li a {
-    padding: 4px 8px;
+    padding: 5px 10px;
     font-size: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 5px;
   }
 
   .footer-links li a:hover {
-    padding-right: 8px;
-  }
-
-  .footer-links li a::before {
-    display: none;
+    padding-right: 10px;
+    background: rgba(255, 107, 53, 0.15);
   }
 
   .contact-item {
@@ -944,7 +967,7 @@
   }
 
   .newsletter-form {
-    flex-direction: column;
+    flex-direction: row;
     gap: 8px;
   }
 
@@ -952,11 +975,13 @@
     height: 38px;
     font-size: 12px;
     padding: 0 12px;
+    flex: 1;
   }
 
   .newsletter-btn {
-    width: 100%;
+    width: 38px;
     height: 38px;
+    flex-shrink: 0;
   }
 
   .payment-methods {

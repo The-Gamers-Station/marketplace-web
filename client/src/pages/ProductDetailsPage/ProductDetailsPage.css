@@ -151,7 +151,7 @@
 }
 
 /* Additional floating element */
-.product-content::before {
+.product-contentt::before {
   content: '';
   position: absolute;
   top: 50%;
@@ -167,7 +167,7 @@
 }
 
 /* Ensure content is above background effects */
-.product-content {
+.product-contentt {
   position: relative;
   z-index: 1;
 }
@@ -2390,7 +2390,7 @@
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-  .product-content {
+  .product-contentt {
     grid-template-columns: 1fr;
     gap: 40px;
   }

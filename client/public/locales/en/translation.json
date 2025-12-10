@@ -409,5 +409,62 @@
     "noSearchResults": "No results found for '{{query}}'",
     "noProducts": "No products available at the moment",
     "loadMore": "Load More"
+  },
+  "addProduct": {
+    "pageTitle": "Add New Product",
+    "pageDescription": "List your gaming products and reach thousands of buyers",
+    "title": "Add New Product",
+    "subtitle": "Follow the steps to list your product",
+    "selectCategory": "Select Category",
+    "selectSubcategory": "Select Subcategory",
+    "productDetails": "Product Details",
+    "locationImages": "Location & Images",
+    "submitProduct": "Submit Product",
+    "submitting": "Submitting...",
+    "successMessage": "Product added successfully!",
+    "imageHint": "Add up to 6 images. First image will be the main photo.",
+    "uploadImage": "Upload Image",
+    "steps": {
+      "category": "Category",
+      "details": "Details",
+      "location": "Location"
+    },
+    "fields": {
+      "title": "Product Title",
+      "description": "Description",
+      "price": "Price (SAR)",
+      "condition": "Condition",
+      "type": "Listing Type",
+      "city": "City",
+      "images": "Product Images"
+    },
+    "placeholders": {
+      "title": "Enter a descriptive title for your product",
+      "description": "Describe your product in detail...",
+      "price": "Enter price",
+      "selectCity": "Select your city"
+    },
+    "conditions": {
+      "new": "Brand New",
+      "likeNew": "Like New",
+      "good": "Good",
+      "fair": "Fair"
+    },
+    "types": {
+      "sale": "For Sale",
+      "exchange": "For Exchange",
+      "wanted": "Wanted"
+    },
+    "categories": {
+      "components": "Components"
+    },
+    "errors": {
+      "titleRequired": "Product title is required",
+      "descriptionRequired": "Description is required",
+      "priceRequired": "Valid price is required",
+      "cityRequired": "Please select a city",
+      "submitFailed": "Failed to add product. Please try again."
+    },
+    "addProductButton": "Add Product"
   }
 }

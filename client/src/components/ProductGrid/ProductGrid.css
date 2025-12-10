@@ -50,6 +50,54 @@
   animation: shimmer 2s infinite;
 }
 
+/* Grid Header */
+.grid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 0 2rem;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.grid-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.add-product-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+}
+
+.add-product-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(255, 107, 53, 0.4);
+}
+
+.add-product-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
 @keyframes shimmer {
   0% {
     transform: translateX(-100%);
@@ -199,6 +247,23 @@
   animation: bounce 0.5s ease infinite;
 }
 
+/* Enhanced Button Loader */
+.button-loader-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+
+.load-more-btn.loading {
+  position: relative;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.load-more-btn.loading .button-loader-inline {
+  animation: pulse 1s ease-in-out infinite;
+}
+
 @keyframes bounce {
   0%, 100% {
     transform: translateY(0);
@@ -245,6 +310,19 @@
     padding: 14px 32px;
     font-size: 14px;
   }
+
+  .grid-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .add-product-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 @media (max-width: 480px) {
@@ -259,7 +337,16 @@
   }
 }
 /* Centered states for loading, error, and empty results */
-.loading-container,
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 24px;
+  padding: 60px 20px 40px;
+  min-height: 300px;
+}
+
 .error-container,
 .empty-state {
   display: flex;
@@ -332,4 +419,13 @@
     min-height: 30vh;
     padding: 0 16px;
   }
+}
+
+/* RTL Support */
+[dir="rtl"] .add-product-btn {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .add-product-btn svg {
+  transform: scaleX(-1);
 }

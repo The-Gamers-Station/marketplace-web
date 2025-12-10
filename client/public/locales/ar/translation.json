@@ -409,5 +409,62 @@
     "noSearchResults": "لا توجد نتائج للبحث '{{query}}'",
     "noProducts": "لا توجد منتجات متاحة حالياً",
     "loadMore": "تحميل المزيد"
+  },
+  "addProduct": {
+    "pageTitle": "إضافة منتج جديد",
+    "pageDescription": "اعرض منتجاتك للألعاب واصل إلى آلاف المشترين",
+    "title": "إضافة منتج جديد",
+    "subtitle": "اتبع الخطوات لعرض منتجك",
+    "selectCategory": "اختر الفئة",
+    "selectSubcategory": "اختر الفئة الفرعية",
+    "productDetails": "تفاصيل المنتج",
+    "locationImages": "الموقع والصور",
+    "submitProduct": "إضافة المنتج",
+    "submitting": "جاري الإضافة...",
+    "successMessage": "تمت إضافة المنتج بنجاح!",
+    "imageHint": "أضف حتى 6 صور. الصورة الأولى ستكون الصورة الرئيسية.",
+    "uploadImage": "رفع صورة",
+    "steps": {
+      "category": "الفئة",
+      "details": "التفاصيل",
+      "location": "الموقع"
+    },
+    "fields": {
+      "title": "عنوان المنتج",
+      "description": "الوصف",
+      "price": "السعر (ريال)",
+      "condition": "الحالة",
+      "type": "نوع الإعلان",
+      "city": "المدينة",
+      "images": "صور المنتج"
+    },
+    "placeholders": {
+      "title": "أدخل عنواناً وصفياً لمنتجك",
+      "description": "صف منتجك بالتفصيل...",
+      "price": "أدخل السعر",
+      "selectCity": "اختر مدينتك"
+    },
+    "conditions": {
+      "new": "جديد تماماً",
+      "likeNew": "كالجديد",
+      "good": "جيد",
+      "fair": "مقبول"
+    },
+    "types": {
+      "sale": "للبيع",
+      "exchange": "للتبديل",
+      "wanted": "مطلوب"
+    },
+    "categories": {
+      "components": "قطع الكمبيوتر"
+    },
+    "errors": {
+      "titleRequired": "عنوان المنتج مطلوب",
+      "descriptionRequired": "الوصف مطلوب",
+      "priceRequired": "السعر الصحيح مطلوب",
+      "cityRequired": "الرجاء اختيار المدينة",
+      "submitFailed": "فشلت إضافة المنتج. يرجى المحاولة مرة أخرى."
+    },
+    "addProductButton": "إضافة منتج"
   }
 }

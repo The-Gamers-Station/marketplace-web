@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProductCard from '../ProductCard/ProductCard';
 import postService from '../../services/postService';
+import { GameSpinner, SkeletonLoader } from '../Loading/Loading';
 import './ProductGrid.css';
 
 const ProductGrid = ({ categoryId, searchQuery }) => {
@@ -76,9 +77,9 @@ const ProductGrid = ({ categoryId, searchQuery }) => {
     return (
       <div className="product-grid">
         <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p>{t('common.loading')}</p>
+          <GameSpinner size="large" text={t('common.loading')} />
         </div>
+        <SkeletonLoader type="card" count={6} />
       </div>
     );
   }
@@ -150,7 +151,9 @@ const ProductGrid = ({ categoryId, searchQuery }) => {
           >
             {loadingMore ? (
               <>
-                <span className="loading-spinner-small"></span>
+                <span className="button-loader-inline">
+                  <span className="loading-spinner-small"></span>
+                </span>
                 {i18n.language === 'ar' ? 'جاري التحميل...' : 'Loading...'}
               </>
             ) : (

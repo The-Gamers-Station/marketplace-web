@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import FormInput from '../../components/FormInput/FormInput';
+import LanguageSwitcher from '../../components/LanguageSwitcher/LanguageSwitcher';
 import authService from '../../services/authService';
 import './RegisterPage.css';
 
@@ -174,6 +175,11 @@ const RegisterPage = () => {
         
         <div className="register-container">
           <div className="register-card">
+            {/* Language Switcher */}
+            <div className="auth-language-switcher">
+              <LanguageSwitcher />
+            </div>
+            
             {/* Header */}
             <div className="register-header">
               <div className="logo-container">

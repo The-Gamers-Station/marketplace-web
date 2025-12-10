@@ -26,16 +26,43 @@ const RegisterPage = lazy(() =>
 const ProfileCompletePage = lazy(() =>
   import(/* webpackChunkName: "profile-complete" */ './pages/ProfileCompletePage/ProfileCompletePage')
 );
+const AddProductPage = lazy(() =>
+  import(/* webpackChunkName: "add-product" */ './pages/AddProductPage/AddProductPage')
+);
 
 // Loading component with better UX
-const PageLoader = memo(() => (
-  <div className="page-loader">
-    <div className="loader-container">
-      <div className="loader-spinner"></div>
-      <p className="loader-text">Loading...</p>
+const PageLoader = memo(() => {
+  const { i18n } = useTranslation();
+  
+  return (
+    <div className="page-loader">
+      <div className="page-loader-backdrop"></div>
+      <div className="page-loader-content">
+        <div className="cyber-grid">
+          <div className="grid-line horizontal-1"></div>
+          <div className="grid-line horizontal-2"></div>
+          <div className="grid-line vertical-1"></div>
+          <div className="grid-line vertical-2"></div>
+        </div>
+        <div className="loader-container">
+          <div className="gaming-logo-loader">
+            <img src="/logo.svg" alt="GamersStation" className="logo-pulse" />
+          </div>
+          <div className="loader-text-container">
+            <p className="loader-text">
+              {i18n.language === 'ar' ? 'جاري التحميل' : 'Loading'}
+            </p>
+            <div className="loader-dots">
+              <span className="dot"></span>
+              <span className="dot"></span>
+              <span className="dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-));
+  );
+});
 
 PageLoader.displayName = 'PageLoader';
 
@@ -83,6 +110,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/profile/complete" element={<ProfileCompletePage />} />
+              <Route path="/add-product" element={<AddProductPage />} />
             </Routes>
           </Suspense>
         </div>

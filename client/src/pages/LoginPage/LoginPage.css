@@ -88,6 +88,19 @@
   overflow: hidden;
 }
 
+/* Language Switcher in Auth Card */
+.auth-language-switcher {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 10;
+}
+
+[dir="rtl"] .auth-language-switcher {
+  right: auto;
+  left: 1.5rem;
+}
+
 /* Header Section */
 .login-header {
   text-align: center;
@@ -357,26 +370,51 @@
 
 .login-button.loading {
   color: transparent;
+  pointer-events: none;
+  background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
 }
 
-/* Button Loader */
-.button-loader {
+.login-button.loading::after {
+  content: '';
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border: 3px solid transparent;
   border-radius: 50%;
-  border-top-color: white;
-  animation: spin 0.8s linear infinite;
+  box-sizing: border-box;
+  animation: button-spin-dual 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
 }
 
-@keyframes spin {
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
+.login-button.loading::after {
+  border-top-color: rgba(255, 255, 255, 1);
+  border-bottom-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Button Loader Animation */
+@keyframes button-spin-dual {
+  0% {
+    transform: rotate(0deg);
+    border-top-color: rgba(255, 255, 255, 1);
+    border-bottom-color: rgba(255, 255, 255, 0.3);
   }
+  50% {
+    transform: rotate(180deg);
+    border-top-color: rgba(255, 255, 255, 0.3);
+    border-bottom-color: rgba(255, 255, 255, 1);
+  }
+  100% {
+    transform: rotate(360deg);
+    border-top-color: rgba(255, 255, 255, 1);
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Button Loader - Legacy Support */
+.button-loader {
+  display: none;
 }
 
 /* Divider */

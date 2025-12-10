@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import FormInput from '../../components/FormInput/FormInput';
+import LanguageSwitcher from '../../components/LanguageSwitcher/LanguageSwitcher';
 import authService from '../../services/authService';
 import './LoginPage.css';
 
@@ -179,6 +180,11 @@ const LoginPage = () => {
         
         <div className="login-container">
           <div className="login-card">
+            {/* Language Switcher */}
+            <div className="auth-language-switcher">
+              <LanguageSwitcher />
+            </div>
+            
             {/* Logo and Title */}
             <div className="login-header">
               <div className="logo-container">
@@ -186,7 +192,7 @@ const LoginPage = () => {
               </div>
               <h1 className="login-title">{t('auth.login.welcomeBack')}</h1>
               <p className="login-subtitle">
-                {step === 'phone' 
+                {step === 'phone'
                   ? t('auth.login.enterPhone')
                   : t('auth.login.enterOtp')
                 }

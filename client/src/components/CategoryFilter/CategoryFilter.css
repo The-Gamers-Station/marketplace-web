@@ -414,6 +414,15 @@
   .filter-container {
     padding: 0 15px;
   }
+
+  /* Category Grid Wrapper - Using CSS Grid */
+  .category-grid-wrapper {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+    margin-bottom: 20px;
+  }
   
   .platform-pills {
     gap: 8px;
@@ -466,4 +475,60 @@
     padding: 6px 12px;
     font-size: 11px;
   }
+}
+
+/* Category Add Product Button */
+.category-add-product-btn {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background: linear-gradient(135deg, #ff6b35, #ff8c42);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 15px rgba(255, 107, 53, 0.25);
+  white-space: nowrap;
+  justify-self: end;
+}
+
+.category-add-product-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(255, 107, 53, 0.35);
+}
+
+.category-add-product-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.category-add-product-btn span {
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .category-grid-wrapper {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .category-add-product-btn {
+    width: 100%;
+    justify-content: center;
+    justify-self: stretch;
+  }
+}
+
+/* RTL Support */
+[dir="rtl"] .category-add-product-btn {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .category-grid-wrapper {
+  direction: rtl;
 }

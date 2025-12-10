@@ -98,16 +98,16 @@ const Footer = () => {
                 {t('footer.about.description')}
               </p>
               <div className="social-links">
-                <a href="#" className="social-link" aria-label="Facebook">
+                <a href="https://www.facebook.com/GamersStationApp" className="social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
                   <Facebook size={18} />
                 </a>
-                <a href="#" className="social-link" aria-label="Twitter">
+                <a href="https://www.twitter.com/GamersStationApp" className="social-link" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
                   <Twitter size={18} />
                 </a>
-                <a href="#" className="social-link" aria-label="Instagram">
+                <a href="https://www.instagram.com/GamersStationApp" className="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
                   <Instagram size={18} />
                 </a>
-                <a href="#" className="social-link" aria-label="Youtube">
+                <a href="https://www.youtube.com/@GamersStationApp" className="social-link" aria-label="Youtube" target="_blank" rel="noopener noreferrer">
                   <Youtube size={18} />
                 </a>
               </div>
@@ -198,16 +198,12 @@ const Footer = () => {
               <h3 className="footer-title">{t('footer.contact.title')}</h3>
               <div className="contact-items">
                 <div className="contact-item">
-                  <Phone size={16} />
-                  <span dir="ltr">+966 50 123 4567</span>
-                </div>
-                <div className="contact-item">
                   <Mail size={16} />
-                  <span>support@gamersstation.sa</span>
+                  <span>contact@thegamersstation.com</span>
                 </div>
                 <div className="contact-item">
                   <MapPin size={16} />
-                  <span>{t('footer.contact.location')}</span>
+                  <span>الرياض</span>
                 </div>
               </div>
               
@@ -238,11 +234,11 @@ const Footer = () => {
           <div className="payment-section">
             <span className="payment-label">{t('footer.payment.title')}</span>
             <div className="payment-methods">
-              <img src="https://via.placeholder.com/50x30/1a2332/ffffff?text=Visa" alt="Visa" className="payment-icon" />
-              <img src="https://via.placeholder.com/50x30/1a2332/ffffff?text=Master" alt="Mastercard" className="payment-icon" />
-              <img src="https://via.placeholder.com/50x30/1a2332/ffffff?text=Mada" alt="Mada" className="payment-icon" />
-              <img src="https://via.placeholder.com/50x30/1a2332/ffffff?text=STC" alt="STC Pay" className="payment-icon" />
-              <img src="https://via.placeholder.com/50x30/1a2332/ffffff?text=Apple" alt="Apple Pay" className="payment-icon" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa" className="payment-icon" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard" className="payment-icon" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Mada_Logo.svg/200px-Mada_Logo.svg.png" alt="Mada" className="payment-icon" />
+              <img src="https://cdn.worldvectorlogo.com/logos/stc-pay.svg" alt="STC Pay" className="payment-icon" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Apple_Pay_logo.svg/200px-Apple_Pay_logo.svg.png" alt="Apple Pay" className="payment-icon" />
             </div>
           </div>
         </div>

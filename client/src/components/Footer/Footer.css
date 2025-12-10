@@ -636,20 +636,8 @@
 
   .footer-about,
   .footer-contact {
-    grid-column: span 3;
+    grid-column: span 1;
     max-width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-  }
-
-  .footer-about .footer-logo,
-  .footer-about .footer-description {
-    grid-column: span 2;
-  }
-
-  .footer-contact {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -658,6 +646,12 @@
     padding: 30px 0;
   }
   
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    display: flex;
+    flex-direction: column;
+  }
   .features-grid {
     display: flex;
     overflow-x: auto;
@@ -682,15 +676,14 @@
     padding: 15px;
   }
 
-  .footer-content {
-    grid-template-columns: 1fr;
-    gap: 20px;
+  .footer-section {
+    width: 100%;
   }
 
   .footer-about {
     order: 1;
     text-align: center;
-    grid-template-columns: 1fr;
+    width: 100%;
   }
 
   .footer-logo {
@@ -768,7 +761,7 @@
 
   .footer-contact {
     order: 2;
-    grid-template-columns: 1fr;
+    width: 100%;
   }
 
   .contact-items {
@@ -854,7 +847,13 @@
   .footer-container {
     padding: 0 15px;
   }
-
+  
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+  }
   .footer-features {
     padding: 20px 0;
   }

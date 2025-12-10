@@ -71,7 +71,7 @@ const ProductDetailsPage = () => {
         rating: 4.5 + Math.random() * 0.5, // Generate random rating for now
         reviews: Math.floor(Math.random() * 500) + 50,
         sold: Math.floor(Math.random() * 1000) + 100,
-        availability: postData.status === 'ACTIVE' ? 'متوفر' : 'غير متوفر',
+        availability: postData.status === 'ACTIVE' ? t('pages.productDetails.available') : t('pages.productDetails.unavailable'),
         brand: 'GamersStation',
         category: postData.category?.localizedName?.[currentLang] || postData.category?.name || 'Gaming',
         sku: `GS-${postData.id}-${new Date().getFullYear()}`,
@@ -79,31 +79,31 @@ const ProductDetailsPage = () => {
           ? postData.images.map(img => img.url || '🎮')
           : ['🎮', '📦', '🎯', '🕹️', '💿'],
         variants: [
-          { id: 'standard', name: 'Standard', price: postData.price, available: true },
-          { id: 'bundle', name: 'With Extra Controller', price: Math.round(postData.price * 1.2), available: true },
-          { id: 'premium', name: 'Premium Bundle', price: Math.round(postData.price * 1.4), available: false }
+          { id: 'standard', name: t('pages.productDetails.variants.standard'), price: postData.price, available: true },
+          { id: 'bundle', name: t('pages.productDetails.variants.withController'), price: Math.round(postData.price * 1.2), available: true },
+          { id: 'premium', name: t('pages.productDetails.variants.premiumBundle'), price: Math.round(postData.price * 1.4), available: false }
         ],
         features: [
-          'جودة عالية ومضمونة',
-          'ضمان لمدة سنة كاملة',
-          'دعم فني على مدار الساعة',
-          'شحن سريع لجميع المناطق',
-          'إمكانية الإرجاع خلال 14 يوم',
-          'طرق دفع آمنة ومتنوعة'
+          t('pages.productDetails.highQualityGraphics'),
+          t('pages.productDetails.warranty') + ' ' + t('pages.productDetails.oneYear'),
+          t('pages.productDetails.onlineMultiplayer'),
+          t('pages.productDetails.fastShipping'),
+          t('pages.productDetails.returnPolicy') + ' ' + t('pages.productDetails.withinDays', { days: 14 }),
+          t('pages.productDetails.exclusiveContent')
         ],
         description: postData.localizedDescription?.[currentLang] || postData.description || 'منتج عالي الجودة من GamersStation',
         specifications: {
-          'الحالة': postData.condition === 'NEW' ? 'جديد' : 'مستعمل',
-          'المدينة': postData.location?.city?.localizedName?.[currentLang] || postData.location?.city?.name || 'الرياض',
-          'تاريخ النشر': new Date(postData.createdAt).toLocaleDateString('ar-SA'),
-          'رقم الإعلان': postData.id,
-          'المشاهدات': postData.viewCount || 0,
-          'الضمان': 'سنة واحدة'
+          [t('pages.productDetails.condition.label')]: postData.condition === 'NEW' ? t('pages.productDetails.condition.new') : t('pages.productDetails.condition.used'),
+          [t('pages.productDetails.city')]: postData.location?.city?.localizedName?.[currentLang] || postData.location?.city?.name || 'الرياض',
+          [t('pages.productDetails.publishDate')]: new Date(postData.createdAt).toLocaleDateString(currentLang === 'ar' ? 'ar-SA' : 'en-US'),
+          [t('pages.productDetails.adNumber')]: postData.id,
+          [t('pages.productDetails.views')]: postData.viewCount || 0,
+          [t('pages.productDetails.warranty')]: t('pages.productDetails.oneYear')
         },
         seller: {
           name: postData.seller?.store?.name || postData.seller?.username || 'GamersStation',
           rating: 4.5 + Math.random() * 0.5,
-          responseTime: '1 ساعة',
+          responseTime: currentLang === 'ar' ? '1 ساعة' : '1 hour',
           products: Math.floor(Math.random() * 200) + 50,
           verified: postData.seller?.store?.verified || true
         }
@@ -303,11 +303,11 @@ const ProductDetailsPage = () => {
                 <div className="badges">
                   <span className="badge-bestseller">
                     <Zap size={14} />
-                    الأكثر مبيعاً
+                    {t('hero.bestSellers')}
                   </span>
                   <span className="badge-verified">
                     <Check size={14} />
-                    منتج أصلي
+                    {currentLang === 'ar' ? 'منتج أصلي' : 'Original Product'}
                   </span>
                 </div>
                 <h1 className="product-title">{product.name}</h1>
@@ -325,16 +325,16 @@ const ProductDetailsPage = () => {
                       ))}
                     </div>
                     <span className="rating-value">{product.rating}</span>
-                    <span className="reviews-count">({product.reviews} تقييم)</span>
+                    <span className="reviews-count">({product.reviews} {t('reviews')})</span>
                   </div>
                   <div className="meta-separator">•</div>
                   <div className="sold-count">
                     <Package size={16} />
-                    <span>{product.sold} قطعة بيعت</span>
+                    <span>{product.sold} {t('pages.productDetails.sold')}</span>
                   </div>
                   <div className="meta-separator">•</div>
                   <div className="sku">
-                    SKU: {product.sku}
+                    {t('pages.productDetails.sku')}: {product.sku}
                   </div>
                 </div>
               </div>
@@ -343,20 +343,20 @@ const ProductDetailsPage = () => {
                 <div className="price-container">
                   <div className="current-price">
                     <span className="price-value">{product.price}</span>
-                    <span className="currency">ر.س</span>
+                    <span className="currency">{t('currency')}</span>
                   </div>
                   <div className="original-price">
-                    <span>{product.originalPrice} ر.س</span>
+                    <span>{product.originalPrice} {t('currency')}</span>
                   </div>
                   <div className="savings">
-                    وفر {product.originalPrice - product.price} ر.س
+                    {t('pages.productDetails.save')} {product.originalPrice - product.price} {t('currency')}
                   </div>
                 </div>
               </div>
 
               {/* Variants */}
               <div className="variants-section">
-                <h3>الخيارات المتاحة:</h3>
+                <h3>{currentLang === 'ar' ? 'الخيارات المتاحة:' : 'Available Options:'}</h3>
                 <div className="variants-list">
                   {product.variants.map((variant) => (
                     <button
@@ -366,8 +366,8 @@ const ProductDetailsPage = () => {
                       disabled={!variant.available}
                     >
                       <span className="variant-name">{variant.name}</span>
-                      <span className="variant-price">{variant.price} ر.س</span>
-                      {!variant.available && <span className="out-of-stock">نفذ المخزون</span>}
+                      <span className="variant-price">{variant.price} {t('currency')}</span>
+                      {!variant.available && <span className="out-of-stock">{t('pages.productDetails.outOfStock')}</span>}
                     </button>
                   ))}
                 </div>

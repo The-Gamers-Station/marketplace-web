@@ -39,10 +39,10 @@ const SEO = ({
       "availableLanguage": ["Arabic", "English"]
     },
     "sameAs": [
-      "https://www.facebook.com/gamersstation",
-      "https://www.twitter.com/gamersstation",
-      "https://www.instagram.com/gamersstation",
-      "https://www.youtube.com/gamersstation"
+      "https://www.facebook.com/GamersStationApp",
+      "https://www.twitter.com/GamersStationApp",
+      "https://www.instagram.com/GamersStationApp",
+      "https://www.youtube.com/@GamersStationApp"
     ]
   };
 

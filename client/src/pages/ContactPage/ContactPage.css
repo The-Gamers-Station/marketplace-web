@@ -47,12 +47,13 @@
   z-index: 1;
 }
 
-.hero-content {
+.contact-content {
   text-align: center;
-  animation: fadeInUp 0.8s ease;
+  /* Remove animation to show content immediately */
+  /* animation: fadeInUp 0.8s ease; */
 }
 
-.hero-title {
+.contact-title {
   font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 800;
   color: white;
@@ -66,7 +67,8 @@
 .title-icon {
   color: #ff6b35;
   filter: drop-shadow(0 4px 15px rgba(255, 107, 53, 0.5));
-  animation: pulse 2s infinite;
+  /* Remove pulse animation for immediate display */
+  /* animation: pulse 2s infinite; */
 }
 
 @keyframes pulse {
@@ -74,7 +76,7 @@
   50% { transform: scale(1.1); }
 }
 
-.hero-subtitle {
+.contact-subtitle {
   font-size: 1.125rem;
   color: var(--text-secondary);
   max-width: 600px;
@@ -106,7 +108,8 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   padding: 40px;
-  animation: fadeInLeft 0.8s ease;
+  /* Remove animation for immediate display */
+  /* animation: fadeInLeft 0.8s ease; */
 }
 
 @keyframes fadeInLeft {
@@ -354,7 +357,8 @@ textarea {
   display: grid;
   grid-template-columns: 1fr;
   gap: 25px;
-  animation: fadeInRight 0.8s ease;
+  /* Remove animation for immediate display */
+  /* animation: fadeInRight 0.8s ease; */
   height: fit-content;
 }
 
@@ -567,12 +571,17 @@ textarea {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.map-container iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: brightness(0.85) contrast(1.1);
+}
+
 .map-overlay {
   position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 20px;
+  left: 20px;
   pointer-events: none;
   z-index: 1;
 }
@@ -659,7 +668,7 @@ textarea {
     padding: 90px 15px 30px;
   }
 
-  .hero-title {
+  .contact-title {
     font-size: 1.8rem;
     flex-direction: row;
     gap: 10px;
@@ -670,7 +679,7 @@ textarea {
     height: 28px;
   }
 
-  .hero-subtitle {
+  .contact-subtitle {
     font-size: 0.95rem;
     padding: 0 10px;
     line-height: 1.6;
@@ -872,7 +881,7 @@ textarea {
     padding: 75px 10px 25px;
   }
 
-  .hero-title {
+  .contact-title {
     font-size: 1.5rem;
     gap: 8px;
   }
@@ -882,7 +891,7 @@ textarea {
     height: 24px;
   }
 
-  .hero-subtitle {
+  .contact-subtitle {
     font-size: 0.85rem;
     line-height: 1.5;
   }
@@ -1162,4 +1171,29 @@ textarea {
     grid-template-columns: 1fr;
     gap: 8px;
   }
+}
+
+/* Remove header animations on contact page */
+.no-header-animation .header {
+  animation: none !important;
+}
+
+.no-header-animation .header-container > * {
+  animation: none !important;
+}
+
+.no-header-animation .header-logo,
+.no-header-animation .logo-icon,
+.no-header-animation .logo-text,
+.no-header-animation .nav-link,
+.no-header-animation .action-btn {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Keep hover effects but remove delays */
+.no-header-animation .header-logo:hover,
+.no-header-animation .nav-link:hover,
+.no-header-animation .action-btn:hover {
+  transition: transform 0.2s ease, color 0.2s ease !important;
 }

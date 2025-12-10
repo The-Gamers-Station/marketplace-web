@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Gamepad2,
@@ -7,7 +7,8 @@ import {
   Trophy,
   Star,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  PhoneCall
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import './Hero.css';
@@ -120,9 +121,9 @@ const Hero = () => {
               <span>{i18n.language === 'ar' ? 'تسوق الآن' : 'Shop Now'}</span>
               <ArrowRight size={18} className="arrow-icon" />
             </Link>
-            <Link to="/categories" className="btn-secondary">
-              <Gamepad2 size={20} />
-              <span>{i18n.language === 'ar' ? 'استكشف الأقسام' : 'Explore Categories'}</span>
+            <Link to="/contact" className="btn-secondary">
+              <PhoneCall size={20} />
+              <span>{i18n.language === 'ar' ? 'تواصل معنا' : 'Contact Us'}</span>
             </Link>
           </div>
 

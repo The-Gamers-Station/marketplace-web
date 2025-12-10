@@ -141,10 +141,10 @@ const Header = memo(() => {
         </button>
 
         {/* Logo */}
-        <div onClick={() => handleLinkClick('/')} className="header-logo">
+        <Link to="/" className="header-logo" onClick={() => handleLinkClick('/')}>
           <img src="/logo.svg" alt="GamersStation" className="logo-icon" loading="eager" />
           <span className="logo-text">GamersStation</span>
-        </div>
+        </Link>
 
         {/* Navigation */}
         <nav className="header-nav">

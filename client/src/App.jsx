@@ -38,16 +38,9 @@ const PageLoader = memo(() => {
     <div className="page-loader">
       <div className="page-loader-backdrop"></div>
       <div className="page-loader-content">
-        <div className="cyber-grid">
-          <div className="grid-line horizontal-1"></div>
-          <div className="grid-line horizontal-2"></div>
-          <div className="grid-line vertical-1"></div>
-          <div className="grid-line vertical-2"></div>
-        </div>
+        
         <div className="loader-container">
-          <div className="gaming-logo-loader">
-            <img src="/logo.svg" alt="GamersStation" className="logo-pulse" />
-          </div>
+           
           <div className="loader-text-container">
             <p className="loader-text">
               {i18n.language === 'ar' ? 'جاري التحميل' : 'Loading'}

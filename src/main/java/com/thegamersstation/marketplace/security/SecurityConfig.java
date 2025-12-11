@@ -68,6 +68,9 @@ public class SecurityConfig {
                     "/posts/**"
                 ).permitAll()
                 
+                // Public endpoints - Static resources (uploaded files)
+                .requestMatchers("/uploads/**").permitAll()
+                
                 // Admin endpoints - require ADMIN role
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 

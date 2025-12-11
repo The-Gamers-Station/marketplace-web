@@ -16,8 +16,11 @@ FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
-# Create non-root user for security
-RUN addgroup -S spring && adduser -S spring -G spring
+# Create uploads directory and non-root user for security
+RUN mkdir -p /app/uploads && \
+    addgroup -S spring && adduser -S spring -G spring && \
+    chown -R spring:spring /app/uploads
+
 USER spring:spring
 
 # Copy jar from build stage

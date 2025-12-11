@@ -74,7 +74,7 @@ public class PostService {
             .condition(request.getCondition())
             .category(category)
             .city(city)
-            .status(Post.PostStatus.WAITING_APPROVAL)
+            .status(Post.PostStatus.ACTIVE) // TODO: Change back to WAITING_APPROVAL when moderation is implemented
             .images(new ArrayList<>())
             .build();
         

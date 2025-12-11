@@ -75,9 +75,51 @@ class PostService {
   // Create a new post
   async createPost(data) {
     try {
+      // Normalize enum values and types to match backend requirements
+      const normalizeType = (type) => {
+        if (!type) return undefined;
+        const map = {
+          SALE: 'SELL',
+          SELL: 'SELL',
+          WANTED: 'ASK',
+          ASK: 'ASK',
+          EXCHANGE: 'SELL' // backend does not support EXCHANGE; fallback to SELL
+        };
+        return map[type] || type;
+      };
+  
+      const normalizeCondition = (cond) => {
+        if (!cond) return undefined;
+        const map = {
+          GOOD: 'USED_GOOD',
+          FAIR: 'USED_FAIR',
+          LIKE_NEW: 'LIKE_NEW',
+          NEW: 'NEW',
+          USED_GOOD: 'USED_GOOD',
+          USED_FAIR: 'USED_FAIR',
+          FOR_PARTS: 'FOR_PARTS'
+        };
+        return map[cond] || cond;
+      };
+  
+      const payload = {
+        title: data.title?.trim(),
+        description: data.description?.trim(),
+        type: normalizeType(data.type),
+        condition: normalizeCondition(data.condition),
+        price: data.price !== undefined && data.price !== '' ? Number(data.price) : undefined,
+        priceMin: data.priceMin !== undefined && data.priceMin !== '' ? Number(data.priceMin) : undefined,
+        priceMax: data.priceMax !== undefined && data.priceMax !== '' ? Number(data.priceMax) : undefined,
+        categoryId: data.categoryId != null ? Number(data.categoryId) : undefined,
+        cityId: data.cityId != null ? Number(data.cityId) : undefined,
+        imageUrls: Array.isArray(data.imageUrls) && data.imageUrls.length > 0
+          ? data.imageUrls
+          : (Array.isArray(data.images) && data.images.length > 0 ? data.images : ['https://via.placeholder.com/800x600?text=Product+Image'])
+      };
+  
       const response = await apiRequest(API_ENDPOINTS.posts.create, {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
       return response;
     } catch (error) {

@@ -57,55 +57,58 @@ const CategoryFilter = () => {
     <div className="category-filter">
       <div className="filter-container">
         {/* Grid Container for Categories and Add Product Button */}
-       <div className="">
-         <div className="category-grid-wrapper">
-          {/* Platform Pills */}
-          <div className="platform-pills">
-            {platforms.map((platform, index) => (
-              <button
-                key={index}
-                className={`platform-pill ${platform.active ? 'active' : ''}`}
-                onClick={() => setSelectedPlatform(platform.key)}
-              >
-                {platform.name}
-              </button>
-            ))}
-            <button className="nav-arrow">›</button>
-          </div>
-          
+       <div className="category-header-wrapper">
+        <div className="">
+        <div className="category-grid-wrapper">
+         {/* Platform Pills */}
+         <div className="platform-pills">
+           {platforms.map((platform, index) => (
+             <button
+               key={index}
+               className={`platform-pill ${platform.active ? 'active' : ''}`}
+               onClick={() => setSelectedPlatform(platform.key)}
+             >
+               {platform.name}
+             </button>
+           ))}
+           <button className="nav-arrow">›</button>
+         </div>
          
-        </div>
-
-        {/* Filter Tags */}
-        <div className="filter-tags">
-          {filters.map((filter) => (
-            <button
-              key={filter.key}
-              className="filter-tag"
-            >
-              {filter.label}
-            </button>
-          ))}
-          <div className="view-toggle">
-            <button className="view-btn active">⊞</button>
-            <button className="view-btn">☰</button>
-            <span className="results-text">
-              {i18n.language === 'ar' ? 'أظهر حسب البطاقة' : 'Show as cards'}
-            </span>
-          </div>
-        </div>
+        
        </div>
-         {/* Add Product Button */}
-          <button
-            className="category-add-product-btn"
-            onClick={handleAddProduct}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            <span>{t('addProduct.addProductButton')}</span>
-          </button>
+
+       {/* Filter Tags */}
+       <div className="filter-tags">
+         {filters.map((filter) => (
+           <button
+             key={filter.key}
+             className="filter-tag"
+           >
+             {filter.label}
+           </button>
+         ))}
+         <div className="view-toggle">
+           <button className="view-btn active">⊞</button>
+           <button className="view-btn">☰</button>
+           <span className="results-text">
+             {i18n.language === 'ar' ? 'أظهر حسب البطاقة' : 'Show as cards'}
+           </span>
+         </div>
+            
+            {/* Add Product Button */}
+            <button
+              className="category-add-product-btn"
+              onClick={handleAddProduct}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span>{t('addProduct.addProductButton')}</span>
+            </button>
+          </div>
+      </div>
+       </div>
       </div>
     </div>
   );

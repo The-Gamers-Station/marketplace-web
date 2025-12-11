@@ -37,7 +37,7 @@ const ProductGrid = ({ categoryId, searchQuery }) => {
       }
 
       // Use search endpoint if search query is provided
-      const response = searchQuery 
+      const response = searchQuery
         ? await postService.searchPosts({ ...params, q: searchQuery })
         : await postService.getPosts(params);
 

@@ -58,7 +58,7 @@ export const API_ENDPOINTS = {
   
   // Media
   media: {
-    uploadImage: '/media/images',
+    uploadImage: '/media/upload',
   },
 };
 
@@ -79,21 +79,114 @@ export const getDefaultHeaders = () => {
   return headers;
 };
 
-// API request helper
-export const apiRequest = async (url, options = {}) => {
+// API request helper with robust error handling and safe JSON parsing
+export const apiRequest = async (url, options = {}, isRetry = false) => {
   const response = await fetch(buildApiUrl(url), {
     ...options,
     headers: {
       ...getDefaultHeaders(),
-      ...options.headers,
+      ...(options.headers || {}),
     },
   });
-  
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'API request failed');
+
+  const contentType = response.headers.get('Content-Type') || '';
+
+  // 204 No Content => return null to avoid JSON parse errors
+  if (response.status === 204) {
+    return null;
   }
-  
+
+  // Read body once (stream is consumable only once)
+  let bodyText = '';
+  try {
+    bodyText = await response.text();
+  } catch {
+    bodyText = '';
+  }
+
+  // Helper: try to parse JSON safely if content-type indicates JSON and body is not empty
+  const tryParseJson = () => {
+    if (!contentType.toLowerCase().includes('application/json') || !bodyText) return null;
+    try {
+      return JSON.parse(bodyText);
+    } catch {
+      return null;
+    }
+  };
+
+  // Handle 401/403 - try to refresh token
+  if ((response.status === 401 || response.status === 403) && !isRetry) {
+    try {
+      // Dynamically import authService to avoid circular dependency
+      const { authService } = await import('../services/authService.js');
+      await authService.refreshToken();
+      // Retry the original request with new token
+      return apiRequest(url, options, true);
+    } catch (refreshError) {
+      console.error('Token refresh failed:', refreshError);
+      // Clear tokens and redirect to login
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+      return;
+    }
+  }
+
+  if (response.ok) {
+    const json = tryParseJson();
+    if (json !== null) return json;
+    // Fallback: return text or null if empty
+    return bodyText || null;
+  }
+
+  // Error path: build meaningful message from ProblemDetail (Spring) or raw text
+  const errorJson = tryParseJson();
+  const message =
+    (errorJson && (errorJson.message || errorJson.detail || errorJson.title)) ||
+    bodyText ||
+    response.statusText ||
+    'API request failed';
+
+  throw new Error(`[${response.status}] ${message}`);
+};
+
+// File upload helper
+export const uploadFile = async (file, folder = 'posts') => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('folder', folder);
+
+  const response = await fetch(buildApiUrl('/media/upload'), {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+      // Don't set Content-Type - let browser set it with boundary for multipart
+    },
+    body: formData,
+  });
+
+  if ((response.status === 401 || response.status === 403)) {
+    try {
+      const { authService } = await import('../services/authService.js');
+      await authService.refreshToken();
+      // Retry upload with new token
+      return uploadFile(file, folder);
+    } catch (refreshError) {
+      console.error('Token refresh failed:', refreshError);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+      return;
+    }
+  }
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`Upload failed: ${error || response.statusText}`);
+  }
+
   return response.json();
 };
 

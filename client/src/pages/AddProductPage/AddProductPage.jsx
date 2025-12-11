@@ -8,6 +8,7 @@ import Footer from '../../components/Footer/Footer';
 import postService from '../../services/postService';
 import cityService from '../../services/cityService';
 import authService from '../../services/authService';
+import { uploadFile } from '../../config/api';
 import './AddProductPage.css';
 
 const AddProductPage = () => {
@@ -30,10 +31,13 @@ const AddProductPage = () => {
     description: '',
     price: '',
     condition: 'NEW',
-    type: 'SALE',
+    type: 'SELL',
     cityId: '',
     images: []
   });
+  
+  const [uploadedImages, setUploadedImages] = useState([]);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   // Categories configuration
   const categories = [
@@ -128,6 +132,10 @@ const AddProductPage = () => {
     
     if (!formData.description.trim()) {
       newErrors.description = t('addProduct.errors.descriptionRequired');
+    } else if (formData.description.trim().length < 20) {
+      newErrors.description = t('addProduct.errors.descriptionTooShort') || 'Description must be at least 20 characters';
+    } else if (formData.description.trim().length > 5000) {
+      newErrors.description = t('addProduct.errors.descriptionTooLong') || 'Description must not exceed 5000 characters';
     }
     
     if (!formData.price || parseFloat(formData.price) <= 0) {
@@ -171,9 +179,11 @@ const AddProductPage = () => {
     try {
       const postData = {
         ...formData,
-        categoryId: 1, // This should be mapped from selectedCategory + selectedSubcategory
+        categoryId: 1, // TODO: Map from selectedCategory + selectedSubcategory
         price: parseFloat(formData.price),
-        cityId: parseInt(formData.cityId)
+        cityId: parseInt(formData.cityId),
+        // Use uploaded images or placeholder
+        imageUrls: uploadedImages.length > 0 ? uploadedImages : ['https://via.placeholder.com/800x600?text=Product+Image']
       };
       
       await postService.createPost(postData);
@@ -222,6 +232,74 @@ const AddProductPage = () => {
       <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
+
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+  
+    // Server constraints (mirror backend MediaService)
+    const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    const MAX_SIZE_MB = 10;
+    const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+    const MAX_IMAGES = 10;
+  
+    // Enforce total images limit
+    if (uploadedImages.length + files.length > MAX_IMAGES) {
+      alert(t('addProduct.errors.tooManyImages') || `You can upload up to ${MAX_IMAGES} images.`);
+      return;
+    }
+  
+    // Validate types and sizes before uploading
+    const valid = [];
+    const rejected = [];
+    for (const f of files) {
+      if (!ALLOWED_TYPES.includes(f.type)) {
+        rejected.push({ name: f.name, reason: 'type' });
+        continue;
+      }
+      if (f.size > MAX_SIZE_BYTES) {
+        rejected.push({ name: f.name, reason: 'size' });
+        continue;
+      }
+      valid.push(f);
+    }
+  
+    if (rejected.length === files.length) {
+      // All files invalid
+      const reasons = rejected.map(r => `- ${r.name} (${r.reason === 'type' ? 'unsupported type' : 'too large'})`).join('\n');
+      alert(
+        (t('addProduct.errors.uploadInvalidFiles') || 'Some files are invalid. Allowed: JPG, JPEG, PNG, WEBP, GIF up to 10MB each.') +
+        '\n' + reasons
+      );
+      return;
+    } else if (rejected.length > 0) {
+      // Partial invalid warning
+      const reasons = rejected.map(r => `- ${r.name} (${r.reason === 'type' ? 'unsupported type' : 'too large'})`).join('\n');
+      console.warn('Some files were rejected:\n' + reasons);
+    }
+  
+    setUploadingImage(true);
+    try {
+      const uploadPromises = valid.map(file => uploadFile(file, 'posts'));
+      const results = await Promise.all(uploadPromises);
+      const newImageUrls = results
+        .filter(Boolean)
+        .map(result => result.url)
+        .filter(Boolean);
+  
+      if (newImageUrls.length === 0) {
+        throw new Error('No images were uploaded');
+      }
+  
+      setUploadedImages(prev => [...prev, ...newImageUrls]);
+    } catch (error) {
+      console.error('Error uploading images:', error);
+      // Don't show alert for upload failures - we'll use placeholder images
+      console.warn('Image upload failed, will use placeholder images instead');
+    } finally {
+      setUploadingImage(false);
+    }
+  };
 
   return (
     <>
@@ -325,6 +403,9 @@ const AddProductPage = () => {
                   <div className="input-group">
                     <label htmlFor="description">
                       {t('addProduct.fields.description')}
+                      <span className="char-count" style={{ marginLeft: '10px', fontSize: '0.85em', color: formData.description.trim().length < 20 || formData.description.trim().length > 5000 ? '#ff3838' : '#666' }}>
+                        ({formData.description.trim().length}/20-5000)
+                      </span>
                     </label>
                     <div className="textarea-container">
                       <DescriptionIcon />
@@ -371,8 +452,8 @@ const AddProductPage = () => {
                       >
                         <option value="NEW">{t('addProduct.conditions.new')}</option>
                         <option value="LIKE_NEW">{t('addProduct.conditions.likeNew')}</option>
-                        <option value="GOOD">{t('addProduct.conditions.good')}</option>
-                        <option value="FAIR">{t('addProduct.conditions.fair')}</option>
+                        <option value="USED_GOOD">{t('addProduct.conditions.good')}</option>
+                        <option value="USED_FAIR">{t('addProduct.conditions.fair')}</option>
                       </select>
                     </div>
                   </div>
@@ -386,9 +467,8 @@ const AddProductPage = () => {
                       onChange={handleChange}
                       className="select-input"
                     >
-                      <option value="SALE">{t('addProduct.types.sale')}</option>
-                      <option value="EXCHANGE">{t('addProduct.types.exchange')}</option>
-                      <option value="WANTED">{t('addProduct.types.wanted')}</option>
+                      <option value="SELL">{t('addProduct.types.sale')}</option>
+                      <option value="ASK">{t('addProduct.types.wanted')}</option>
                     </select>
                   </div>
                 </form>
@@ -416,7 +496,7 @@ const AddProductPage = () => {
                     <option value="">{t('addProduct.placeholders.selectCity')}</option>
                     {cities.map(city => (
                       <option key={city.id} value={city.id}>
-                        {city.name}
+                        {city.nameEn || city.nameAr || city.name}
                       </option>
                     ))}
                   </select>
@@ -430,14 +510,49 @@ const AddProductPage = () => {
                   <p className="upload-hint">{t('addProduct.imageHint')}</p>
                   
                   <div className="upload-grid">
-                    <button className="upload-trigger">
-                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="2"/>
-                        <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
-                        <polyline points="21 15 16 10 5 21" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                      <span>{t('addProduct.uploadImage')}</span>
-                    </button>
+                    {uploadedImages.map((imageUrl, index) => (
+                      <div key={index} className="uploaded-image-preview">
+                        <img src={imageUrl} alt={`Product ${index + 1}`} />
+                        <button
+                          className="remove-image-btn"
+                          onClick={() => {
+                            setUploadedImages(prev => prev.filter((_, i) => i !== index));
+                          }}
+                          type="button"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                    
+                    {uploadedImages.length < 10 && (
+                      <label className={`upload-trigger ${uploadingImage ? 'uploading' : ''}`}>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleImageUpload}
+                          disabled={uploadingImage}
+                          style={{ display: 'none' }}
+                        />
+                        {uploadingImage ? (
+                          <div className="upload-loading">
+                            <span className="upload-spinner"></span>
+                            <span>{t('addProduct.uploading')}</span>
+                          </div>
+                        ) : (
+                          <>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="2"/>
+                              <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
+                              <polyline points="21 15 16 10 5 21" stroke="currentColor" strokeWidth="2"/>
+                            </svg>
+                            <span>{t('addProduct.uploadImage')}</span>
+                            <span className="upload-hint-small">{uploadedImages.length}/10</span>
+                          </>
+                        )}
+                      </label>
+                    )}
                   </div>
                 </div>
               </div>

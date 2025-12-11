@@ -29,6 +29,7 @@ import Footer from '../../components/Footer/Footer';
 import SEO from '../../components/SEO/SEO';
 import { postService } from '../../services/postService';
 import { useTranslation } from 'react-i18next';
+import OptimizedImage from '../../components/OptimizedImage/OptimizedImage';
 import './ProductDetailsPage.css';
 
 const ProductDetailsPage = () => {
@@ -68,7 +69,7 @@ const ProductDetailsPage = () => {
         price: postData.price || 0,
         originalPrice: postData.price ? Math.round(postData.price * 1.15) : 0, // Add 15% as original price
         discount: 14, // Calculate discount percentage
-        rating: 4.5 + Math.random() * 0.5, // Generate random rating for now
+        rating: Math.round((4.5 + Math.random() * 0.5) * 10) / 10, // Generate random rating for now
         reviews: Math.floor(Math.random() * 500) + 50,
         sold: Math.floor(Math.random() * 1000) + 100,
         availability: postData.status === 'ACTIVE' ? t('pages.productDetails.available') : t('pages.productDetails.unavailable'),
@@ -76,8 +77,8 @@ const ProductDetailsPage = () => {
         category: postData.category?.localizedName?.[currentLang] || postData.category?.name || 'Gaming',
         sku: `GS-${postData.id}-${new Date().getFullYear()}`,
         images: postData.images?.length > 0
-          ? postData.images.map(img => img.url || '🎮')
-          : ['🎮', '📦', '🎯', '🕹️', '💿'],
+          ? postData.images.map(img => img.url || '/placeholder-game.jpg')
+          : ['/placeholder-game.jpg'],
         variants: [
           { id: 'standard', name: t('pages.productDetails.variants.standard'), price: postData.price, available: true },
           { id: 'bundle', name: t('pages.productDetails.variants.withController'), price: Math.round(postData.price * 1.2), available: true },
@@ -102,7 +103,7 @@ const ProductDetailsPage = () => {
         },
         seller: {
           name: postData.seller?.store?.name || postData.seller?.username || 'GamersStation',
-          rating: 4.5 + Math.random() * 0.5,
+          rating: Math.round((4.5 + Math.random() * 0.5) * 10) / 10,
           responseTime: currentLang === 'ar' ? '1 ساعة' : '1 hour',
           products: Math.floor(Math.random() * 200) + 50,
           verified: postData.seller?.store?.verified || true
@@ -125,8 +126,8 @@ const ProductDetailsPage = () => {
           id: post.id,
           name: post.localizedTitle?.[currentLang] || post.title,
           price: post.price,
-          rating: 4.5 + Math.random() * 0.5,
-          image: post.images?.[0]?.url || '🎮'
+          rating: Math.round((4.5 + Math.random() * 0.5) * 10) / 10,
+          image: post.images?.[0]?.url || '/placeholder-game.jpg'
         }));
         
       setRelatedProducts(transformedRelated);
@@ -317,9 +318,9 @@ const ProductDetailsPage = () => {
                   <div className="rating-info">
                     <div className="stars">
                       {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          size={18} 
+                        <Star
+                          key={i}
+                          size={18}
                           className={i < Math.floor(product.rating) ? 'filled' : ''}
                         />
                       ))}
@@ -336,6 +337,69 @@ const ProductDetailsPage = () => {
                   <div className="sku">
                     {t('pages.productDetails.sku')}: {product.sku}
                   </div>
+                </div>
+              </div>
+
+              {/* Mobile Product Gallery - Show only on mobile */}
+              <div className="product-gallery mobile-only">
+                <div className="main-image-container">
+                  <div className="discount-badge">
+                    <span>-{product.discount}%</span>
+                  </div>
+                  <button
+                    className="gallery-nav prev"
+                    onClick={prevImage}
+                    aria-label="Previous image"
+                  >
+                    <ChevronRight size={24} />
+                  </button>
+                  <button
+                    className="gallery-nav next"
+                    onClick={nextImage}
+                    aria-label="Next image"
+                  >
+                    <ChevronLeft size={24} />
+                  </button>
+                  <button
+                    className="zoom-btn"
+                    onClick={() => setShowZoom(true)}
+                    aria-label="Zoom image"
+                  >
+                    <ZoomIn size={20} />
+                  </button>
+                  <div className="main-image">
+                    {product.images[selectedImage].startsWith('http') ? (
+                      <OptimizedImage
+                        src={product.images[selectedImage]}
+                        alt={product.name}
+                        className="product-main-image"
+                        priority={true}
+                        objectFit="contain"
+                      />
+                    ) : (
+                      <span className="product-emoji">{product.images[selectedImage]}</span>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="thumbnail-list">
+                  {product.images.map((image, index) => (
+                    <button
+                      key={index}
+                      className={`thumbnail ${selectedImage === index ? 'active' : ''}`}
+                      onClick={() => handleImageSelect(index)}
+                    >
+                      {image.startsWith('http') ? (
+                        <img
+                          src={image}
+                          alt={`${product.name} ${index + 1}`}
+                          className="thumbnail-image"
+                        />
+                      ) : (
+                        <span>{image}</span>
+                      )}
+                    </button>
+                  ))}
                 </div>
               </div>
 
@@ -414,14 +478,10 @@ const ProductDetailsPage = () => {
                 </div>
 
                 <div className="action-buttons">
-                  <button className="btn-add-cart">
-                    <ShoppingCart size={20} />
-                    أضف للسلة
-                  </button>
                   <button className="btn-buy-now">
                     اشتري الآن
                   </button>
-                  <button 
+                  <button
                     className={`btn-wishlist ${isWishlisted ? 'active' : ''}`}
                     onClick={() => setIsWishlisted(!isWishlisted)}
                   >
@@ -470,8 +530,8 @@ const ProductDetailsPage = () => {
                 </div>
               </div>
             </div>
-            {/* Product Gallery */}
-            <div className="product-gallery">
+            {/* Product Gallery - Desktop Only */}
+            <div className="product-gallery desktop-only">
               <div className="main-image-container">
                 <div className="discount-badge">
                   <span>-{product.discount}%</span>
@@ -498,7 +558,17 @@ const ProductDetailsPage = () => {
                   <ZoomIn size={20} />
                 </button>
                 <div className="main-image">
-                  <span className="product-emoji">{product.images[selectedImage]}</span>
+                  {product.images[selectedImage].startsWith('http') ? (
+                    <OptimizedImage
+                      src={product.images[selectedImage]}
+                      alt={product.name}
+                      className="product-main-image"
+                      priority={true}
+                      objectFit="contain"
+                    />
+                  ) : (
+                    <span className="product-emoji">{product.images[selectedImage]}</span>
+                  )}
                 </div>
               </div>
               
@@ -509,7 +579,15 @@ const ProductDetailsPage = () => {
                     className={`thumbnail ${selectedImage === index ? 'active' : ''}`}
                     onClick={() => handleImageSelect(index)}
                   >
-                    <span>{image}</span>
+                    {image.startsWith('http') ? (
+                      <img
+                        src={image}
+                        alt={`${product.name} ${index + 1}`}
+                        className="thumbnail-image"
+                      />
+                    ) : (
+                      <span>{image}</span>
+                    )}
                   </button>
                 ))}
               </div>
@@ -757,7 +835,16 @@ const ProductDetailsPage = () => {
                     <div className="product-image-wrapper">
                       <div className="image-container">
                         <div className="image-shimmer"></div>
-                        <span className="product-emoji">{item.image}</span>
+                        {item.image.startsWith('http') ? (
+                          <OptimizedImage
+                            src={item.image}
+                            alt={item.name}
+                            className="related-product-image"
+                            objectFit="cover"
+                          />
+                        ) : (
+                          <span className="product-emoji">{item.image}</span>
+                        )}
                       </div>
                       <div className="image-shadow"></div>
                     </div>
@@ -847,7 +934,15 @@ const ProductDetailsPage = () => {
             <X size={24} />
           </button>
           <div className="zoom-content">
-            <span className="zoomed-image">{product.images[selectedImage]}</span>
+            {product.images[selectedImage].startsWith('http') ? (
+              <img
+                src={product.images[selectedImage]}
+                alt={product.name}
+                className="zoomed-image"
+              />
+            ) : (
+              <span className="zoomed-image">{product.images[selectedImage]}</span>
+            )}
           </div>
         </div>
       )}

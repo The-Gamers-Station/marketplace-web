@@ -477,9 +477,20 @@
   }
 }
 
+/* Category Header Wrapper */
+.category-header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.category-header-wrapper > div {
+  flex: 1;
+}
+
 /* Category Add Product Button */
 .category-add-product-btn {
-  margin-top: 10px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -494,7 +505,8 @@
   transition: all 0.3s ease;
   box-shadow: 0 3px 15px rgba(255, 107, 53, 0.25);
   white-space: nowrap;
-  justify-self: end;
+  order: 2;
+  flex-shrink: 0;
 }
 
 .category-add-product-btn:hover {
@@ -517,10 +529,16 @@
     gap: 1rem;
   }
 
+  .category-header-wrapper {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
   .category-add-product-btn {
     width: 100%;
     justify-content: center;
-    justify-self: stretch;
+    order: 1;
+    margin-bottom: 10px;
   }
 }
 

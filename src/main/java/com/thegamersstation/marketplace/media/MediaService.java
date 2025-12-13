@@ -29,7 +29,7 @@ public class MediaService {
     @Value("${media.storage.local.upload-dir:uploads}")
     private String localUploadDir;
 
-    @Value("${media.storage.local.base-url:http://localhost:8080/uploads}")
+    @Value("${media.storage.local.base-url:http://localhost:8080/api/v1/uploads}")
     private String localBaseUrl;
 
     @Value("${media.max-size-mb:10}")
@@ -86,7 +86,12 @@ public class MediaService {
         validateImage(file);
 
         if ("s3".equalsIgnoreCase(storageProvider) && s3Client != null) {
-            return uploadToS3(file, folder);
+            try {
+                return uploadToS3(file, folder);
+            } catch (BusinessRuleException ex) {
+                log.warn("S3 upload failed, falling back to local storage: {}", ex.getMessage());
+                return uploadToLocal(file, folder);
+            }
         } else {
             return uploadToLocal(file, folder);
         }

@@ -1,12 +1,15 @@
 {
   "header": {
     "home": "الرئيسية",
-    "merchants": "التجار",
     "contact": "تواصل معنا",
     "faq": "الأسئلة الشائعة",
     "searchPlaceholder": "ابحث عن لعبة أو منتج...",
     "myAccount": "حسابي",
-    "toggleNavigation": "تبديل قائمة التنقل"
+    "toggleNavigation": "تبديل قائمة التنقل",
+    "myProfile": "ملفي الشخصي",
+    "logout": "تسجيل الخروج",
+    "login": "دخول",
+    "register": "تسجيل"
   },
   "hero": {
     "mainTitle": "عالمك للألعاب",
@@ -36,14 +39,17 @@
     "nintendo": "نينتندو",
     "pc": "كمبيوتر",
     "accessories": "إكسسوارات",
-    "showAsCards": "أظهر حسب البطاقة"
+    "showAsCards": "أظهر حسب البطاقة",
+    "console": "جهاز الألعاب",
+    "games": "الألعاب"
   },
   "productCard": {
     "new": "جديد",
     "sale": "تخفيض",
     "addToCart": "أضف للسلة",
     "viewDetails": "عرض التفاصيل",
-    "sar": "ر.س"
+    "sar": "ر.س",
+    "offer": "عرض"
   },
   "anonymous": "مجهول",
   "reviews": "تقييمات",
@@ -67,10 +73,10 @@
     "quickLinks": {
       "title": "روابط سريعة",
       "home": "الرئيسية",
-      "merchants": "التجار",
       "categories": "الأقسام",
       "offers": "العروض الخاصة",
-      "newArrivals": "وصل حديثاً"
+      "newArrivals": "وصل حديثاً",
+      "merchants": "التجار"
     },
     "customerService": {
       "title": "خدمة العملاء",
@@ -111,6 +117,13 @@
       "viewAll": "عرض الكل",
       "loadMore": "تحميل المزيد"
     },
+    "seo": {
+      "largestGamingMarketplace": "أكبر سوق للألعاب الإلكترونية في مصر",
+      "home": "الرئيسية",
+      "cairo": "القاهرة",
+      "riyadh": "الرياض",
+      "main": "رئيسي"
+    },
     "merchants": {
       "title": "التجار",
       "searchPlaceholder": "ابحث عن تاجر...",
@@ -146,7 +159,10 @@
       "continuousSupport": "دعم مستمر من فريقنا",
       "competitiveCommission": "عمولة تنافسية",
       "accessToBuyers": "وصول لآلاف المشترين",
-      "registerNow": "سجل كتاجر الآن"
+      "registerNow": "سجل كتاجر الآن",
+      "filterResults": "تصفية النتائج",
+      "secureTransactions": "حماية كاملة للمعاملات",
+      "advancedAnalytics": "أدوات تحليل متقدمة"
     },
     "productDetails": {
       "home": "الرئيسية",
@@ -197,7 +213,32 @@
       "exploreMore": "استكشف المزيد",
       "amazingProducts": "+100 منتج رائع",
       "viewAllProducts": "عرض جميع المنتجات",
-      "scrollToTop": "العودة إلى الأعلى"
+      "scrollToTop": "العودة إلى الأعلى",
+      "available": "متوفر",
+      "unavailable": "غير متوفر",
+      "variants": {
+        "standard": "الإصدار العادي",
+        "withController": "مع ذراع تحكم",
+        "premiumBundle": "حزمة بريميوم"
+      },
+      "highQualityGraphics": "رسومات عالية الجودة",
+      "warranty": "الضمان",
+      "oneYear": "سنة واحدة",
+      "onlineMultiplayer": "لعب جماعي أونلاين",
+      "fastShipping": "شحن سريع",
+      "returnPolicy": "سياسة الإرجاع",
+      "withinDays": "خلال {{days}} يوم",
+      "exclusiveContent": "محتوى حصري",
+      "condition": {
+        "label": "الحالة",
+        "new": "جديد",
+        "used": "مستعمل"
+      },
+      "city": "المدينة",
+      "publishDate": "تاريخ النشر",
+      "adNumber": "رقم الإعلان",
+      "views": "المشاهدات",
+      "sku": "رقم المنتج"
     },
     "faq": {
       "title": "الأسئلة الشائعة",
@@ -414,5 +455,197 @@
     "edit": "تعديل",
     "language": "اللغة",
     "optional": "اختياري"
+  },
+  "auth": {
+    "login": {
+      "pageTitle": "تسجيل الدخول",
+      "pageDescription": "سجل دخولك إلى حسابك في GamersStation للوصول إلى الميزات الحصرية والعروض",
+      "welcomeBack": "مرحباً بعودتك!",
+      "enterCredentials": "أدخل بياناتك للوصول إلى حسابك",
+      "enterPhone": "أدخل رقم هاتفك للمتابعة",
+      "enterOtp": "أدخل رمز التحقق",
+      "signIn": "تسجيل الدخول",
+      "requestOtp": "إرسال رمز التحقق",
+      "verifyAndSignIn": "تحقق وسجل الدخول",
+      "otpSentTo": "تم إرسال رمز التحقق إلى",
+      "changePhone": "تغيير رقم الهاتف",
+      "resendOtp": "إعادة إرسال الرمز",
+      "resendIn": "إعادة الإرسال بعد",
+      "signUp": "سجل الآن",
+      "rememberMe": "تذكرني",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "orContinueWith": "أو تابع بواسطة",
+      "googleSignIn": "تسجيل الدخول بواسطة جوجل",
+      "facebookSignIn": "تسجيل الدخول بواسطة فيسبوك",
+      "noAccount": "ليس لديك حساب؟",
+      "successMessage": "تم تسجيل الدخول بنجاح! جاري التحويل..."
+    },
+    "register": {
+      "requestOtp": "إرسال رمز التحقق",
+      "otpSentTo": "تم إرسال رمز التحقق إلى",
+      "changePhone": "تغيير رقم الهاتف",
+      "resendIn": "إعادة الإرسال بعد",
+      "resendOtp": "إعادة إرسال الرمز",
+      "verifyAndContinue": "تحقق ومتابعة",
+      "pageTitle": "إنشاء حساب",
+      "pageDescription": "انضم إلى GamersStation لبدء التسوق لألعابك ومنتجاتك المفضلة",
+      "createAccount": "إنشاء حساب",
+      "joinCommunity": "انضم إلى مجتمع الألعاب لدينا اليوم",
+      "personalInfo": "المعلومات الشخصية",
+      "accountDetails": "تفاصيل الحساب",
+      "nextStep": "الخطوة التالية",
+      "prevStep": "السابق",
+      "orSignUpWith": "أو سجل بواسطة",
+      "googleSignUp": "التسجيل بواسطة جوجل",
+      "facebookSignUp": "التسجيل بواسطة فيسبوك",
+      "haveAccount": "لديك حساب بالفعل؟",
+      "signIn": "تسجيل الدخول",
+      "agreeToTerms": "أوافق على",
+      "termsOfService": "شروط الخدمة",
+      "privacyPolicy": "سياسة الخصوصية",
+      "and": "و",
+      "successTitle": "مرحباً بك في GamersStation!",
+      "successMessage": "تم إنشاء حسابك بنجاح. جاري التحويل...",
+      "passwordWeak": "ضعيف",
+      "passwordFair": "مقبول",
+      "passwordGood": "جيد",
+      "passwordStrong": "قوي",
+      "passwordVeryStrong": "قوي جداً"
+    },
+    "fields": {
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "phone": "رقم الهاتف",
+      "phoneNumber": "رقم الهاتف",
+      "otpCode": "رمز التحقق"
+    },
+    "placeholders": {
+      "email": "أدخل بريدك الإلكتروني",
+      "password": "أدخل كلمة المرور",
+      "confirmPassword": "أدخل كلمة المرور مرة أخرى",
+      "firstName": "أدخل اسمك الأول",
+      "lastName": "أدخل اسم عائلتك",
+      "phone": "أدخل رقم هاتفك",
+      "phoneNumber": "مثال: 501234567",
+      "otpCode": "أدخل الرمز المكون من 4 أرقام"
+    },
+    "errors": {
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "emailInvalid": "الرجاء إدخال بريد إلكتروني صحيح",
+      "passwordRequired": "كلمة المرور مطلوبة",
+      "passwordShort": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+      "passwordWeak": "كلمة المرور يجب أن تحتوي على أحرف كبيرة وصغيرة وأرقام",
+      "confirmPasswordRequired": "الرجاء تأكيد كلمة المرور",
+      "passwordMismatch": "كلمات المرور غير متطابقة",
+      "firstNameRequired": "الاسم الأول مطلوب",
+      "firstNameShort": "الاسم الأول يجب أن يكون حرفين على الأقل",
+      "lastNameRequired": "اسم العائلة مطلوب",
+      "lastNameShort": "اسم العائلة يجب أن يكون حرفين على الأقل",
+      "phoneRequired": "رقم الهاتف مطلوب",
+      "phoneInvalid": "الرجاء إدخال رقم هاتف سعودي صحيح",
+      "termsRequired": "يجب الموافقة على الشروط والأحكام",
+      "otpRequired": "رمز التحقق مطلوب",
+      "otpInvalid": "الرجاء إدخال رمز صحيح مكون من 4 أرقام",
+      "requestOtpFailed": "فشل إرسال رمز التحقق. الرجاء المحاولة مرة أخرى.",
+      "verifyOtpFailed": "رمز التحقق غير صحيح أو منتهي الصلاحية. الرجاء المحاولة مرة أخرى.",
+      "usernameRequired": "اسم المستخدم مطلوب",
+      "usernameShort": "اسم المستخدم يجب أن يكون 3 أحرف على الأقل",
+      "usernameInvalid": "اسم المستخدم يمكن أن يحتوي على أحرف وأرقام وشرطات سفلية فقط",
+      "cityRequired": "المدينة مطلوبة"
+    }
+  },
+  "profileComplete": {
+    "pageTitle": "أكمل ملفك الشخصي",
+    "pageDescription": "أكمل ملفك الشخصي للاستمتاع بجميع ميزات GamersStation",
+    "title": "تقريباً انتهينا!",
+    "subtitle": "أكمل ملفك الشخصي لبدء البيع والشراء",
+    "fields": {
+      "username": "اسم المستخدم",
+      "email": "البريد الإلكتروني (اختياري)",
+      "city": "المدينة"
+    },
+    "placeholders": {
+      "username": "اختر اسم مستخدم فريد",
+      "email": "أدخل بريدك الإلكتروني",
+      "city": "اختر مدينتك"
+    },
+    "skipForNow": "تخطي الآن",
+    "saving": "جاري الحفظ...",
+    "complete": "إكمال الملف الشخصي",
+    "infoText": "يمكنك دائماً تحديث ملفك الشخصي لاحقاً من الإعدادات",
+    "errors": {
+      "updateFailed": "فشل تحديث الملف الشخصي. الرجاء المحاولة مرة أخرى."
+    }
+  },
+  "productGrid": {
+    "noSearchResults": "لا توجد نتائج لـ '{{query}}'",
+    "noProducts": "لا توجد منتجات متاحة حالياً",
+    "loadMore": "تحميل المزيد"
+  },
+  "addProduct": {
+    "pageTitle": "إضافة منتج جديد",
+    "pageDescription": "اعرض منتجاتك من الألعاب واصل لآلاف المشترين",
+    "title": "إضافة منتج جديد",
+    "subtitle": "اتبع الخطوات لعرض منتجك",
+    "selectCategory": "اختر الفئة",
+    "selectSubcategory": "اختر الفئة الفرعية",
+    "productDetails": "تفاصيل المنتج",
+    "locationImages": "الموقع والصور",
+    "submitProduct": "إرسال المنتج",
+    "submitting": "جاري الإرسال...",
+    "successTitle": "نجح!",
+    "successMessage": "تم إضافة المنتج بنجاح!",
+    "imageHint": "أضف حتى 6 صور. الصورة الأولى ستكون الصورة الرئيسية.",
+    "uploadImage": "رفع صورة",
+    "steps": {
+      "category": "الفئة",
+      "details": "التفاصيل",
+      "location": "الموقع"
+    },
+    "fields": {
+      "title": "عنوان المنتج",
+      "description": "الوصف",
+      "price": "السعر (ريال)",
+      "condition": "الحالة",
+      "type": "نوع الإعلان",
+      "city": "المدينة",
+      "images": "صور المنتج"
+    },
+    "placeholders": {
+      "title": "أدخل عنوان وصفي للمنتج",
+      "description": "اكتب وصف تفصيلي للمنتج...",
+      "price": "أدخل السعر",
+      "selectCity": "اختر مدينتك"
+    },
+    "conditions": {
+      "new": "جديد تماماً",
+      "likeNew": "كالجديد",
+      "good": "جيد",
+      "fair": "مقبول"
+    },
+    "types": {
+      "sale": "للبيع",
+      "exchange": "للتبديل",
+      "wanted": "مطلوب"
+    },
+    "categories": {
+      "components": "المكونات"
+    },
+    "errors": {
+      "titleRequired": "عنوان المنتج مطلوب",
+      "descriptionRequired": "الوصف مطلوب",
+      "descriptionTooShort": "الوصف يجب أن يكون 20 حرفًا على الأقل",
+      "descriptionTooLong": "الوصف يجب ألا يتجاوز 5000 حرف",
+      "priceRequired": "السعر مطلوب وصحيح",
+      "cityRequired": "الرجاء اختيار مدينة",
+      "submitFailed": "فشل إضافة المنتج. الرجاء المحاولة مرة أخرى.",
+      "tooManyImages": "يمكنك رفع حتى 10 صور",
+      "uploadInvalidFiles": "بعض الملفات غير صالحة. المسموح: JPG، JPEG، PNG، WEBP، GIF حتى 10 ميجابايت لكل منها"
+    },
+    "uploading": "جاري الرفع...",
+    "addProductButton": "إضافة منتج"
   }
 }

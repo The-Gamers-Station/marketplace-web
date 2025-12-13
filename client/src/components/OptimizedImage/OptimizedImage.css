@@ -3,6 +3,8 @@
   overflow: hidden;
   background-color: #f0f0f0;
   border-radius: 8px;
+  contain: layout style paint;
+  will-change: auto;
 }
 
 .optimized-image {
@@ -10,6 +12,7 @@
   height: 100%;
   display: block;
   transition: opacity 0.3s ease-in-out;
+  object-fit: cover;
 }
 
 .optimized-image.loaded {
@@ -30,6 +33,12 @@
   background-position: center;
   transition: opacity 0.3s ease-in-out;
   z-index: 1;
+}
+
+.blur-placeholder {
+  filter: blur(20px);
+  transform: scale(1.2);
+  will-change: opacity, filter;
 }
 
 .image-skeleton {
@@ -96,6 +105,16 @@
   opacity: 0.7;
 }
 
+/* Picture element optimization */
+picture {
+  display: contents;
+}
+
+/* Performance optimizations */
+.optimized-image-container img {
+  content-visibility: auto;
+}
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .optimized-image-container {
@@ -144,7 +163,8 @@
 /* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {
   .optimized-image,
-  .image-placeholder {
+  .image-placeholder,
+  .blur-placeholder {
     transition: none;
   }
 
@@ -162,5 +182,36 @@
 
   .image-error {
     color: currentColor;
+  }
+}
+
+/* Forced hardware acceleration for smooth animations */
+.optimized-image,
+.blur-placeholder {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Reduced data mode */
+@media (prefers-reduced-data: reduce) {
+  .blur-placeholder {
+    filter: blur(10px);
+  }
+}
+
+/* Container query support for responsive images */
+@supports (container-type: inline-size) {
+  .optimized-image-container {
+    container-type: inline-size;
+  }
+  
+  @container (max-width: 300px) {
+    .error-icon {
+      font-size: 24px;
+    }
+    
+    .error-text {
+      font-size: 9px;
+    }
   }
 }

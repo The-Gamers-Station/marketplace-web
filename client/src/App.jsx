@@ -15,11 +15,20 @@ const FAQPage = lazy(() =>
 const ContactPage = lazy(() =>
   import(/* webpackChunkName: "contact" */ './pages/ContactPage/ContactPage')
 );
-const MerchantsPage = lazy(() =>
-  import(/* webpackChunkName: "merchants" */ './pages/MerchantsPage/MerchantsPage')
-);
 const ProductDetailsPage = lazy(() =>
   import(/* webpackChunkName: "product" */ './pages/ProductDetailsPage/ProductDetailsPage')
+);
+const LoginPage = lazy(() =>
+  import(/* webpackChunkName: "login" */ './pages/LoginPage/LoginPage')
+);
+const RegisterPage = lazy(() =>
+  import(/* webpackChunkName: "register" */ './pages/RegisterPage/RegisterPage')
+);
+const ProfileCompletePage = lazy(() =>
+  import(/* webpackChunkName: "profile-complete" */ './pages/ProfileCompletePage/ProfileCompletePage')
+);
+const AddProductPage = lazy(() =>
+  import(/* webpackChunkName: "add-product" */ './pages/AddProductPage/AddProductPage')
 );
 
 // Modern Loading component with professional design
@@ -30,9 +39,7 @@ const PageLoader = memo(() => {
     <div className="page-loader">
       <div className="loader-container">
         <div className="modern-loader">
-          <div className="loader-ring">
-            <div className="loader-ring-inner"></div>
-          </div>
+           
           <img src="/logo.svg" alt="GamersStation" className="loader-logo" />
         </div>
         <div className="loader-progress">
@@ -63,8 +70,10 @@ function App() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Preload frequently accessed pages
-      import(/* webpackChunkName: "merchants" */ './pages/MerchantsPage/MerchantsPage');
       import(/* webpackChunkName: "product" */ './pages/ProductDetailsPage/ProductDetailsPage');
+      // Preload auth pages for better UX
+      import(/* webpackChunkName: "login" */ './pages/LoginPage/LoginPage');
+      import(/* webpackChunkName: "register" */ './pages/RegisterPage/RegisterPage');
     };
     
     preloadPages();
@@ -84,8 +93,11 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/contact" element={<ContactPage />} />
-              <Route path="/merchants" element={<MerchantsPage />} />
               <Route path="/product/:id" element={<ProductDetailsPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/profile/complete" element={<ProfileCompletePage />} />
+              <Route path="/add-product" element={<AddProductPage />} />
             </Routes>
           </Suspense>
           <ScrollToTop />

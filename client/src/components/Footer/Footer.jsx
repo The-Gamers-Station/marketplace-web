@@ -202,7 +202,7 @@ const Footer = () => {
                 </div>
                 <div className="contact-item">
                   <MapPin size={16} />
-                  <span>{t('footer.contact.location')}</span>
+                  <span>الرياض</span>
                 </div>
               </div>
               

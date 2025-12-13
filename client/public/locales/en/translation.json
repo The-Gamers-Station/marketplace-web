@@ -1,12 +1,15 @@
 {
   "header": {
     "home": "Home",
-    "merchants": "Merchants",
     "contact": "Contact Us",
     "faq": "FAQ",
     "searchPlaceholder": "Search for a game or product...",
     "myAccount": "My Account",
-    "toggleNavigation": "Toggle navigation menu"
+    "toggleNavigation": "Toggle navigation menu",
+    "myProfile": "My Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
   },
   "hero": {
     "mainTitle": "Your Gaming World",
@@ -36,14 +39,17 @@
     "nintendo": "Nintendo",
     "pc": "PC",
     "accessories": "Accessories",
-    "showAsCards": "Show as cards"
+    "showAsCards": "Show as cards",
+    "console": "Console",
+    "games": "Games"
   },
   "productCard": {
     "new": "New",
     "sale": "Sale",
     "addToCart": "Add to Cart",
     "viewDetails": "View Details",
-    "sar": "SAR"
+    "sar": "SAR",
+    "offer": "Sale"
   },
   "anonymous": "Anonymous",
   "reviews": "reviews",
@@ -67,10 +73,10 @@
     "quickLinks": {
       "title": "Quick Links",
       "home": "Home",
-      "merchants": "Merchants",
       "categories": "Categories",
       "offers": "Special Offers",
-      "newArrivals": "New Arrivals"
+      "newArrivals": "New Arrivals",
+      "merchants": "Merchants"
     },
     "customerService": {
       "title": "Customer Service",
@@ -111,6 +117,13 @@
       "viewAll": "View All",
       "loadMore": "Load More"
     },
+    "seo": {
+      "largestGamingMarketplace": "The largest gaming marketplace in Egypt",
+      "home": "Home",
+      "cairo": "Cairo",
+      "riyadh": "Riyadh",
+      "main": "Main"
+    },
     "merchants": {
       "title": "Merchants",
       "searchPlaceholder": "Search for a merchant...",
@@ -140,6 +153,9 @@
       "specialties": "Specialties",
       "quickResponse": "Quick Response",
       "viewStore": "View Store",
+      "filterResults": "Filter Results",
+      "secureTransactions": "Complete transaction protection",
+      "advancedAnalytics": "Advanced analytics tools",
       "joinUs": "Are you a merchant? Join us",
       "startSelling": "Start selling on the largest gaming platform in the region",
       "professionalTools": "Professional management tools",
@@ -197,7 +213,32 @@
       "exploreMore": "Explore More",
       "amazingProducts": "100+ Amazing Products",
       "viewAllProducts": "View All Products",
-      "scrollToTop": "Back to top"
+      "scrollToTop": "Back to top",
+      "available": "Available",
+      "unavailable": "Unavailable",
+      "variants": {
+        "standard": "Standard Edition",
+        "withController": "With Controller",
+        "premiumBundle": "Premium Bundle"
+      },
+      "highQualityGraphics": "High Quality Graphics",
+      "warranty": "Warranty",
+      "oneYear": "1 Year",
+      "onlineMultiplayer": "Online Multiplayer",
+      "fastShipping": "Fast Shipping",
+      "returnPolicy": "Return Policy",
+      "withinDays": "within {{days}} days",
+      "exclusiveContent": "Exclusive Content",
+      "condition": {
+        "label": "Condition",
+        "new": "New",
+        "used": "Used"
+      },
+      "city": "City",
+      "publishDate": "Publish Date",
+      "adNumber": "Ad Number",
+      "views": "Views",
+      "sku": "SKU"
     },
     "faq": {
       "title": "Frequently Asked Questions",
@@ -396,7 +437,72 @@
       "emailInvalid": "Email is invalid",
       "subjectRequired": "Subject is required",
       "messageRequired": "Message is required",
-      "messageTooShort": "Message must be at least 10 characters"
+      "messageTooShort": "Message must be at least 10 characters",
+      "send": "Send",
+      "phone": "Phone",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "emailPlaceholder": "example@email.com",
+      "phonePlaceholder": "05XXXXXXXX",
+      "selectSubject": "Select Subject",
+      "subjects": {
+        "general": "General Inquiry",
+        "order": "Orders",
+        "technical": "Technical Support",
+        "complaint": "Complaint",
+        "suggestion": "Suggestion",
+        "partnership": "Partnership"
+      },
+      "messagePlaceholder": "Write your message here...",
+      "sending": "Sending...",
+      "submitSuccessTitle": "Your message has been sent successfully!",
+      "submitSuccessMessage": "Thank you for contacting us. We will respond to your message as soon as possible.",
+      "ok": "OK",
+      "mainOffice": "Main Office",
+      "address": "Riyadh, Saudi Arabia",
+      "businessHours": "Business Hours",
+      "satToThu": "Sat - Thu",
+      "friday": "Friday",
+      "closed": "Closed",
+      "followUs": "Follow Us",
+      "socialMedia": "Follow us on social media",
+      "ourLocation": "Our Location",
+      "viewLargerMap": "View Larger Map"
+    },
+    "merchants": {
+      "pageTitle": "Our Trusted Merchants",
+      "heroTitle": "Discover the Best Merchants",
+      "heroSubtitle": "Shop from trusted merchants with quality and security guarantee",
+      "startShopping": "Start Shopping",
+      "searchPlaceholder": "Search for a merchant...",
+      "allMerchants": "All Merchants",
+      "premiumMerchants": "Premium Merchants",
+      "consoles": "Game Consoles",
+      "pcGames": "PC Games",
+      "accessories": "Accessories",
+      "digitalProducts": "Digital Products",
+      "sortBy": {
+        "rating": "Highest Rated",
+        "reviews": "Most Reviews",
+        "products": "Most Products",
+        "newest": "Newest"
+      },
+      "badges": {
+        "premium": "Premium Merchant",
+        "gold": "Gold Merchant",
+        "silver": "Silver Merchant",
+        "featured": "Featured Merchant"
+      },
+      "memberSince": "Member Since",
+      "deliveryTime": "Delivery Time",
+      "responseRate": "Response Rate",
+      "visitStore": "Visit Store",
+      "products": "Products",
+      "sales": "Sales",
+      "ctaTitle": "Are you a merchant?",
+      "ctaSubtitle": "Join our platform and start selling your products to thousands of customers",
+      "learnMore": "Learn More",
+      "immediateDelivery": "Immediate"
     }
   },
   "common": {
@@ -413,6 +519,199 @@
     "delete": "Delete",
     "edit": "Edit",
     "language": "Language",
-    "optional": "optional"
+    "optional": "optional",
+    "language": "Language"
+  },
+  "auth": {
+    "login": {
+      "pageTitle": "Login",
+      "pageDescription": "Login to your GamersStation account to access exclusive features and offers",
+      "welcomeBack": "Welcome Back!",
+      "enterCredentials": "Enter your credentials to access your account",
+      "enterPhone": "Enter your phone number to continue",
+      "enterOtp": "Enter the verification code",
+      "signIn": "Sign In",
+      "requestOtp": "Send Verification Code",
+      "verifyAndSignIn": "Verify & Sign In",
+      "otpSentTo": "Verification code sent to",
+      "changePhone": "Change phone number",
+      "resendOtp": "Resend Code",
+      "resendIn": "Resend code in",
+      "signUp": "Sign Up",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "orContinueWith": "Or continue with",
+      "googleSignIn": "Sign in with Google",
+      "facebookSignIn": "Sign in with Facebook",
+      "noAccount": "Don't have an account?",
+      "successMessage": "Login successful! Redirecting..."
+    },
+    "register": {
+      "requestOtp": "Send Verification Code",
+      "otpSentTo": "Verification code sent to",
+      "changePhone": "Change phone number",
+      "resendIn": "Resend code in",
+      "resendOtp": "Resend Code",
+      "verifyAndContinue": "Verify & Continue",
+      "pageTitle": "Create Account",
+      "pageDescription": "Join GamersStation to start shopping for your favorite games and products",
+      "createAccount": "Create Account",
+      "joinCommunity": "Join our gaming community today",
+      "personalInfo": "Personal Info",
+      "accountDetails": "Account Details",
+      "nextStep": "Next Step",
+      "prevStep": "Previous",
+      "orSignUpWith": "Or sign up with",
+      "googleSignUp": "Sign up with Google",
+      "facebookSignUp": "Sign up with Facebook",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign In",
+      "agreeToTerms": "I agree to the",
+      "termsOfService": "Terms of Service",
+      "privacyPolicy": "Privacy Policy",
+      "and": "and",
+      "successTitle": "Welcome to GamersStation!",
+      "successMessage": "Your account has been created successfully. Redirecting...",
+      "passwordWeak": "Weak",
+      "passwordFair": "Fair",
+      "passwordGood": "Good",
+      "passwordStrong": "Strong",
+      "passwordVeryStrong": "Very Strong"
+    },
+    "fields": {
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phone": "Phone Number",
+      "phoneNumber": "Phone Number",
+      "otpCode": "Verification Code"
+    },
+    "placeholders": {
+      "email": "Enter your email address",
+      "password": "Enter your password",
+      "confirmPassword": "Enter your password again",
+      "firstName": "Enter your first name",
+      "lastName": "Enter your last name",
+      "phone": "Enter your phone number",
+      "phoneNumber": "e.g., 501234567",
+      "otpCode": "Enter 4-digit code"
+    },
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Password is required",
+      "passwordShort": "Password must be at least 8 characters",
+      "passwordWeak": "Password must contain uppercase, lowercase and numbers",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordMismatch": "Passwords do not match",
+      "firstNameRequired": "First name is required",
+      "firstNameShort": "First name must be at least 2 characters",
+      "lastNameRequired": "Last name is required",
+      "lastNameShort": "Last name must be at least 2 characters",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Please enter a valid Saudi phone number",
+      "termsRequired": "You must agree to the terms and conditions",
+      "otpRequired": "Verification code is required",
+      "otpInvalid": "Please enter a valid 4-digit code",
+      "requestOtpFailed": "Failed to send verification code. Please try again.",
+      "verifyOtpFailed": "Invalid or expired verification code. Please try again.",
+      "usernameRequired": "Username is required",
+      "usernameShort": "Username must be at least 3 characters",
+      "usernameInvalid": "Username can only contain letters, numbers, and underscores",
+      "cityRequired": "City is required"
+    }
+  },
+  "profileComplete": {
+    "pageTitle": "Complete Your Profile",
+    "pageDescription": "Complete your profile to enjoy all features of GamersStation",
+    "title": "Almost there!",
+    "subtitle": "Complete your profile to start buying and selling",
+    "fields": {
+      "username": "Username",
+      "email": "Email (Optional)",
+      "city": "City"
+    },
+    "placeholders": {
+      "username": "Choose a unique username",
+      "email": "Enter your email address",
+      "city": "Select your city"
+    },
+    "skipForNow": "Skip for now",
+    "saving": "Saving...",
+    "complete": "Complete Profile",
+    "infoText": "You can always update your profile later from settings",
+    "errors": {
+      "updateFailed": "Failed to update profile. Please try again."
+    }
+  },
+  "productGrid": {
+    "noSearchResults": "No results found for '{{query}}'",
+    "noProducts": "No products available at the moment",
+    "loadMore": "Load More"
+  },
+  "addProduct": {
+    "pageTitle": "Add New Product",
+    "pageDescription": "List your gaming products and reach thousands of buyers",
+    "title": "Add New Product",
+    "subtitle": "Follow the steps to list your product",
+    "selectCategory": "Select Category",
+    "selectSubcategory": "Select Subcategory",
+    "productDetails": "Product Details",
+    "locationImages": "Location & Images",
+    "submitProduct": "Submit Product",
+    "submitting": "Submitting...",
+    "successTitle": "Success!",
+    "successMessage": "Product added successfully!",
+    "imageHint": "Add up to 6 images. First image will be the main photo.",
+    "uploadImage": "Upload Image",
+    "steps": {
+      "category": "Category",
+      "details": "Details",
+      "location": "Location"
+    },
+    "fields": {
+      "title": "Product Title",
+      "description": "Description",
+      "price": "Price (SAR)",
+      "condition": "Condition",
+      "type": "Listing Type",
+      "city": "City",
+      "images": "Product Images"
+    },
+    "placeholders": {
+      "title": "Enter a descriptive title for your product",
+      "description": "Describe your product in detail...",
+      "price": "Enter price",
+      "selectCity": "Select your city"
+    },
+    "conditions": {
+      "new": "Brand New",
+      "likeNew": "Like New",
+      "good": "Good",
+      "fair": "Fair"
+    },
+    "types": {
+      "sale": "For Sale",
+      "exchange": "For Exchange",
+      "wanted": "Wanted"
+    },
+    "categories": {
+      "components": "Components"
+    },
+    "errors": {
+      "titleRequired": "Product title is required",
+      "descriptionRequired": "Description is required",
+      "descriptionTooShort": "Description must be at least 20 characters",
+      "descriptionTooLong": "Description must not exceed 5000 characters",
+      "priceRequired": "Valid price is required",
+      "cityRequired": "Please select a city",
+      "submitFailed": "Failed to add product. Please try again.",
+      "tooManyImages": "You can upload up to 10 images",
+      "uploadInvalidFiles": "Some files are invalid. Allowed: JPG, JPEG, PNG, WEBP, GIF up to 10MB each"
+    },
+    "uploading": "Uploading...",
+    "addProductButton": "Add Product"
   }
 }

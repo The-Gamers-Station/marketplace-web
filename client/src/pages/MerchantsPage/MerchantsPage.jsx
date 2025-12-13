@@ -340,7 +340,7 @@ const MerchantsPage = () => {
             <aside className="mp-filters-sidebar">
               <div className="mp-filter-header">
                 <Filter size={20} />
-                <h3>تصفية النتائج</h3>
+                <h2>تصفية النتائج</h2>
               </div>
 
               {/* Search */}
@@ -510,10 +510,10 @@ const MerchantsPage = () => {
                   </div>
 
                   <div className="mp-merchant-specialties">
-                    <h4 className="mp-specialties-title">
+                    <h3 className="mp-specialties-title">
                       <Sparkles size={14} />
                       {t('pages.merchants.specialties')}
-                    </h4>
+                    </h3>
                     <div className="mp-specialty-tags">
                       {merchant.specialties.map((specialty, index) => (
                         <span key={index} className="mp-specialty-tag mp-glass">
@@ -537,7 +537,7 @@ const MerchantsPage = () => {
                     </div>
 
                     <div className="mp-action-buttons">
-                      <button className="mp-quick-view-btn mp-glass">
+                      <button className="mp-quick-view-btn mp-glass" aria-label={t('pages.merchants.quickView')}>
                         <Globe size={16} />
                       </button>
                       <button className="mp-view-store-btn mp-gradient-btn">

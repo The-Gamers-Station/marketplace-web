@@ -20,3 +20,10 @@ otp:
 messaging:
   ably:
     enabled: true
+
+# Use local storage as fallback in production when S3 fails
+media:
+  storage:
+    local:
+      upload-dir: uploads
+      base-url: http://80.66.87.82/api/v1/uploads

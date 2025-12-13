@@ -50,7 +50,7 @@ const LandingPage = () => {
           "https://www.facebook.com/GamersStationApp",
           "https://www.twitter.com/GamersStationApp",
           "https://www.instagram.com/GamersStationApp",
-          "https://www.youtube.com/GamersStationApp"
+          "https://www.youtube.com/@GamersStationApp"
         ],
         "address": {
           "@type": "PostalAddress",

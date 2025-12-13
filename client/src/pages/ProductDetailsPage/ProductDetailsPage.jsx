@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   ChevronLeft,
@@ -22,76 +22,120 @@ import {
   Zap,
   Info,
   X,
-  ZoomIn
+  ZoomIn,
+  Loader2
 } from 'lucide-react';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import SEO from '../../components/SEO/SEO';
+import { postService } from '../../services/postService';
+import OptimizedImage from '../../components/OptimizedImage/OptimizedImage';
 import './ProductDetailsPage.css';
 
 const ProductDetailsPage = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const currentLang = i18n.language;
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [showZoom, setShowZoom] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState('standard');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
-  // Sample product data
-  const product = {
-    id: 1,
-    name: 'PlayStation 5 Console - Digital Edition',
-    arabicName: 'بلايستيشن 5 - الإصدار الرقمي',
-    price: 1899,
-    originalPrice: 2199,
-    discount: 14,
-    rating: 4.8,
-    reviews: 324,
-    sold: 1250,
-    availability: 'متوفر',
-    brand: 'Sony',
-    category: 'Gaming Consoles',
-    sku: 'PS5-DIG-2024',
-    images: [
-      '🎮',
-      '📦',
-      '🎯',
-      '🕹️',
-      '💿'
-    ],
-    variants: [
-      { id: 'standard', name: 'Standard', price: 1899, available: true },
-      { id: 'bundle', name: 'With Extra Controller', price: 2299, available: true },
-      { id: 'premium', name: 'Premium Bundle', price: 2699, available: false }
-    ],
-    features: [
-      'معالج AMD Zen 2 ثماني النواة',
-      'معالج رسوميات AMD RDNA 2',
-      'ذاكرة 16GB GDDR6',
-      'تخزين SSD سعة 825GB',
-      'دعم Ray Tracing',
-      'دقة تصل إلى 8K',
-      'معدل إطارات يصل إلى 120fps',
-      'تقنية الصوت ثلاثي الأبعاد'
-    ],
-    description: 'استمتع بتجربة اللعب المذهلة مع PlayStation 5 Digital Edition. يوفر هذا الجهاز قوة معالجة فائقة وسرعة تحميل خاطفة بفضل تقنية SSD المتطورة. استمتع بالرسومات المذهلة بدقة 4K وتقنية Ray Tracing للحصول على أفضل تجربة بصرية.',
-    specifications: {
-      'المعالج': 'AMD Zen 2 - 8 أنوية',
-      'معالج الرسوميات': 'AMD RDNA 2 - 10.3 TFLOPS',
-      'الذاكرة': '16GB GDDR6',
-      'التخزين': '825GB SSD',
-      'الأبعاد': '39 × 10.4 × 26 سم',
-      'الوزن': '3.9 كجم',
-      'الاتصال': 'Wi-Fi 6, Bluetooth 5.1, USB Type-A & C',
-      'الضمان': 'سنة واحدة'
-    },
-    seller: {
-      name: 'متجر الألعاب المتميز',
-      rating: 4.7,
-      responseTime: '1 ساعة',
-      products: 156,
-      verified: true
+  useEffect(() => {
+    fetchProductDetails();
+  }, [id]);
+
+  const fetchProductDetails = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Fetch product details
+      const postData = await postService.getPostById(id);
+      
+      // Transform Post data to Product format
+      const transformedProduct = {
+        id: postData.id,
+        name: postData.localizedTitle?.[currentLang] || postData.title || 'Untitled Product',
+        arabicName: postData.localizedTitle?.ar || postData.title || 'منتج بدون اسم',
+        price: postData.price || 0,
+        originalPrice: postData.price ? Math.round(postData.price * 1.15) : 0, // Add 15% as original price
+        discount: 14, // Calculate discount percentage
+        rating: Math.round((4.5 + Math.random() * 0.5) * 10) / 10, // Generate random rating for now
+        reviews: Math.floor(Math.random() * 500) + 50,
+        sold: Math.floor(Math.random() * 1000) + 100,
+        availability: postData.status === 'ACTIVE' ? t('pages.productDetails.available') : t('pages.productDetails.unavailable'),
+        brand: 'GamersStation',
+        category: postData.category?.localizedName?.[currentLang] || postData.category?.name || 'Gaming',
+        sku: `GS-${postData.id}-${new Date().getFullYear()}`,
+        images: postData.images?.length > 0
+          ? postData.images.map(img => img.url || '/placeholder-game.jpg')
+          : ['/placeholder-game.jpg'],
+        variants: [
+          { id: 'standard', name: t('pages.productDetails.variants.standard'), price: postData.price, available: true },
+          { id: 'bundle', name: t('pages.productDetails.variants.withController'), price: Math.round(postData.price * 1.2), available: true },
+          { id: 'premium', name: t('pages.productDetails.variants.premiumBundle'), price: Math.round(postData.price * 1.4), available: false }
+        ],
+        features: [
+          t('pages.productDetails.highQualityGraphics'),
+          t('pages.productDetails.warranty') + ' ' + t('pages.productDetails.oneYear'),
+          t('pages.productDetails.onlineMultiplayer'),
+          t('pages.productDetails.fastShipping'),
+          t('pages.productDetails.returnPolicy') + ' ' + t('pages.productDetails.withinDays', { days: 14 }),
+          t('pages.productDetails.exclusiveContent')
+        ],
+        description: postData.localizedDescription?.[currentLang] || postData.description || 'منتج عالي الجودة من GamersStation',
+        specifications: {
+          [t('pages.productDetails.condition.label')]: postData.condition === 'NEW' ? t('pages.productDetails.condition.new') : t('pages.productDetails.condition.used'),
+          [t('pages.productDetails.city')]: postData.location?.city?.localizedName?.[currentLang] || postData.location?.city?.name || 'Riyadh',
+          [t('pages.productDetails.publishDate')]: new Date(postData.createdAt).toLocaleDateString(currentLang === 'ar' ? 'ar-SA' : 'en-US'),
+          [t('pages.productDetails.adNumber')]: postData.id,
+          [t('pages.productDetails.views')]: postData.viewCount || 0,
+          [t('pages.productDetails.warranty')]: t('pages.productDetails.oneYear')
+        },
+        seller: {
+          name: postData.seller?.store?.name || postData.seller?.username || 'GamersStation',
+          rating: Math.round((4.5 + Math.random() * 0.5) * 10) / 10,
+          responseTime: currentLang === 'ar' ? '1 ساعة' : '1 hour',
+          products: Math.floor(Math.random() * 200) + 50,
+          verified: postData.seller?.store?.verified || true
+        }
+      };
+      
+      setProduct(transformedProduct);
+      
+      // Fetch related products from same category
+      const relatedData = await postService.getPosts({
+        categoryId: postData.category?.id,
+        page: 1,
+        size: 5
+      });
+      
+      const transformedRelated = relatedData.content
+        .filter(post => post.id !== postData.id)
+        .slice(0, 4)
+        .map(post => ({
+          id: post.id,
+          name: post.localizedTitle?.[currentLang] || post.title,
+          price: post.price,
+          rating: Math.round((4.5 + Math.random() * 0.5) * 10) / 10,
+          image: post.images?.[0]?.url || '/placeholder-game.jpg'
+        }));
+        
+      setRelatedProducts(transformedRelated);
+      
+    } catch (err) {
+      console.error('Error fetching product details:', err);
+      setError(t('common.error'));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -126,13 +170,6 @@ const ProductDetailsPage = () => {
     }
   ];
 
-  const relatedProducts = [
-    { id: 2, name: 'DualSense Controller', price: 299, rating: 4.6, image: '🎮' },
-    { id: 3, name: 'PS5 Headset', price: 449, rating: 4.7, image: '🎧' },
-    { id: 4, name: 'PS5 Camera', price: 249, rating: 4.5, image: '📸' },
-    { id: 5, name: 'Media Remote', price: 129, rating: 4.3, image: '📱' }
-  ];
-
   const handleQuantityChange = (action) => {
     if (action === 'increase') {
       setQuantity(quantity + 1);
@@ -153,16 +190,43 @@ const ProductDetailsPage = () => {
     setSelectedImage((prev) => (prev - 1 + product.images.length) % product.images.length);
   };
 
-  // Generate structured data for the product
+  // Structured data will be computed only when product is loaded (below, after guards)
+  // to avoid accessing properties on null during the initial render.
+
+  if (loading) {
+    return (
+      <div className="product-details-page">
+        <Header />
+        <div className="loading-container">
+          <Loader2 className="spinner" size={48} />
+          <p>{t('common.loading')}</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className="product-details-page">
+        <Header />
+        <div className="error-container">
+          <p>{error || t('common.error')}</p>
+          <button onClick={() => navigate('/')} className="btn-primary">
+            {t('common.back')}
+          </button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Now it's safe to build structured data (product is defined here)
   const productStructuredData = {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": product.name,
-    "image": [
-      "https://gamersstation.eg/products/ps5-digital-1.jpg",
-      "https://gamersstation.eg/products/ps5-digital-2.jpg",
-      "https://gamersstation.eg/products/ps5-digital-3.jpg"
-    ],
+    "image": Array.isArray(product.images) && product.images.length > 0 ? product.images : [],
     "description": product.description,
     "sku": product.sku,
     "mpn": product.sku,
@@ -173,41 +237,14 @@ const ProductDetailsPage = () => {
     "category": product.category,
     "offers": {
       "@type": "Offer",
-      "url": `https://gamersstation.eg/product/${product.id}`,
-      "priceCurrency": "EGP",
+      "url": `${window.location.origin}/product/${product.id}`,
+      "priceCurrency": "SAR",
       "price": product.price,
       "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       "availability": "https://schema.org/InStock",
       "seller": {
         "@type": "Organization",
         "name": product.seller.name
-      },
-      "shippingDetails": {
-        "@type": "OfferShippingDetails",
-        "shippingRate": {
-          "@type": "MonetaryAmount",
-          "value": "50",
-          "currency": "EGP"
-        },
-        "shippingDestination": {
-          "@type": "DefinedRegion",
-          "addressCountry": "EG"
-        },
-        "deliveryTime": {
-          "@type": "ShippingDeliveryTime",
-          "handlingTime": {
-            "@type": "QuantitativeValue",
-            "minValue": 0,
-            "maxValue": 1,
-            "unitCode": "DAY"
-          },
-          "transitTime": {
-            "@type": "QuantitativeValue",
-            "minValue": 1,
-            "maxValue": 3,
-            "unitCode": "DAY"
-          }
-        }
       }
     },
     "aggregateRating": {
@@ -238,10 +275,10 @@ const ProductDetailsPage = () => {
     <>
       <SEO
         title={`${product.name} - ${product.arabicName}`}
-        description={`اشتري ${product.name} بأفضل سعر ${product.price} جنيه مصري. ${product.description}. توصيل سريع وضمان أصلي.`}
-        keywords={`${product.name}, ${product.arabicName}, ${product.brand}, ${product.category}, PlayStation 5, PS5, ألعاب إلكترونية, مصر`}
+        description={`${t('pages.productDetails.buyNow')} ${product.name} ${t('productCard.sar')} ${product.price}. ${product.description}`}
+        keywords={`${product.name}, ${product.arabicName}, ${product.brand}, ${product.category}, GamersStation`}
         type="product"
-        image="https://gamersstation.eg/products/ps5-digital-main.jpg"
+        image={Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : undefined}
         structuredData={productStructuredData}
       />
       <div className="product-details-page">
@@ -280,9 +317,9 @@ const ProductDetailsPage = () => {
                   <div className="rating-info">
                     <div className="stars">
                       {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          size={18} 
+                        <Star
+                          key={i}
+                          size={18}
                           className={i < Math.floor(product.rating) ? 'filled' : ''}
                         />
                       ))}
@@ -297,8 +334,71 @@ const ProductDetailsPage = () => {
                   </div>
                   <div className="meta-separator">•</div>
                   <div className="sku">
-                    SKU: {product.sku}
+                    {t('pages.productDetails.sku')}: {product.sku}
                   </div>
+                </div>
+              </div>
+
+              {/* Mobile Product Gallery - Show only on mobile */}
+              <div className="product-gallery mobile-only">
+                <div className="main-image-container">
+                  <div className="discount-badge">
+                    <span>-{product.discount}%</span>
+                  </div>
+                  <button
+                    className="gallery-nav prev"
+                    onClick={prevImage}
+                    aria-label="Previous image"
+                  >
+                    <ChevronRight size={24} />
+                  </button>
+                  <button
+                    className="gallery-nav next"
+                    onClick={nextImage}
+                    aria-label="Next image"
+                  >
+                    <ChevronLeft size={24} />
+                  </button>
+                  <button
+                    className="zoom-btn"
+                    onClick={() => setShowZoom(true)}
+                    aria-label="Zoom image"
+                  >
+                    <ZoomIn size={20} />
+                  </button>
+                  <div className="main-image">
+                    {product.images[selectedImage].startsWith('http') ? (
+                      <OptimizedImage
+                        src={product.images[selectedImage]}
+                        alt={product.name}
+                        className="product-main-image"
+                        priority={true}
+                        objectFit="contain"
+                      />
+                    ) : (
+                      <span className="product-emoji">{product.images[selectedImage]}</span>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="thumbnail-list">
+                  {product.images.map((image, index) => (
+                    <button
+                      key={index}
+                      className={`thumbnail ${selectedImage === index ? 'active' : ''}`}
+                      onClick={() => handleImageSelect(index)}
+                    >
+                      {image.startsWith('http') ? (
+                        <img
+                          src={image}
+                          alt={`${product.name} ${index + 1}`}
+                          className="thumbnail-image"
+                        />
+                      ) : (
+                        <span>{image}</span>
+                      )}
+                    </button>
+                  ))}
                 </div>
               </div>
 
@@ -319,7 +419,7 @@ const ProductDetailsPage = () => {
 
               {/* Variants */}
               <div className="variants-section">
-                <h3>{t('pages.productDetails.availableOptions')}</h3>
+                <h2>{t('pages.productDetails.availableOptions')}</h2>
                 <div className="variants-list">
                   {product.variants.map((variant) => (
                     <button
@@ -366,11 +466,11 @@ const ProductDetailsPage = () => {
                 <div className="quantity-selector">
                   <label>{t('pages.productDetails.quantity')}</label>
                   <div className="quantity-controls">
-                    <button onClick={() => handleQuantityChange('decrease')}>
+                    <button onClick={() => handleQuantityChange('decrease')} aria-label={t('pages.productDetails.decreaseQuantity')}>
                       <Minus size={18} />
                     </button>
                     <input type="number" value={quantity} readOnly />
-                    <button onClick={() => handleQuantityChange('increase')}>
+                    <button onClick={() => handleQuantityChange('increase')} aria-label={t('pages.productDetails.increaseQuantity')}>
                       <Plus size={18} />
                     </button>
                   </div>
@@ -384,13 +484,13 @@ const ProductDetailsPage = () => {
                   <button className="btn-buy-now">
                     {t('pages.productDetails.buyNow')}
                   </button>
-                  <button 
+                  <button
                     className={`btn-wishlist ${isWishlisted ? 'active' : ''}`}
                     onClick={() => setIsWishlisted(!isWishlisted)}
                   >
                     <Heart size={20} />
                   </button>
-                  <button className="btn-share">
+                  <button className="btn-share" aria-label={t('pages.productDetails.shareProduct')}>
                     <Share2 size={20} />
                   </button>
                 </div>
@@ -409,7 +509,7 @@ const ProductDetailsPage = () => {
               {/* Seller Info */}
               <div className="seller-info">
                 <div className="seller-header">
-                  <h3>{t('pages.productDetails.seller')}</h3>
+                  <h2>{t('pages.productDetails.seller')}</h2>
                   {product.seller.verified && (
                     <span className="verified-badge">
                       <Award size={14} />
@@ -433,8 +533,8 @@ const ProductDetailsPage = () => {
                 </div>
               </div>
             </div>
-            {/* Product Gallery */}
-            <div className="product-gallery">
+            {/* Product Gallery - Desktop Only */}
+            <div className="product-gallery desktop-only">
               <div className="main-image-container">
                 <div className="discount-badge">
                   <span>-{product.discount}%</span>
@@ -461,7 +561,17 @@ const ProductDetailsPage = () => {
                   <ZoomIn size={20} />
                 </button>
                 <div className="main-image">
-                  <span className="product-emoji">{product.images[selectedImage]}</span>
+                  {product.images[selectedImage].startsWith('http') ? (
+                    <OptimizedImage
+                      src={product.images[selectedImage]}
+                      alt={product.name}
+                      className="product-main-image"
+                      priority={true}
+                      objectFit="contain"
+                    />
+                  ) : (
+                    <span className="product-emoji">{product.images[selectedImage]}</span>
+                  )}
                 </div>
               </div>
               
@@ -472,7 +582,15 @@ const ProductDetailsPage = () => {
                     className={`thumbnail ${selectedImage === index ? 'active' : ''}`}
                     onClick={() => handleImageSelect(index)}
                   >
-                    <span>{image}</span>
+                    {image.startsWith('http') ? (
+                      <img
+                        src={image}
+                        alt={`${product.name} ${index + 1}`}
+                        className="thumbnail-image"
+                      />
+                    ) : (
+                      <span>{image}</span>
+                    )}
                   </button>
                 ))}
               </div>
@@ -517,7 +635,7 @@ const ProductDetailsPage = () => {
                   <h2>{t('pages.productDetails.productDescription')}</h2>
                   <p>{product.description}</p>
                   <div className="highlights">
-                    <h3>{t('pages.productDetails.keyFeatures')}</h3>
+                    <h2>{t('pages.productDetails.keyFeatures')}</h2>
                     <ul>
                       {product.features.slice(0, 4).map((feature, index) => (
                         <li key={index}>
@@ -637,7 +755,7 @@ const ProductDetailsPage = () => {
                           </div>
                         )}
                         <div className="review-footer">
-                          <button className="helpful-btn">
+                          <button className="helpful-btn" aria-label={`${t('pages.productDetails.markReviewHelpful')} - ${review.helpful} ${t('pages.productDetails.peopleFoundHelpful')}`}>
                             <ThumbsUp size={16} />
                             {t('pages.productDetails.helpful')} ({review.helpful})
                           </button>
@@ -674,7 +792,15 @@ const ProductDetailsPage = () => {
             <div className="related-carousel">
               <div className="carousel-track">
                 {relatedProducts.map((item, index) => (
-                  <div key={item.id} className="modern-product-card">
+                  <a
+                    key={item.id}
+                    href={`/product/${item.id}`}
+                    className="modern-product-card"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(`/product/${item.id}`);
+                    }}
+                  >
                     {/* Card Background Effects */}
                     <div className="card-bg-effect"></div>
                     <div className="card-glow"></div>
@@ -712,14 +838,23 @@ const ProductDetailsPage = () => {
                     <div className="product-image-wrapper">
                       <div className="image-container">
                         <div className="image-shimmer"></div>
-                        <span className="product-emoji">{item.image}</span>
+                        {item.image.startsWith('http') ? (
+                          <OptimizedImage
+                            src={item.image}
+                            alt={item.name}
+                            className="related-product-image"
+                            objectFit="cover"
+                          />
+                        ) : (
+                          <span className="product-emoji">{item.image}</span>
+                        )}
                       </div>
                       <div className="image-shadow"></div>
                     </div>
                     
                     {/* Product Info */}
                     <div className="product-info-section">
-                      <h3 className="product-name">{item.name}</h3>
+                      <h2 className="product-name">{item.name}</h2>
                       
                       {/* Rating and Reviews */}
                       <div className="product-meta">
@@ -760,7 +895,7 @@ const ProductDetailsPage = () => {
                       
                        
                     </div>
-                  </div>
+                  </a>
                 ))}
                 
                 {/* View All Card */}
@@ -770,9 +905,9 @@ const ProductDetailsPage = () => {
                       <Package size={56} />
                       <div className="icon-bg-circle"></div>
                     </div>
-                    <h3>{t('pages.productDetails.exploreMore')}</h3>
+                    <h2>{t('pages.productDetails.exploreMore')}</h2>
                     <p className="products-count">{t('pages.productDetails.amazingProducts')}</p>
-                    <button className="explore-btn">
+                    <button className="explore-btn" aria-label={t('pages.productDetails.viewAllProducts')}>
                       <span>{t('pages.productDetails.viewAllProducts')}</span>
                       <ChevronLeft size={18} />
                     </button>
@@ -798,11 +933,19 @@ const ProductDetailsPage = () => {
       {/* Image Zoom Modal */}
       {showZoom && (
         <div className="zoom-modal" onClick={() => setShowZoom(false)}>
-          <button className="close-zoom" onClick={() => setShowZoom(false)}>
+          <button className="close-zoom" onClick={() => setShowZoom(false)} aria-label={t('pages.productDetails.closeZoom')}>
             <X size={24} />
           </button>
           <div className="zoom-content">
-            <span className="zoomed-image">{product.images[selectedImage]}</span>
+            {product.images[selectedImage].startsWith('http') ? (
+              <img
+                src={product.images[selectedImage]}
+                alt={product.name}
+                className="zoomed-image"
+              />
+            ) : (
+              <span className="zoomed-image">{product.images[selectedImage]}</span>
+            )}
           </div>
         </div>
       )}

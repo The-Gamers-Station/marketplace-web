@@ -1,0 +1,251 @@
+/* Virtual Scroll Container Styles */
+.virtual-scroll-container {
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  will-change: scroll-position;
+  
+  /* Custom scrollbar styles */
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+/* Webkit scrollbar customization */
+.virtual-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.virtual-scroll-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.virtual-scroll-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.virtual-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+/* Scrolling state */
+.virtual-scroll-container.is-scrolling {
+  pointer-events: none;
+}
+
+.virtual-scroll-container.is-scrolling * {
+  pointer-events: auto;
+}
+
+/* Viewport container */
+.virtual-scroll-viewport {
+  will-change: auto;
+  contain: layout style;
+}
+
+/* Individual items */
+.virtual-scroll-item {
+  contain: layout style paint;
+  will-change: auto;
+  transform: translateZ(0);
+}
+
+/* Loading state */
+.virtual-scroll-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  gap: 16px;
+  color: #666;
+  font-size: 14px;
+  text-align: center;
+}
+
+.virtual-scroll-loading .loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* End of list */
+.virtual-scroll-end {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+  border-top: 1px solid #eee;
+  margin-top: 16px;
+}
+
+/* Empty state */
+.virtual-scroll-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 32px;
+  color: #888;
+  font-size: 16px;
+  text-align: center;
+  min-height: 300px;
+}
+
+/* Performance optimizations */
+@media (prefers-reduced-motion: reduce) {
+  .virtual-scroll-container,
+  .virtual-scroll-viewport {
+    will-change: auto !important;
+  }
+  
+  .loading-spinner {
+    animation: none;
+    border-color: #3498db;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .virtual-scroll-container {
+    scrollbar-color: #555 #1a1a1a;
+  }
+  
+  .virtual-scroll-container::-webkit-scrollbar-track {
+    background: #1a1a1a;
+  }
+  
+  .virtual-scroll-container::-webkit-scrollbar-thumb {
+    background: #555;
+  }
+  
+  .virtual-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #777;
+  }
+  
+  .virtual-scroll-loading {
+    color: #ccc;
+  }
+  
+  .virtual-scroll-loading .loading-spinner {
+    border-color: #333;
+    border-top-color: #5cb3ff;
+  }
+  
+  .virtual-scroll-end {
+    color: #666;
+    border-top-color: #333;
+  }
+  
+  .virtual-scroll-empty {
+    color: #666;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .virtual-scroll-container {
+    scrollbar-width: none;
+  }
+  
+  .virtual-scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Show scroll indicator on mobile */
+  .virtual-scroll-container::after {
+    content: '';
+    position: fixed;
+    right: 2px;
+    top: 50%;
+    width: 4px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  
+  .virtual-scroll-container.is-scrolling::after {
+    opacity: 1;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .virtual-scroll-container {
+    border: 1px solid currentColor;
+  }
+  
+  .virtual-scroll-end {
+    border-top: 1px solid currentColor;
+  }
+}
+
+/* Grid layout support */
+.virtual-scroll-viewport[style*="display: grid"] {
+  width: 100%;
+}
+
+/* Skeleton loading effect for items */
+.virtual-scroll-item[data-loading] {
+  position: relative;
+  overflow: hidden;
+}
+
+.virtual-scroll-item[data-loading]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  z-index: 1;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Custom focus styles */
+.virtual-scroll-item:focus-within {
+  outline: 2px solid #3498db;
+  outline-offset: 2px;
+}
+
+/* Preserve focus visibility during scroll */
+.virtual-scroll-container:focus-visible {
+  outline: 2px solid #3498db;
+  outline-offset: -2px;
+}
+
+/* Smooth scroll behavior */
+@media (prefers-reduced-motion: no-preference) {
+  .virtual-scroll-container {
+    scroll-behavior: smooth;
+  }
+}

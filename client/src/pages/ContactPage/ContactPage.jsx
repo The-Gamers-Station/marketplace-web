@@ -5,7 +5,6 @@ import {
   MapPin,
   Send,
   MessageSquare,
-  Clock,
   Facebook,
   Twitter,
   Instagram,
@@ -124,8 +123,8 @@ const ContactPage = () => {
           <div className="hero-pattern"></div>
         </div>
         <div className="container">
-          <div className="hero-content">
-            <h1 className="hero-title">
+          <div className="contact-content">
+            <h1 className="contact-title">
               <MessageSquare className="title-icon" />
               {t('pages.contact.title', 'تواصل معنا')}
             </h1>
@@ -184,7 +183,7 @@ const ContactPage = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="example@email.com"
+                      placeholder={t('pages.contact.emailPlaceholder')}
                       className={errors.email ? 'error' : ''}
                       dir="ltr"
                     />
@@ -204,7 +203,7 @@ const ContactPage = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder="05XXXXXXXX"
+                      placeholder={t('pages.contact.phonePlaceholder')}
                       dir="ltr"
                     />
                   </div>

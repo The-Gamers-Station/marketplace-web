@@ -311,7 +311,7 @@
 
 /* LTR direction */
 :root[dir="ltr"] .footer-title::after {
-  left: 0;
+  right: 0;
 }
 
 /* Footer Links */

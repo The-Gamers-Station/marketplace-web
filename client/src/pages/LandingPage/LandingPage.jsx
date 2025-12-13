@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../../components/Header/Header';
 import Hero from '../../components/Hero/Hero';
 import CategoryFilter from '../../components/CategoryFilter/CategoryFilter';
@@ -8,6 +8,13 @@ import SEO from '../../components/SEO/SEO';
 import './LandingPage.css';
 
 const LandingPage = () => {
+  // State for selected category filter
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  
+  // Handle category filter change
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+  };
   // Structured data for the home page
   const homeStructuredData = {
     "@context": "https://schema.org",
@@ -85,9 +92,9 @@ const LandingPage = () => {
       <div className="landing-page">
         <Header />
         <Hero />
-        <CategoryFilter />
+        <CategoryFilter onFilterChange={handleCategoryChange} />
         <main className="main-content">
-          <ProductGrid />
+          <ProductGrid categoryId={selectedCategoryId} />
         </main>
         <Footer />
       </div>

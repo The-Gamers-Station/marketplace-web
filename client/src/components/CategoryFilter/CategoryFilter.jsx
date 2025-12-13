@@ -1,20 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import authService from '../../services/authService';
+import categoryService from '../../services/categoryService';
 import './CategoryFilter.css';
 
-const CategoryFilter = () => {
+const CategoryFilter = ({ onFilterChange }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [selectedPlatform, setSelectedPlatform] = useState('playstation');
- 
+  const [selectedPlatform, setSelectedPlatform] = useState('all');
+  const [categories, setCategories] = useState([]);
+  
+  // Fetch categories from backend on component mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const platformCategories = await categoryService.getGamingPlatforms();
+        setCategories(platformCategories);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+    
+    fetchCategories();
+  }, []);
+
+  // Build platforms array from fetched categories
   const platforms = [
-    { name: t('categoryFilter.playstation'), key: 'playstation', active: true },
-    { name: t('categoryFilter.pc'), key: 'pc', active: false },
-    { name: t('categoryFilter.xbox'), key: 'xbox', active: false },
-    { name: t('categoryFilter.nintendo'), key: 'nintendo', active: false },
-    { name: t('categoryFilter.accessories'), key: 'accessories', active: false },
+    { name: t('categoryFilter.all') || 'All', key: 'all', categoryId: null },
+    ...categories.map(cat => {
+      // Map category slugs to translation keys
+      const translationKeyMap = {
+        'playstation': 'playstation',
+        'xbox': 'xbox',
+        'nintendo': 'nintendo',
+        'pc-gaming': 'pc',
+        'gaming-accessories': 'accessories'
+      };
+      
+      const translationKey = translationKeyMap[cat.slug] || cat.slug;
+      
+      return {
+        name: t(`categoryFilter.${translationKey}`) || cat.nameEn,
+        key: cat.slug,
+        categoryId: cat.id
+      };
+    })
   ];
 
   const filters = [
@@ -37,6 +68,14 @@ const CategoryFilter = () => {
     }
   };
 
+  // Handle platform selection
+  const handlePlatformChange = (platform) => {
+    setSelectedPlatform(platform.key);
+    if (onFilterChange) {
+      onFilterChange(platform.categoryId);
+    }
+  };
+
   return (
     <div className="category-filter">
       <div className="filter-container">
@@ -52,7 +91,7 @@ const CategoryFilter = () => {
                     className={`platform-pill ${
                       selectedPlatform === platform.key ? "active" : ""
                     }`}
-                    onClick={() => setSelectedPlatform(platform.key)}
+                    onClick={() => handlePlatformChange(platform)}
                   >
                     {platform.name}
                   </button>

@@ -437,7 +437,72 @@
       "emailInvalid": "البريد الإلكتروني غير صحيح",
       "subjectRequired": "الموضوع مطلوب",
       "messageRequired": "الرسالة مطلوبة",
-      "messageTooShort": "الرسالة يجب أن تكون 10 أحرف على الأقل"
+      "messageTooShort": "الرسالة يجب أن تكون 10 أحرف على الأقل",
+      "send": "إرسال",
+      "phone": "الهاتف",
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "أدخل اسمك الكامل",
+      "emailPlaceholder": "example@email.com",
+      "phonePlaceholder": "05XXXXXXXX",
+      "selectSubject": "اختر الموضوع",
+      "subjects": {
+        "general": "استفسار عام",
+        "order": "الطلبات",
+        "technical": "دعم فني",
+        "complaint": "شكوى",
+        "suggestion": "اقتراح",
+        "partnership": "شراكة"
+      },
+      "messagePlaceholder": "اكتب رسالتك هنا...",
+      "sending": "جاري الإرسال...",
+      "submitSuccessTitle": "تم إرسال رسالتك بنجاح!",
+      "submitSuccessMessage": "شكراً لتواصلك معنا. سنرد على رسالتك في أقرب وقت ممكن.",
+      "ok": "موافق",
+      "mainOffice": "المكتب الرئيسي",
+      "address": "الرياض، المملكة العربية السعودية",
+      "businessHours": "ساعات العمل",
+      "satToThu": "السبت - الخميس",
+      "friday": "الجمعة",
+      "closed": "مغلق",
+      "followUs": "تابعنا",
+      "socialMedia": "تابعنا على وسائل التواصل الاجتماعي",
+      "ourLocation": "موقعنا",
+      "viewLargerMap": "عرض خريطة أكبر"
+    },
+    "merchants": {
+      "pageTitle": "تجارنا الموثوقين",
+      "heroTitle": "اكتشف أفضل التجار",
+      "heroSubtitle": "تسوق من التجار الموثوقين مع ضمان الجودة والأمان",
+      "startShopping": "ابدأ التسوق",
+      "searchPlaceholder": "ابحث عن تاجر...",
+      "allMerchants": "جميع التجار",
+      "premiumMerchants": "التجار المميزون",
+      "consoles": "أجهزة الألعاب",
+      "pcGames": "ألعاب الكمبيوتر",
+      "accessories": "الإكسسوارات",
+      "digitalProducts": "المنتجات الرقمية",
+      "sortBy": {
+        "rating": "الأعلى تقييماً",
+        "reviews": "الأكثر تقييماً",
+        "products": "الأكثر منتجات",
+        "newest": "الأحدث"
+      },
+      "badges": {
+        "premium": "تاجر مميز",
+        "gold": "تاجر ذهبي",
+        "silver": "تاجر فضي",
+        "featured": "تاجر مميز"
+      },
+      "memberSince": "عضو منذ",
+      "deliveryTime": "وقت التوصيل",
+      "responseRate": "معدل الاستجابة",
+      "visitStore": "زيارة المتجر",
+      "products": "منتجات",
+      "sales": "مبيعات",
+      "ctaTitle": "هل أنت تاجر؟",
+      "ctaSubtitle": "انضم إلى منصتنا وابدأ ببيع منتجاتك لآلاف العملاء",
+      "learnMore": "اعرف المزيد",
+      "immediateDelivery": "فوري"
     }
   },
   "common": {
@@ -647,5 +712,16 @@
     },
     "uploading": "جاري الرفع...",
     "addProductButton": "إضافة منتج"
+  },
+  "imageAlt": {
+    "logo": "شعار GamersStation",
+    "productImage": "صورة {{productName}}",
+    "productImageNumber": "صورة {{productName}} {{number}}",
+    "productNumber": "المنتج {{number}}",
+    "previousImage": "الصورة السابقة",
+    "nextImage": "الصورة التالية",
+    "zoomImage": "تكبير الصورة",
+    "imageUnavailable": "الصورة غير متاحة",
+    "placeholder": "صورة افتراضية للمنتج"
   }
 }

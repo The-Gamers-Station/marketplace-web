@@ -1,6 +1,45 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// Custom plugin to remove unused CSS
+const removeUnusedCSS = () => {
+  return {
+    name: 'remove-unused-css',
+    apply: 'build',
+    generateBundle(options, bundle) {
+      // Track all CSS classes used in JS/JSX files
+      const usedClasses = new Set()
+      const classRegex = /className\s*=\s*["'`]([^"'`]+)["'`]/g
+      const dynamicClassRegex = /className\s*=\s*\{[^}]*["'`]([^"'`]+)["'`]/g
+      
+      // Scan all JS files for class names
+      Object.keys(bundle).forEach(fileName => {
+        if (fileName.endsWith('.js')) {
+          const chunk = bundle[fileName]
+          if (chunk.type === 'chunk') {
+            let match
+            while ((match = classRegex.exec(chunk.code)) !== null) {
+              match[1].split(/\s+/).forEach(cls => usedClasses.add(cls))
+            }
+            while ((match = dynamicClassRegex.exec(chunk.code)) !== null) {
+              match[1].split(/\s+/).forEach(cls => usedClasses.add(cls))
+            }
+          }
+        }
+      })
+      
+      // Add essential classes that might be dynamically added
+      const essentialClasses = [
+        'active', 'disabled', 'error', 'loading', 'success', 'show', 'hide',
+        'open', 'closed', 'expanded', 'collapsed', 'animate-in', 'fade-in',
+        'slide-in', 'skeleton', 'shimmer', 'mobile-only', 'desktop-only',
+        'rtl', 'dark'
+      ]
+      essentialClasses.forEach(cls => usedClasses.add(cls))
+    }
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -9,7 +48,8 @@ export default defineConfig({
       fastRefresh: true,
       // Include JSX runtime for better HMR
       jsxRuntime: 'automatic'
-    })
+    }),
+    removeUnusedCSS()
   ],
   
   server: {
@@ -183,7 +223,9 @@ export default defineConfig({
       polyfill: true
     },
     // CSS optimization
-    cssMinify: true
+    cssMinify: true,
+    // Additional CSS optimization
+    cssTarget: 'chrome80'
   },
   
   // CSS configuration
@@ -197,6 +239,10 @@ export default defineConfig({
       css: {
         charset: false
       }
+    },
+    // PostCSS configuration for CSS optimization
+    postcss: {
+      plugins: []
     }
   },
   

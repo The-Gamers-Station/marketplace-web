@@ -348,21 +348,21 @@ const ProductDetailsPage = () => {
                   <button
                     className="gallery-nav prev"
                     onClick={prevImage}
-                    aria-label="Previous image"
+                    aria-label={t('imageAlt.previousImage')}
                   >
                     <ChevronRight size={24} />
                   </button>
                   <button
                     className="gallery-nav next"
                     onClick={nextImage}
-                    aria-label="Next image"
+                    aria-label={t('imageAlt.nextImage')}
                   >
                     <ChevronLeft size={24} />
                   </button>
                   <button
                     className="zoom-btn"
                     onClick={() => setShowZoom(true)}
-                    aria-label="Zoom image"
+                    aria-label={t('imageAlt.zoomImage')}
                   >
                     <ZoomIn size={20} />
                   </button>
@@ -391,7 +391,7 @@ const ProductDetailsPage = () => {
                       {image.startsWith('http') ? (
                         <img
                           src={image}
-                          alt={`${product.name} ${index + 1}`}
+                          alt={t('imageAlt.productImageNumber', { productName: product.name, number: index + 1 })}
                           className="thumbnail-image"
                         />
                       ) : (
@@ -540,23 +540,23 @@ const ProductDetailsPage = () => {
                   <span>-{product.discount}%</span>
                 </div>
                 <button 
-                  className="gallery-nav prev" 
+                  className="gallery-nav prev"
                   onClick={prevImage}
-                  aria-label="Previous image"
+                  aria-label={t('imageAlt.previousImage')}
                 >
                   <ChevronRight size={24} />
                 </button>
                 <button 
-                  className="gallery-nav next" 
+                  className="gallery-nav next"
                   onClick={nextImage}
-                  aria-label="Next image"
+                  aria-label={t('imageAlt.nextImage')}
                 >
                   <ChevronLeft size={24} />
                 </button>
                 <button 
                   className="zoom-btn"
                   onClick={() => setShowZoom(true)}
-                  aria-label="Zoom image"
+                  aria-label={t('imageAlt.zoomImage')}
                 >
                   <ZoomIn size={20} />
                 </button>
@@ -585,7 +585,7 @@ const ProductDetailsPage = () => {
                     {image.startsWith('http') ? (
                       <img
                         src={image}
-                        alt={`${product.name} ${index + 1}`}
+                        alt={t('imageAlt.productImageNumber', { productName: product.name, number: index + 1 })}
                         className="thumbnail-image"
                       />
                     ) : (

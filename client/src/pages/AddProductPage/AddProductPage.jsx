@@ -536,7 +536,7 @@ const AddProductPage = () => {
                   <div className="upload-grid">
                     {uploadedImages.map((imageUrl, index) => (
                       <div key={index} className="uploaded-image-preview">
-                        <img src={imageUrl} alt={`Product ${index + 1}`} />
+                        <img src={imageUrl} alt={t('imageAlt.productNumber', { number: index + 1 })} />
                         <button
                           className="remove-image-btn"
                           onClick={() => {

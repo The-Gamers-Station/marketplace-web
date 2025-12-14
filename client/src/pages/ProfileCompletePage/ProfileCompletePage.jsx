@@ -154,7 +154,7 @@ const ProfileCompletePage = () => {
             {/* Header */}
             <div className="profile-header">
               <div className="logo-container">
-                <img src="/logo.svg" alt="GamersStation" className="logo-image" />
+                <img src="/logo.svg" alt={t('imageAlt.logo')} className="logo-image" />
               </div>
               <h1 className="profile-title">{t('profileComplete.title')}</h1>
               <p className="profile-subtitle">{t('profileComplete.subtitle')}</p>

@@ -183,7 +183,7 @@ const RegisterPage = () => {
             {/* Header */}
             <div className="register-header">
               <div className="logo-container">
-                <img src="/logo.svg" alt="GamersStation" className="logo-image" />
+                <img src="/logo.svg" alt={t('imageAlt.logo')} className="logo-image" />
               </div>
               <h1 className="register-title">{t('auth.register.createAccount')}</h1>
               <p className="register-subtitle">{t('auth.register.joinCommunity')}</p>

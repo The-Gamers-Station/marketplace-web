@@ -188,7 +188,7 @@ const LoginPage = () => {
             {/* Logo and Title */}
             <div className="login-header">
               <div className="logo-container">
-                <img src="/logo.svg" alt="GamersStation" className="logo-image" />
+                <img src="/logo.svg" alt={t('imageAlt.logo')} className="logo-image" />
               </div>
               <h1 className="login-title">{t('auth.login.welcomeBack')}</h1>
               <p className="login-subtitle">

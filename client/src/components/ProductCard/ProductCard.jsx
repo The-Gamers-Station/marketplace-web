@@ -61,7 +61,10 @@ const ProductCard = ({
       )}
       
       <div className="product-image">
-        <img src={image || '/placeholder-game.jpg'} alt={title} />
+        <img
+          src={image || '/placeholder-game.jpg'}
+          alt={t('imageAlt.productImage', { productName: title })}
+        />
       </div>
 
       <div className="product-content">

@@ -713,5 +713,16 @@
     },
     "uploading": "Uploading...",
     "addProductButton": "Add Product"
+  },
+  "imageAlt": {
+    "logo": "GamersStation Logo",
+    "productImage": "{{productName}} image",
+    "productImageNumber": "{{productName}} image {{number}}",
+    "productNumber": "Product {{number}}",
+    "previousImage": "Previous image",
+    "nextImage": "Next image",
+    "zoomImage": "Zoom image",
+    "imageUnavailable": "Image unavailable",
+    "placeholder": "Product image placeholder"
   }
 }

@@ -763,6 +763,16 @@
     "updateSuccess": "تم تحديث الملف الشخصي بنجاح!",
     "updateError": "فشل تحديث الملف الشخصي. يرجى المحاولة مرة أخرى.",
     "changeAvatar": "تغيير الصورة الشخصية",
-    "changeCover": "تغيير صورة الغلاف"
+    "changeCover": "تغيير صورة الغلاف",
+    "socialMedia": "روابط التواصل الاجتماعي",
+    "noSocialLinks": "لم يتم إضافة روابط التواصل الاجتماعي بعد",
+    "addSocialLinks": "إضافة روابط التواصل",
+    "facebookPlaceholder": "رابط ملف فيسبوك الشخصي",
+    "twitterPlaceholder": "رابط ملف تويتر الشخصي",
+    "instagramPlaceholder": "رابط ملف انستغرام الشخصي",
+    "youtubePlaceholder": "رابط قناة يوتيوب",
+    "linkedinPlaceholder": "رابط ملف لينكد إن الشخصي",
+    "githubPlaceholder": "رابط ملف جيت هاب الشخصي",
+    "websitePlaceholder": "رابط الموقع الشخصي"
   }
 }

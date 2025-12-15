@@ -764,6 +764,16 @@
     "updateSuccess": "Profile updated successfully!",
     "updateError": "Failed to update profile. Please try again.",
     "changeAvatar": "Change Avatar",
-    "changeCover": "Change Cover Photo"
+    "changeCover": "Change Cover Photo",
+    "socialMedia": "Social Media Links",
+    "noSocialLinks": "No social media links added yet",
+    "addSocialLinks": "Add Social Links",
+    "facebookPlaceholder": "Facebook profile URL",
+    "twitterPlaceholder": "Twitter profile URL",
+    "instagramPlaceholder": "Instagram profile URL",
+    "youtubePlaceholder": "YouTube channel URL",
+    "linkedinPlaceholder": "LinkedIn profile URL",
+    "githubPlaceholder": "GitHub profile URL",
+    "websitePlaceholder": "Personal website URL"
   }
 }

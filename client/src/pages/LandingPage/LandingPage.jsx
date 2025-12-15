@@ -24,7 +24,7 @@ const LandingPage = () => {
         "@id": "https://gamersstation.eg/#website",
         "url": "https://gamersstation.eg/",
         "name": "GamersStation",
-        "description": "أكبر سوق للألعاب الإلكترونية في مصر",
+        "description": "أكبر سوق للألعاب الإلكترونية في السعودية",
         "publisher": {
           "@id": "https://gamersstation.eg/#organization"
         },
@@ -36,7 +36,7 @@ const LandingPage = () => {
           },
           "query-input": "required name=search_term_string"
         },
-        "inLanguage": "ar-EG"
+        "inLanguage": "ar-SA"
       },
       {
         "@type": "Organization",
@@ -61,8 +61,8 @@ const LandingPage = () => {
         ],
         "address": {
           "@type": "PostalAddress",
-          "addressCountry": "EG",
-          "addressLocality": "القاهرة"
+          "addressCountry": "SA",
+          "addressLocality": "الرياض"
         }
       },
       {
@@ -84,8 +84,8 @@ const LandingPage = () => {
     <>
       <SEO
         title=""
-        description="تسوق أحدث الألعاب والأجهزة من PlayStation 5، Xbox Series X، Nintendo Switch، وأجهزة الكمبيوتر. أفضل الأسعار والعروض من تجار موثوقين في مصر. توصيل سريع وضمان أصلي."
-        keywords="ألعاب إلكترونية, بلايستيشن 5, إكس بوكس, نينتندو سويتش, ألعاب كمبيوتر, PS5, Xbox Series X, Nintendo Switch, gaming مصر, متجر ألعاب, أجهزة ألعاب"
+        description="تسوق أحدث الألعاب والأجهزة من PlayStation 5، Xbox Series X، Nintendo Switch، وأجهزة الكمبيوتر. أفضل الأسعار والعروض من تجار موثوقين في السعودية. توصيل سريع وضمان أصلي."
+        keywords="ألعاب إلكترونية, بلايستيشن 5, إكس بوكس, نينتندو سويتش, ألعاب كمبيوتر, PS5, Xbox Series X, Nintendo Switch, gaming السعودية, متجر ألعاب, أجهزة ألعاب"
         structuredData={homeStructuredData}
         type="website"
       />

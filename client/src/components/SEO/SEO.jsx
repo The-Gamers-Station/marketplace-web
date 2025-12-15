@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 const SEO = ({ 
   title = '',
   description = 'اكتشف أفضل الألعاب والأجهزة والإكسسوارات من تجار موثوقين. PlayStation، Xbox، Nintendo، وأجهزة الكمبيوتر. توصيل سريع وأسعار تنافسية.',
-  keywords = 'ألعاب إلكترونية, بلايستيشن, إكس بوكس, نينتندو, ألعاب كمبيوتر, PS5, Xbox Series X, gaming, مصر',
+  keywords = 'ألعاب إلكترونية, بلايستيشن, إكس بوكس, نينتندو, ألعاب كمبيوتر, PS5, Xbox Series X, gaming, السعودية',
   image = 'https://gamersstation.eg/og-image.jpg',
   url = 'https://gamersstation.eg',
   type = 'website',
@@ -15,7 +15,7 @@ const SEO = ({
   noindex = false,
   nofollow = false
 }) => {
-  const siteTitle = 'GamersStation - أكبر سوق للألعاب الإلكترونية في مصر';
+  const siteTitle = 'GamersStation - أكبر سوق للألعاب الإلكترونية في السعودية';
   const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
   const currentUrl = canonicalUrl || `${url}${typeof window !== 'undefined' ? window.location.pathname : ''}`;
   
@@ -26,11 +26,11 @@ const SEO = ({
     "name": "GamersStation",
     "url": "https://gamersstation.eg",
     "logo": "https://gamersstation.eg/logo.svg",
-    "description": "أكبر سوق للألعاب الإلكترونية في مصر",
+    "description": "أكبر سوق للألعاب الإلكترونية في السعودية",
     "address": {
       "@type": "PostalAddress",
-      "addressCountry": "EG",
-      "addressRegion": "القاهرة"
+      "addressCountry": "SA",
+      "addressRegion": "الرياض"
     },
     "contactPoint": {
       "@type": "ContactPoint",
@@ -70,8 +70,8 @@ const SEO = ({
       <link rel="canonical" href={currentUrl} />
       
       {/* Alternate Language Links */}
-      <link rel="alternate" hreflang="ar-EG" href={currentUrl} />
-      <link rel="alternate" hreflang="en-EG" href={`${url}/en${typeof window !== 'undefined' ? window.location.pathname : ''}`} />
+      <link rel="alternate" hreflang="ar-SA" href={currentUrl} />
+      <link rel="alternate" hreflang="en-SA" href={`${url}/en${typeof window !== 'undefined' ? window.location.pathname : ''}`} />
       {alternateLinks.map((link, index) => (
         <link key={index} rel="alternate" hreflang={link.hreflang} href={link.href} />
       ))}
@@ -84,8 +84,8 @@ const SEO = ({
       <meta property="og:image" content={image} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      <meta property="og:locale" content="ar_EG" />
-      <meta property="og:locale:alternate" content="en_EG" />
+      <meta property="og:locale" content="ar_SA" />
+      <meta property="og:locale:alternate" content="en_SA" />
       <meta property="og:site_name" content="GamersStation" />
       
       {/* Twitter Card Meta Tags */}
@@ -111,7 +111,7 @@ const SEO = ({
         <>
           <meta property="product:availability" content="in stock" />
           <meta property="product:condition" content="new" />
-          <meta property="product:price:currency" content="EGP" />
+          <meta property="product:price:currency" content="SAR" />
         </>
       )}
       

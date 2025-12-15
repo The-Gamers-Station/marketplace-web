@@ -1,0 +1,561 @@
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet-async';
+import {
+  User,
+  Edit3,
+  Package,
+  Heart,
+  Star,
+  Settings,
+  Shield,
+  Calendar,
+  MapPin,
+  Phone,
+  Mail,
+  Camera,
+  Save,
+  X,
+  Upload,
+  Eye,
+  MessageSquare,
+  Award
+} from 'lucide-react';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import { PageLoader } from '../../components/Loading/Loading';
+import authService from '../../services/authService';
+import userService from '../../services/userService';
+import postService from '../../services/postService';
+import './ProfilePage.css';
+
+const ProfilePage = () => {
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [userPosts, setUserPosts] = useState([]);
+  const [activeTab, setActiveTab] = useState('posts');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedUser, setEditedUser] = useState({});
+  const [profileImage, setProfileImage] = useState(null);
+  const [backgroundImage, setBackgroundImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [backgroundPreview, setBackgroundPreview] = useState(null);
+  const [stats, setStats] = useState({
+    totalPosts: 0,
+    totalViews: 0,
+    totalLikes: 0,
+    rating: 0,
+    joinDate: null
+  });
+
+  // Check authentication
+  useEffect(() => {
+    const checkAuth = () => {
+      if (!authService.isAuthenticated()) {
+        navigate('/login');
+        return false;
+      }
+      return true;
+    };
+    
+    checkAuth();
+  }, [navigate]);
+
+  // Fetch user data
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        setLoading(true);
+        
+        // Get current user profile
+        const userProfile = await userService.getCurrentUserProfile();
+        setUser(userProfile);
+        setEditedUser(userProfile);
+        
+        // Get user posts
+        let fetchedPosts = [];
+        try {
+          const posts = await postService.getMyPosts({ size: 20 });
+          fetchedPosts = posts.content || [];
+          setUserPosts(fetchedPosts);
+        } catch (error) {
+          console.error('Error fetching user posts:', error);
+          setUserPosts([]);
+        }
+        
+        // Calculate stats
+        const totalViews = fetchedPosts.reduce((sum, post) => sum + (post.views || 0), 0);
+        const totalLikes = fetchedPosts.reduce((sum, post) => sum + (post.likes || 0), 0);
+        
+        setStats({
+          totalPosts: fetchedPosts.length,
+          totalViews,
+          totalLikes,
+          rating: userProfile.rating || 4.5,
+          joinDate: userProfile.createdAt
+        });
+        
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (authService.isAuthenticated()) {
+      fetchUserData();
+    }
+  }, []);
+
+  // Handle edit mode
+  const handleEdit = () => {
+    setIsEditing(true);
+    setEditedUser({ ...user });
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditedUser({ ...user });
+    setImagePreview(null);
+    setProfileImage(null);
+    setBackgroundPreview(null);
+    setBackgroundImage(null);
+  };
+
+  const handleSaveProfile = async () => {
+    try {
+      setLoading(true);
+      
+      // Prepare updated user data
+      const updateData = { ...editedUser };
+      
+      // If there's a new profile image, add it to the update data
+      if (imagePreview) {
+        updateData.profileImage = imagePreview;
+      }
+      
+      // If there's a new background image, add it to the update data
+      if (backgroundPreview) {
+        updateData.backgroundImage = backgroundPreview;
+      }
+      
+      // Update user profile
+      const updatedUser = await userService.updateProfile(updateData);
+      setUser(updatedUser);
+      setIsEditing(false);
+      
+      // Show success message
+      alert(t('profile.updateSuccess'));
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert(t('profile.updateError'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle input changes
+  const handleInputChange = (field, value) => {
+    setEditedUser(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  // Handle image upload
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Handle background image upload
+  const handleBackgroundChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setBackgroundImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBackgroundPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Format date
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString(i18n.language === 'ar' ? 'ar-SA' : 'en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  if (loading) {
+    return <PageLoader message={t('common.loading')} />;
+  }
+
+  // If no user data, show error
+  if (!user) {
+    return (
+      <>
+        <Header />
+        <main className="profile-page">
+          <div className="profile-container">
+            <div className="empty-state" style={{ marginTop: '100px' }}>
+              <User size={48} />
+              <p>{t('profile.notLoggedIn') || 'Please log in to view your profile'}</p>
+              <button
+                className="add-post-btn"
+                onClick={() => navigate('/login')}
+              >
+                {t('header.login')}
+              </button>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Helmet>
+        <title>{t('profile.pageTitle')} - GamersStation</title>
+        <meta name="description" content={t('profile.pageDescription')} />
+      </Helmet>
+      
+      <Header />
+      
+      <main className="profile-page">
+        <div className="profile-container">
+          {/* Profile Header */}
+          <div className="profile-header">
+            <div
+              className="profile-cover"
+              style={{
+                backgroundImage: backgroundPreview
+                  ? `url(${backgroundPreview})`
+                  : user?.backgroundImage
+                  ? `url(${user.backgroundImage})`
+                  : 'none'
+              }}
+            >
+              <div className="profile-cover-gradient" />
+              {isEditing && (
+                <label className="cover-upload-btn">
+                  <Upload size={20} />
+                  <span>{t('profile.changeCover')}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleBackgroundChange}
+                    hidden
+                  />
+                </label>
+              )}
+            </div>
+            
+            <div className="profile-info-section">
+              <div className="profile-avatar-wrapper">
+                <div className="profile-avatar">
+                  {isEditing ? (
+                    <>
+                      <img
+                        src={imagePreview || user?.profileImage || `https://ui-avatars.com/api/?name=${user?.username || 'User'}&background=ff6b35&color=fff&size=150`}
+                        alt={user?.username || t('profile.userAvatar')}
+                      />
+                      <label className="avatar-upload-btn" title={t('profile.changeAvatar')}>
+                        <Camera size={20} />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageChange}
+                          hidden
+                        />
+                      </label>
+                    </>
+                  ) : (
+                    <img
+                      src={user?.profileImage || `https://ui-avatars.com/api/?name=${user?.username || 'User'}&background=ff6b35&color=fff&size=150`}
+                      alt={user?.username || t('profile.userAvatar')}
+                    />
+                  )}
+                </div>
+                {user?.verified && (
+                  <div className="verified-badge">
+                    <Shield size={16} />
+                  </div>
+                )}
+              </div>
+              
+              <div className="profile-details">
+                {isEditing ? (
+                  <div className="edit-profile-form">
+                    <input
+                      type="text"
+                      className="edit-input username-input"
+                      value={editedUser.username || ''}
+                      onChange={(e) => handleInputChange('username', e.target.value)}
+                      placeholder={t('profile.username')}
+                    />
+                    <div className="edit-actions">
+                      <button className="save-btn" onClick={handleSaveProfile}>
+                        <Save size={16} />
+                        {t('profile.save')}
+                      </button>
+                      <button className="cancel-btn" onClick={handleCancelEdit}>
+                        <X size={16} />
+                        {t('profile.cancel')}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <h1 className="profile-username">{user?.username || t('profile.anonymous')}</h1>
+                    <div className="profile-meta">
+                      <span className="meta-item">
+                        <MapPin size={16} />
+                        {user?.city || t('profile.noLocation')}
+                      </span>
+                      <span className="meta-item">
+                        <Calendar size={16} />
+                        {t('profile.memberSince')} {formatDate(stats.joinDate)}
+                      </span>
+                    </div>
+                    <button className="edit-profile-btn" onClick={handleEdit}>
+                      <Edit3 size={16} />
+                      {t('profile.editProfile')}
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Stats Section */}
+          <div className="profile-stats">
+            <div className="stat-card">
+              <div className="stat-icon">
+                <Package size={24} />
+              </div>
+              <div className="stat-content">
+                <span className="stat-value">{stats.totalPosts}</span>
+                <span className="stat-label">{t('profile.totalPosts')}</span>
+              </div>
+            </div>
+            
+            <div className="stat-card">
+              <div className="stat-icon">
+                <Eye size={24} />
+              </div>
+              <div className="stat-content">
+                <span className="stat-value">{stats.totalViews.toLocaleString()}</span>
+                <span className="stat-label">{t('profile.totalViews')}</span>
+              </div>
+            </div>
+            
+            <div className="stat-card">
+              <div className="stat-icon">
+                <Heart size={24} />
+              </div>
+              <div className="stat-content">
+                <span className="stat-value">{stats.totalLikes}</span>
+                <span className="stat-label">{t('profile.totalLikes')}</span>
+              </div>
+            </div>
+            
+            <div className="stat-card">
+              <div className="stat-icon">
+                <Star size={24} />
+              </div>
+              <div className="stat-content">
+                <span className="stat-value">{stats.rating.toFixed(1)}</span>
+                <span className="stat-label">{t('profile.rating')}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div className="profile-tabs">
+            <button 
+              className={`tab-btn ${activeTab === 'posts' ? 'active' : ''}`}
+              onClick={() => setActiveTab('posts')}
+            >
+              <Package size={18} />
+              {t('profile.myPosts')}
+            </button>
+            
+            <button 
+              className={`tab-btn ${activeTab === 'reviews' ? 'active' : ''}`}
+              onClick={() => setActiveTab('reviews')}
+            >
+              <MessageSquare size={18} />
+              {t('profile.reviews')}
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'settings' ? 'active' : ''}`}
+              onClick={() => setActiveTab('settings')}
+            >
+              <Settings size={18} />
+              {t('profile.settings')}
+            </button>
+          </div>
+
+          {/* Tab Content */}
+          <div className="profile-content">
+            {activeTab === 'posts' && (
+              <div className="posts-section">
+                {userPosts.length > 0 ? (
+                  <div className="user-posts-grid">
+                    {userPosts.map(post => (
+                      <div key={post.id} className="user-post-card" onClick={() => navigate(`/product/${post.id}`)}>
+                        <div className="post-image">
+                          <img src={post.images?.[0]?.url || `https://via.placeholder.com/300x200/1a1f36/ff6b35?text=${encodeURIComponent(post.title)}`} alt={post.title} />
+                          <div className="post-overlay">
+                            <span className="post-price">{t('currency')} {post.price}</span>
+                          </div>
+                        </div>
+                        <div className="post-info">
+                          <h3 className="post-title">{post.title}</h3>
+                          <div className="post-stats">
+                            <span><Eye size={14} /> {post.views || 0}</span>
+                            <span><Heart size={14} /> {post.likes || 0}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="empty-state">
+                    <Package size={48} />
+                    <p>{t('profile.noPosts')}</p>
+                    <button className="add-post-btn" onClick={() => navigate('/add-product')}>
+                      {t('profile.addFirstPost')}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'favorites' && (
+              <div className="favorites-section">
+                <div className="empty-state">
+                  <Heart size={48} />
+                  <p>{t('profile.noFavorites')}</p>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'reviews' && (
+              <div className="reviews-section">
+                <div className="empty-state">
+                  <MessageSquare size={48} />
+                  <p>{t('profile.noReviews')}</p>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'settings' && (
+              <div className="settings-section">
+                <div className="settings-group">
+                  <h3>{t('profile.contactInfo')}</h3>
+                  {isEditing ? (
+                    <div className="settings-fields">
+                      <div className="field-group">
+                        <label>
+                          <Phone size={16} />
+                          {t('profile.phone')}
+                        </label>
+                        <input
+                          type="tel"
+                          value={editedUser.phoneNumber || ''}
+                          onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                          disabled
+                        />
+                      </div>
+                      <div className="field-group">
+                        <label>
+                          <Mail size={16} />
+                          {t('profile.email')}
+                        </label>
+                        <input
+                          type="email"
+                          value={editedUser.email || ''}
+                          onChange={(e) => handleInputChange('email', e.target.value)}
+                          placeholder={t('profile.emailPlaceholder')}
+                        />
+                      </div>
+                      <div className="field-group">
+                        <label>
+                          <MapPin size={16} />
+                          {t('profile.city')}
+                        </label>
+                        <input
+                          type="text"
+                          value={editedUser.city || ''}
+                          onChange={(e) => handleInputChange('city', e.target.value)}
+                          placeholder={t('profile.cityPlaceholder')}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="settings-info">
+                      <div className="info-item">
+                        <Phone size={16} />
+                        <span>{user?.phoneNumber || t('profile.noPhone')}</span>
+                      </div>
+                      <div className="info-item">
+                        <Mail size={16} />
+                        <span>{user?.email || t('profile.noEmail')}</span>
+                      </div>
+                      <div className="info-item">
+                        <MapPin size={16} />
+                        <span>{user?.city || t('profile.noCity')}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="settings-group">
+                  <h3>{t('profile.accountSettings')}</h3>
+                  <div className="settings-actions">
+                    <button className="settings-btn">
+                      <Shield size={16} />
+                      {t('profile.privacySettings')}
+                    </button>
+                    <button className="settings-btn">
+                      <Award size={16} />
+                      {t('profile.verifyAccount')}
+                    </button>
+                    <button className="settings-btn danger" onClick={() => authService.logout()}>
+                      {t('profile.logout')}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+      
+      <Footer />
+    </>
+  );
+};
+
+export default ProfilePage;
+                

@@ -30,6 +30,9 @@ const ProfileCompletePage = lazy(() =>
 const AddProductPage = lazy(() =>
   import(/* webpackChunkName: "add-product" */ './pages/AddProductPage/AddProductPage')
 );
+const ProfilePage = lazy(() =>
+  import(/* webpackChunkName: "profile" */ './pages/ProfilePage/ProfilePage')
+);
 
 // Modern Loading component with professional design
 const PageLoader = memo(() => {
@@ -97,6 +100,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/profile/complete" element={<ProfileCompletePage />} />
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/add-product" element={<AddProductPage />} />
             </Routes>
           </Suspense>

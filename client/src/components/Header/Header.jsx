@@ -247,12 +247,12 @@ const Header = memo(() => {
           <div className="mobile-user-section">
             {isAuthenticated ? (
               <>
-                <button className="mobile-action-btn">
+                <Link to="/profile" className="mobile-action-btn" onClick={toggleMobileMenu}>
                   <div className="mobile-user-profile-img">
                     <User size={20} />
                   </div>
                   <span>{currentUser?.username || t('header.myAccount')}</span>
-                </button>
+                </Link>
                 <button onClick={handleLogout} className="mobile-action-btn logout-btn">
                   <LogIn size={20} />
                   <span>{t('header.logout')}</span>

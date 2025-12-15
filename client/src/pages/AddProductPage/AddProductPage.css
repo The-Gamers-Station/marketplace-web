@@ -12,7 +12,11 @@
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--bg-primary) 0%,
+    var(--bg-secondary) 100%
+  );
   overflow: hidden;
 }
 
@@ -53,7 +57,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) scale(1);
   }
   25% {
@@ -69,7 +74,7 @@
 
 /* Container */
 .product-wizard-container {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 2rem auto;
   padding: 0 2rem;
   flex: 1;
@@ -88,7 +93,11 @@
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -138,7 +147,11 @@
 }
 
 .wizard-step.active .step-circle {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-hover)
+  );
   border-color: var(--primary-color);
   color: white;
   box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
@@ -160,7 +173,11 @@
 }
 
 .step-connector.active {
-  background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+  background: linear-gradient(
+    90deg,
+    var(--primary-color),
+    var(--primary-hover)
+  );
 }
 
 /* Wizard Content */
@@ -170,6 +187,7 @@
   border: 1px solid var(--border-color);
   border-radius: 20px;
   padding: 2.5rem;
+  width: 1200px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.5s ease;
 }
@@ -216,7 +234,7 @@
 }
 
 .platform-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -237,7 +255,11 @@
 }
 
 .platform-card.selected {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-hover)
+  );
   border-color: var(--primary-color);
   transform: translateY(-5px) scale(1.05);
   box-shadow: 0 10px 40px rgba(255, 107, 53, 0.4);
@@ -522,7 +544,9 @@
 }
 
 @keyframes uploadSpin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Action Buttons */
@@ -558,7 +582,11 @@
 }
 
 .action-primary {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-hover)
+  );
   border: none;
   color: white;
   box-shadow: 0 5px 20px rgba(255, 107, 53, 0.3);
@@ -590,7 +618,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Submit Error */
@@ -769,7 +799,11 @@
 }
 
 .success-popup {
-  background: linear-gradient(135deg, rgba(20, 30, 45, 0.95), rgba(30, 40, 55, 0.95));
+  background: linear-gradient(
+    135deg,
+    rgba(20, 30, 45, 0.95),
+    rgba(30, 40, 55, 0.95)
+  );
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 30px;
@@ -844,7 +878,11 @@
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.75rem;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -884,7 +922,9 @@
 }
 
 @keyframes popupLoader {
-  0%, 80%, 100% {
+  0%,
+  80%,
+  100% {
     transform: scale(0.8);
     opacity: 0.5;
   }
@@ -912,6 +952,19 @@
   .success-checkmark {
     width: 60px;
     height: 60px;
+  }
+  .product-wizard-container {
+    width: 100%;
+  }
+  .wizard-content {
+    background: rgba(20, 30, 45, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 100%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.5s ease;
   }
 }
 

@@ -618,7 +618,7 @@ const AddProductPage = () => {
           </div>
         </div>
 
-        <Footer />
+     
       </div>
     </>
   );

@@ -140,6 +140,7 @@ const Header = memo(() => {
   // Memoize navigation items
   const navigationItems = useMemo(() => [
     { path: '/', label: t('header.home') },
+    { path: '/products', label: t('header.products') },
     { path: '/contact', label: t('header.contact') },
     { path: '/faq', label: t('header.faq') }
   ], [t]);

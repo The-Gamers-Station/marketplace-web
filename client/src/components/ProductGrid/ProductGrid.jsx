@@ -5,7 +5,7 @@ import postService from '../../services/postService';
 import { GameSpinner, SkeletonLoader } from '../Loading/Loading';
 import './ProductGrid.css';
 
-const ProductGrid = ({ categoryId, searchQuery }) => {
+const ProductGrid = ({ categoryId, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction }) => {
   const { t, i18n } = useTranslation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,13 +27,25 @@ const ProductGrid = ({ categoryId, searchQuery }) => {
       const params = {
         page: pageNumber,
         size: 20,
-        sortBy: 'createdAt',
-        direction: 'DESC',
+        sortBy: sortBy || 'createdAt',
+        direction: direction || 'DESC',
       };
 
-      // Add category filter if provided
+      // Add filters if provided
       if (categoryId) {
         params.categoryId = categoryId;
+      }
+      if (cityId) {
+        params.cityId = cityId;
+      }
+      if (minPrice) {
+        params.minPrice = minPrice;
+      }
+      if (maxPrice) {
+        params.maxPrice = maxPrice;
+      }
+      if (condition) {
+        params.condition = condition;
       }
 
       // Use search endpoint if search query is provided
@@ -63,7 +75,7 @@ const ProductGrid = ({ categoryId, searchQuery }) => {
   // Fetch products on mount and when filters change
   useEffect(() => {
     fetchProducts(0, false);
-  }, [categoryId, searchQuery]);
+  }, [categoryId, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction]);
 
   // Load more products
   const handleLoadMore = () => {

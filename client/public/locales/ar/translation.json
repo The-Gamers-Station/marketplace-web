@@ -1,6 +1,7 @@
 {
   "header": {
     "home": "الرئيسية",
+    "products": "المنتجات",
     "contact": "تواصل معنا",
     "faq": "الأسئلة الشائعة",
     "searchPlaceholder": "ابحث عن لعبة أو منتج...",
@@ -814,5 +815,34 @@
     "faq": "الأسئلة الشائعة",
     "contact": "تواصل معنا",
     "login": "دخول"
+  },
+  "allProducts": {
+    "pageTitle": "جميع المنتجات - GamersStation",
+    "pageDescription": "تصفح جميع منتجات الألعاب والأجهزة والإكسسوارات والمزيد. اعثر على أفضل العروض من البائعين الموثوقين.",
+    "title": "جميع المنتجات",
+    "subtitle": "اكتشف منتجات الألعاب المذهلة من البائعين الموثوقين",
+    "searchPlaceholder": "ابحث عن المنتجات، الألعاب، الأجهزة...",
+    "filters": "الفلاتر",
+    "clearAll": "مسح الكل",
+    "category": "الفئة",
+    "allCategories": "جميع الفئات",
+    "price": "نطاق السعر",
+    "minPrice": "الحد الأدنى",
+    "maxPrice": "الحد الأقصى",
+    "city": "المدينة",
+    "allCities": "جميع المدن",
+    "condition": "حالة المنتج",
+    "allConditions": "جميع الحالات",
+    "conditionNew": "جديد تماماً",
+    "conditionLikeNew": "كالجديد",
+    "conditionGood": "جيد",
+    "conditionFair": "مقبول",
+    "searchingFor": "البحث عن \"{{query}}\"",
+    "sortBy": "ترتيب حسب:",
+    "sortNewest": "الأحدث أولاً",
+    "sortOldest": "الأقدم أولاً",
+    "sortPriceLow": "السعر: من الأقل للأعلى",
+    "sortPriceHigh": "السعر: من الأعلى للأقل",
+    "sortMostViewed": "الأكثر مشاهدة"
   }
 }

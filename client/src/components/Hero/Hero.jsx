@@ -123,14 +123,13 @@ const Hero = () => {
 
           {/* CTA Buttons */}
           <div className={`hero-actions ${isVisible ? 'animate-in' : ''}`}>
-            <Link to="/contact" className="btn-primary">
-             
-              <PhoneCall size={20} />
-              <span>{i18n.language === 'ar' ? 'تواصل معنا' : 'Contact Us'}</span>
+            <Link to="/products" className="btn-primary">
+              <ShoppingCart size={20} />
+              <span>{i18n.language === 'ar' ? 'تصفح المنتجات' : 'Browse Products'}</span>
             </Link>
-            <Link to="/faq" className="btn-secondary">
-                
-              <span>{i18n.language === 'ar' ? 'الاسئلة الشائعة' : 'FAQ'}</span>
+            <Link to="/contact" className="btn-secondary">
+              <PhoneCall size={18} />
+              <span>{i18n.language === 'ar' ? 'تواصل معنا' : 'Contact Us'}</span>
               <ArrowRight size={18} className="arrow-icon" />
             </Link>
           </div>

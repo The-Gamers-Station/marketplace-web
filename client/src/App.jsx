@@ -39,6 +39,9 @@ const ChatPage = lazy(() =>
 const NotFoundPage = lazy(() =>
   import(/* webpackChunkName: "notfound" */ './pages/NotFoundPage/NotFoundPage')
 );
+const AllProductsPage = lazy(() =>
+  import(/* webpackChunkName: "all-products" */ './pages/AllProductsPage/AllProductsPage')
+);
 
 // Modern Loading component with professional design
 const PageLoader = memo(() => {
@@ -100,6 +103,7 @@ function App() {
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<LandingPage />} />
+              <Route path="/products" element={<AllProductsPage />} />
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/product/:id" element={<ProductDetailsPage />} />

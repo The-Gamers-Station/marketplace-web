@@ -1,6 +1,7 @@
 {
   "header": {
     "home": "Home",
+    "products": "Products",
     "contact": "Contact Us",
     "faq": "FAQ",
     "searchPlaceholder": "Search for a game or product...",
@@ -815,5 +816,34 @@
     "faq": "FAQ",
     "contact": "Contact",
     "login": "Login"
+  },
+  "allProducts": {
+    "pageTitle": "All Products - GamersStation",
+    "pageDescription": "Browse all gaming products, consoles, accessories and more. Find the best deals from trusted sellers.",
+    "title": "All Products",
+    "subtitle": "Discover amazing gaming products from trusted sellers",
+    "searchPlaceholder": "Search for products, games, consoles...",
+    "filters": "Filters",
+    "clearAll": "Clear All",
+    "category": "Category",
+    "allCategories": "All Categories",
+    "price": "Price Range",
+    "minPrice": "Min",
+    "maxPrice": "Max",
+    "city": "City",
+    "allCities": "All Cities",
+    "condition": "Product Condition",
+    "allConditions": "All Conditions",
+    "conditionNew": "Brand New",
+    "conditionLikeNew": "Like New",
+    "conditionGood": "Good",
+    "conditionFair": "Fair",
+    "searchingFor": "Searching for \"{{query}}\"",
+    "sortBy": "Sort by:",
+    "sortNewest": "Newest First",
+    "sortOldest": "Oldest First",
+    "sortPriceLow": "Price: Low to High",
+    "sortPriceHigh": "Price: High to Low",
+    "sortMostViewed": "Most Viewed"
   }
 }

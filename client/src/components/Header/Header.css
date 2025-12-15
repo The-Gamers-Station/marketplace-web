@@ -224,6 +224,64 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
+
+/* User Button Badge */
+.user-unread-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff6b35;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 12px;
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  animation: pulse 2s infinite;
+  z-index: 10;
+  border: 2px solid var(--bg-primary, #0f1823);
+}
+
+/* Dropdown Item Badge */
+.dropdown-badge {
+  margin-left: auto;
+  background: #ff6b35;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 8px;
+  min-width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Ensure dropdown item can display badge properly */
+.dropdown-item {
+  position: relative;
+}
 }
 
 .action-btn::before {
@@ -248,6 +306,8 @@
   width: auto;
   padding: 0 15px;
   gap: 8px;
+  position: relative;
+  overflow: visible;
 }
 
 .user-name {

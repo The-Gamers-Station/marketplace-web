@@ -23,7 +23,8 @@ import {
   Info,
   X,
   ZoomIn,
-  Loader2
+  Loader2,
+  MessageCircle
 } from 'lucide-react';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -462,7 +463,7 @@ const ProductDetailsPage = () => {
               </div>
 
               {/* Purchase Section */}
-              <div className="purchase-section">
+              {/* <div className="purchase-section">
                 <div className="quantity-selector">
                   <label>{t('pages.productDetails.quantity')}</label>
                   <div className="quantity-controls">
@@ -494,7 +495,7 @@ const ProductDetailsPage = () => {
                     <Share2 size={20} />
                   </button>
                 </div>
-              </div>
+              </div> */}
 
               {/* Delivery Info */}
               <div className="delivery-info">
@@ -529,7 +530,23 @@ const ProductDetailsPage = () => {
                     <span>•</span>
                     <span>{t('pages.productDetails.responseWithin')} {product.seller.responseTime}</span>
                   </div>
-                  <a href="#" className="visit-store">{t('pages.productDetails.visitStore')}</a>
+                  <div className="seller-actions">
+                    <a href="#" className="visit-store">{t('pages.productDetails.visitStore')}</a>
+                    <button
+                      className="chat-with-seller-btn"
+                      onClick={() => navigate(`/chat/${product.id}`, {
+                        state: {
+                          productId: product.id,
+                          productName: product.name,
+                          sellerName: product.seller.name,
+                          sellerId: product.seller.id
+                        }
+                      })}
+                    >
+                      <MessageCircle size={18} />
+                      {t('pages.productDetails.chatWithSeller')}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

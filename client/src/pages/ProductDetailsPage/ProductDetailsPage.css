@@ -367,8 +367,7 @@
   transition: transform 0.3s;
 }
 
-.main-image:hover .product-emoji,
-.main-image:hover .product-main-image {
+.main-image:hover .product-emoji  {
   transform: scale(1.1);
 }
 
@@ -1191,6 +1190,50 @@
 
 .visit-store:hover::after {
   transform: translateX(5px);
+}
+
+/* Seller Actions */
+.seller-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+/* Chat with Seller Button */
+.chat-with-seller-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.2);
+}
+
+.chat-with-seller-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  background: linear-gradient(135deg, #22c55e 0%, #0f9d58 100%);
+}
+
+.chat-with-seller-btn:active {
+  transform: translateY(0);
+}
+
+.chat-with-seller-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.chat-with-seller-btn:hover svg {
+  transform: rotate(10deg);
 }
 
 /* Product Details Tabs with enhanced background */

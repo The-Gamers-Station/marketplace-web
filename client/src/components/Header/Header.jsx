@@ -1,6 +1,6 @@
 import React, { useState, useEffect, memo, useCallback, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Search, User, ChevronDown, Menu, X, LogIn, UserPlus } from 'lucide-react';
+import { Search, User, ChevronDown, Menu, X, LogIn, UserPlus, MessageCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import authService from '../../services/authService';
@@ -45,6 +45,7 @@ const Header = memo(() => {
   const [activeLink, setActiveLink] = useState('/');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
   const location = useLocation();
 
   // Update active link based on current location
@@ -85,6 +86,18 @@ const Header = memo(() => {
       window.removeEventListener('authStateChanged', handleAuthChange);
     };
   }, []);
+
+  // Mock unread messages count - replace with actual API call
+  useEffect(() => {
+    if (isAuthenticated) {
+      // Simulate fetching unread messages count
+      // In production, this would be an API call
+      const mockUnreadCount = 3;
+      setUnreadMessagesCount(mockUnreadCount);
+    } else {
+      setUnreadMessagesCount(0);
+    }
+  }, [isAuthenticated]);
 
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen(prevState => {
@@ -189,11 +202,21 @@ const Header = memo(() => {
                   <span className="user-name">{currentUser.username}</span>
                 )}
                 <ChevronDown size={16} />
+                {unreadMessagesCount > 0 && (
+                  <span className="user-unread-badge">{unreadMessagesCount}</span>
+                )}
               </button>
               <div className="dropdown-menu">
                 <Link to="/profile" className="dropdown-item">
                   <User size={18} />
                   <span>{t('header.myProfile')}</span>
+                </Link>
+                <Link to="/profile?tab=messages" className="dropdown-item">
+                  <MessageCircle size={18} />
+                  <span>{t('chat.messages')}</span>
+                  {unreadMessagesCount > 0 && (
+                    <span className="dropdown-badge">{unreadMessagesCount}</span>
+                  )}
                 </Link>
                 <button onClick={handleLogout} className="dropdown-item logout-item">
                   <LogIn size={18} />

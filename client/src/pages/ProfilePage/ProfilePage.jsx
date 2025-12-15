@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import {
@@ -42,14 +42,13 @@ import './ProfilePage.css';
 const ProfilePage = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
   const [activeTab, setActiveTab] = useState('posts');
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({});
-  const [profileImage, setProfileImage] = useState(null);
-  const [backgroundImage, setBackgroundImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [backgroundPreview, setBackgroundPreview] = useState(null);
   const [socialLinks, setSocialLinks] = useState({
@@ -133,6 +132,15 @@ const ProfilePage = () => {
     }
   }, []);
 
+  // Handle tab parameter from URL
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tab = params.get('tab');
+    if (tab && ['posts', 'reviews', 'messages', 'settings'].includes(tab)) {
+      setActiveTab(tab);
+    }
+  }, [location]);
+
   // Handle edit mode
   const handleEdit = () => {
     setIsEditing(true);
@@ -152,9 +160,7 @@ const ProfilePage = () => {
     setIsEditing(false);
     setEditedUser({ ...user });
     setImagePreview(null);
-    setProfileImage(null);
     setBackgroundPreview(null);
-    setBackgroundImage(null);
   };
 
   const handleSaveProfile = async () => {
@@ -212,7 +218,6 @@ const ProfilePage = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setProfileImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -225,7 +230,6 @@ const ProfilePage = () => {
   const handleBackgroundChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setBackgroundImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setBackgroundPreview(reader.result);
@@ -581,14 +585,23 @@ const ProfilePage = () => {
               {t('profile.myPosts')}
             </button>
             
-            <button 
+            <button
               className={`tab-btn ${activeTab === 'reviews' ? 'active' : ''}`}
               onClick={() => setActiveTab('reviews')}
             >
               <MessageSquare size={18} />
               {t('profile.reviews')}
             </button>
-            <button 
+            <button
+              className={`tab-btn ${activeTab === 'messages' ? 'active' : ''}`}
+              onClick={() => setActiveTab('messages')}
+            >
+              <MessageSquare size={18} />
+              {t('chat.messages')}
+              {/* Show unread count if any */}
+              <span className="unread-badge">3</span>
+            </button>
+            <button
               className={`tab-btn ${activeTab === 'settings' ? 'active' : ''}`}
               onClick={() => setActiveTab('settings')}
             >
@@ -647,6 +660,92 @@ const ProfilePage = () => {
                 <div className="empty-state">
                   <MessageSquare size={48} />
                   <p>{t('profile.noReviews')}</p>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'messages' && (
+              <div className="messages-section">
+                <div className="messages-list">
+                  {/* Mock messages for demonstration */}
+                  <div className="message-item unread" onClick={() => navigate('/chat/1', {
+                    state: {
+                      productId: 1,
+                      productName: 'PlayStation 5',
+                      sellerName: 'أحمد محمد',
+                      sellerId: 1
+                    }
+                  })}>
+                    <div className="message-header">
+                      <div className="message-sender">
+                        <div className="sender-avatar">
+                          <img src="https://ui-avatars.com/api/?name=أحمد+محمد&background=ff6b35&color=fff&size=50" alt="أحمد محمد" />
+                        </div>
+                        <div className="sender-info">
+                          <h4>أحمد محمد</h4>
+                          <div className="product-context">
+                            <Package size={14} />
+                            <span>PlayStation 5</span>
+                          </div>
+                        </div>
+                      </div>
+                      <span className="message-time">{t('chat.minutesAgo', { minutes: 5 })}</span>
+                    </div>
+                    <p className="message-preview">مرحباً، هل المنتج متوفر؟</p>
+                    <span className="unread-badge">2</span>
+                  </div>
+                  
+                  <div className="message-item" onClick={() => navigate('/chat/2', {
+                    state: {
+                      productId: 2,
+                      productName: 'Xbox Controller',
+                      sellerName: 'سارة أحمد',
+                      sellerId: 2
+                    }
+                  })}>
+                    <div className="message-header">
+                      <div className="message-sender">
+                        <div className="sender-avatar">
+                          <img src="https://ui-avatars.com/api/?name=سارة+أحمد&background=00d4ff&color=fff&size=50" alt="سارة أحمد" />
+                        </div>
+                        <div className="sender-info">
+                          <h4>سارة أحمد</h4>
+                          <div className="product-context">
+                            <Package size={14} />
+                            <span>Xbox Controller</span>
+                          </div>
+                        </div>
+                      </div>
+                      <span className="message-time">{t('chat.hoursAgo', { hours: 2 })}</span>
+                    </div>
+                    <p className="message-preview">شكراً لك على التوضيح</p>
+                  </div>
+                  
+                  <div className="message-item" onClick={() => navigate('/chat/3', {
+                    state: {
+                      productId: 3,
+                      productName: 'Gaming Chair',
+                      sellerName: 'محمد علي',
+                      sellerId: 3
+                    }
+                  })}>
+                    <div className="message-header">
+                      <div className="message-sender">
+                        <div className="sender-avatar">
+                          <img src="https://ui-avatars.com/api/?name=محمد+علي&background=ff8c42&color=fff&size=50" alt="محمد علي" />
+                        </div>
+                        <div className="sender-info">
+                          <h4>محمد علي</h4>
+                          <div className="product-context">
+                            <Package size={14} />
+                            <span>Gaming Chair</span>
+                          </div>
+                        </div>
+                      </div>
+                      <span className="message-time">{t('chat.daysAgo', { days: 1 })}</span>
+                    </div>
+                    <p className="message-preview">تم الاتفاق، سأحضر غداً</p>
+                  </div>
                 </div>
               </div>
             )}

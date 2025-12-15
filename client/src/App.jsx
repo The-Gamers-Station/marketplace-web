@@ -33,6 +33,12 @@ const AddProductPage = lazy(() =>
 const ProfilePage = lazy(() =>
   import(/* webpackChunkName: "profile" */ './pages/ProfilePage/ProfilePage')
 );
+const ChatPage = lazy(() =>
+  import(/* webpackChunkName: "chat" */ './pages/ChatPage/ChatPage')
+);
+const NotFoundPage = lazy(() =>
+  import(/* webpackChunkName: "notfound" */ './pages/NotFoundPage/NotFoundPage')
+);
 
 // Modern Loading component with professional design
 const PageLoader = memo(() => {
@@ -102,6 +108,8 @@ function App() {
               <Route path="/profile/complete" element={<ProfileCompletePage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/add-product" element={<AddProductPage />} />
+              <Route path="/chat/:chatId" element={<ChatPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>
           <ScrollToTop />

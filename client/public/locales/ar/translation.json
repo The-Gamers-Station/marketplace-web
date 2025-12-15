@@ -192,6 +192,7 @@
       "product": "منتج",
       "responseWithin": "رد خلال",
       "visitStore": "زيارة المتجر",
+      "chatWithSeller": "محادثة البائع",
       "description": "الوصف",
       "features": "المميزات",
       "specifications": "المواصفات",
@@ -774,5 +775,44 @@
     "linkedinPlaceholder": "رابط ملف لينكد إن الشخصي",
     "githubPlaceholder": "رابط ملف جيت هاب الشخصي",
     "websitePlaceholder": "رابط الموقع الشخصي"
+  },
+  "chat": {
+    "online": "متصل",
+    "lastSeen": "آخر ظهور {{time}}",
+    "justNow": "الآن",
+    "minutesAgo": "منذ {{minutes}} دقيقة",
+    "hoursAgo": "منذ {{hours}} ساعة",
+    "daysAgo": "منذ {{days}} يوم",
+    "voiceCall": "مكالمة صوتية",
+    "videoCall": "مكالمة فيديو",
+    "search": "بحث",
+    "more": "المزيد من الخيارات",
+    "regarding": "بخصوص",
+    "viewProduct": "عرض المنتج",
+    "typeMessage": "اكتب رسالة...",
+    "messages": "الرسائل",
+    "noMessages": "لا توجد رسائل بعد",
+    "startConversation": "ابدأ محادثة",
+    "unreadMessages": "{{count}} رسالة غير مقروءة",
+    "newMessage": "رسالة جديدة",
+    "messageFrom": "رسالة من {{name}}",
+    "allMessages": "جميع الرسائل"
+  },
+  "notFound": {
+    "title": "404 - الصفحة غير موجودة",
+    "description": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها",
+    "gameOver": "انتهت اللعبة!",
+    "message": "يبدو أنك دخلت منطقة غير مستكشفة. الصفحة التي تبحث عنها انتقلت إلى مكان آخر.",
+    "backToHome": "العودة للقاعدة",
+    "goBack": "رجوع",
+    "redirecting": "إعادة توجيه تلقائي خلال {{seconds}} ثانية...",
+    "popularPages": "الوجهات الشائعة",
+    "easterEgg": "اضغط ↑ ↑ ↓ ↓ ← → ← → B A لمفاجأة!"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "faq": "الأسئلة الشائعة",
+    "contact": "تواصل معنا",
+    "login": "دخول"
   }
 }

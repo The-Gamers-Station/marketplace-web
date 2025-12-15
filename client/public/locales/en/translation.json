@@ -192,6 +192,7 @@
       "product": "product",
       "responseWithin": "Response within",
       "visitStore": "Visit Store",
+      "chatWithSeller": "Chat with Seller",
       "description": "Description",
       "features": "Features",
       "specifications": "Specifications",
@@ -775,5 +776,44 @@
     "linkedinPlaceholder": "LinkedIn profile URL",
     "githubPlaceholder": "GitHub profile URL",
     "websitePlaceholder": "Personal website URL"
+  },
+  "chat": {
+    "online": "Online",
+    "lastSeen": "Last seen {{time}}",
+    "justNow": "just now",
+    "minutesAgo": "{{minutes}} minutes ago",
+    "hoursAgo": "{{hours}} hours ago",
+    "daysAgo": "{{days}} days ago",
+    "voiceCall": "Voice Call",
+    "videoCall": "Video Call",
+    "search": "Search",
+    "more": "More options",
+    "regarding": "Regarding",
+    "viewProduct": "View Product",
+    "typeMessage": "Type a message...",
+    "messages": "Messages",
+    "noMessages": "No messages yet",
+    "startConversation": "Start a conversation",
+    "unreadMessages": "{{count}} unread messages",
+    "newMessage": "New message",
+    "messageFrom": "Message from {{name}}",
+    "allMessages": "All Messages"
+  },
+  "notFound": {
+    "title": "404 - Page Not Found",
+    "description": "The page you are looking for does not exist or has been moved",
+    "gameOver": "Game Over!",
+    "message": "Looks like you've ventured into uncharted territory. The page you're looking for has respawned elsewhere.",
+    "backToHome": "Return to Base",
+    "goBack": "Go Back",
+    "redirecting": "Auto-redirecting in {{seconds}} seconds...",
+    "popularPages": "Popular Destinations",
+    "easterEgg": "Press ↑ ↑ ↓ ↓ ← → ← → B A for a surprise!"
+  },
+  "navigation": {
+    "home": "Home",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "login": "Login"
   }
 }

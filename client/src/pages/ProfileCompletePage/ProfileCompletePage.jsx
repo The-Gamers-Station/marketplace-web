@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import FormInput from '../../components/FormInput/FormInput';
+import SuccessPopup from '../../components/SuccessPopup/SuccessPopup';
 import userService from '../../services/userService';
 import cityService from '../../services/cityService';
 import './ProfileCompletePage.css';
@@ -19,6 +20,7 @@ const ProfileCompletePage = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingCities, setIsLoadingCities] = useState(true);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   // Fetch cities on mount
   useEffect(() => {
@@ -100,13 +102,19 @@ const ProfileCompletePage = () => {
       
       await userService.updateProfile(profileData);
       
-      // Navigate to home page after successful profile update
-      navigate('/');
+      // Show success popup then navigate
+      setShowSuccessPopup(true);
+      
+      // Navigate after a delay
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
     } catch (error) {
       console.error('Error updating profile:', error);
-      setErrors({ 
-        general: error.message || t('profileComplete.errors.updateFailed') 
+      setErrors({
+        general: error.message || t('profileComplete.errors.updateFailed')
       });
+    } finally {
       setIsLoading(false);
     }
   };
@@ -254,6 +262,19 @@ const ProfileCompletePage = () => {
           </div>
         </div>
       </div>
+      
+      {/* Success Popup */}
+      <SuccessPopup
+        isOpen={showSuccessPopup}
+        onClose={() => {
+          setShowSuccessPopup(false);
+          navigate('/');
+        }}
+        title={t('profileComplete.successTitle') || 'Welcome to GamersStation!'}
+        message={t('profileComplete.successMessage') || 'Your profile has been completed successfully. Enjoy browsing!'}
+        autoClose={true}
+        autoCloseDelay={2000}
+      />
     </>
   );
 };

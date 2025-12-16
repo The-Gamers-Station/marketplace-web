@@ -34,6 +34,7 @@ import {
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import { PageLoader } from '../../components/Loading/Loading';
+import SuccessPopup from '../../components/SuccessPopup/SuccessPopup';
 import authService from '../../services/authService';
 import userService from '../../services/userService';
 import postService from '../../services/postService';
@@ -67,6 +68,9 @@ const ProfilePage = () => {
     rating: 0,
     joinDate: null
   });
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+  const [popupTitle, setPopupTitle] = useState('');
 
   // Check authentication
   useEffect(() => {
@@ -188,11 +192,16 @@ const ProfilePage = () => {
       setUser(updatedUser);
       setIsEditing(false);
       
-      // Show success message
-      alert(t('profile.updateSuccess'));
+      // Show success popup
+      setPopupTitle(t('profile.updateSuccessTitle') || 'Profile Updated!');
+      setPopupMessage(t('profile.updateSuccess') || 'Your profile has been updated successfully.');
+      setShowSuccessPopup(true);
     } catch (error) {
       console.error('Error updating profile:', error);
-      alert(t('profile.updateError'));
+      // Show error popup
+      setPopupTitle(t('profile.updateErrorTitle') || 'Update Failed');
+      setPopupMessage(t('profile.updateError') || 'Failed to update profile. Please try again.');
+      setShowSuccessPopup(true);
     } finally {
       setLoading(false);
     }
@@ -832,11 +841,21 @@ const ProfilePage = () => {
           </div>
         </div>
       </main>
-      
       <Footer />
+      
+      {/* Success Popup */}
+      <SuccessPopup
+        isOpen={showSuccessPopup}
+        onClose={() => setShowSuccessPopup(false)}
+        title={popupTitle}
+        message={popupMessage}
+        autoClose={true}
+        autoCloseDelay={3000}
+      />
     </>
   );
 };
 
 export default ProfilePage;
+                
                 

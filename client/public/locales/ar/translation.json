@@ -645,7 +645,9 @@
     "infoText": "يمكنك دائماً تحديث ملفك الشخصي لاحقاً من الإعدادات",
     "errors": {
       "updateFailed": "فشل تحديث الملف الشخصي. الرجاء المحاولة مرة أخرى."
-    }
+    },
+    "successTitle": "مرحباً بك في GamersStation!",
+    "successMessage": "تم إكمال ملفك الشخصي بنجاح. استمتع بالتصفح!"
   },
   "productGrid": {
     "noSearchResults": "لا توجد نتائج لـ '{{query}}'",
@@ -764,6 +766,8 @@
     "logout": "تسجيل الخروج",
     "updateSuccess": "تم تحديث الملف الشخصي بنجاح!",
     "updateError": "فشل تحديث الملف الشخصي. يرجى المحاولة مرة أخرى.",
+    "updateSuccessTitle": "تم تحديث الملف الشخصي!",
+    "updateErrorTitle": "فشل التحديث",
     "changeAvatar": "تغيير الصورة الشخصية",
     "changeCover": "تغيير صورة الغلاف",
     "socialMedia": "روابط التواصل الاجتماعي",

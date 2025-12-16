@@ -646,7 +646,9 @@
     "infoText": "You can always update your profile later from settings",
     "errors": {
       "updateFailed": "Failed to update profile. Please try again."
-    }
+    },
+    "successTitle": "Welcome to GamersStation!",
+    "successMessage": "Your profile has been completed successfully. Enjoy browsing!"
   },
   "productGrid": {
     "noSearchResults": "No results found for '{{query}}'",
@@ -765,6 +767,8 @@
     "logout": "Logout",
     "updateSuccess": "Profile updated successfully!",
     "updateError": "Failed to update profile. Please try again.",
+    "updateSuccessTitle": "Profile Updated!",
+    "updateErrorTitle": "Update Failed",
     "changeAvatar": "Change Avatar",
     "changeCover": "Change Cover Photo",
     "socialMedia": "Social Media Links",

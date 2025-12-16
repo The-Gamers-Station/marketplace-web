@@ -841,7 +841,7 @@ const ProfilePage = () => {
           </div>
         </div>
       </main>
-      <Footer />
+       
       
       {/* Success Popup */}
       <SuccessPopup

@@ -64,13 +64,15 @@ public class PostController {
         @RequestParam(required = false) Long cityId,
         @RequestParam(required = false) Post.PostType type,
         @RequestParam(required = false) Post.PostCondition condition,
+        @RequestParam(required = false) java.math.BigDecimal minPrice,
+        @RequestParam(required = false) java.math.BigDecimal maxPrice,
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "20") int size,
         @RequestParam(defaultValue = "createdAt") String sortBy,
         @RequestParam(defaultValue = "DESC") Sort.Direction direction
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-        PageResponseDto<PostDto> ads = PostService.searchPosts(categoryId, categoryIds, cityId, type, condition, pageable);
+        PageResponseDto<PostDto> ads = PostService.searchPosts(categoryId, categoryIds, cityId, type, condition, minPrice, maxPrice, pageable);
         return ResponseEntity.ok(ads);
     }
     

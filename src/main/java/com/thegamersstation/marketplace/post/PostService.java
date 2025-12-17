@@ -223,6 +223,8 @@ public class PostService {
         Long cityId,
         Post.PostType type,
         Post.PostCondition condition,
+        java.math.BigDecimal minPrice,
+        java.math.BigDecimal maxPrice,
         Pageable pageable
     ) {
         // Parse categoryIds if provided
@@ -235,9 +237,9 @@ public class PostService {
         
         Page<Post> postsPage;
         if (categoryIdList != null) {
-            postsPage = postRepository.searchPostsWithMultipleCategories(categoryIdList, cityId, type, condition, pageable);
+            postsPage = postRepository.searchPostsWithMultipleCategoriesAndPrice(categoryIdList, cityId, type, condition, minPrice, maxPrice, pageable);
         } else {
-            postsPage = postRepository.searchPosts(categoryId, cityId, type, condition, pageable);
+            postsPage = postRepository.searchPostsWithPrice(categoryId, cityId, type, condition, minPrice, maxPrice, pageable);
         }
         return PageResponseDto.of(postsPage.map(postMapper::toDto));
     }

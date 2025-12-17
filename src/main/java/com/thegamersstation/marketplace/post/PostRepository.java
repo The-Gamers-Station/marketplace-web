@@ -37,6 +37,24 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
     );
     
     @Query("SELECT p FROM Post p WHERE p.status = 'ACTIVE' " +
+           "AND (:categoryId IS NULL OR p.category.id = :categoryId OR " +
+           "(p.category.parentId = :categoryId)) " +
+           "AND (:cityId IS NULL OR p.city.id = :cityId) " +
+           "AND (:type IS NULL OR p.type = :type) " +
+           "AND (:condition IS NULL OR p.condition = :condition) " +
+           "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
+           "AND (:maxPrice IS NULL OR p.price <= :maxPrice)")
+    Page<Post> searchPostsWithPrice(
+        @Param("categoryId") Long categoryId,
+        @Param("cityId") Long cityId,
+        @Param("type") Post.PostType type,
+        @Param("condition") Post.PostCondition condition,
+        @Param("minPrice") java.math.BigDecimal minPrice,
+        @Param("maxPrice") java.math.BigDecimal maxPrice,
+        Pageable pageable
+    );
+    
+    @Query("SELECT p FROM Post p WHERE p.status = 'ACTIVE' " +
            "AND (p.category.id IN :categoryIds) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
            "AND (:type IS NULL OR p.type = :type) " +
@@ -46,6 +64,23 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
         @Param("cityId") Long cityId,
         @Param("type") Post.PostType type,
         @Param("condition") Post.PostCondition condition,
+        Pageable pageable
+    );
+    
+    @Query("SELECT p FROM Post p WHERE p.status = 'ACTIVE' " +
+           "AND (p.category.id IN :categoryIds) " +
+           "AND (:cityId IS NULL OR p.city.id = :cityId) " +
+           "AND (:type IS NULL OR p.type = :type) " +
+           "AND (:condition IS NULL OR p.condition = :condition) " +
+           "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
+           "AND (:maxPrice IS NULL OR p.price <= :maxPrice)")
+    Page<Post> searchPostsWithMultipleCategoriesAndPrice(
+        @Param("categoryIds") java.util.List<Long> categoryIds,
+        @Param("cityId") Long cityId,
+        @Param("type") Post.PostType type,
+        @Param("condition") Post.PostCondition condition,
+        @Param("minPrice") java.math.BigDecimal minPrice,
+        @Param("maxPrice") java.math.BigDecimal maxPrice,
         Pageable pageable
     );
     

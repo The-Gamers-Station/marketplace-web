@@ -731,9 +731,10 @@ body.mobile-menu-open {
 .dropdown-menu {
   position: absolute;
   top: 100%;
-  right: 0;
+  left: 0;
   margin-top: 0.5rem;
-  min-width: 200px;
+  min-width: 220px;
+  max-width: 280px;
   background: white;
   border-radius: 12px;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
@@ -743,6 +744,7 @@ body.mobile-menu-open {
   transform: translateY(-10px);
   transition: all 0.2s ease;
   z-index: 100;
+  overflow: hidden;
 }
 
 .auth-dropdown:hover .dropdown-menu {
@@ -764,6 +766,7 @@ body.mobile-menu-open {
   width: 100%;
   font-size: 0.875rem;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .dropdown-item:hover {
@@ -897,7 +900,8 @@ body.mobile-menu-open {
   }
   
   .dropdown-menu {
-    right: -1rem;
+    left: 0;
+    min-width: 200px;
   }
 }
 
@@ -907,8 +911,8 @@ body.mobile-menu-open {
 }
 
 [dir="rtl"] .dropdown-menu {
-  right: auto;
-  left: 0;
+  left: auto;
+  right: 0;
 }
 
 [dir="rtl"] .dropdown-item {

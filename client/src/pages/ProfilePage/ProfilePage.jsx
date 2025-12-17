@@ -34,6 +34,8 @@ import {
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import { PageLoader } from '../../components/Loading/Loading';
+import SuccessPopup from '../../components/SuccessPopup/SuccessPopup';
+import MessagesTab from '../../components/MessagesTab/MessagesTab';
 import authService from '../../services/authService';
 import userService from '../../services/userService';
 import postService from '../../services/postService';
@@ -68,6 +70,12 @@ const ProfilePage = () => {
     rating: 0,
     joinDate: null
   });
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [popupTitle, setPopupTitle] = useState('');
+  const [popupMessage, setPopupMessage] = useState('');
+  const [conversations, setConversations] = useState([]);
+  const [conversationsLoading, setConversationsLoading] = useState(false);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
 
   // Check authentication
   useEffect(() => {
@@ -141,6 +149,44 @@ const ProfilePage = () => {
       setActiveTab(tab);
     }
   }, [location]);
+
+  // Fetch unread messages count
+  useEffect(() => {
+    let unsubscribe;
+    
+    const fetchUnreadCount = async () => {
+      if (authService.isAuthenticated()) {
+        try {
+          const count = await messagingService.getUnreadCount();
+          setUnreadMessagesCount(count);
+        } catch (error) {
+          console.error('Error fetching unread count:', error);
+          setUnreadMessagesCount(0);
+        }
+      }
+    };
+
+    fetchUnreadCount();
+
+    // Subscribe to new messages to update count in real-time
+    if (authService.isAuthenticated()) {
+      messagingService.subscribeToMessages((message) => {
+        if (!message.isOwn) {
+          setUnreadMessagesCount(prev => prev + 1);
+        }
+      }).then(unsub => {
+        unsubscribe = unsub;
+      }).catch(error => {
+        console.error('Error subscribing to messages:', error);
+      });
+    }
+
+    return () => {
+      if (unsubscribe && typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
+  }, []);
 
   // Handle edit mode
   const handleEdit = () => {
@@ -569,49 +615,6 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          {/* Stats Section */}
-          <div className="profile-stats">
-            <div className="stat-card">
-              <div className="stat-icon">
-                <Package size={24} />
-              </div>
-              <div className="stat-content">
-                <span className="stat-value">{stats.totalPosts}</span>
-                <span className="stat-label">{t('profile.totalPosts')}</span>
-              </div>
-            </div>
-            
-            <div className="stat-card">
-              <div className="stat-icon">
-                <Eye size={24} />
-              </div>
-              <div className="stat-content">
-                <span className="stat-value">{stats.totalViews.toLocaleString()}</span>
-                <span className="stat-label">{t('profile.totalViews')}</span>
-              </div>
-            </div>
-            
-            <div className="stat-card">
-              <div className="stat-icon">
-                <Heart size={24} />
-              </div>
-              <div className="stat-content">
-                <span className="stat-value">{stats.totalLikes}</span>
-                <span className="stat-label">{t('profile.totalLikes')}</span>
-              </div>
-            </div>
-            
-            <div className="stat-card">
-              <div className="stat-icon">
-                <Star size={24} />
-              </div>
-              <div className="stat-content">
-                <span className="stat-value">{stats.rating.toFixed(1)}</span>
-                <span className="stat-label">{t('profile.rating')}</span>
-              </div>
-            </div>
-          </div>
-
           {/* Tabs */}
           <div className="profile-tabs">
             <button 
@@ -636,7 +639,9 @@ const ProfilePage = () => {
               <MessageSquare size={18} />
               {t('chat.messages')}
               {/* Show unread count if any */}
-              <span className="unread-badge">3</span>
+              {unreadMessagesCount > 0 && (
+                <span className="unread-badge">{unreadMessagesCount}</span>
+              )}
             </button>
             <button
               className={`tab-btn ${activeTab === 'settings' ? 'active' : ''}`}

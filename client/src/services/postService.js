@@ -13,6 +13,8 @@ class PostService {
       if (params.regionId) queryParams.append('regionId', params.regionId);
       if (params.type) queryParams.append('type', params.type);
       if (params.condition) queryParams.append('condition', params.condition);
+      if (params.minPrice) queryParams.append('minPrice', params.minPrice);
+      if (params.maxPrice) queryParams.append('maxPrice', params.maxPrice);
       if (params.page !== undefined) queryParams.append('page', params.page);
       if (params.size !== undefined) queryParams.append('size', params.size);
       if (params.sortBy) queryParams.append('sortBy', params.sortBy);
@@ -46,6 +48,8 @@ class PostService {
       if (params.maxPrice) queryParams.append('maxPrice', params.maxPrice);
       if (params.page !== undefined) queryParams.append('page', params.page);
       if (params.size !== undefined) queryParams.append('size', params.size);
+      if (params.sortBy) queryParams.append('sortBy', params.sortBy);
+      if (params.direction) queryParams.append('direction', params.direction);
       if (params.sort) queryParams.append('sort', params.sort);
       
       const url = `${API_ENDPOINTS.posts.search}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;

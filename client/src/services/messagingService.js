@@ -101,6 +101,19 @@ class MessagingService {
     });
   }
 
+  // Get total unread messages count
+  async getUnreadCount() {
+    try {
+      const response = await apiRequest('/conversations?page=0&size=1', {
+        method: 'GET'
+      });
+      return response.totalUnreadConversations || 0;
+    } catch (error) {
+      console.error('Error fetching unread count:', error);
+      return 0;
+    }
+  }
+
   // WebSocket Methods
 
   // Connect to WebSocket (resolves ONLY after STOMP CONNECT)

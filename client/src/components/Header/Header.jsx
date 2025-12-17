@@ -4,6 +4,7 @@ import { Search, User, ChevronDown, Menu, X, LogIn, UserPlus, MessageCircle } fr
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import authService from '../../services/authService';
+import messagingService from '../../services/messagingService';
 import './Header.css';
 
 // Memoized navigation link component - Using React Router Link for SPA navigation
@@ -83,16 +84,44 @@ const Header = memo(() => {
     };
   }, []);
 
-  // Mock unread messages count - replace with actual API call
+  // Fetch unread messages count
   useEffect(() => {
+    let unsubscribe;
+    
+    const fetchUnreadCount = async () => {
+      if (isAuthenticated) {
+        try {
+          const count = await messagingService.getUnreadCount();
+          setUnreadMessagesCount(count);
+        } catch (error) {
+          console.error('Error fetching unread count:', error);
+          setUnreadMessagesCount(0);
+        }
+      } else {
+        setUnreadMessagesCount(0);
+      }
+    };
+
+    fetchUnreadCount();
+
+    // Subscribe to new messages to update count in real-time
     if (isAuthenticated) {
-      // Simulate fetching unread messages count
-      // In production, this would be an API call
-      const mockUnreadCount = 3;
-      setUnreadMessagesCount(mockUnreadCount);
-    } else {
-      setUnreadMessagesCount(0);
+      messagingService.subscribeToMessages((message) => {
+        if (!message.isOwn) {
+          setUnreadMessagesCount(prev => prev + 1);
+        }
+      }).then(unsub => {
+        unsubscribe = unsub;
+      }).catch(error => {
+        console.error('Error subscribing to messages:', error);
+      });
     }
+
+    return () => {
+      if (unsubscribe && typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
   }, [isAuthenticated]);
 
   const toggleMobileMenu = useCallback(() => {
@@ -234,7 +263,7 @@ const Header = memo(() => {
                   <User size={18} />
                   <span>{t('header.myProfile')}</span>
                 </Link>
-                <Link to="/chat" className="dropdown-item">
+                <Link to="/profile?tab=messages" className="dropdown-item">
                   <MessageCircle size={18} />
                   <span>{t('chat.messages')}</span>
                   {unreadMessagesCount > 0 && (

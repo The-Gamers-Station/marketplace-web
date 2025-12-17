@@ -23,7 +23,8 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
     Page<Post> findByStatus(@Param("status") Post.PostStatus status, Pageable pageable);
     
     @Query("SELECT p FROM Post p WHERE p.status = 'ACTIVE' " +
-           "AND (:categoryId IS NULL OR p.category.id = :categoryId) " +
+           "AND (:categoryId IS NULL OR p.category.id = :categoryId OR " +
+           "(p.category.parentId = :categoryId)) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
            "AND (:type IS NULL OR p.type = :type) " +
            "AND (:condition IS NULL OR p.condition = :condition)")
@@ -36,8 +37,22 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
     );
     
     @Query("SELECT p FROM Post p WHERE p.status = 'ACTIVE' " +
+           "AND (p.category.id IN :categoryIds) " +
+           "AND (:cityId IS NULL OR p.city.id = :cityId) " +
+           "AND (:type IS NULL OR p.type = :type) " +
+           "AND (:condition IS NULL OR p.condition = :condition)")
+    Page<Post> searchPostsWithMultipleCategories(
+        @Param("categoryIds") java.util.List<Long> categoryIds,
+        @Param("cityId") Long cityId,
+        @Param("type") Post.PostType type,
+        @Param("condition") Post.PostCondition condition,
+        Pageable pageable
+    );
+    
+    @Query("SELECT p FROM Post p WHERE p.status = 'ACTIVE' " +
            "AND (:query IS NULL OR :query = '' OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(p.description) LIKE LOWER(CONCAT('%', :query, '%'))) " +
-           "AND (:categoryId IS NULL OR p.category.id = :categoryId) " +
+           "AND (:categoryId IS NULL OR p.category.id = :categoryId OR " +
+           "(p.category.parentId = :categoryId)) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
            "AND (:regionId IS NULL OR p.city.region.id = :regionId) " +
            "AND (:type IS NULL OR p.type = :type) " +

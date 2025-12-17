@@ -42,7 +42,8 @@
     "accessories": "Accessories",
     "showAsCards": "Show as cards",
     "console": "Console",
-    "games": "Games"
+    "games": "Games",
+    "devices": "Devices"
   },
   "productCard": {
     "new": "New",
@@ -709,6 +710,7 @@
       "descriptionTooLong": "Description must not exceed 5000 characters",
       "priceRequired": "Valid price is required",
       "cityRequired": "Please select a city",
+      "categoryRequired": "Please select a valid category",
       "submitFailed": "Failed to add product. Please try again.",
       "tooManyImages": "You can upload up to 10 images",
       "uploadInvalidFiles": "Some files are invalid. Allowed: JPG, JPEG, PNG, WEBP, GIF up to 10MB each"
@@ -780,6 +782,7 @@
   },
   "chat": {
     "online": "Online",
+    "offline": "Offline",
     "lastSeen": "Last seen {{time}}",
     "justNow": "just now",
     "minutesAgo": "{{minutes}} minutes ago",
@@ -788,17 +791,31 @@
     "voiceCall": "Voice Call",
     "videoCall": "Video Call",
     "search": "Search",
+    "searchMessages": "Search messages",
+    "unknownUser": "Unknown User",
+    "you": "You",
     "more": "More options",
     "regarding": "Regarding",
     "viewProduct": "View Product",
     "typeMessage": "Type a message...",
+    "typeFirstMessage": "Type a message to start the conversation...",
     "messages": "Messages",
     "noMessages": "No messages yet",
     "startConversation": "Start a conversation",
     "unreadMessages": "{{count}} unread messages",
     "newMessage": "New message",
     "messageFrom": "Message from {{name}}",
-    "allMessages": "All Messages"
+    "allMessages": "All Messages",
+    "noConversation": "No Conversation Selected",
+    "selectConversationOrStartNew": "Select a conversation from the list or browse products to start a new chat",
+    "browseProducts": "Browse Products",
+    "loadError": "Failed to load chat. Please try again.",
+    "sendError": "Failed to send message. Please try again.",
+    "loadEarlierMessages": "Load earlier messages",
+    "attachmentComingSoon": "Attachments coming soon",
+    "interestedInProduct": "Interested in product",
+    "loadingConversations": "Loading conversations...",
+    "noConversations": "No conversations yet"
   },
   "notFound": {
     "title": "404 - Page Not Found",

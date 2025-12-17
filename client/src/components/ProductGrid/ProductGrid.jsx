@@ -5,7 +5,7 @@ import postService from '../../services/postService';
 import { GameSpinner, SkeletonLoader } from '../Loading/Loading';
 import './ProductGrid.css';
 
-const ProductGrid = ({ categoryId, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction }) => {
+const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction }) => {
   const { t, i18n } = useTranslation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +34,9 @@ const ProductGrid = ({ categoryId, searchQuery, cityId, minPrice, maxPrice, cond
       // Add filters if provided
       if (categoryId) {
         params.categoryId = categoryId;
+      } else if (subcategoryType && Array.isArray(subcategoryType)) {
+        // Handle multiple category IDs for cross-platform subcategory search
+        params.categoryIds = subcategoryType.join(',');
       }
       if (cityId) {
         params.cityId = cityId;
@@ -75,7 +78,7 @@ const ProductGrid = ({ categoryId, searchQuery, cityId, minPrice, maxPrice, cond
   // Fetch products on mount and when filters change
   useEffect(() => {
     fetchProducts(0, false);
-  }, [categoryId, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction]);
+  }, [categoryId, subcategoryType, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction]);
 
   // Load more products
   const handleLoadMore = () => {

@@ -15,12 +15,36 @@ class CategoryService {
         method: 'GET',
       });
       
-      this.categoriesCache = response;
-      return response;
+      // Flatten the tree structure into a flat array
+      const flatCategories = this.flattenCategoryTree(response);
+      
+      this.categoriesCache = flatCategories;
+      return flatCategories;
     } catch (error) {
       console.error('Error fetching categories:', error);
       throw error;
     }
+  }
+  
+  // Helper method to flatten category tree
+  flattenCategoryTree(tree, result = []) {
+    for (const node of tree) {
+      result.push({
+        id: node.id,
+        nameEn: node.nameEn,
+        nameAr: node.nameAr,
+        slug: node.slug,
+        parentId: node.parentId,
+        level: node.level,
+        sortOrder: node.sortOrder,
+        isActive: node.isActive,
+      });
+      
+      if (node.children && node.children.length > 0) {
+        this.flattenCategoryTree(node.children, result);
+      }
+    }
+    return result;
   }
   
   // Get category by ID

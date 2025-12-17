@@ -6,7 +6,7 @@
     
     <!-- Homepage -->
     <url>
-        <loc>https://gamersstation.eg/</loc>
+        <loc>https://gamersstation.com/</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
@@ -14,21 +14,21 @@
     
     <!-- Main Pages -->
     <url>
-        <loc>https://gamersstation.eg/merchants</loc>
+        <loc>https://gamersstation.com/merchants</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     
     <url>
-        <loc>https://gamersstation.eg/faq</loc>
+        <loc>https://gamersstation.com/faq</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     
     <url>
-        <loc>https://gamersstation.eg/contact</loc>
+        <loc>https://gamersstation.com/contact</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
@@ -36,35 +36,35 @@
     
     <!-- Product Categories -->
     <url>
-        <loc>https://gamersstation.eg/category/playstation</loc>
+        <loc>https://gamersstation.com/category/playstation</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>https://gamersstation.eg/category/xbox</loc>
+        <loc>https://gamersstation.com/category/xbox</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>https://gamersstation.eg/category/nintendo</loc>
+        <loc>https://gamersstation.com/category/nintendo</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>https://gamersstation.eg/category/pc-gaming</loc>
+        <loc>https://gamersstation.com/category/pc-gaming</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>https://gamersstation.eg/category/accessories</loc>
+        <loc>https://gamersstation.com/category/accessories</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
@@ -72,21 +72,21 @@
     
     <!-- Sample Product Pages -->
     <url>
-        <loc>https://gamersstation.eg/product/1</loc>
+        <loc>https://gamersstation.com/product/1</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>https://gamersstation.eg/product/2</loc>
+        <loc>https://gamersstation.com/product/2</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>https://gamersstation.eg/product/3</loc>
+        <loc>https://gamersstation.com/product/3</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
@@ -94,28 +94,28 @@
     
     <!-- Arabic Language URLs -->
     <url>
-        <loc>https://gamersstation.eg/ar/</loc>
+        <loc>https://gamersstation.com/ar/</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>
     
     <url>
-        <loc>https://gamersstation.eg/ar/merchants</loc>
+        <loc>https://gamersstation.com/ar/merchants</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>https://gamersstation.eg/ar/faq</loc>
+        <loc>https://gamersstation.com/ar/faq</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     
     <url>
-        <loc>https://gamersstation.eg/ar/contact</loc>
+        <loc>https://gamersstation.com/ar/contact</loc>
         <lastmod>2025-12-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>

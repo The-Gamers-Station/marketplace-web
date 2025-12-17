@@ -10,10 +10,19 @@ import './LandingPage.css';
 const LandingPage = () => {
   // State for selected category filter
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedSubcategoryType, setSelectedSubcategoryType] = useState(null);
   
   // Handle category filter change
-  const handleCategoryChange = (categoryId) => {
-    setSelectedCategoryId(categoryId);
+  const handleCategoryChange = (categoryId, categoryIds) => {
+    if (categoryIds) {
+      // Multiple category IDs for cross-platform subcategory search
+      setSelectedCategoryId(null);
+      setSelectedSubcategoryType(categoryIds);
+    } else {
+      // Single category ID for platform-specific search
+      setSelectedCategoryId(categoryId);
+      setSelectedSubcategoryType(null);
+    }
   };
   // Structured data for the home page
   const homeStructuredData = {
@@ -94,7 +103,10 @@ const LandingPage = () => {
         <Hero />
         <CategoryFilter onFilterChange={handleCategoryChange} />
         <main className="main-content">
-          <ProductGrid categoryId={selectedCategoryId} />
+          <ProductGrid
+            categoryId={selectedCategoryId}
+            subcategoryType={selectedSubcategoryType}
+          />
         </main>
         <Footer />
       </div>

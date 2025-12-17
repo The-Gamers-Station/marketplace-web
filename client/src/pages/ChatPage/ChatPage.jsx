@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -8,7 +8,6 @@ import {
   Phone,
   Video,
   Search,
-  Paperclip,
   Smile,
   Check,
   CheckCheck,
@@ -16,87 +15,248 @@ import {
   AlertCircle,
   Image as ImageIcon,
   File,
-  X
+  Loader2,
+  MessageCircle,
+  MapPin,
+  Package
 } from 'lucide-react';
 import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import messagingService from '../../services/messagingService';
+import authService from '../../services/authService';
 import './ChatPage.css';
 
 const ChatPage = () => {
+  console.log('[ChatPage] Component initializing');
+  
   const { t, i18n } = useTranslation();
-  const { chatId } = useParams();
+  const { chatId: conversationId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const messagesEndRef = useRef(null);
-  const fileInputRef = useRef(null);
+  const typingTimeoutRef = useRef(null);
   
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [sending, setSending] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [chatInfo, setChatInfo] = useState(null);
-  const [attachments, setAttachments] = useState([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [otherUserTyping, setOtherUserTyping] = useState(false);
+  const [cursor, setCursor] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [connectionStatus, setConnectionStatus] = useState(true); // Default to true (online)
+  const [error, setError] = useState(null);
   
   // Get current user
-  // const currentUser = authService.getCurrentUser();
+  const currentUser = authService.getCurrentUser();
+  console.log('[ChatPage] Current user:', currentUser);
+
+  // Auth guard: ensure user is logged in before accessing chat
+  useEffect(() => {
+    console.log('[ChatPage] Auth check:', {
+      isAuthenticated: authService.isAuthenticated(),
+      pathname: location.pathname,
+      conversationId,
+      currentUser,
+      accessToken: authService.getAccessToken() ? 'Present' : 'Missing'
+    });
+    if (!authService.isAuthenticated()) {
+      console.log('[ChatPage] Not authenticated, redirecting to login');
+      navigate('/login', { state: { redirectTo: location.pathname + location.search } });
+    }
+  }, [navigate, location, conversationId]);
   
   // Scroll to bottom function
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
   
-  // Mock data for demonstration
   // Initialize chat data
   useEffect(() => {
-    // Use a small delay to avoid synchronous setState
-    const timer = setTimeout(() => {
-      // Set chat info from location state or mock data
-      setChatInfo({
-        productId: location.state?.productId || chatId,
-        productName: location.state?.productName || 'PlayStation 5',
-        sellerName: location.state?.sellerName || 'أحمد محمد',
-        sellerId: location.state?.sellerId || '123',
-        sellerAvatar: null,
-        lastSeen: new Date(Date.now() - 1000 * 60 * 5), // 5 minutes ago
-        isOnline: true
+    const initializeChat = async () => {
+      console.log('[ChatPage] Initializing chat:', {
+        conversationId,
+        locationState: location.state,
+        currentUser
       });
       
-      // Mock messages
-      setMessages([
-        {
-          id: 1,
-          text: 'مرحباً، هل المنتج متوفر؟',
-          sender: 'user',
-          timestamp: new Date(Date.now() - 1000 * 60 * 30),
-          status: 'read'
-        },
-        {
-          id: 2,
-          text: 'نعم متوفر، هل تريد المزيد من المعلومات؟',
-          sender: 'seller',
-          timestamp: new Date(Date.now() - 1000 * 60 * 25),
-          status: 'read'
-        },
-        {
-          id: 3,
-          text: 'نعم، ما هي حالة الجهاز بالضبط؟',
-          sender: 'user',
-          timestamp: new Date(Date.now() - 1000 * 60 * 20),
-          status: 'read'
-        },
-        {
-          id: 4,
-          text: 'الجهاز جديد تماماً، لم يتم فتحه من قبل. يأتي مع جميع الملحقات الأصلية والضمان.',
-          sender: 'seller',
-          timestamp: new Date(Date.now() - 1000 * 60 * 15),
-          status: 'read'
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // If we have a conversation ID, load it
+        if (conversationId) {
+          const conversation = await messagingService.getConversation(conversationId);
+          
+          setChatInfo({
+            conversationId: conversation.id,
+            productId: conversation.post?.id,
+            productName: conversation.post?.localizedTitle?.[i18n.language] || conversation.post?.title,
+            productImage: conversation.post?.images?.[0]?.url,
+            sellerName: conversation.otherParticipant?.username,
+            sellerId: conversation.otherParticipant?.id,
+            sellerAvatar: conversation.otherParticipant?.profileImage,
+            lastSeen: conversation.otherParticipant?.lastSeen,
+            isOnline: conversation.otherParticipant?.isOnline,
+            isCurrentUserSeller: conversation.isCurrentUserSeller,
+            post: conversation.post,
+            otherParticipant: conversation.otherParticipant
+          });
+          
+          // Load initial messages
+          await loadMessages();
+          
+          // Mark messages as read
+          await messagingService.markMessagesAsRead(conversationId);
+          
+          // Mark conversation as seen
+          await messagingService.markConversationAsSeen(conversationId);
+        } else {
+          // No conversation ID, check if we're starting a new chat
+          if (location.state?.productId) {
+            console.log('[ChatPage] Starting new chat with product:', location.state);
+            // We'll create the conversation when sending the first message
+            setChatInfo({
+              productId: location.state.productId,
+              productName: location.state.productName,
+              sellerName: location.state.sellerName,
+              sellerId: location.state.sellerId,
+              isOnline: true
+            });
+          } else {
+            // No conversation and no product info
+            // Show empty chat state instead of redirecting
+            console.log('[ChatPage] No conversation ID or product info, showing empty state');
+            setLoading(false);
+            return;
+          }
         }
-      ]);
-    }, 0);
+      } catch (err) {
+        console.error('[ChatPage] Error initializing chat:', {
+          error: err,
+          message: err.message,
+          response: err.response,
+          conversationId
+        });
+        
+        // Handle specific error cases
+        if (err.message.includes('[403]')) {
+          // Log more details about the 403 error
+          console.error('[ChatPage] 403 Forbidden - Possible causes:', {
+            currentUser,
+            token: authService.getAccessToken() ? 'Present' : 'Missing',
+            tokenPrefix: authService.getAccessToken()?.substring(0, 20) + '...'
+          });
+          
+          // Check if it's a token issue or a business rule violation
+          if (err.message.includes('token') || err.message.includes('expired')) {
+            authService.clearTokens();
+            navigate('/login', { state: { redirectTo: location.pathname } });
+            return;
+          }
+        } else if (err.message.includes('[401]')) {
+          // Authentication issue - redirect to login
+          authService.clearTokens();
+          navigate('/login', { state: { redirectTo: location.pathname } });
+          return;
+        }
+        
+        setError(t('chat.loadError'));
+      } finally {
+        setLoading(false);
+      }
+    };
     
-    return () => clearTimeout(timer);
-  }, [chatId, location.state]);
+    initializeChat();
+  }, [conversationId, location.state, i18n.language, navigate, t]);
+  
+  // Load messages
+  const loadMessages = async (loadMore = false) => {
+    try {
+      if (loadMore) {
+        setLoadingMore(true);
+      }
+      
+      const response = await messagingService.getMessages(
+        conversationId,
+        loadMore ? cursor : null
+      );
+      
+      if (loadMore) {
+        setMessages(prev => [...response.messages, ...prev]);
+      } else {
+        setMessages(response.messages);
+      }
+      
+      setHasMore(response.hasMore);
+      setCursor(response.nextCursor);
+    } catch (err) {
+      console.error('Error loading messages:', err);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+  
+  // Set up WebSocket subscriptions
+  useEffect(() => {
+    if (!conversationId) return;
+    
+    let unsubscribeMessages;
+    let unsubscribeReceipts;
+    let unsubscribeTyping;
+    let unsubscribeStatus;
+    
+    const setupSubscriptions = async () => {
+      try {
+        // Subscribe to messages
+        unsubscribeMessages = await messagingService.subscribeToMessages((messageData) => {
+          if (messageData.conversationId === parseInt(conversationId)) {
+            setMessages(prev => [...prev, messageData]);
+            
+            // Mark as read if conversation is open
+            messagingService.markMessagesAsRead(conversationId);
+          }
+        });
+        
+        // Subscribe to read receipts
+        unsubscribeReceipts = await messagingService.subscribeToReadReceipts((receiptData) => {
+          if (receiptData.conversationId === parseInt(conversationId)) {
+            // Update message statuses
+            setMessages(prev => prev.map(msg => {
+              if (msg.isOwnMessage && !msg.isRead) {
+                return { ...msg, isRead: true, readAt: receiptData.readAt, status: 'read' };
+              }
+              return msg;
+            }));
+          }
+        });
+        
+        // Subscribe to typing status
+        unsubscribeTyping = await messagingService.subscribeToTypingStatus(conversationId, (typingData) => {
+          if (typingData.userId !== currentUser?.userId) {
+            setOtherUserTyping(typingData.typing);
+          }
+        });
+        
+        // Connection status
+        unsubscribeStatus = messagingService.onConnectionStatusChange(setConnectionStatus);
+      } catch (error) {
+        console.error('Failed to setup subscriptions:', error);
+      }
+    };
+    
+    setupSubscriptions();
+    
+    return () => {
+      // Cleanup subscriptions
+      if (typeof unsubscribeMessages === 'function') unsubscribeMessages();
+      if (typeof unsubscribeReceipts === 'function') unsubscribeReceipts();
+      if (typeof unsubscribeTyping === 'function') unsubscribeTyping();
+      if (typeof unsubscribeStatus === 'function') unsubscribeStatus();
+    };
+  }, [conversationId, currentUser?.userId]);
   
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -105,85 +265,106 @@ const ChatPage = () => {
   
   const handleSendMessage = async (e) => {
     e.preventDefault();
+
+    // Require authentication
+    if (!authService.isAuthenticated()) {
+      navigate('/login', { state: { redirectTo: location.pathname + location.search } });
+      return;
+    }
     
-    if (!message.trim() && attachments.length === 0) return;
+    if (!message.trim()) return;
+    if (sending) return;
     
     setSending(true);
+    setError(null);
     
-    // Create new message
-    const newMessage = {
-      id: messages.length + 1,
-      text: message,
-      sender: 'user',
-      timestamp: new Date(),
-      status: 'sending',
-      attachments: attachments
-    };
-    
-    // Add message to list
-    setMessages(prev => [...prev, newMessage]);
-    setMessage('');
-    setAttachments([]);
-    
-    // Simulate sending
-    setTimeout(() => {
-      setMessages(prev => 
-        prev.map(msg => 
-          msg.id === newMessage.id 
-            ? { ...msg, status: 'sent' }
-            : msg
-        )
-      );
+    try {
+      let activeConversationId = conversationId;
       
-      // Simulate read after 2 seconds
-      setTimeout(() => {
-        setMessages(prev => 
-          prev.map(msg => 
-            msg.id === newMessage.id 
-              ? { ...msg, status: 'read' }
-              : msg
-          )
+      // If no conversation exists, start one
+      if (!activeConversationId) {
+        const conversation = await messagingService.startConversation(
+          chatInfo.productId,
+          message
         );
-      }, 2000);
+        
+        // Navigate to the new conversation
+        navigate(`/chat/${conversation.id}`, { replace: true });
+        return;
+      }
       
+      // Send message
+      const sentMessage = await messagingService.sendMessage(activeConversationId, message);
+      
+      // Add to messages if not already received via WebSocket
+      setMessages(prev => {
+        const exists = prev.some(msg => msg.id === sentMessage.id);
+        if (!exists) {
+          return [...prev, sentMessage];
+        }
+        return prev;
+      });
+      
+      setMessage('');
+      
+      // Stop typing indicator
+      handleTypingStop();
+    } catch (err) {
+      console.error('Error sending message:', err);
+      
+      // Handle specific error cases
+      if (err.message.includes('[403]')) {
+        // Authentication issue - redirect to login
+        authService.clearTokens();
+        navigate('/login', { state: { redirectTo: location.pathname } });
+        return;
+      } else if (err.message.includes('[400]') && err.message.includes('yourself')) {
+        setError(t('chat.cannotMessageYourself') || 'You cannot message yourself');
+      } else if (err.message.includes('[404]')) {
+        setError(t('chat.productNotFound') || 'Product not found');
+      } else {
+        // Show the actual error message from backend if available
+        const errorMatch = err.message.match(/\[\d+\]\s*(.+)/);
+        setError(errorMatch ? errorMatch[1] : t('chat.sendError'));
+      }
+    } finally {
       setSending(false);
-      
-      // Simulate seller typing
+    }
+  };
+  
+  const handleTyping = () => {
+    if (!isTyping && conversationId) {
       setIsTyping(true);
-      setTimeout(() => {
-        setIsTyping(false);
-        // Simulate seller response
-        const sellerResponse = {
-          id: messages.length + 2,
-          text: 'شكراً لك، سأتواصل معك قريباً بخصوص التفاصيل.',
-          sender: 'seller',
-          timestamp: new Date(),
-          status: 'read'
-        };
-        setMessages(prev => [...prev, sellerResponse]);
-      }, 3000);
-    }, 1000);
-  };
-  
-  const handleFileSelect = (e) => {
-    const files = Array.from(e.target.files);
-    const newAttachments = files.map(file => ({
-      id: Date.now() + Math.random(),
-      file,
-      type: file.type.startsWith('image/') ? 'image' : 'file',
-      preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : null
-    }));
+      messagingService.sendTypingStatus(conversationId, true).catch(console.error);
+    }
     
-    setAttachments(prev => [...prev, ...newAttachments]);
+    // Clear existing timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    
+    // Set new timeout
+    typingTimeoutRef.current = setTimeout(() => {
+      handleTypingStop();
+    }, 3000);
   };
   
-  const removeAttachment = (id) => {
-    setAttachments(prev => prev.filter(att => att.id !== id));
+  const handleTypingStop = () => {
+    if (isTyping && conversationId) {
+      setIsTyping(false);
+      messagingService.sendTypingStatus(conversationId, false).catch(console.error);
+    }
+    
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
   };
   
   const formatTime = (date) => {
-    const now = new Date();
+    if (!date) return '';
+    
     const messageDate = new Date(date);
+    const now = new Date();
     const diffInHours = (now - messageDate) / (1000 * 60 * 60);
     
     if (diffInHours < 24) {
@@ -200,6 +381,8 @@ const ChatPage = () => {
   };
   
   const formatLastSeen = (date) => {
+    if (!date) return '';
+    
     const now = new Date();
     const lastSeenDate = new Date(date);
     const diffInMinutes = (now - lastSeenDate) / (1000 * 60);
@@ -215,21 +398,55 @@ const ChatPage = () => {
     }
   };
   
-  const MessageStatus = ({ status }) => {
-    switch (status) {
-      case 'sending':
-        return <Clock size={14} className="message-status sending" />;
-      case 'sent':
-        return <Check size={14} className="message-status sent" />;
-      case 'read':
-        return <CheckCheck size={14} className="message-status read" />;
-      case 'failed':
-        return <AlertCircle size={14} className="message-status failed" />;
-      default:
-        return null;
+  const MessageStatus = ({ status, isRead }) => {
+    if (status === 'sending') {
+      return <Clock size={14} className="message-status sending" />;
+    } else if (isRead || status === 'read') {
+      return <CheckCheck size={14} className="message-status read" />;
+    } else if (status === 'sent') {
+      return <Check size={14} className="message-status sent" />;
+    } else if (status === 'failed') {
+      return <AlertCircle size={14} className="message-status failed" />;
     }
+    return null;
   };
   
+  if (loading) {
+    console.log('[ChatPage] Rendering loading state');
+    return (
+      <div className="chat-page">
+        <Header />
+        <div className="loading-container">
+          <Loader2 className="spinner" size={48} />
+          <p>{t('common.loading')}</p>
+        </div>
+      </div>
+    );
+  }
+  
+  // Show empty state when no conversation is selected
+  if (!conversationId && !chatInfo) {
+    console.log('[ChatPage] Rendering empty state:', { conversationId, chatInfo });
+    return (
+      <div className="chat-page">
+        <Header />
+        
+        <div className="chat-empty-state">
+          <div className="empty-state-content">
+            <MessageCircle size={64} className="empty-state-icon" />
+            <h2>{t('chat.noConversation')}</h2>
+            <p>{t('chat.selectConversationOrStartNew')}</p>
+            <button
+              className="browse-products-btn"
+              onClick={() => navigate('/products')}
+            >
+              {t('chat.browseProducts')}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="chat-page">
@@ -248,30 +465,31 @@ const ChatPage = () => {
                 {chatInfo?.sellerAvatar ? (
                   <img src={chatInfo.sellerAvatar} alt={chatInfo.sellerName} />
                 ) : (
-                  <span>{chatInfo?.sellerName?.charAt(0)}</span>
+                  <span>{chatInfo?.sellerName?.charAt(0) || '?'}</span>
                 )}
-                {chatInfo?.isOnline && <span className="online-indicator"></span>}
               </div>
               
               <div className="chat-user-details">
                 <h3>{chatInfo?.sellerName}</h3>
-                <p className="chat-user-status">
-                  {chatInfo?.isOnline
-                    ? t('chat.online')
-                    : t('chat.lastSeen', { time: formatLastSeen(chatInfo?.lastSeen) })
-                  }
-                </p>
               </div>
             </div>
           </div>
           
-         
+          <div className="chat-header-right">
+          </div>
         </div>
         
         {/* Product Info Bar */}
         {chatInfo?.productName && (
           <div className="chat-product-info">
             <div className="product-info-content">
+              {chatInfo?.productImage && (
+                <img 
+                  src={chatInfo.productImage} 
+                  alt={chatInfo.productName} 
+                  className="product-thumbnail"
+                />
+              )}
               <span className="product-label">{t('chat.regarding')}:</span>
               <span className="product-name">{chatInfo.productName}</span>
             </div>
@@ -287,13 +505,38 @@ const ChatPage = () => {
         {/* Messages Area */}
         <div className="chat-messages">
           <div className="messages-container">
+            {/* Load more button */}
+            {hasMore && !loadingMore && (
+              <button 
+                className="load-more-btn" 
+                onClick={() => loadMessages(true)}
+              >
+                {t('chat.loadEarlierMessages')}
+              </button>
+            )}
+            
+            {loadingMore && (
+              <div className="loading-more">
+                <Loader2 className="spinner" size={20} />
+              </div>
+            )}
+            
+            {/* Error message */}
+            {error && (
+              <div className="chat-error">
+                <AlertCircle size={16} />
+                <span>{error}</span>
+              </div>
+            )}
+            
+            {/* Messages */}
             {messages.map((msg) => (
               <div 
                 key={msg.id} 
-                className={`message ${msg.sender === 'user' ? 'sent' : 'received'}`}
+                className={`message ${msg.isOwnMessage ? 'sent' : 'received'}`}
               >
                 <div className="message-content">
-                  {msg.text && <p className="message-text">{msg.text}</p>}
+                  {msg.content && <p className="message-text">{msg.content}</p>}
                   
                   {msg.attachments && msg.attachments.length > 0 && (
                     <div className="message-attachments">
@@ -313,14 +556,15 @@ const ChatPage = () => {
                   )}
                   
                   <div className="message-meta">
-                    <span className="message-time">{formatTime(msg.timestamp)}</span>
-                    {msg.sender === 'user' && <MessageStatus status={msg.status} />}
+                    <span className="message-time">{formatTime(msg.createdAt)}</span>
+                    {msg.isOwnMessage && <MessageStatus status={msg.status} isRead={msg.isRead} />}
                   </div>
                 </div>
               </div>
             ))}
             
-            {isTyping && (
+            {/* Typing indicator */}
+            {otherUserTyping && (
               <div className="message received typing">
                 <div className="typing-indicator">
                   <span></span>
@@ -334,72 +578,36 @@ const ChatPage = () => {
           </div>
         </div>
         
-        {/* Attachments Preview */}
-        {attachments.length > 0 && (
-          <div className="attachments-preview">
-            {attachments.map((att) => (
-              <div key={att.id} className="attachment-preview">
-                {att.type === 'image' ? (
-                  <img src={att.preview} alt="Preview" />
-                ) : (
-                  <div className="file-preview">
-                    <File size={20} />
-                  </div>
-                )}
-                <button 
-                  className="remove-attachment"
-                  onClick={() => removeAttachment(att.id)}
-                >
-                  <X size={16} />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-        
         {/* Message Input */}
         <form className="chat-input-container" onSubmit={handleSendMessage}>
           <div className="chat-input-wrapper">
-            <button 
-              type="button"
-              className="attach-btn"
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <Paperclip size={20} />
-            </button>
-            
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileSelect}
-              multiple
-              accept="image/*,.pdf,.doc,.docx"
-              hidden
-            />
-            
             <input
               type="text"
               className="message-input"
-              placeholder={t('chat.typeMessage')}
+              placeholder={conversationId ? t('chat.typeMessage') : t('chat.typeFirstMessage')}
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e) => {
+                setMessage(e.target.value);
+                handleTyping();
+              }}
+              onBlur={handleTypingStop}
               disabled={sending}
             />
             
-             
-            
-            <button 
+            <button
               type="submit"
               className="send-btn"
-              disabled={!message.trim() && attachments.length === 0 || sending}
+              disabled={!message.trim() || sending}
             >
-              <Send size={20} />
+              {sending ? (
+                <Loader2 size={20} className="spinner" />
+              ) : (
+                <Send size={20} />
+              )}
             </button>
           </div>
         </form>
       </div>
-      
-     
     </div>
   );
 };

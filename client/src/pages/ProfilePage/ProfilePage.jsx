@@ -34,9 +34,11 @@ import {
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import { PageLoader } from '../../components/Loading/Loading';
+import MessagesTab from '../../components/MessagesTab/MessagesTab';
 import authService from '../../services/authService';
 import userService from '../../services/userService';
 import postService from '../../services/postService';
+import messagingService from '../../services/messagingService';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
@@ -67,6 +69,8 @@ const ProfilePage = () => {
     rating: 0,
     joinDate: null
   });
+  const [conversations, setConversations] = useState([]);
+  const [conversationsLoading, setConversationsLoading] = useState(false);
 
   // Check authentication
   useEffect(() => {
@@ -168,7 +172,21 @@ const ProfilePage = () => {
       setLoading(true);
       
       // Prepare updated user data
-      const updateData = { ...editedUser };
+      const updateData = {};
+      
+      // Only include fields that have changed
+      if (editedUser.username && editedUser.username !== user.username) {
+        updateData.username = editedUser.username;
+      }
+      
+      if (editedUser.email !== user.email) {
+        updateData.email = editedUser.email || null;
+      }
+      
+      // Include cityId only if user doesn't have one yet (for profile completion)
+      if (!user.cityId && editedUser.cityId) {
+        updateData.cityId = editedUser.cityId;
+      }
       
       // If there's a new profile image, add it to the update data
       if (imagePreview) {
@@ -180,13 +198,30 @@ const ProfilePage = () => {
         updateData.backgroundImage = backgroundPreview;
       }
       
-      // Add social links to update data
-      updateData.socialLinks = socialLinks;
+      // Add individual social links to update data
+      updateData.facebookLink = socialLinks.facebook || null;
+      updateData.twitterLink = socialLinks.twitter || null;
+      updateData.instagramLink = socialLinks.instagram || null;
+      updateData.youtubeLink = socialLinks.youtube || null;
+      updateData.linkedinLink = socialLinks.linkedin || null;
+      updateData.githubLink = socialLinks.github || null;
+      updateData.websiteLink = socialLinks.website || null;
       
       // Update user profile
       const updatedUser = await userService.updateProfile(updateData);
+      
+      // Update local state with the response
       setUser(updatedUser);
+      setEditedUser(updatedUser);
+      
+      // Update social links from response
+      if (updatedUser.socialLinks) {
+        setSocialLinks(updatedUser.socialLinks);
+      }
+      
       setIsEditing(false);
+      setImagePreview(null);
+      setBackgroundPreview(null);
       
       // Show success message
       alert(t('profile.updateSuccess'));
@@ -663,90 +698,15 @@ const ProfilePage = () => {
                 </div>
               </div>
             )}
-
+  
             {activeTab === 'messages' && (
               <div className="messages-section">
-                <div className="messages-list">
-                  {/* Mock messages for demonstration */}
-                  <div className="message-item unread" onClick={() => navigate('/chat/1', {
-                    state: {
-                      productId: 1,
-                      productName: 'PlayStation 5',
-                      sellerName: 'أحمد محمد',
-                      sellerId: 1
-                    }
-                  })}>
-                    <div className="message-header">
-                      <div className="message-sender">
-                        <div className="sender-avatar">
-                          <img src="https://ui-avatars.com/api/?name=أحمد+محمد&background=ff6b35&color=fff&size=50" alt="أحمد محمد" />
-                        </div>
-                        <div className="sender-info">
-                          <h4>أحمد محمد</h4>
-                          <div className="product-context">
-                            <Package size={14} />
-                            <span>PlayStation 5</span>
-                          </div>
-                        </div>
-                      </div>
-                      <span className="message-time">{t('chat.minutesAgo', { minutes: 5 })}</span>
-                    </div>
-                    <p className="message-preview">مرحباً، هل المنتج متوفر؟</p>
-                    <span className="unread-badge">2</span>
-                  </div>
-                  
-                  <div className="message-item" onClick={() => navigate('/chat/2', {
-                    state: {
-                      productId: 2,
-                      productName: 'Xbox Controller',
-                      sellerName: 'سارة أحمد',
-                      sellerId: 2
-                    }
-                  })}>
-                    <div className="message-header">
-                      <div className="message-sender">
-                        <div className="sender-avatar">
-                          <img src="https://ui-avatars.com/api/?name=سارة+أحمد&background=00d4ff&color=fff&size=50" alt="سارة أحمد" />
-                        </div>
-                        <div className="sender-info">
-                          <h4>سارة أحمد</h4>
-                          <div className="product-context">
-                            <Package size={14} />
-                            <span>Xbox Controller</span>
-                          </div>
-                        </div>
-                      </div>
-                      <span className="message-time">{t('chat.hoursAgo', { hours: 2 })}</span>
-                    </div>
-                    <p className="message-preview">شكراً لك على التوضيح</p>
-                  </div>
-                  
-                  <div className="message-item" onClick={() => navigate('/chat/3', {
-                    state: {
-                      productId: 3,
-                      productName: 'Gaming Chair',
-                      sellerName: 'محمد علي',
-                      sellerId: 3
-                    }
-                  })}>
-                    <div className="message-header">
-                      <div className="message-sender">
-                        <div className="sender-avatar">
-                          <img src="https://ui-avatars.com/api/?name=محمد+علي&background=ff8c42&color=fff&size=50" alt="محمد علي" />
-                        </div>
-                        <div className="sender-info">
-                          <h4>محمد علي</h4>
-                          <div className="product-context">
-                            <Package size={14} />
-                            <span>Gaming Chair</span>
-                          </div>
-                        </div>
-                      </div>
-                      <span className="message-time">{t('chat.daysAgo', { days: 1 })}</span>
-                    </div>
-                    <p className="message-preview">تم الاتفاق، سأحضر غداً</p>
-                  </div>
-                </div>
+                <MessagesTab
+                  conversations={conversations}
+                  setConversations={setConversations}
+                  loading={conversationsLoading}
+                  setLoading={setConversationsLoading}
+                />
               </div>
             )}
 

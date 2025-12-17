@@ -12,7 +12,7 @@ import { uploadFile } from '../../config/api';
 import './AddProductPage.css';
 
 const AddProductPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   
   // Check authentication
@@ -20,7 +20,8 @@ const AddProductPage = () => {
   
   const [step, setStep] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState('playstation');
-  const [selectedSubcategory, setSelectedSubcategory] = useState('console');
+  const [selectedSubcategory, setSelectedSubcategory] = useState('devices');
+  const [selectedCategoryId, setSelectedCategoryId] = useState(100);
   const [cities, setCities] = useState([]);
   const [loadingCities, setLoadingCities] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,46 +41,75 @@ const AddProductPage = () => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  // Categories configuration
-  const categories = [
+  // Hardcoded platform categories structure
+  const platformCategories = [
     {
       id: 'playstation',
+      categoryId: 1,
       name: t('categoryFilter.playstation'),
       icon: '🎮',
       subcategories: [
-        { id: 'console', name: t('categoryFilter.console') },
-        { id: 'games', name: t('categoryFilter.games') },
-        { id: 'accessories', name: t('categoryFilter.accessories') }
+        {
+          id: 'devices',
+          categoryId: 100,
+          name: i18n.language === 'ar' ? 'الأجهزة' : 'Devices'
+        },
+        {
+          id: 'games',
+          categoryId: 101,
+          name: i18n.language === 'ar' ? 'الألعاب' : 'Games'
+        },
+        {
+          id: 'accessories',
+          categoryId: 102,
+          name: i18n.language === 'ar' ? 'الإكسسوارات' : 'Accessories'
+        }
       ]
     },
     {
       id: 'xbox',
+      categoryId: 2,
       name: t('categoryFilter.xbox'),
       icon: '🎯',
       subcategories: [
-        { id: 'console', name: t('categoryFilter.console') },
-        { id: 'games', name: t('categoryFilter.games') },
-        { id: 'accessories', name: t('categoryFilter.accessories') }
+        {
+          id: 'devices',
+          categoryId: 200,
+          name: i18n.language === 'ar' ? 'الأجهزة' : 'Devices'
+        },
+        {
+          id: 'games',
+          categoryId: 201,
+          name: i18n.language === 'ar' ? 'الألعاب' : 'Games'
+        },
+        {
+          id: 'accessories',
+          categoryId: 202,
+          name: i18n.language === 'ar' ? 'الإكسسوارات' : 'Accessories'
+        }
       ]
     },
     {
       id: 'nintendo',
+      categoryId: 3,
       name: t('categoryFilter.nintendo'),
       icon: '🎨',
       subcategories: [
-        { id: 'console', name: t('categoryFilter.console') },
-        { id: 'games', name: t('categoryFilter.games') },
-        { id: 'accessories', name: t('categoryFilter.accessories') }
-      ]
-    },
-    {
-      id: 'pc',
-      name: t('categoryFilter.pc'),
-      icon: '💻',
-      subcategories: [
-        { id: 'games', name: t('categoryFilter.games') },
-        { id: 'accessories', name: t('categoryFilter.accessories') },
-        { id: 'components', name: t('addProduct.categories.components') }
+        {
+          id: 'devices',
+          categoryId: 300,
+          name: i18n.language === 'ar' ? 'الأجهزة' : 'Devices'
+        },
+        {
+          id: 'games',
+          categoryId: 301,
+          name: i18n.language === 'ar' ? 'الألعاب' : 'Games'
+        },
+        {
+          id: 'accessories',
+          categoryId: 302,
+          name: i18n.language === 'ar' ? 'الإكسسوارات' : 'Accessories'
+        }
       ]
     }
   ];
@@ -178,9 +208,14 @@ const AddProductPage = () => {
     setIsSubmitting(true);
     
     try {
+      if (!selectedCategoryId) {
+        setErrors({ submit: t('addProduct.errors.categoryRequired') || 'Please select a valid category' });
+        return;
+      }
+      
       const postData = {
         ...formData,
-        categoryId: 1, // TODO: Map from selectedCategory + selectedSubcategory
+        categoryId: selectedCategoryId,
         price: parseFloat(formData.price),
         cityId: parseInt(formData.cityId),
         // Use uploaded images or placeholder
@@ -372,13 +407,17 @@ const AddProductPage = () => {
                 <h2>{t('addProduct.selectCategory')}</h2>
                 
                 <div className="platform-grid">
-                  {categories.map(category => (
+                  {platformCategories.map(category => (
                     <button
                       key={category.id}
                       className={`platform-card ${selectedCategory === category.id ? 'selected' : ''}`}
                       onClick={() => {
                         setSelectedCategory(category.id);
-                        setSelectedSubcategory(category.subcategories[0].id);
+                        if (category.subcategories.length > 0) {
+                          const firstSubcat = category.subcategories[0];
+                          setSelectedSubcategory(firstSubcat.id);
+                          setSelectedCategoryId(firstSubcat.categoryId);
+                        }
                       }}
                     >
                       <span className="platform-emoji">{category.icon}</span>
@@ -390,13 +429,16 @@ const AddProductPage = () => {
                 <div className="subcategory-area">
                   <h3>{t('addProduct.selectSubcategory')}</h3>
                   <div className="subcategory-list">
-                    {categories
+                    {platformCategories
                       .find(c => c.id === selectedCategory)
                       ?.subcategories.map(sub => (
                         <button
                           key={sub.id}
                           className={`subcategory-tag ${selectedSubcategory === sub.id ? 'selected' : ''}`}
-                          onClick={() => setSelectedSubcategory(sub.id)}
+                          onClick={() => {
+                            setSelectedSubcategory(sub.id);
+                            setSelectedCategoryId(sub.categoryId);
+                          }}
                         >
                           {sub.name}
                         </button>

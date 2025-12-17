@@ -45,4 +45,42 @@ public class UserProfileDto {
 
     @Schema(description = "Last update timestamp")
     private Instant updatedAt;
+
+    @Schema(description = "Profile image URL")
+    private String profileImage;
+
+    @Schema(description = "Background image URL")
+    private String backgroundImage;
+
+    @Schema(description = "Social media links")
+    @Builder.Default
+    private SocialLinksDto socialLinks = new SocialLinksDto();
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @Schema(description = "Social media links")
+    public static class SocialLinksDto {
+        @Schema(description = "Facebook profile URL")
+        private String facebook;
+
+        @Schema(description = "Twitter profile URL")
+        private String twitter;
+
+        @Schema(description = "Instagram profile URL")
+        private String instagram;
+
+        @Schema(description = "YouTube channel URL")
+        private String youtube;
+
+        @Schema(description = "LinkedIn profile URL")
+        private String linkedin;
+
+        @Schema(description = "GitHub profile URL")
+        private String github;
+
+        @Schema(description = "Personal website URL")
+        private String website;
+    }
 }

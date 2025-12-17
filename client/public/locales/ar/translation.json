@@ -42,7 +42,8 @@
     "accessories": "إكسسوارات",
     "showAsCards": "أظهر حسب البطاقة",
     "console": "جهاز الألعاب",
-    "games": "الألعاب"
+    "games": "الألعاب",
+    "devices": "الأجهزة"
   },
   "productCard": {
     "new": "جديد",
@@ -708,6 +709,7 @@
       "descriptionTooLong": "الوصف يجب ألا يتجاوز 5000 حرف",
       "priceRequired": "السعر مطلوب وصحيح",
       "cityRequired": "الرجاء اختيار مدينة",
+      "categoryRequired": "الرجاء اختيار فئة صحيحة",
       "submitFailed": "فشل إضافة المنتج. الرجاء المحاولة مرة أخرى.",
       "tooManyImages": "يمكنك رفع حتى 10 صور",
       "uploadInvalidFiles": "بعض الملفات غير صالحة. المسموح: JPG، JPEG، PNG، WEBP، GIF حتى 10 ميجابايت لكل منها"
@@ -779,6 +781,7 @@
   },
   "chat": {
     "online": "متصل",
+    "offline": "غير متصل",
     "lastSeen": "آخر ظهور {{time}}",
     "justNow": "الآن",
     "minutesAgo": "منذ {{minutes}} دقيقة",
@@ -787,17 +790,31 @@
     "voiceCall": "مكالمة صوتية",
     "videoCall": "مكالمة فيديو",
     "search": "بحث",
+    "searchMessages": "البحث في الرسائل",
+    "unknownUser": "مستخدم مجهول",
+    "you": "أنت",
     "more": "المزيد من الخيارات",
     "regarding": "بخصوص",
     "viewProduct": "عرض المنتج",
     "typeMessage": "اكتب رسالة...",
+    "typeFirstMessage": "اكتب رسالة لبدء المحادثة...",
     "messages": "الرسائل",
     "noMessages": "لا توجد رسائل بعد",
     "startConversation": "ابدأ محادثة",
     "unreadMessages": "{{count}} رسالة غير مقروءة",
     "newMessage": "رسالة جديدة",
     "messageFrom": "رسالة من {{name}}",
-    "allMessages": "جميع الرسائل"
+    "allMessages": "جميع الرسائل",
+    "noConversation": "لم يتم اختيار محادثة",
+    "selectConversationOrStartNew": "اختر محادثة من القائمة أو تصفح المنتجات لبدء دردشة جديدة",
+    "browseProducts": "تصفح المنتجات",
+    "loadError": "فشل تحميل المحادثة. حاول مرة أخرى.",
+    "sendError": "فشل إرسال الرسالة. حاول مرة أخرى.",
+    "loadEarlierMessages": "تحميل الرسائل السابقة",
+    "attachmentComingSoon": "المرفقات قريباً",
+    "interestedInProduct": "مهتم بالمنتج",
+    "loadingConversations": "جاري تحميل المحادثات...",
+    "noConversations": "لا توجد محادثات حتى الآن"
   },
   "notFound": {
     "title": "404 - الصفحة غير موجودة",

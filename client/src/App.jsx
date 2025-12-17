@@ -112,7 +112,18 @@ function App() {
               <Route path="/profile/complete" element={<ProfileCompletePage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/add-product" element={<AddProductPage />} />
-              <Route path="/chat/:chatId" element={<ChatPage />} />
+              <Route path="/chat" element={
+                <>
+                  {console.log('[App] Rendering /chat route')}
+                  <ChatPage />
+                </>
+              } />
+              <Route path="/chat/:chatId" element={
+                <>
+                  {console.log('[App] Rendering /chat/:chatId route')}
+                  <ChatPage />
+                </>
+              } />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>

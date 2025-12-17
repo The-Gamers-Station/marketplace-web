@@ -30,6 +30,8 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import SEO from '../../components/SEO/SEO';
 import { postService } from '../../services/postService';
+import messagingService from '../../services/messagingService';
+import authService from '../../services/authService';
 import OptimizedImage from '../../components/OptimizedImage/OptimizedImage';
 import './ProductDetailsPage.css';
 
@@ -102,6 +104,7 @@ const ProductDetailsPage = () => {
           [t('pages.productDetails.warranty')]: t('pages.productDetails.oneYear')
         },
         seller: {
+          id: postData.seller?.id,
           name: postData.seller?.store?.name || postData.seller?.username || 'GamersStation',
           rating: Math.round((4.5 + Math.random() * 0.5) * 10) / 10,
           responseTime: currentLang === 'ar' ? '1 ساعة' : '1 hour',
@@ -534,14 +537,27 @@ const ProductDetailsPage = () => {
                     <a href="#" className="visit-store">{t('pages.productDetails.visitStore')}</a>
                     <button
                       className="chat-with-seller-btn"
-                      onClick={() => navigate(`/chat/${product.id}`, {
-                        state: {
-                          productId: product.id,
-                          productName: product.name,
-                          sellerName: product.seller.name,
-                          sellerId: product.seller.id
+                      onClick={async () => {
+                        // Check if user is logged in
+                        if (!authService.isAuthenticated()) {
+                          navigate('/login');
+                          return;
                         }
-                      })}
+                        
+                        try {
+                          // Start or get existing conversation with seller
+                          const conversation = await messagingService.startConversation(
+                            product.id,
+                            t('chat.interestedInProduct', { productName: product.name }) || `Hi, I'm interested in ${product.name}`
+                          );
+                          
+                          // Navigate to chat page with conversation ID
+                          navigate(`/chat/${conversation.id}`);
+                        } catch (error) {
+                          console.error('Error starting conversation:', error);
+                          alert(t('chat.errorStartingConversation') || 'Could not start conversation. Please try again.');
+                        }
+                      }}
                     >
                       <MessageCircle size={18} />
                       {t('pages.productDetails.chatWithSeller')}

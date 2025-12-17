@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import FormInput from '../../components/FormInput/FormInput';
@@ -10,6 +10,7 @@ import './LoginPage.css';
 const LoginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const [step, setStep] = useState('phone'); // 'phone' or 'otp'
   const [formData, setFormData] = useState({
     phoneNumber: '',
@@ -19,6 +20,16 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [resendTimer, setResendTimer] = useState(0);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (authService.isAuthenticated()) {
+      // Get the redirect location from state or default to home
+      const redirectTo = location.state?.redirectTo || location.state?.from || '/';
+      console.log('[LoginPage] User already authenticated, redirecting to:', redirectTo);
+      navigate(redirectTo, { replace: true });
+    }
+  }, [navigate, location]);
 
   // Start resend timer
   const startResendTimer = () => {
@@ -113,6 +124,11 @@ const LoginPage = () => {
       setIsLoading(false);
       setShowSuccess(true);
       
+      // Determine redirect target after successful login
+      const searchParams = new URLSearchParams(location.search);
+      const qsRedirect = searchParams.get('redirectTo');
+      const redirectTo = (location.state && (location.state.redirectTo || location.state.from)) || qsRedirect || '/';
+      
       // Check if user needs to complete profile
       if (response.isNewUser || !response.profileCompleted) {
         setTimeout(() => {
@@ -120,7 +136,7 @@ const LoginPage = () => {
         }, 1500);
       } else {
         setTimeout(() => {
-          navigate('/');
+          navigate(redirectTo);
         }, 1500);
       }
     } catch (error) {

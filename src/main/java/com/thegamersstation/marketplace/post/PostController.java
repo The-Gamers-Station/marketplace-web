@@ -60,6 +60,7 @@ public class PostController {
     @Operation(summary = "Search posts with filters")
     public ResponseEntity<PageResponseDto<PostDto>> searchPosts(
         @RequestParam(required = false) Long categoryId,
+        @RequestParam(required = false) String categoryIds,
         @RequestParam(required = false) Long cityId,
         @RequestParam(required = false) Post.PostType type,
         @RequestParam(required = false) Post.PostCondition condition,
@@ -69,7 +70,7 @@ public class PostController {
         @RequestParam(defaultValue = "DESC") Sort.Direction direction
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-        PageResponseDto<PostDto> ads = PostService.searchPosts(categoryId, cityId, type, condition, pageable);
+        PageResponseDto<PostDto> ads = PostService.searchPosts(categoryId, categoryIds, cityId, type, condition, pageable);
         return ResponseEntity.ok(ads);
     }
     

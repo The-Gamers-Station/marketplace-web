@@ -36,6 +36,33 @@ public class User {
     @Column(name = "city_id")
     private Long cityId;
 
+    @Column(name = "profile_image", length = 500)
+    private String profileImage;
+
+    @Column(name = "background_image", length = 500)
+    private String backgroundImage;
+
+    @Column(name = "facebook_link", length = 200)
+    private String facebookLink;
+
+    @Column(name = "twitter_link", length = 200)
+    private String twitterLink;
+
+    @Column(name = "instagram_link", length = 200)
+    private String instagramLink;
+
+    @Column(name = "youtube_link", length = 200)
+    private String youtubeLink;
+
+    @Column(name = "linkedin_link", length = 200)
+    private String linkedinLink;
+
+    @Column(name = "github_link", length = 200)
+    private String githubLink;
+
+    @Column(name = "website_link", length = 200)
+    private String websiteLink;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 30)
     @Builder.Default

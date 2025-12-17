@@ -52,13 +52,17 @@ export default defineConfig({
     removeUnusedCSS()
   ],
   
+  // Ensure public directory is copied to dist
+  publicDir: 'public',
+  
   server: {
     // Enable HMR
     hmr: {
       overlay: true,
       protocol: 'ws',
       host: 'localhost',
-      port: 5173
+      port: 5174, // Use a different port for HMR websocket to avoid conflicts
+      clientPort: 5174
     },
     // Watch options for better file detection on Windows
     watch: {
@@ -86,6 +90,23 @@ export default defineConfig({
           });
           proxy.on('proxyRes', (proxyRes, req) => {
             console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
+          });
+        },
+      },
+      // WebSocket proxy configuration
+      '/api/v1/ws': {
+        target: 'ws://80.66.87.82:8080',
+        ws: true,
+        changeOrigin: true,
+        configure: (proxy) => {
+          proxy.on('error', (err) => {
+            console.log('WebSocket proxy error', err);
+          });
+          proxy.on('open', () => {
+            console.log('WebSocket connection opened');
+          });
+          proxy.on('close', () => {
+            console.log('WebSocket connection closed');
           });
         },
       }
@@ -141,58 +162,8 @@ export default defineConfig({
     assetsInlineLimit: 4096, // Inline assets smaller than 4kb
     rollupOptions: {
       output: {
-        // Advanced chunking strategy
-        manualChunks(id) {
-          // Core React chunks
-          if (id.includes('node_modules')) {
-            // React core
-            if (id.includes('react') && !id.includes('react-')) {
-              return 'react-core';
-            }
-            // React ecosystem
-            if (id.includes('react-dom') || id.includes('react-router') || id.includes('react-helmet')) {
-              return 'react-vendor';
-            }
-            // i18n
-            if (id.includes('i18next') || id.includes('react-i18next')) {
-              return 'i18n';
-            }
-            // Icons
-            if (id.includes('lucide-react')) {
-              return 'icons';
-            }
-            // All other vendor code
-            return 'vendor';
-          }
-          
-          // Application code splitting
-          if (id.includes('/src/')) {
-            // Services
-            if (id.includes('/services/')) {
-              return 'services';
-            }
-            // Common components
-            if (id.includes('/components/Header') || 
-                id.includes('/components/Footer') || 
-                id.includes('/components/SEO')) {
-              return 'layout';
-            }
-            // Product components
-            if (id.includes('/components/Product') || 
-                id.includes('/components/OptimizedImage')) {
-              return 'product-components';
-            }
-            // Form components
-            if (id.includes('/components/Form') || 
-                id.includes('/components/LanguageSwitcher')) {
-              return 'form-components';
-            }
-            // Virtual scrolling
-            if (id.includes('/components/VirtualScroll')) {
-              return 'virtual-scroll';
-            }
-          }
-        },
+        // Disable manual chunking to avoid issues with lucide-react
+        manualChunks: undefined,
         
         // Asset naming
         assetFileNames: (assetInfo) => {

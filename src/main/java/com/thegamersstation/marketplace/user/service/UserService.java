@@ -42,13 +42,16 @@ public class UserService {
         User user = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        // Validate city exists
-        if (!cityRepository.existsById(updateDto.getCityId())) {
-            throw new BusinessRuleException("Invalid city ID");
+        // Validate city exists if provided
+        if (updateDto.getCityId() != null) {
+            if (!cityRepository.existsById(updateDto.getCityId())) {
+                throw new BusinessRuleException("Invalid city ID");
+            }
+            user.setCityId(updateDto.getCityId());
         }
 
         // Check username uniqueness if provided and different
-        if (updateDto.getUsername() != null && 
+        if (updateDto.getUsername() != null &&
             !updateDto.getUsername().equals(user.getUsername())) {
             if (usersRepository.existsByUsername(updateDto.getUsername())) {
                 throw new BusinessRuleException("Username already taken");
@@ -60,10 +63,40 @@ public class UserService {
         if (updateDto.getEmail() != null) {
             user.setEmail(updateDto.getEmail());
         }
-        user.setCityId(updateDto.getCityId());
 
-        // Mark profile as completed
-        if (!user.getProfileCompleted()) {
+        // Update profile images
+        if (updateDto.getProfileImage() != null) {
+            user.setProfileImage(updateDto.getProfileImage());
+        }
+        if (updateDto.getBackgroundImage() != null) {
+            user.setBackgroundImage(updateDto.getBackgroundImage());
+        }
+
+        // Update social media links
+        if (updateDto.getFacebookLink() != null) {
+            user.setFacebookLink(updateDto.getFacebookLink());
+        }
+        if (updateDto.getTwitterLink() != null) {
+            user.setTwitterLink(updateDto.getTwitterLink());
+        }
+        if (updateDto.getInstagramLink() != null) {
+            user.setInstagramLink(updateDto.getInstagramLink());
+        }
+        if (updateDto.getYoutubeLink() != null) {
+            user.setYoutubeLink(updateDto.getYoutubeLink());
+        }
+        if (updateDto.getLinkedinLink() != null) {
+            user.setLinkedinLink(updateDto.getLinkedinLink());
+        }
+        if (updateDto.getGithubLink() != null) {
+            user.setGithubLink(updateDto.getGithubLink());
+        }
+        if (updateDto.getWebsiteLink() != null) {
+            user.setWebsiteLink(updateDto.getWebsiteLink());
+        }
+
+        // Mark profile as completed if cityId is provided
+        if (updateDto.getCityId() != null && !user.getProfileCompleted()) {
             user.setProfileCompleted(true);
             log.info("User {} profile completed", userId);
         }

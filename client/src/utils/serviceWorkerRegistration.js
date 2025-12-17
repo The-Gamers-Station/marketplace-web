@@ -205,22 +205,49 @@ function showUpdateNotification() {
 
 // Utility functions for service worker communication
 export function sendMessageToSW(message) {
-  return new Promise((resolve, reject) => {
-    if (!navigator.serviceWorker.controller) {
-      reject(new Error('No service worker controller'));
-      return;
-    }
-
-    const messageChannel = new MessageChannel();
-    messageChannel.port1.onmessage = event => {
-      if (event.data.error) {
-        reject(event.data.error);
-      } else {
-        resolve(event.data);
+  return new Promise(async (resolve, reject) => {
+    try {
+      // Check if service worker is supported
+      if (!('serviceWorker' in navigator)) {
+        reject(new Error('Service Worker not supported'));
+        return;
       }
-    };
 
-    navigator.serviceWorker.controller.postMessage(message, [messageChannel.port2]);
+      // Ensure the service worker is ready
+      const registration = await navigator.serviceWorker.ready;
+
+      // Use controller when available, otherwise fall back to the active worker
+      let target = navigator.serviceWorker.controller || registration.active;
+
+      // If still not available (first install on this tab), wait for controllerchange
+      if (!target) {
+        await new Promise((res, rej) => {
+          const timeout = setTimeout(() => {
+            navigator.serviceWorker.removeEventListener('controllerchange', onChange);
+            rej(new Error('No service worker controller'));
+          }, 15000);
+          function onChange() {
+            clearTimeout(timeout);
+            res();
+          }
+          navigator.serviceWorker.addEventListener('controllerchange', onChange, { once: true });
+        });
+        target = navigator.serviceWorker.controller || registration.active;
+      }
+
+      const messageChannel = new MessageChannel();
+      messageChannel.port1.onmessage = event => {
+        if (event.data && event.data.error) {
+          reject(event.data.error);
+        } else {
+          resolve(event.data);
+        }
+      };
+
+      target.postMessage(message, [messageChannel.port2]);
+    } catch (err) {
+      reject(err);
+    }
   });
 }
 
@@ -251,10 +278,16 @@ export function setupNetworkStatusMonitoring() {
   window.addEventListener('online', () => {
     if (wasOffline) {
       console.log('Back online! Syncing data...');
-      // Trigger background sync
+      // Trigger background sync if supported
       if ('serviceWorker' in navigator && 'sync' in ServiceWorkerRegistration.prototype) {
         navigator.serviceWorker.ready.then(registration => {
-          registration.sync.register('sync-posts');
+          if (registration && registration.sync) {
+            registration.sync.register('sync-posts').catch(err => {
+              console.log('Failed to register background sync:', err);
+            });
+          }
+        }).catch(err => {
+          console.log('Service worker not ready:', err);
         });
       }
       wasOffline = false;
@@ -269,20 +302,50 @@ export function setupNetworkStatusMonitoring() {
 
 // Preload critical resources
 export function preloadCriticalResources() {
+  // Check if service workers are supported
+  if (!('serviceWorker' in navigator)) {
+    console.log('Service Worker not supported, skipping resource preload');
+    return;
+  }
+
   const criticalUrls = [
     '/',
-    '/api/posts?page=1&limit=12',
-    '/api/categories',
+    '/api/v1/posts?page=0&size=12',
+    '/api/v1/categories/tree',
     '/logo.svg',
     '/placeholder-game.jpg'
   ];
   
   // Preload after initial page load
   window.addEventListener('load', () => {
-    setTimeout(() => {
-      cacheUrls(criticalUrls).catch(err => {
-        console.log('Failed to preload resources:', err);
-      });
+    setTimeout(async () => {
+      try {
+        // Check if service worker is available
+        if (!navigator.serviceWorker) {
+          console.log('Service Worker API not available');
+          return;
+        }
+
+        // Wait for SW to be ready
+        await navigator.serviceWorker.ready;
+
+        // Ensure this page is controlled by the SW before messaging it
+        if (!navigator.serviceWorker.controller) {
+          await new Promise((res) => {
+            const timeout = setTimeout(res, 3000);
+            const onChange = () => {
+              clearTimeout(timeout);
+              res();
+            };
+            navigator.serviceWorker.addEventListener('controllerchange', onChange, { once: true });
+          });
+        }
+
+        await cacheUrls(criticalUrls);
+        console.log('Critical resources preloaded successfully');
+      } catch (err) {
+        console.log('Failed to preload resources:', err.message || err);
+      }
     }, 5000); // Wait 5 seconds after page load
   });
 }

@@ -8,6 +8,7 @@ class PostService {
       
       // Add parameters if they exist
       if (params.categoryId) queryParams.append('categoryId', params.categoryId);
+      if (params.categoryIds) queryParams.append('categoryIds', params.categoryIds);
       if (params.cityId) queryParams.append('cityId', params.cityId);
       if (params.regionId) queryParams.append('regionId', params.regionId);
       if (params.type) queryParams.append('type', params.type);
@@ -190,6 +191,39 @@ class PostService {
     }
   }
   
+  // Map category IDs to proper display names
+  getCategoryDisplayName(categoryId) {
+    const categoryMap = {
+      100: 'PlayStation Devices',
+      101: 'PlayStation Games',
+      102: 'PlayStation Accessories',
+      200: 'Xbox Devices',
+      201: 'Xbox Games',
+      202: 'Xbox Accessories',
+      300: 'Nintendo Devices',
+      301: 'Nintendo Games',
+      302: 'Nintendo Accessories'
+    };
+    
+    const arabicCategoryMap = {
+      100: 'أجهزة بلايستيشن',
+      101: 'ألعاب بلايستيشن',
+      102: 'إكسسوارات بلايستيشن',
+      200: 'أجهزة إكس بوكس',
+      201: 'ألعاب إكس بوكس',
+      202: 'إكسسوارات إكس بوكس',
+      300: 'أجهزة نينتندو',
+      301: 'ألعاب نينتندو',
+      302: 'إكسسوارات نينتندو'
+    };
+    
+    // Check if we're in Arabic mode (you might need to pass language as parameter)
+    const isArabic = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl';
+    const map = isArabic ? arabicCategoryMap : categoryMap;
+    
+    return map[categoryId] || 'Uncategorized';
+  }
+  
   // Transform backend post to frontend product format
   transformPostToProduct(post) {
     return {
@@ -201,7 +235,7 @@ class PostService {
       images: post.images || [],
       rating: 4.5, // Default rating since backend doesn't have ratings yet
       reviews: 0, // Default reviews count
-      category: post.categoryName || 'Uncategorized',
+      category: this.getCategoryDisplayName(post.categoryId) || post.categoryName || 'Uncategorized',
       categoryId: post.categoryId,
       description: post.description,
       condition: post.condition,

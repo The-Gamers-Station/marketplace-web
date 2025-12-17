@@ -15,7 +15,7 @@
     
     <!-- Prefetch Key Routes -->
     <link rel="prefetch" href="/api/posts?page=1&limit=12">
-    <link rel="prefetch" href="/api/categories">
+    <link rel="prefetch" href="/api/categories/tree">
     
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -173,7 +173,6 @@
               cls += entry.value;
             }
           }
-          console.log('CLS:', cls);
         }).observe({type: 'layout-shift', buffered: true});
       }
     </script>

@@ -1,10 +1,13 @@
 package com.thegamersstation.marketplace.common.util;
 
+import org.springframework.stereotype.Service;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+@Service
 public class ProfanityFilter {
     
     // Common profanity words (English and Arabic - sample list, expand as needed)
@@ -24,7 +27,7 @@ public class ProfanityFilter {
     /**
      * Checks if the content contains profanity
      */
-    public static boolean containsProfanity(String content) {
+    public boolean containsProfanity(String content) {
         if (content == null || content.isBlank()) {
             return false;
         }
@@ -45,7 +48,7 @@ public class ProfanityFilter {
     /**
      * Filters profanity by replacing bad words with asterisks
      */
-    public static String filter(String content) {
+    public String filter(String content) {
         if (content == null || content.isBlank()) {
             return content;
         }
@@ -63,7 +66,7 @@ public class ProfanityFilter {
     /**
      * Validates content and throws exception if profanity is found
      */
-    public static void validateNoProfanity(String content) {
+    public void validateNoProfanity(String content) {
         if (containsProfanity(content)) {
             throw new IllegalArgumentException("Content contains inappropriate language");
         }

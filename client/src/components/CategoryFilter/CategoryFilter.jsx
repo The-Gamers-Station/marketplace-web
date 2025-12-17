@@ -1,60 +1,81 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import authService from '../../services/authService';
-import categoryService from '../../services/categoryService';
 import './CategoryFilter.css';
 
 const CategoryFilter = ({ onFilterChange }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [selectedPlatform, setSelectedPlatform] = useState('all');
-  const [categories, setCategories] = useState([]);
+  const [selectedSubcategory, setSelectedSubcategory] = useState('all');
   
-  // Fetch categories from backend on component mount
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const platformCategories = await categoryService.getGamingPlatforms();
-        setCategories(platformCategories);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-    
-    fetchCategories();
-  }, []);
+  // Generic subcategories for "all" platform - these will search across all platforms
+  const genericSubcategories = [
+    {
+      key: 'devices',
+      name: i18n.language === 'ar' ? 'الأجهزة' : 'Devices',
+      categoryIds: [100, 200, 300] // PlayStation, Xbox, Nintendo device IDs
+    },
+    {
+      key: 'games',
+      name: i18n.language === 'ar' ? 'الألعاب' : 'Games',
+      categoryIds: [101, 201, 301] // PlayStation, Xbox, Nintendo game IDs
+    },
+    {
+      key: 'accessories',
+      name: i18n.language === 'ar' ? 'الإكسسوارات' : 'Accessories',
+      categoryIds: [102, 202, 302] // PlayStation, Xbox, Nintendo accessories IDs
+    }
+  ];
 
-  // Build platforms array from fetched categories
+  // Hardcoded platforms and subcategories
   const platforms = [
-    { name: t('categoryFilter.all') || 'All', key: 'all', categoryId: null },
-    ...categories.map(cat => {
-      // Map category slugs to translation keys
-      const translationKeyMap = {
-        'playstation': 'playstation',
-        'xbox': 'xbox',
-        'nintendo': 'nintendo',
-        'pc-gaming': 'pc',
-        'gaming-accessories': 'accessories'
-      };
-      
-      const translationKey = translationKeyMap[cat.slug] || cat.slug;
-      
-      return {
-        name: t(`categoryFilter.${translationKey}`) || cat.nameEn,
-        key: cat.slug,
-        categoryId: cat.id
-      };
-    })
+    {
+      name: t('categoryFilter.all') || 'All',
+      key: 'all',
+      categoryId: null,
+      subcategories: genericSubcategories
+    },
+    {
+      name: t('categoryFilter.playstation') || 'PlayStation',
+      key: 'playstation',
+      categoryId: null, // Will use subcategory IDs instead
+      categoryIds: [100, 101, 102], // All PlayStation category IDs
+      subcategories: [
+        { key: 'devices', name: i18n.language === 'ar' ? 'الأجهزة' : 'Devices', categoryId: 100 },
+        { key: 'games', name: i18n.language === 'ar' ? 'الألعاب' : 'Games', categoryId: 101 },
+        { key: 'accessories', name: i18n.language === 'ar' ? 'الإكسسوارات' : 'Accessories', categoryId: 102 }
+      ]
+    },
+    {
+      name: t('categoryFilter.xbox') || 'Xbox',
+      key: 'xbox',
+      categoryId: null, // Will use subcategory IDs instead
+      categoryIds: [200, 201, 202], // All Xbox category IDs
+      subcategories: [
+        { key: 'devices', name: i18n.language === 'ar' ? 'الأجهزة' : 'Devices', categoryId: 200 },
+        { key: 'games', name: i18n.language === 'ar' ? 'الألعاب' : 'Games', categoryId: 201 },
+        { key: 'accessories', name: i18n.language === 'ar' ? 'الإكسسوارات' : 'Accessories', categoryId: 202 }
+      ]
+    },
+    {
+      name: t('categoryFilter.nintendo') || 'Nintendo',
+      key: 'nintendo',
+      categoryId: null, // Will use subcategory IDs instead
+      categoryIds: [300, 301, 302], // All Nintendo category IDs
+      subcategories: [
+        { key: 'devices', name: i18n.language === 'ar' ? 'الأجهزة' : 'Devices', categoryId: 300 },
+        { key: 'games', name: i18n.language === 'ar' ? 'الألعاب' : 'Games', categoryId: 301 },
+        { key: 'accessories', name: i18n.language === 'ar' ? 'الإكسسوارات' : 'Accessories', categoryId: 302 }
+      ]
+    }
   ];
 
-  const filters = [
-    { key: 'accessories', label: t('categoryFilter.accessories') },
-    { key: 'categories', label: i18n.language === 'ar' ? 'الكونسولات' : 'Consoles' },
-    { key: 'console', label: i18n.language === 'ar' ? 'كونسل' : 'Console' },
-    { key: 'region', label: i18n.language === 'ar' ? 'اشرطة' : 'Games' },
-    { key: 'subcategories', label: i18n.language === 'ar' ? 'الفئات الفرعية' : 'Subcategories' },
-  ];
+  // Get current platform's subcategories
+  const currentPlatform = platforms.find(p => p.key === selectedPlatform);
+  const subcategories = currentPlatform?.subcategories || [];
+
 
   // Check if user is authenticated
   const isAuthenticated = authService.isAuthenticated();
@@ -71,8 +92,31 @@ const CategoryFilter = ({ onFilterChange }) => {
   // Handle platform selection
   const handlePlatformChange = (platform) => {
     setSelectedPlatform(platform.key);
+    setSelectedSubcategory('all');
     if (onFilterChange) {
-      onFilterChange(platform.categoryId);
+      // If platform is 'all', pass null
+      if (platform.key === 'all') {
+        onFilterChange(null);
+      } else if (platform.categoryIds) {
+        // Pass multiple category IDs for platform-wide search
+        onFilterChange(null, platform.categoryIds);
+      } else {
+        onFilterChange(platform.categoryId);
+      }
+    }
+  };
+
+  // Handle subcategory selection
+  const handleSubcategoryChange = (subcategory) => {
+    setSelectedSubcategory(subcategory.key);
+    if (onFilterChange) {
+      if (subcategory.categoryIds) {
+        // For generic subcategories (when platform is "all")
+        onFilterChange(null, subcategory.categoryIds);
+      } else {
+        // For platform-specific subcategories
+        onFilterChange(subcategory.categoryId);
+      }
     }
   };
 
@@ -100,22 +144,37 @@ const CategoryFilter = ({ onFilterChange }) => {
               </div>
             </div>
 
-            {/* Filter Tags */}
+            {/* Subcategory Filter Tags */}
             <div className="filter-tags">
-              {filters.map((filter) => (
-                <button key={filter.key} className="filter-tag">
-                  {filter.label}
-                </button>
-              ))}
-              {/* <div className="view-toggle">
-                <button className="view-btn active">⊞</button>
-                <button className="view-btn">☰</button>
-                <span className="results-text">
-                  {i18n.language === "ar"
-                    ? "أظهر حسب البطاقة"
-                    : "Show as cards"}
-                </span>
-              </div> */}
+              {subcategories.length > 0 && (
+                <>
+                  <button
+                    className={`filter-tag ${selectedSubcategory === 'all' ? 'active' : ''}`}
+                    onClick={() => {
+                      setSelectedSubcategory('all');
+                      if (onFilterChange) {
+                        if (currentPlatform.categoryIds) {
+                          // Pass multiple category IDs for platform-wide search
+                          onFilterChange(null, currentPlatform.categoryIds);
+                        } else {
+                          onFilterChange(currentPlatform.categoryId);
+                        }
+                      }
+                    }}
+                  >
+                    {i18n.language === 'ar' ? 'الكل' : 'All'}
+                  </button>
+                  {subcategories.map((subcategory) => (
+                    <button
+                      key={subcategory.key}
+                      className={`filter-tag ${selectedSubcategory === subcategory.key ? 'active' : ''}`}
+                      onClick={() => handleSubcategoryChange(subcategory)}
+                    >
+                      {subcategory.name}
+                    </button>
+                  ))}
+                </>
+              )}
 
               {/* Add Product Button */}
               <button

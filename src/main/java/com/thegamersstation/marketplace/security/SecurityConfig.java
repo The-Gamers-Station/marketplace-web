@@ -71,6 +71,12 @@ public class SecurityConfig {
                 // Public endpoints - Static resources (uploaded files)
                 .requestMatchers("/uploads/**").permitAll()
                 
+                // Public endpoints - WebSocket handshake and SockJS info
+                .requestMatchers(
+                    "/ws",
+                    "/ws/**"
+                ).permitAll()
+                
                 // Admin endpoints - require ADMIN role
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 
@@ -91,6 +97,7 @@ public class SecurityConfig {
             "http://localhost:3000",
             "http://localhost:5173",
             "http://80.66.87.82:5174",
+            "http://80.66.87.82:3001",
             "http://localhost:8080"
         ));
         

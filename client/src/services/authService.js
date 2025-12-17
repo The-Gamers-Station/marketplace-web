@@ -25,6 +25,16 @@ class AuthService {
     return !!localStorage.getItem('accessToken');
   }
   
+  // Get access token
+  getAccessToken() {
+    return localStorage.getItem('accessToken');
+  }
+  
+  // Get refresh token
+  getRefreshToken() {
+    return localStorage.getItem('refreshToken');
+  }
+  
   // Request OTP
   async requestOtp(phoneNumber) {
     try {

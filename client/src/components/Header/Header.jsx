@@ -6,34 +6,28 @@ import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import authService from '../../services/authService';
 import './Header.css';
 
-// Memoized navigation link component - Using regular anchor tag for page refresh
+// Memoized navigation link component - Using React Router Link for SPA navigation
 const NavLink = memo(({ to, isActive, onClick, children }) => (
-  <a
-    href={to}
+  <Link
+    to={to}
     className={`nav-link ${isActive ? 'active' : ''}`}
-    onClick={() => {
-      // Let browser handle navigation naturally for page refresh
-      onClick && onClick();
-    }}
+    onClick={onClick}
   >
     {children}
-  </a>
+  </Link>
 ));
 
 NavLink.displayName = 'NavLink';
 
-// Memoized mobile navigation link component - Using regular anchor tag for page refresh
+// Memoized mobile navigation link component - Using React Router Link for SPA navigation
 const MobileNavLink = memo(({ to, isActive, onClick, children }) => (
-  <a
-    href={to}
+  <Link
+    to={to}
     className={`mobile-nav-link ${isActive ? 'active' : ''}`}
-    onClick={() => {
-      // Let browser handle navigation naturally for page refresh
-      onClick && onClick();
-    }}
+    onClick={onClick}
   >
     {children}
-  </a>
+  </Link>
 ));
 
 MobileNavLink.displayName = 'MobileNavLink';
@@ -46,6 +40,8 @@ const Header = memo(() => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
+  const [searchValue, setSearchValue] = useState('');
+  const [mobileSearchValue, setMobileSearchValue] = useState('');
   const location = useLocation();
 
   // Update active link based on current location
@@ -136,6 +132,29 @@ const Header = memo(() => {
     setCurrentUser(null);
     navigate('/');
   }, [navigate]);
+
+  // Handle search submission
+  const handleSearchSubmit = useCallback((e, isMobile = false) => {
+    e.preventDefault();
+    const query = isMobile ? mobileSearchValue : searchValue;
+    if (query.trim()) {
+      navigate(`/products?q=${encodeURIComponent(query.trim())}`);
+      // Clear search input after navigation
+      if (isMobile) {
+        setMobileSearchValue('');
+        toggleMobileMenu();
+      } else {
+        setSearchValue('');
+      }
+    }
+  }, [navigate, searchValue, mobileSearchValue, toggleMobileMenu]);
+
+  // Handle Enter key in search input
+  const handleSearchKeyPress = useCallback((e, isMobile = false) => {
+    if (e.key === 'Enter') {
+      handleSearchSubmit(e, isMobile);
+    }
+  }, [handleSearchSubmit]);
   
   // Memoize navigation items
   const navigationItems = useMemo(() => [
@@ -160,11 +179,11 @@ const Header = memo(() => {
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        {/* Logo - Using regular anchor tag for page refresh */}
-        <a href="/" className="header-logo">
+        {/* Logo - Using React Router Link for SPA navigation */}
+        <Link to="/" className="header-logo">
           <img src="/logo.svg" alt="GamersStation" className="logo-icon" loading="eager" />
           <span className="logo-text">GamersStation</span>
-        </a>
+        </Link>
 
         {/* Navigation */}
         <nav className="header-nav">
@@ -181,14 +200,17 @@ const Header = memo(() => {
         </nav>
 
         {/* Search Bar */}
-        <div className="header-search">
+        <form className="header-search" onSubmit={(e) => handleSearchSubmit(e)}>
           <Search className="search-icon" size={20} />
           <input
             type="text"
             placeholder={t('header.searchPlaceholder')}
             className="search-input"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyPress={(e) => handleSearchKeyPress(e)}
           />
-        </div>
+        </form>
 
         {/* User Actions */}
         <div className="header-actions">
@@ -212,7 +234,7 @@ const Header = memo(() => {
                   <User size={18} />
                   <span>{t('header.myProfile')}</span>
                 </Link>
-                <Link to="/profile?tab=messages" className="dropdown-item">
+                <Link to="/chat" className="dropdown-item">
                   <MessageCircle size={18} />
                   <span>{t('chat.messages')}</span>
                   {unreadMessagesCount > 0 && (
@@ -244,14 +266,17 @@ const Header = memo(() => {
       <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
         <div className="mobile-menu-content">
           {/* Mobile Search */}
-          <div className="mobile-search">
+          <form className="mobile-search" onSubmit={(e) => handleSearchSubmit(e, true)}>
             <Search className="mobile-search-icon" size={20} />
             <input
               type="text"
               placeholder={t('header.searchPlaceholder')}
               className="mobile-search-input"
+              value={mobileSearchValue}
+              onChange={(e) => setMobileSearchValue(e.target.value)}
+              onKeyPress={(e) => handleSearchKeyPress(e, true)}
             />
-          </div>
+          </form>
 
           {/* Mobile Navigation */}
           <nav className="mobile-nav">

@@ -101,7 +101,7 @@ function getCacheStrategy(request) {
   const pathname = url.pathname;
   
   // API requests - Network first, cache fallback
-  if (pathname.startsWith('/api/')) {
+  if (pathname.startsWith('/api/v1/') || pathname.startsWith('/api/')) {
     return { strategy: 'network-first', cache: CACHE_NAMES.api };
   }
   
@@ -275,8 +275,8 @@ async function syncPosts() {
     const requests = await cache.keys();
     
     // Filter POST requests that need syncing
-    const postRequests = requests.filter(request => 
-      request.method === 'POST' && request.url.includes('/api/')
+    const postRequests = requests.filter(request =>
+      request.method === 'POST' && (request.url.includes('/api/v1/') || request.url.includes('/api/'))
     );
     
     // Attempt to sync each request
@@ -309,8 +309,8 @@ async function updateContent() {
   // Periodically update cached content
   const urlsToUpdate = [
     '/',
-    '/api/posts',
-    '/api/categories'
+    '/api/v1/posts',
+    '/api/v1/categories/tree'
   ];
   
   const cache = await caches.open(CACHE_NAMES.dynamic);

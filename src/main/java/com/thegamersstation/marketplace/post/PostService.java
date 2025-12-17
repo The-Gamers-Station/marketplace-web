@@ -15,6 +15,7 @@ import com.thegamersstation.marketplace.store.StoreRepository;
 import com.thegamersstation.marketplace.user.repository.User;
 import com.thegamersstation.marketplace.user.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
@@ -23,10 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostService {
     
     private final PostRepository postRepository;
@@ -39,15 +43,62 @@ public class PostService {
     
     @Transactional
     public PostDto createPost(CreatePostRequest request, Long userId) {
+        log.info("=== CREATE POST DEBUG START ===");
+        log.info("User ID: {}", userId);
+        log.info("Requested Category ID: {}", request.getCategoryId());
+        log.info("Post Type: {}", request.getType());
+        log.info("City ID: {}", request.getCityId());
+        
         User user = usersRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
+        log.info("User found: {} ({})", user.getUsername(), user.getPhoneNumber());
+        
+        // Debug: Check if category exists
+        log.info("Attempting to find category with ID: {}", request.getCategoryId());
         Category category = categoryRepository.findById(request.getCategoryId())
-            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+            .orElseThrow(() -> {
+                // Log all available categories for debugging
+                List<Category> allCategories = categoryRepository.findAll();
+                log.error("❌ CATEGORY NOT FOUND - ID: {}", request.getCategoryId());
+                log.error("📊 Total categories in database: {}", allCategories.size());
+                log.error("📋 Available category IDs and names:");
+                allCategories.forEach(cat ->
+                    log.error("   - ID: {} | Name: {} | Slug: {} | Active: {} | Level: {}",
+                        cat.getId(), cat.getNameEn(), cat.getSlug(), cat.getIsActive(), cat.getLevel())
+                );
+                
+                // Check if there are any categories with similar names
+                String requestedIdStr = String.valueOf(request.getCategoryId());
+                log.error("🔍 Searching for categories with names containing 'xbox' or 'nintendo' (case-insensitive):");
+                allCategories.stream()
+                    .filter(cat -> cat.getNameEn().toLowerCase().contains("xbox") ||
+                                   cat.getNameEn().toLowerCase().contains("nintendo") ||
+                                   cat.getSlug().toLowerCase().contains("xbox") ||
+                                   cat.getSlug().toLowerCase().contains("nintendo"))
+                    .forEach(cat -> log.error("   🎮 Found: ID={}, Name={}, Slug={}, Active={}",
+                        cat.getId(), cat.getNameEn(), cat.getSlug(), cat.getIsActive()));
+                
+                return new ResourceNotFoundException(
+                    String.format("Category not found with ID: %d. Available IDs: %s",
+                        request.getCategoryId(),
+                        allCategories.stream()
+                            .map(c -> c.getId().toString())
+                            .limit(20)
+                            .collect(Collectors.joining(", ")))
+                );
+            });
+        
+        log.info("✅ Category found: ID={}, Name={}, Slug={}, Active={}, Level={}",
+            category.getId(), category.getNameEn(), category.getSlug(),
+            category.getIsActive(), category.getLevel());
         
         if (!category.getIsActive()) {
+            log.error("❌ Category is INACTIVE: ID={}, Name={}", category.getId(), category.getNameEn());
             throw new IllegalArgumentException("Category is not active");
         }
+        
+        log.info("✅ Category is active, proceeding with post creation");
         
         City city = cityRepository.findById(request.getCityId())
             .orElseThrow(() -> new ResourceNotFoundException("City not found"));
@@ -168,12 +219,26 @@ public class PostService {
     @Transactional(readOnly = true)
     public PageResponseDto<PostDto> searchPosts(
         Long categoryId,
+        String categoryIds,
         Long cityId,
         Post.PostType type,
         Post.PostCondition condition,
         Pageable pageable
     ) {
-        Page<Post> postsPage = postRepository.searchPosts(categoryId, cityId, type, condition, pageable);
+        // Parse categoryIds if provided
+        List<Long> categoryIdList = null;
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            categoryIdList = Arrays.stream(categoryIds.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        }
+        
+        Page<Post> postsPage;
+        if (categoryIdList != null) {
+            postsPage = postRepository.searchPostsWithMultipleCategories(categoryIdList, cityId, type, condition, pageable);
+        } else {
+            postsPage = postRepository.searchPosts(categoryId, cityId, type, condition, pageable);
+        }
         return PageResponseDto.of(postsPage.map(postMapper::toDto));
     }
     

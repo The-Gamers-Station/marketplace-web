@@ -25,7 +25,7 @@ export const API_ENDPOINTS = {
   
   // Categories
   categories: {
-    list: '/categories',
+    list: '/categories/tree',
     getById: (id) => `/categories/${id}`,
   },
   

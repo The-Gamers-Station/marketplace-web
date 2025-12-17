@@ -24,8 +24,43 @@ public class UpdateUserProfileDto {
     @Size(max = 100, message = "Email must not exceed 100 characters")
     private String email;
 
-    @Schema(description = "City ID (required for profile completion)", example = "1", required = true)
-    @NotNull(message = "City ID is required")
+    @Schema(description = "City ID (required for profile completion)", example = "1")
     @Positive(message = "City ID must be positive")
     private Long cityId;
+
+    @Schema(description = "Profile image URL", example = "https://example.com/profile.jpg")
+    @Size(max = 500, message = "Profile image URL must not exceed 500 characters")
+    private String profileImage;
+
+    @Schema(description = "Background image URL", example = "https://example.com/background.jpg")
+    @Size(max = 500, message = "Background image URL must not exceed 500 characters")
+    private String backgroundImage;
+
+    @Schema(description = "Facebook profile URL", example = "https://facebook.com/username")
+    @Size(max = 200, message = "Facebook link must not exceed 200 characters")
+    private String facebookLink;
+
+    @Schema(description = "Twitter profile URL", example = "https://twitter.com/username")
+    @Size(max = 200, message = "Twitter link must not exceed 200 characters")
+    private String twitterLink;
+
+    @Schema(description = "Instagram profile URL", example = "https://instagram.com/username")
+    @Size(max = 200, message = "Instagram link must not exceed 200 characters")
+    private String instagramLink;
+
+    @Schema(description = "YouTube channel URL", example = "https://youtube.com/channel/channelId")
+    @Size(max = 200, message = "YouTube link must not exceed 200 characters")
+    private String youtubeLink;
+
+    @Schema(description = "LinkedIn profile URL", example = "https://linkedin.com/in/username")
+    @Size(max = 200, message = "LinkedIn link must not exceed 200 characters")
+    private String linkedinLink;
+
+    @Schema(description = "GitHub profile URL", example = "https://github.com/username")
+    @Size(max = 200, message = "GitHub link must not exceed 200 characters")
+    private String githubLink;
+
+    @Schema(description = "Personal website URL", example = "https://example.com")
+    @Size(max = 200, message = "Website link must not exceed 200 characters")
+    private String websiteLink;
 }

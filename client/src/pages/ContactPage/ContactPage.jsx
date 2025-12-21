@@ -2,17 +2,11 @@ import React, { useState } from 'react';
 import {
   Mail,
   Phone,
-  MapPin,
   Send,
   MessageSquare,
-  Facebook,
-  Twitter,
-  Instagram,
-  Youtube,
   CheckCircle,
   User,
   MessageCircle,
-  Headphones,
   ArrowLeft
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -289,79 +283,16 @@ const ContactPage = () => {
 
                   <div className="info-item">
                     <div className="info-icon">
-                      <MapPin size={20} />
+                      <Phone size={20} />
                     </div>
                     <div className="info-content">
-                      <span className="info-label">{t('pages.contact.address')}</span>
-                      <span>{t('footer.contact.location')}</span>
+                      <span className="info-label">{t('pages.contact.phone')}</span>
+                      <a href="tel:+201234567890" dir="ltr">+20 123 456 7890</a>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Social Media */}
-              <div className="info-card">
-                <h3>{t('pages.contact.followUs')}</h3>
-                <div className="social-grid">
-                  <a href="https://www.facebook.com/GamersStationApp" className="social-card facebook" target="_blank" rel="noopener noreferrer">
-                    <Facebook size={24} />
-                    <span>Facebook</span>
-                  </a>
-                  <a href="https://www.twitter.com/GamersStationApp" className="social-card twitter" target="_blank" rel="noopener noreferrer">
-                    <Twitter size={24} />
-                    <span>Twitter</span>
-                  </a>
-                  <a href="https://www.instagram.com/GamersStationApp" className="social-card instagram" target="_blank" rel="noopener noreferrer">
-                    <Instagram size={24} />
-                    <span>Instagram</span>
-                  </a>
-                  <a href="https://www.youtube.com/GamersStationApp" className="social-card youtube" target="_blank" rel="noopener noreferrer">
-                    <Youtube size={24} />
-                    <span>Youtube</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* Support Options */}
-              <div className="info-card">
-                <h3>{t('pages.contact.otherWays')}</h3>
-                <div className="support-options">
-                  <a href="#" className="support-option">
-                    <Headphones size={20} />
-                    <div>
-                      <strong>{t('pages.contact.liveSupport')}</strong>
-                      <span>{t('pages.contact.liveSupportDesc')}</span>
-                    </div>
-                    <ArrowLeft size={16} />
-                  </a>
-                  <a href="/faq" className="support-option">
-                    <MessageCircle size={20} />
-                    <div>
-                      <strong>{t('header.faq')}</strong>
-                      <span>{t('pages.contact.faqDesc')}</span>
-                    </div>
-                    <ArrowLeft size={16} />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Map Section */}
-          <div className="map-section">
-            <div className="map-container">
-              {/* Google Maps Iframe */}
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d464843.0891421265!2d46.54313544267577!3d24.724302369843767!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f03890d489399%3A0xba974d1c98e79fd5!2sRiyadh%20Saudi%20Arabia!5e0!3m2!1sen!2ssa!4v1701427200000!5m2!1sen!2ssa"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title={t('pages.contact.ourLocation')}
-                className="map-iframe"
-              />
             </div>
           </div>
         </div>

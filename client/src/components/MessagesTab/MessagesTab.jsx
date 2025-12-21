@@ -156,7 +156,7 @@ const MessagesTab = ({ conversations, setConversations, loading, setLoading }) =
                     {conversation.lastMessage?.isOwn && (
                       <span className="message-prefix">{t('chat.you')}: </span>
                     )}
-                    {conversation.lastMessage?.content || t('chat.noMessages')}
+                    {conversation.lastMessage?.content || ''}
                   </p>
 
                   <div className="conversation-status">

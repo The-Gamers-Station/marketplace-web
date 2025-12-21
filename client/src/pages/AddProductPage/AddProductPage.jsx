@@ -19,9 +19,9 @@ const AddProductPage = () => {
   const isAuthenticated = authService.isAuthenticated();
   
   const [step, setStep] = useState(1);
-  const [selectedCategory, setSelectedCategory] = useState('playstation');
-  const [selectedSubcategory, setSelectedSubcategory] = useState('devices');
-  const [selectedCategoryId, setSelectedCategoryId] = useState(100);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedSubcategory, setSelectedSubcategory] = useState('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [cities, setCities] = useState([]);
   const [loadingCities, setLoadingCities] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,7 +33,7 @@ const AddProductPage = () => {
     description: '',
     price: '',
     condition: 'NEW',
-    type: 'SELL',
+    type: '',
     cityId: '',
     images: []
   });
@@ -47,7 +47,6 @@ const AddProductPage = () => {
       id: 'playstation',
       categoryId: 1,
       name: t('categoryFilter.playstation'),
-      icon: '🎮',
       subcategories: [
         {
           id: 'devices',
@@ -70,7 +69,6 @@ const AddProductPage = () => {
       id: 'xbox',
       categoryId: 2,
       name: t('categoryFilter.xbox'),
-      icon: '🎯',
       subcategories: [
         {
           id: 'devices',
@@ -93,7 +91,6 @@ const AddProductPage = () => {
       id: 'nintendo',
       categoryId: 3,
       name: t('categoryFilter.nintendo'),
-      icon: '🎨',
       subcategories: [
         {
           id: 'devices',
@@ -151,7 +148,20 @@ const AddProductPage = () => {
   };
 
   const validateStep1 = () => {
-    return selectedCategory && selectedSubcategory;
+    const newErrors = {};
+    
+    if (!formData.type) {
+      newErrors.type = t('addProduct.errors.typeRequired');
+    }
+    if (!selectedCategory) {
+      newErrors.category = t('addProduct.errors.categoryRequired');
+    }
+    if (!selectedSubcategory) {
+      newErrors.subcategory = t('addProduct.errors.subcategoryRequired');
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const validateStep2 = () => {
@@ -175,13 +185,6 @@ const AddProductPage = () => {
       newErrors.price = t('addProduct.errors.priceRequired');
     }
     
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const validateStep3 = () => {
-    const newErrors = {};
-    
     if (!formData.cityId) {
       newErrors.cityId = t('addProduct.errors.cityRequired');
     }
@@ -194,8 +197,6 @@ const AddProductPage = () => {
     if (step === 1 && validateStep1()) {
       setStep(2);
     } else if (step === 2 && validateStep2()) {
-      setStep(3);
-    } else if (step === 3 && validateStep3()) {
       handleSubmit();
     }
   };
@@ -388,78 +389,99 @@ const AddProductPage = () => {
         </div>
 
         <div className="product-wizard-container">
-          <div className="wizard-heading">
-            <h1>{t('addProduct.title')}</h1>
-            <p>{t('addProduct.subtitle')}</p>
-          </div>
-
           {/* Progress Steps */}
           <div className="wizard-progress">
             <div className={`wizard-step ${step >= 1 ? 'active' : ''}`}>
               <div className="step-circle">1</div>
-              <div className="step-text">{t('addProduct.steps.category')}</div>
+              <div className="step-text">{t('addProduct.steps.typeAndCategory')}</div>
             </div>
             <div className={`step-connector ${step >= 2 ? 'active' : ''}`}></div>
             <div className={`wizard-step ${step >= 2 ? 'active' : ''}`}>
               <div className="step-circle">2</div>
-              <div className="step-text">{t('addProduct.steps.details')}</div>
-            </div>
-            <div className={`step-connector ${step >= 3 ? 'active' : ''}`}></div>
-            <div className={`wizard-step ${step >= 3 ? 'active' : ''}`}>
-              <div className="step-circle">3</div>
-              <div className="step-text">{t('addProduct.steps.location')}</div>
+              <div className="step-text">{t('addProduct.steps.detailsAndLocation')}</div>
             </div>
           </div>
 
           <div className="wizard-content">
-            {/* Step 1: Category Selection */}
+            {/* Step 1: Type and Category Selection */}
             {step === 1 && (
               <div className="wizard-panel">
-                <h2>{t('addProduct.selectCategory')}</h2>
-                
-                <div className="platform-grid">
-                  {platformCategories.map(category => (
+                {/* Type Selection */}
+                <div className="type-selection-area">
+                  <h2>{t('addProduct.selectType')}</h2>
+                  <div className="type-buttons">
                     <button
-                      key={category.id}
-                      className={`platform-card ${selectedCategory === category.id ? 'selected' : ''}`}
-                      onClick={() => {
-                        setSelectedCategory(category.id);
-                        if (category.subcategories.length > 0) {
-                          const firstSubcat = category.subcategories[0];
-                          setSelectedSubcategory(firstSubcat.id);
-                          setSelectedCategoryId(firstSubcat.categoryId);
-                        }
-                      }}
+                      className={`type-button ${formData.type === 'SELL' ? 'selected' : ''}`}
+                      onClick={() => setFormData(prev => ({ ...prev, type: 'SELL' }))}
                     >
-                      <span className="platform-emoji">{category.icon}</span>
-                      <span className="platform-label">{category.name}</span>
+                      {t('addProduct.types.sale')}
                     </button>
-                  ))}
+                    <button
+                      className={`type-button ${formData.type === 'ASK' ? 'selected' : ''}`}
+                      onClick={() => setFormData(prev => ({ ...prev, type: 'ASK' }))}
+                    >
+                      {t('addProduct.types.wanted')}
+                    </button>
+                  </div>
+                  {errors.type && (
+                    <span className="field-error">{errors.type}</span>
+                  )}
                 </div>
 
-                <div className="subcategory-area">
-                  <h3>{t('addProduct.selectSubcategory')}</h3>
-                  <div className="subcategory-list">
-                    {platformCategories
-                      .find(c => c.id === selectedCategory)
-                      ?.subcategories.map(sub => (
+                {/* Category Selection */}
+                {formData.type && (
+                  <div className="category-selection-area">
+                    <h3>{t('addProduct.selectCategory')}</h3>
+                    <div className="platform-grid">
+                      {platformCategories.map(category => (
                         <button
-                          key={sub.id}
-                          className={`subcategory-tag ${selectedSubcategory === sub.id ? 'selected' : ''}`}
+                          key={category.id}
+                          className={`platform-card no-icon ${selectedCategory === category.id ? 'selected' : ''}`}
                           onClick={() => {
-                            setSelectedSubcategory(sub.id);
-                            setSelectedCategoryId(sub.categoryId);
+                            setSelectedCategory(category.id);
+                            setSelectedSubcategory('');
+                            setSelectedCategoryId(null);
                           }}
                         >
-                          {sub.name}
+                          <span className="platform-label">{category.name}</span>
                         </button>
                       ))}
+                    </div>
+                    {errors.category && (
+                      <span className="field-error">{errors.category}</span>
+                    )}
+
+                    {/* Subcategory Selection */}
+                    {selectedCategory && (
+                      <div className="subcategory-area">
+                        <h3>{t('addProduct.selectSubcategory')}</h3>
+                        <div className="subcategory-list">
+                          {platformCategories
+                            .find(c => c.id === selectedCategory)
+                            ?.subcategories.map(sub => (
+                              <button
+                                key={sub.id}
+                                className={`subcategory-tag ${selectedSubcategory === sub.id ? 'selected' : ''}`}
+                                onClick={() => {
+                                  setSelectedSubcategory(sub.id);
+                                  setSelectedCategoryId(sub.categoryId);
+                                }}
+                              >
+                                {sub.name}
+                              </button>
+                            ))}
+                        </div>
+                        {errors.subcategory && (
+                          <span className="field-error">{errors.subcategory}</span>
+                        )}
+                      </div>
+                    )}
                   </div>
-                </div>
+                )}
               </div>
             )}
 
-            {/* Step 2: Product Details */}
+            {/* Step 2: Product Details, Location & Images */}
             {step === 2 && (
               <div className="wizard-panel">
                 <h2>{t('addProduct.productDetails')}</h2>
@@ -548,102 +570,81 @@ const AddProductPage = () => {
                   </div>
 
                   <div className="input-group">
-                    <label htmlFor="type">{t('addProduct.fields.type')}</label>
+                    <label htmlFor="cityId">
+                      <LocationIcon />
+                      {t('addProduct.fields.city')}
+                    </label>
                     <select
-                      id="type"
-                      name="type"
-                      value={formData.type}
+                      id="cityId"
+                      name="cityId"
+                      value={formData.cityId}
                       onChange={handleChange}
-                      className="select-input"
+                      className={`select-input ${errors.cityId ? 'has-error' : ''}`}
+                      disabled={loadingCities}
                     >
-                      <option value="SELL">{t('addProduct.types.sale')}</option>
-                      <option value="ASK">{t('addProduct.types.wanted')}</option>
+                      <option value="">{t('addProduct.placeholders.selectCity')}</option>
+                      {cities.map(city => (
+                        <option key={city.id} value={city.id}>
+                          {i18n.language === 'ar' ? city.nameAr : city.nameEn}
+                        </option>
+                      ))}
                     </select>
-                  </div>
-                </form>
-              </div>
-            )}
-
-            {/* Step 3: Location & Images */}
-            {step === 3 && (
-              <div className="wizard-panel">
-                <h2>{t('addProduct.locationImages')}</h2>
-                
-                <div className="input-group">
-                  <label htmlFor="cityId">
-                    <LocationIcon />
-                    {t('addProduct.fields.city')}
-                  </label>
-                  <select
-                    id="cityId"
-                    name="cityId"
-                    value={formData.cityId}
-                    onChange={handleChange}
-                    className={`select-input ${errors.cityId ? 'has-error' : ''}`}
-                    disabled={loadingCities}
-                  >
-                    <option value="">{t('addProduct.placeholders.selectCity')}</option>
-                    {cities.map(city => (
-                      <option key={city.id} value={city.id}>
-                        {i18n.language === 'ar' ? city.nameAr : city.nameEn}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.cityId && (
-                    <span className="field-error">{errors.cityId}</span>
-                  )}
-                </div>
-
-                <div className="media-upload-area">
-                  <h3>{t('addProduct.fields.images')}</h3>
-                  <p className="upload-hint">{t('addProduct.imageHint')}</p>
-                  
-                  <div className="upload-grid">
-                    {uploadedImages.map((imageUrl, index) => (
-                      <div key={index} className="uploaded-image-preview">
-                        <img src={imageUrl} alt={t('imageAlt.productNumber', { number: index + 1 })} />
-                        <button
-                          className="remove-image-btn"
-                          onClick={() => {
-                            setUploadedImages(prev => prev.filter((_, i) => i !== index));
-                          }}
-                          type="button"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ))}
-                    
-                    {uploadedImages.length < 10 && (
-                      <label className={`upload-trigger ${uploadingImage ? 'uploading' : ''}`}>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          multiple
-                          onChange={handleImageUpload}
-                          disabled={uploadingImage}
-                          style={{ display: 'none' }}
-                        />
-                        {uploadingImage ? (
-                          <div className="upload-loading">
-                            <span className="upload-spinner"></span>
-                            <span>{t('addProduct.uploading')}</span>
-                          </div>
-                        ) : (
-                          <>
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="2"/>
-                              <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
-                              <polyline points="21 15 16 10 5 21" stroke="currentColor" strokeWidth="2"/>
-                            </svg>
-                            <span>{t('addProduct.uploadImage')}</span>
-                            <span className="upload-hint-small">{uploadedImages.length}/10</span>
-                          </>
-                        )}
-                      </label>
+                    {errors.cityId && (
+                      <span className="field-error">{errors.cityId}</span>
                     )}
                   </div>
-                </div>
+
+                  <div className="media-upload-area">
+                    <h3>{t('addProduct.fields.images')}</h3>
+                    <p className="upload-hint">{t('addProduct.imageHint')}</p>
+                    
+                    <div className="upload-grid">
+                      {uploadedImages.map((imageUrl, index) => (
+                        <div key={index} className="uploaded-image-preview">
+                          <img src={imageUrl} alt={t('imageAlt.productNumber', { number: index + 1 })} />
+                          <button
+                            className="remove-image-btn"
+                            onClick={() => {
+                              setUploadedImages(prev => prev.filter((_, i) => i !== index));
+                            }}
+                            type="button"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                      
+                      {uploadedImages.length < 10 && (
+                        <label className={`upload-trigger ${uploadingImage ? 'uploading' : ''}`}>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={handleImageUpload}
+                            disabled={uploadingImage}
+                            style={{ display: 'none' }}
+                          />
+                          {uploadingImage ? (
+                            <div className="upload-loading">
+                              <span className="upload-spinner"></span>
+                              <span>{t('addProduct.uploading')}</span>
+                            </div>
+                          ) : (
+                            <>
+                              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
+                                <polyline points="21 15 16 10 5 21" stroke="currentColor" strokeWidth="2"/>
+                              </svg>
+                              <span>{t('addProduct.uploadImage')}</span>
+                              <span className="upload-hint-small">{uploadedImages.length}/10</span>
+                            </>
+                          )}
+                        </label>
+                      )}
+                    </div>
+                  </div>
+                </form>
               </div>
             )}
 
@@ -670,7 +671,7 @@ const AddProductPage = () => {
                     {t('addProduct.submitting')}
                   </>
                 ) : (
-                  step === 3 ? t('addProduct.submitProduct') : t('common.next')
+                  step === 2 ? t('addProduct.submitProduct') : t('common.next')
                 )}
               </button>
             </div>

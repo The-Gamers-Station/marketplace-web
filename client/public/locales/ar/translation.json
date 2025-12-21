@@ -107,7 +107,7 @@
       "title": "طرق الدفع المتاحة:"
     },
     "bottom": {
-      "copyright": "© {{year}} GamersStation. جميع الحقوق محفوظة.",
+      "copyright": "جميع الحقوق محفوظة. © {{year}} GamersStation.",
       "sitemap": "خريطة الموقع",
       "accessibility": "إمكانية الوصول",
       "helpCenter": "مركز المساعدة"
@@ -526,7 +526,8 @@
     "delete": "حذف",
     "edit": "تعديل",
     "language": "اللغة",
-    "optional": "اختياري"
+    "optional": "اختياري",
+    "showAllProducts": "عرض جميع المنتجات"
   },
   "auth": {
     "login": {
@@ -662,8 +663,7 @@
   "addProduct": {
     "pageTitle": "إضافة منتج جديد",
     "pageDescription": "اعرض منتجاتك من الألعاب واصل لآلاف المشترين",
-    "title": "إضافة منتج جديد",
-    "subtitle": "اتبع الخطوات لعرض منتجك",
+    "selectType": "اختر نوع الإعلان",
     "selectCategory": "اختر الفئة",
     "selectSubcategory": "اختر الفئة الفرعية",
     "productDetails": "تفاصيل المنتج",
@@ -672,9 +672,11 @@
     "submitting": "جاري الإرسال...",
     "successTitle": "نجح!",
     "successMessage": "تم إضافة المنتج بنجاح!",
-    "imageHint": "أضف حتى 6 صور. الصورة الأولى ستكون الصورة الرئيسية.",
+    "imageHint": "أضف حتى 10 صور. الصورة الأولى ستكون الصورة الرئيسية.",
     "uploadImage": "رفع صورة",
     "steps": {
+      "typeAndCategory": "النوع والفئة",
+      "detailsAndLocation": "التفاصيل والموقع",
       "category": "الفئة",
       "details": "التفاصيل",
       "location": "الموقع"
@@ -716,7 +718,9 @@
       "descriptionTooLong": "الوصف يجب ألا يتجاوز 5000 حرف",
       "priceRequired": "السعر مطلوب وصحيح",
       "cityRequired": "الرجاء اختيار مدينة",
-      "categoryRequired": "الرجاء اختيار فئة صحيحة",
+      "typeRequired": "الرجاء اختيار نوع الإعلان",
+      "categoryRequired": "الرجاء اختيار الفئة",
+      "subcategoryRequired": "الرجاء اختيار الفئة الفرعية",
       "submitFailed": "فشل إضافة المنتج. الرجاء المحاولة مرة أخرى.",
       "tooManyImages": "يمكنك رفع حتى 10 صور",
       "uploadInvalidFiles": "بعض الملفات غير صالحة. المسموح: JPG، JPEG، PNG، WEBP، GIF حتى 10 ميجابايت لكل منها"
@@ -750,7 +754,7 @@
     "totalViews": "إجمالي المشاهدات",
     "totalLikes": "إجمالي الإعجابات",
     "rating": "التقييم",
-    "myPosts": "منشوراتي",
+    "myPosts": "اعلاناتي",
     "favorites": "المفضلة",
     "reviews": "التقييمات",
     "settings": "الإعدادات",

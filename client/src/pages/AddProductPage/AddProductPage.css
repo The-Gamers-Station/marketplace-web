@@ -82,32 +82,6 @@
   flex-direction: column;
 }
 
-/* Wizard Heading */
-.wizard-heading {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.wizard-heading h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-  background: linear-gradient(
-    135deg,
-    var(--primary-color),
-    var(--secondary-color)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.wizard-heading p {
-  font-size: 1.1rem;
-  color: var(--text-secondary);
-}
-
 /* Progress Steps */
 .wizard-progress {
   display: flex;
@@ -265,13 +239,85 @@
   box-shadow: 0 10px 40px rgba(255, 107, 53, 0.4);
 }
 
-.platform-emoji {
-  font-size: 2.5rem;
+.platform-card.no-icon {
+  padding: 1.5rem 1rem;
 }
 
 .platform-label {
   font-weight: 600;
   color: var(--text-primary);
+  text-align: center;
+}
+
+/* Type Selection */
+.type-selection-area {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.type-selection-area h2 {
+  margin-bottom: 2rem;
+}
+
+.type-buttons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.type-button {
+  flex: 1;
+  max-width: 250px;
+  padding: 1.5rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--border-color);
+  border-radius: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.type-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.type-button.selected {
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-hover)
+  );
+  border-color: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+}
+
+/* Category Selection Area */
+.category-selection-area {
+  animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.category-selection-area h3 {
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
   text-align: center;
 }
 
@@ -739,6 +785,15 @@
 
   .platform-card {
     padding: 1.5rem 0.75rem;
+  }
+
+  .type-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .type-button {
+    width: 100%;
   }
 
   .subcategory-tag {

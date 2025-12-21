@@ -140,7 +140,6 @@ const CategoryFilter = ({ onFilterChange }) => {
                     {platform.name}
                   </button>
                 ))}
-                <button className="nav-arrow">›</button>
               </div>
             </div>
 
@@ -176,7 +175,7 @@ const CategoryFilter = ({ onFilterChange }) => {
                 </>
               )}
 
-              {/* Add Product Button */}
+              {/* Add Product Button - Commented out as requested
               <button
                 className="category-add-product-btn"
                 onClick={handleAddProduct}
@@ -244,6 +243,7 @@ const CategoryFilter = ({ onFilterChange }) => {
                   <span></span>
                 </div>
               </button>
+              */}
             </div>
           </div>
         </div>

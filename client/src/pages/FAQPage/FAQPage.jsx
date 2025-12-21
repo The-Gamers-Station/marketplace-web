@@ -257,14 +257,6 @@ const FAQPage = () => {
         <div className="hero-content">
           <h1>{t('pages.faq.title')}</h1>
           <p>{t('pages.faq.subtitle')}</p>
-          <div className="search-box">
-            <input
-              type="text"
-              placeholder={t('pages.faq.searchHere')}
-              className="faq-search-input"
-            />
-            <button className="search-btn">{t('pages.faq.search')}</button>
-          </div>
         </div>
       </div>
 

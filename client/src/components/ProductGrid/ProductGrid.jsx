@@ -5,7 +5,7 @@ import postService from '../../services/postService';
 import { GameSpinner, SkeletonLoader } from '../Loading/Loading';
 import './ProductGrid.css';
 
-const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction }) => {
+const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction, hideLoadMore = false }) => {
   const { t, i18n } = useTranslation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -157,9 +157,9 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
         ))}
       </div>
       
-      {hasMore && (
+      {hasMore && !hideLoadMore && (
         <div className="load-more">
-          <button 
+          <button
             className={`load-more-btn ${loadingMore ? 'loading' : ''}`}
             onClick={handleLoadMore}
             disabled={loadingMore}

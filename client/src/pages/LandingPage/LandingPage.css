@@ -1,6 +1,6 @@
 .landing-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0a0e1a 0%, #0f1823 50%, #1a2332 100%);
+  background: #0f1823;
   position: relative;
 }
 
@@ -17,6 +17,97 @@
     radial-gradient(circle at 40% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
+}
+
+/* Landing Page Search Bar */
+.landing-search-container {
+  width: 100%;
+  padding: 30px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  background: rgba(15, 24, 35, 0.95);
+}
+
+.landing-search-form {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  align-items: center;
+  background: rgba(15, 24, 35, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.landing-search-btn {
+  background-color: #ff6b35;
+  border: none;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  height: 48px;
+}
+
+.landing-search-btn:hover {
+  background-color: #ff5722;
+}
+
+.landing-search-btn svg {
+  color: white;
+}
+
+.landing-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  background-color: transparent;
+  height: 48px;
+}
+
+.landing-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+}
+
+/* RTL support for search bar */
+[dir="rtl"] .landing-search-form {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .landing-search-input {
+  text-align: right;
+}
+
+/* Mobile responsive for search bar */
+@media (max-width: 768px) {
+  .landing-search-container {
+    padding: 20px 15px;
+  }
+  
+  .landing-search-form {
+    max-width: 100%;
+  }
+  
+  .landing-search-btn {
+    padding: 10px 14px;
+    height: 44px;
+  }
+  
+  .landing-search-input {
+    padding: 10px 14px;
+    font-size: 15px;
+    height: 44px;
+  }
 }
 
 .main-content {
@@ -39,4 +130,189 @@
 
 .landing-page > * {
   animation: fadeIn 0.6s ease-out;
+}
+
+/* Floating Add Product Button */
+.floating-add-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4),
+              0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  animation: bounceIn 0.6s ease-out 0.5s both;
+}
+
+.floating-add-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 30px rgba(255, 107, 53, 0.5),
+              0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.floating-add-btn:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 0 2px 12px rgba(255, 107, 53, 0.3),
+              0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Floating button entrance animation */
+@keyframes bounceIn {
+  from {
+    opacity: 0;
+    transform: scale(0.3) translateY(100px);
+  }
+  50% {
+    transform: scale(1.05) translateY(-10px);
+  }
+  70% {
+    transform: scale(0.9) translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Pulse animation for attention */
+.floating-add-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+  opacity: 0;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .floating-add-btn {
+    bottom: 24px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+  }
+  
+  .floating-add-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Show All Products Button */
+.show-all-products-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.show-all-products-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3),
+              0 2px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.show-all-products-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.show-all-products-btn:hover::before {
+  left: 100%;
+}
+
+.show-all-products-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(255, 107, 53, 0.4),
+              0 4px 12px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #ff7d4d 0%, #ff9e54 100%);
+}
+
+.show-all-products-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3),
+              0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.show-all-products-btn .arrow-icon {
+  transition: transform 0.3s ease;
+}
+
+.show-all-products-btn:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
+/* RTL support for show all products button */
+[dir="rtl"] .show-all-products-btn {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .show-all-products-btn .arrow-icon {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .show-all-products-btn:hover .arrow-icon {
+  transform: scaleX(-1) translateX(-4px);
+}
+
+/* Mobile responsive for show all products */
+@media (max-width: 768px) {
+  .show-all-products-container {
+    padding: 30px 20px 40px;
+  }
+  
+  .show-all-products-btn {
+    padding: 14px 24px;
+    font-size: 15px;
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
 }

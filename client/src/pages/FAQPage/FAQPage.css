@@ -40,50 +40,9 @@
 
 .hero-content p {
   font-size: 20px;
-  margin-bottom: 40px;
   opacity: 0.95;
 }
 
-.search-box {
-  max-width: 600px;
-  margin: 0 auto;
-  display: flex;
-  gap: 12px;
-  background: white;
-  padding: 8px;
-  border-radius: 50px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-}
-
-.faq-search-input {
-  flex: 1;
-  padding: 14px 24px;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  background: transparent;
-  color: #333;
-  font-family: 'Cairo', sans-serif;
-}
-
-.search-btn {
-  padding: 14px 32px;
-  background: linear-gradient(135deg, #FF6B35 0%, #FF8E53 100%);
-  color: white;
-  border: none;
-  border-radius: 40px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  font-family: 'Cairo', sans-serif;
-}
-
-.search-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4);
-  background: linear-gradient(135deg, #FF8E53 0%, #FF6B35 100%);
-}
 
 /* Main Container */
 .faq-container {
@@ -347,15 +306,6 @@
     font-size: 16px;
   }
   
-  .search-box {
-    flex-direction: column;
-    padding: 16px;
-    border-radius: 20px;
-  }
-  
-  .search-btn {
-    width: 100%;
-  }
   
   .faq-content {
     padding: 24px 16px;
@@ -430,9 +380,6 @@ body[dir="rtl"] .faq-nav-item {
   flex-direction: row-reverse;
 }
 
-body[dir="rtl"] .search-box {
-  direction: rtl;
-}
 
 /* Smooth Scrolling */
 html {

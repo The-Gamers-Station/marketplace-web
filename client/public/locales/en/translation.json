@@ -107,7 +107,7 @@
       "title": "Available Payment Methods:"
     },
     "bottom": {
-      "copyright": "© {{year}} GamersStation. All rights reserved.",
+      "copyright": "All rights reserved. © {{year}} GamersStation.",
       "sitemap": "Sitemap",
       "accessibility": "Accessibility",
       "helpCenter": "Help Center"
@@ -527,7 +527,7 @@
     "edit": "Edit",
     "language": "Language",
     "optional": "optional",
-    "language": "Language"
+    "showAllProducts": "Show All Products"
   },
   "auth": {
     "login": {
@@ -663,8 +663,7 @@
   "addProduct": {
     "pageTitle": "Add New Product",
     "pageDescription": "List your gaming products and reach thousands of buyers",
-    "title": "Add New Product",
-    "subtitle": "Follow the steps to list your product",
+    "selectType": "Select Listing Type",
     "selectCategory": "Select Category",
     "selectSubcategory": "Select Subcategory",
     "productDetails": "Product Details",
@@ -673,9 +672,11 @@
     "submitting": "Submitting...",
     "successTitle": "Success!",
     "successMessage": "Product added successfully!",
-    "imageHint": "Add up to 6 images. First image will be the main photo.",
+    "imageHint": "Add up to 10 images. First image will be the main photo.",
     "uploadImage": "Upload Image",
     "steps": {
+      "typeAndCategory": "Type & Category",
+      "detailsAndLocation": "Details & Location",
       "category": "Category",
       "details": "Details",
       "location": "Location"
@@ -717,7 +718,9 @@
       "descriptionTooLong": "Description must not exceed 5000 characters",
       "priceRequired": "Valid price is required",
       "cityRequired": "Please select a city",
-      "categoryRequired": "Please select a valid category",
+      "typeRequired": "Please select a listing type",
+      "categoryRequired": "Please select a category",
+      "subcategoryRequired": "Please select a subcategory",
       "submitFailed": "Failed to add product. Please try again.",
       "tooManyImages": "You can upload up to 10 images",
       "uploadInvalidFiles": "Some files are invalid. Allowed: JPG, JPEG, PNG, WEBP, GIF up to 10MB each"

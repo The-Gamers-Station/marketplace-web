@@ -22,14 +22,6 @@ import {
   Eye,
   MessageSquare,
   Award,
-  Facebook,
-  Twitter,
-  Instagram,
-  Youtube,
-  Linkedin,
-  Github,
-  Globe,
-  Link
 } from 'lucide-react';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -40,6 +32,7 @@ import authService from '../../services/authService';
 import userService from '../../services/userService';
 import postService from '../../services/postService';
 import messagingService from '../../services/messagingService';
+import { uploadFile } from '../../config/api';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
@@ -54,15 +47,8 @@ const ProfilePage = () => {
   const [editedUser, setEditedUser] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
   const [backgroundPreview, setBackgroundPreview] = useState(null);
-  const [socialLinks, setSocialLinks] = useState({
-    facebook: '',
-    twitter: '',
-    instagram: '',
-    youtube: '',
-    linkedin: '',
-    github: '',
-    website: ''
-  });
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const [backgroundUploading, setBackgroundUploading] = useState(false);
   const [stats, setStats] = useState({
     totalPosts: 0,
     totalViews: 0,
@@ -100,11 +86,6 @@ const ProfilePage = () => {
         const userProfile = await userService.getCurrentUserProfile();
         setUser(userProfile);
         setEditedUser(userProfile);
-        
-        // Set social links if they exist
-        if (userProfile.socialLinks) {
-          setSocialLinks(userProfile.socialLinks);
-        }
         
         // Get user posts
         let fetchedPosts = [];
@@ -145,7 +126,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tab = params.get('tab');
-    if (tab && ['posts', 'reviews', 'messages', 'settings'].includes(tab)) {
+    if (tab && ['posts', 'messages'].includes(tab)) {
       setActiveTab(tab);
     }
   }, [location]);
@@ -192,15 +173,6 @@ const ProfilePage = () => {
   const handleEdit = () => {
     setIsEditing(true);
     setEditedUser({ ...user });
-    setSocialLinks(user.socialLinks || {
-      facebook: '',
-      twitter: '',
-      instagram: '',
-      youtube: '',
-      linkedin: '',
-      github: '',
-      website: ''
-    });
   };
 
   const handleCancelEdit = () => {
@@ -212,6 +184,9 @@ const ProfilePage = () => {
 
   const handleSaveProfile = async () => {
     try {
+      if (avatarUploading || backgroundUploading) {
+        throw new Error('Image upload in progress. Please wait.');
+      }
       setLoading(true);
       
       // Prepare updated user data
@@ -231,24 +206,15 @@ const ProfilePage = () => {
         updateData.cityId = editedUser.cityId;
       }
       
-      // If there's a new profile image, add it to the update data
-      if (imagePreview) {
+      // If there's a new profile image URL, add it to the update data (only allow http/https)
+      if (imagePreview && /^https?:\/\//.test(imagePreview)) {
         updateData.profileImage = imagePreview;
       }
       
-      // If there's a new background image, add it to the update data
-      if (backgroundPreview) {
+      // If there's a new background image URL, add it to the update data (only allow http/https)
+      if (backgroundPreview && /^https?:\/\//.test(backgroundPreview)) {
         updateData.backgroundImage = backgroundPreview;
       }
-      
-      // Add individual social links to update data
-      updateData.facebookLink = socialLinks.facebook || null;
-      updateData.twitterLink = socialLinks.twitter || null;
-      updateData.instagramLink = socialLinks.instagram || null;
-      updateData.youtubeLink = socialLinks.youtube || null;
-      updateData.linkedinLink = socialLinks.linkedin || null;
-      updateData.githubLink = socialLinks.github || null;
-      updateData.websiteLink = socialLinks.website || null;
       
       // Update user profile
       const updatedUser = await userService.updateProfile(updateData);
@@ -256,11 +222,6 @@ const ProfilePage = () => {
       // Update local state with the response
       setUser(updatedUser);
       setEditedUser(updatedUser);
-      
-      // Update social links from response
-      if (updatedUser.socialLinks) {
-        setSocialLinks(updatedUser.socialLinks);
-      }
       
       setIsEditing(false);
       setImagePreview(null);
@@ -288,36 +249,62 @@ const ProfilePage = () => {
       [field]: value
     }));
   };
-  
-  // Handle social link changes
-  const handleSocialLinkChange = (platform, value) => {
-    setSocialLinks(prev => ({
-      ...prev,
-      [platform]: value
-    }));
-  };
 
   // Handle image upload
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    // Validate file type/size (mirror backend)
+    const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    const MAX_SIZE_BYTES = 10 * 1024 * 1024;
+    if (!ALLOWED_TYPES.includes(file.type) || file.size > MAX_SIZE_BYTES) {
+      console.error('Invalid image selected');
+      return;
+    }
+
+    try {
+      setAvatarUploading(true);
+      // Quick local preview while uploading
+      const tempUrl = URL.createObjectURL(file);
+      setImagePreview(tempUrl);
+
+      const result = await uploadFile(file, 'avatars');
+      if (result?.url) {
+        setImagePreview(result.url);
+      }
+    } catch (err) {
+      console.error('Avatar upload failed:', err);
+    } finally {
+      setAvatarUploading(false);
     }
   };
 
   // Handle background image upload
-  const handleBackgroundChange = (e) => {
+  const handleBackgroundChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setBackgroundPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    const MAX_SIZE_BYTES = 10 * 1024 * 1024;
+    if (!ALLOWED_TYPES.includes(file.type) || file.size > MAX_SIZE_BYTES) {
+      console.error('Invalid background image selected');
+      return;
+    }
+
+    try {
+      setBackgroundUploading(true);
+      const tempUrl = URL.createObjectURL(file);
+      setBackgroundPreview(tempUrl);
+
+      const result = await uploadFile(file, 'backgrounds');
+      if (result?.url) {
+        setBackgroundPreview(result.url);
+      }
+    } catch (err) {
+      console.error('Background upload failed:', err);
+    } finally {
+      setBackgroundUploading(false);
     }
   };
 
@@ -442,7 +429,7 @@ const ProfilePage = () => {
                       placeholder={t('profile.username')}
                     />
                     <div className="edit-actions">
-                      <button className="save-btn" onClick={handleSaveProfile}>
+                      <button className="save-btn" onClick={handleSaveProfile} disabled={avatarUploading || backgroundUploading}>
                         <Save size={16} />
                         {t('profile.save')}
                       </button>
@@ -475,146 +462,6 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          {/* Social Media Links Section */}
-          <div className="social-media-section">
-            <div className="social-media-card">
-              <div className="social-media-header">
-                <h3>
-                  <Link size={20} />
-                  {t('profile.socialMedia') || 'Social Media Links'}
-                </h3>
-                {!isEditing && user?.socialLinks && Object.values(user.socialLinks).some(link => link) && (
-                  <button className="edit-social-btn" onClick={handleEdit}>
-                    <Edit3 size={16} />
-                  </button>
-                )}
-              </div>
-              
-              <div className="social-media-links">
-                {isEditing ? (
-                  <div className="social-links-edit">
-                    <div className="social-link-input">
-                      <Facebook size={20} />
-                      <input
-                        type="url"
-                        placeholder={t('profile.facebookPlaceholder') || 'Facebook profile URL'}
-                        value={socialLinks.facebook || ''}
-                        onChange={(e) => handleSocialLinkChange('facebook', e.target.value)}
-                      />
-                    </div>
-                    
-                    <div className="social-link-input">
-                      <Twitter size={20} />
-                      <input
-                        type="url"
-                        placeholder={t('profile.twitterPlaceholder') || 'Twitter profile URL'}
-                        value={socialLinks.twitter || ''}
-                        onChange={(e) => handleSocialLinkChange('twitter', e.target.value)}
-                      />
-                    </div>
-                    
-                    <div className="social-link-input">
-                      <Instagram size={20} />
-                      <input
-                        type="url"
-                        placeholder={t('profile.instagramPlaceholder') || 'Instagram profile URL'}
-                        value={socialLinks.instagram || ''}
-                        onChange={(e) => handleSocialLinkChange('instagram', e.target.value)}
-                      />
-                    </div>
-                    
-                    <div className="social-link-input">
-                      <Youtube size={20} />
-                      <input
-                        type="url"
-                        placeholder={t('profile.youtubePlaceholder') || 'YouTube channel URL'}
-                        value={socialLinks.youtube || ''}
-                        onChange={(e) => handleSocialLinkChange('youtube', e.target.value)}
-                      />
-                    </div>
-                    
-                    <div className="social-link-input">
-                      <Linkedin size={20} />
-                      <input
-                        type="url"
-                        placeholder={t('profile.linkedinPlaceholder') || 'LinkedIn profile URL'}
-                        value={socialLinks.linkedin || ''}
-                        onChange={(e) => handleSocialLinkChange('linkedin', e.target.value)}
-                      />
-                    </div>
-                    
-                    <div className="social-link-input">
-                      <Github size={20} />
-                      <input
-                        type="url"
-                        placeholder={t('profile.githubPlaceholder') || 'GitHub profile URL'}
-                        value={socialLinks.github || ''}
-                        onChange={(e) => handleSocialLinkChange('github', e.target.value)}
-                      />
-                    </div>
-                    
-                    <div className="social-link-input">
-                      <Globe size={20} />
-                      <input
-                        type="url"
-                        placeholder={t('profile.websitePlaceholder') || 'Personal website URL'}
-                        value={socialLinks.website || ''}
-                        onChange={(e) => handleSocialLinkChange('website', e.target.value)}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="social-links-display">
-                    {user?.socialLinks?.facebook && (
-                      <a href={user.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="social-link">
-                        <Facebook size={20} />
-                      </a>
-                    )}
-                    {user?.socialLinks?.twitter && (
-                      <a href={user.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="social-link">
-                        <Twitter size={20} />
-                      </a>
-                    )}
-                    {user?.socialLinks?.instagram && (
-                      <a href={user.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="social-link">
-                        <Instagram size={20} />
-                      </a>
-                    )}
-                    {user?.socialLinks?.youtube && (
-                      <a href={user.socialLinks.youtube} target="_blank" rel="noopener noreferrer" className="social-link">
-                        <Youtube size={20} />
-                      </a>
-                    )}
-                    {user?.socialLinks?.linkedin && (
-                      <a href={user.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="social-link">
-                        <Linkedin size={20} />
-                      </a>
-                    )}
-                    {user?.socialLinks?.github && (
-                      <a href={user.socialLinks.github} target="_blank" rel="noopener noreferrer" className="social-link">
-                        <Github size={20} />
-                      </a>
-                    )}
-                    {user?.socialLinks?.website && (
-                      <a href={user.socialLinks.website} target="_blank" rel="noopener noreferrer" className="social-link">
-                        <Globe size={20} />
-                      </a>
-                    )}
-                    {(!user?.socialLinks || !Object.values(user.socialLinks).some(link => link)) && (
-                      <div className="no-social-links">
-                        <p>{t('profile.noSocialLinks') || 'No social media links added yet'}</p>
-                        <button className="add-social-btn" onClick={handleEdit}>
-                          <Link size={16} />
-                          {t('profile.addSocialLinks') || 'Add Social Links'}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
           {/* Tabs */}
           <div className="profile-tabs">
             <button 
@@ -626,13 +473,6 @@ const ProfilePage = () => {
             </button>
             
             <button
-              className={`tab-btn ${activeTab === 'reviews' ? 'active' : ''}`}
-              onClick={() => setActiveTab('reviews')}
-            >
-              <MessageSquare size={18} />
-              {t('profile.reviews')}
-            </button>
-            <button
               className={`tab-btn ${activeTab === 'messages' ? 'active' : ''}`}
               onClick={() => setActiveTab('messages')}
             >
@@ -643,6 +483,7 @@ const ProfilePage = () => {
                 <span className="unread-badge">{unreadMessagesCount}</span>
               )}
             </button>
+            {/* Settings tab commented out
             <button
               className={`tab-btn ${activeTab === 'settings' ? 'active' : ''}`}
               onClick={() => setActiveTab('settings')}
@@ -650,6 +491,7 @@ const ProfilePage = () => {
               <Settings size={18} />
               {t('profile.settings')}
             </button>
+            */}
           </div>
 
           {/* Tab Content */}
@@ -696,15 +538,6 @@ const ProfilePage = () => {
                 </div>
               </div>
             )}
-
-            {activeTab === 'reviews' && (
-              <div className="reviews-section">
-                <div className="empty-state">
-                  <MessageSquare size={48} />
-                  <p>{t('profile.noReviews')}</p>
-                </div>
-              </div>
-            )}
   
             {activeTab === 'messages' && (
               <div className="messages-section">
@@ -717,6 +550,7 @@ const ProfilePage = () => {
               </div>
             )}
 
+            {/* Settings section commented out
             {activeTab === 'settings' && (
               <div className="settings-section">
                 <div className="settings-group">
@@ -796,6 +630,7 @@ const ProfilePage = () => {
                 </div>
               </div>
             )}
+            */}
           </div>
         </div>
       </main>

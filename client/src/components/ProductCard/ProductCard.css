@@ -74,6 +74,8 @@
   flex-direction: column;
   flex: 1;
   gap: 12px;
+  position: relative;
+  padding-bottom: 50px; /* Space for price at bottom */
 }
 
 /* User Info Section */
@@ -282,16 +284,21 @@
   display: flex;
   align-items: baseline;
   gap: 4px;
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  padding: 8px 12px;
+  border-radius: 8px;
 }
 
 .current-price .price-currency {
-  font-size: 12px;
+  font-size: 14px;
   color: rgba(255, 255, 255, 0.7);
   font-weight: 500;
 }
 
 .price-valuee {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
   -webkit-background-clip: text;
@@ -377,5 +384,36 @@
   }
   100% {
     background-position: -200% 0;
+  }
+}
+
+/* RTL support - price stays on left */
+[dir="rtl"] .current-price {
+  /* Price always stays on left side */
+  left: 16px;
+  right: auto;
+}
+
+/* Responsive price position */
+@media (max-width: 768px) {
+  .current-price {
+    font-size: 14px;
+    padding: 6px 10px;
+    bottom: 14px;
+    left: 14px;
+  }
+  
+  .current-price .price-currency {
+    font-size: 12px;
+  }
+  
+  .price-valuee {
+    font-size: 18px;
+  }
+  
+  [dir="rtl"] .current-price {
+    /* Price always stays on left side */
+    left: 14px;
+    right: auto;
   }
 }

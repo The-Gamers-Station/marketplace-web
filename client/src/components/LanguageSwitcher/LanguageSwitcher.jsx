@@ -34,15 +34,17 @@ const LanguageSwitcher = () => {
         onClick={toggleLanguage}
         aria-label="Toggle language"
       >
-        <span className={`lang-option flag-option ${i18n.language === 'ar' ? 'active' : ''}`}>
-          <img src="/flags/fl (1).png" alt="Arabic" className="flag-img" />
-          <span className="flag-text">AR</span>
-        </span>
-        <span className="lang-divider">|</span>
-        <span className={`lang-option flag-option ${i18n.language === 'en' ? 'active' : ''}`}>
-          <img src="/flags/fl (2).png" alt="English" className="flag-img" />
-          <span className="flag-text">EN</span>
-        </span>
+        {i18n.language === 'ar' ? (
+          <span className="lang-option flag-option">
+            <img src="/flags/fl (2).png" alt="English" className="flag-img" />
+            <span className="flag-text">EN</span>
+          </span>
+        ) : (
+          <span className="lang-option flag-option">
+            <img src="/flags/fl (1).png" alt="Arabic" className="flag-img" />
+            <span className="flag-text">AR</span>
+          </span>
+        )}
       </button>
     </div>
   );

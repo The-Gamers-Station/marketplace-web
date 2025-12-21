@@ -21,6 +21,7 @@ class PostService {
       if (params.direction) queryParams.append('direction', params.direction);
       
       const url = `${API_ENDPOINTS.posts.list}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+      
       const response = await apiRequest(url, {
         method: 'GET',
       });

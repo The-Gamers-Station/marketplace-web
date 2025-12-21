@@ -241,7 +241,11 @@
       "publishDate": "تاريخ النشر",
       "adNumber": "رقم الإعلان",
       "views": "المشاهدات",
-      "sku": "رقم المنتج"
+      "sku": "رقم المنتج",
+      "location": "الموقع",
+      "similarProducts": "إعلانات مشابهة",
+      "posted": "تاريخ النشر",
+      "contactSeller": "تواصل مع البائع"
     },
     "faq": {
       "title": "الأسئلة الشائعة",
@@ -706,6 +710,7 @@
     },
     "errors": {
       "titleRequired": "عنوان المنتج مطلوب",
+      "titleTooShort": "يجب أن يكون العنوان 5 أحرف على الأقل",
       "descriptionRequired": "الوصف مطلوب",
       "descriptionTooShort": "الوصف يجب أن يكون 20 حرفًا على الأقل",
       "descriptionTooLong": "الوصف يجب ألا يتجاوز 5000 حرف",

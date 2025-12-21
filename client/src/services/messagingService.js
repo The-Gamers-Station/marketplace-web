@@ -285,6 +285,31 @@ class MessagingService {
       }
     };
   }
+  // Subscribe to per-conversation messages topic
+  async subscribeToConversationMessages(conversationId, onMessageReceived) {
+    await this.connect();
+
+    const destination = `/topic/conversation.${conversationId}.messages`;
+    const subscription = this.stompClient.subscribe(destination, (message) => {
+      try {
+        const messageData = JSON.parse(message.body);
+        onMessageReceived(messageData);
+      } catch (e) {
+        console.error('Failed to parse conversation message', e);
+      }
+    });
+
+    const subKey = `conv-msg-${conversationId}`;
+    this.subscriptions.set(subKey, subscription);
+
+    // Return cleanup function
+    return () => {
+      if (subscription && subscription.unsubscribe) {
+        subscription.unsubscribe();
+        this.subscriptions.delete(subKey);
+      }
+    };
+  }
 
   // Send typing status
   async sendTypingStatus(conversationId, typing) {

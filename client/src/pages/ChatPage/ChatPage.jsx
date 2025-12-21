@@ -203,22 +203,36 @@ const ChatPage = () => {
   useEffect(() => {
     if (!conversationId) return;
     
-    let unsubscribeMessages;
+    let unsubscribeConvMessages;
     let unsubscribeReceipts;
     let unsubscribeTyping;
     let unsubscribeStatus;
     
     const setupSubscriptions = async () => {
       try {
-        // Subscribe to messages
-        unsubscribeMessages = await messagingService.subscribeToMessages((messageData) => {
-          if (messageData.conversationId === parseInt(conversationId)) {
-            setMessages(prev => [...prev, messageData]);
-            
-            // Mark as read if conversation is open
+        // Subscribe to per-conversation messages topic to update both sides instantly
+        unsubscribeConvMessages = await messagingService.subscribeToConversationMessages(
+          conversationId,
+          (messageData) => {
+            // Normalize ownership relative to current user so incoming messages render correctly
+            const senderId = messageData?.sender?.id ?? messageData?.sender?.userId;
+            const myId = currentUser?.userId ?? currentUser?.id;
+            const normalized = {
+              ...messageData,
+              // use loose equality to tolerate string/number mismatch across platforms
+              isOwnMessage: senderId == myId
+            };
+
+            // Dedupe by id to avoid double-add when sender also receives topic echo
+            setMessages(prev => {
+              if (prev.some(m => m.id === normalized.id)) return prev;
+              return [...prev, normalized];
+            });
+
+            // Mark as read if this chat is open
             messagingService.markMessagesAsRead(conversationId);
           }
-        });
+        );
         
         // Subscribe to read receipts
         unsubscribeReceipts = await messagingService.subscribeToReadReceipts((receiptData) => {
@@ -251,7 +265,7 @@ const ChatPage = () => {
     
     return () => {
       // Cleanup subscriptions
-      if (typeof unsubscribeMessages === 'function') unsubscribeMessages();
+      if (typeof unsubscribeConvMessages === 'function') unsubscribeConvMessages();
       if (typeof unsubscribeReceipts === 'function') unsubscribeReceipts();
       if (typeof unsubscribeTyping === 'function') unsubscribeTyping();
       if (typeof unsubscribeStatus === 'function') unsubscribeStatus();

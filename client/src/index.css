@@ -21,6 +21,12 @@
   -webkit-text-size-adjust: 100%;
 }
 
+/* Prevent horizontal scroll */
+html {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -31,7 +37,9 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif, 'Arial', 'Tahoma';
- 
+  overflow-x: hidden;
+  max-width: 100%;
+  position: relative;
 }
  
 /* Reset */

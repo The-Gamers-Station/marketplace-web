@@ -241,7 +241,11 @@
       "publishDate": "Publish Date",
       "adNumber": "Ad Number",
       "views": "Views",
-      "sku": "SKU"
+      "sku": "SKU",
+      "location": "Location",
+      "similarProducts": "Similar Products",
+      "posted": "Posted",
+      "contactSeller": "Contact Seller"
     },
     "faq": {
       "title": "Frequently Asked Questions",
@@ -707,6 +711,7 @@
     },
     "errors": {
       "titleRequired": "Product title is required",
+      "titleTooShort": "Title must be at least 5 characters",
       "descriptionRequired": "Description is required",
       "descriptionTooShort": "Description must be at least 20 characters",
       "descriptionTooLong": "Description must not exceed 5000 characters",

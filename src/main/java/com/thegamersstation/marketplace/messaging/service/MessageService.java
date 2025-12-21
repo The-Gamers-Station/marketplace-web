@@ -194,14 +194,20 @@ public class MessageService {
     
     private void broadcastMessage(Long conversationId, Long recipientId, MessageDto messageDto) {
         try {
-            // Send to specific user's queue
+            // Send to specific user's queue (recipient)
             messagingTemplate.convertAndSendToUser(
                 recipientId.toString(),
                 "/queue/messages",
                 messageDto
             );
-            
-            log.debug("Broadcast message to user {} for conversation {}", recipientId, conversationId);
+
+            // Also broadcast to the conversation topic so all active participants update instantly
+            messagingTemplate.convertAndSend(
+                "/topic/conversation." + conversationId + ".messages",
+                messageDto
+            );
+
+            log.debug("Broadcast message to user {} and topic for conversation {}", recipientId, conversationId);
         } catch (Exception e) {
             // Log error but don't fail the message send
             log.error("Failed to broadcast message via WebSocket", e);

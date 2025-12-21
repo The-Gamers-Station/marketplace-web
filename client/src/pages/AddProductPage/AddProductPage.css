@@ -345,6 +345,55 @@
   color: var(--primary-color);
 }
 
+.char-count {
+  margin-left: 10px;
+  font-size: 0.85em;
+  color: #666;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.input-container:focus-within {
+  border-color: var(--primary-color);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.input-container svg {
+  position: absolute;
+  left: 1rem;
+  width: 20px;
+  height: 20px;
+  color: var(--primary-color);
+}
+
+.input-container input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.input-container input:focus {
+  outline: none;
+}
+
+.input-container.has-error,
+.input-container input.has-error {
+  border-color: #ff4444;
+}
+
 .textarea-container {
   position: relative;
 }
@@ -763,6 +812,16 @@
 }
 
 /* LTR Support (default) */
+:root[dir="ltr"] .input-container svg {
+  left: 1rem;
+  right: auto;
+}
+
+:root[dir="ltr"] .input-container input {
+  padding: 1rem 1rem 1rem 3rem;
+  text-align: left;
+}
+
 :root[dir="ltr"] .textarea-container svg {
   left: 1rem;
   right: auto;

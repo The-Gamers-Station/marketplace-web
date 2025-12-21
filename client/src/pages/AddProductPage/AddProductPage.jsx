@@ -159,6 +159,8 @@ const AddProductPage = () => {
     
     if (!formData.title.trim()) {
       newErrors.title = t('addProduct.errors.titleRequired');
+    } else if (formData.title.trim().length < 5) {
+      newErrors.title = t('addProduct.errors.titleTooShort') || 'Title must be at least 5 characters';
     }
     
     if (!formData.description.trim()) {
@@ -258,11 +260,20 @@ const AddProductPage = () => {
   );
 
   const PriceIcon = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  );
+  <img
+    src="https://www.sama.gov.sa/ar-sa/Currency/SRS/PublishingImages/Saudi_Riyal_Symbol-1.png"
+    alt="Saudi Riyal symbol"
+    style={{ 
+      width: '20px', 
+      height: '20px', 
+      objectFit: 'contain', 
+      display: 'block',
+      filter: 'invert(1) brightness(2)',
+      opacity: '0.7'
+    }}
+    referrerPolicy="no-referrer"
+  />
+);
 
   const LocationIcon = () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -454,17 +465,29 @@ const AddProductPage = () => {
                 <h2>{t('addProduct.productDetails')}</h2>
                 
                 <form className="product-details-form">
-                  <FormInput
-                    label={t('addProduct.fields.title')}
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    placeholder={t('addProduct.placeholders.title')}
-                    error={errors.title}
-                    required
-                    icon={<TitleIcon />}
-                  />
+                  <div className="input-group">
+                    <label htmlFor="title">
+                      {t('addProduct.fields.title')}
+                      <span className="char-count" style={{ marginLeft: '10px', fontSize: '0.85em', color: formData.title.trim().length < 5 ? '#ff3838' : '#666' }}>
+                        ({formData.title.trim().length}/5)
+                      </span>
+                    </label>
+                    <div className="input-container">
+                      <TitleIcon />
+                      <input
+                        id="title"
+                        type="text"
+                        name="title"
+                        value={formData.title}
+                        onChange={handleChange}
+                        placeholder={t('addProduct.placeholders.title')}
+                        className={errors.title ? 'has-error' : ''}
+                      />
+                    </div>
+                    {errors.title && (
+                      <span className="field-error">{errors.title}</span>
+                    )}
+                  </div>
 
                   <div className="input-group">
                     <label htmlFor="description">
@@ -562,7 +585,7 @@ const AddProductPage = () => {
                     <option value="">{t('addProduct.placeholders.selectCity')}</option>
                     {cities.map(city => (
                       <option key={city.id} value={city.id}>
-                        {city.nameEn || city.nameAr || city.name}
+                        {i18n.language === 'ar' ? city.nameAr : city.nameEn}
                       </option>
                     ))}
                   </select>

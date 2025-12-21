@@ -394,20 +394,20 @@
 .mobile-menu {
   position: fixed;
   top: 80px;
-  left: 0;
-  right: 0;
+  left: 100%;
+  width: 100%;
   bottom: 0;
   background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(10px);
   z-index: 99;
-  transform: translateX(100%);
+  transform: translateX(0);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   visibility: hidden;
   opacity: 0;
 }
 
 .mobile-menu.open {
-  transform: translateX(0);
+  transform: translateX(-100%);
   visibility: visible;
   opacity: 1;
 }
@@ -731,7 +731,8 @@ body.mobile-menu-open {
 .dropdown-menu {
   position: absolute;
   top: 100%;
-  left: 0;
+  left: auto;
+  right: 0;
   margin-top: 0.5rem;
   min-width: 220px;
   max-width: 280px;
@@ -900,7 +901,8 @@ body.mobile-menu-open {
   }
   
   .dropdown-menu {
-    left: 0;
+    left: auto !important;
+    right: 0 !important;
     min-width: 200px;
   }
 }
@@ -910,15 +912,23 @@ body.mobile-menu-open {
   direction: rtl;
 }
 
-[dir="rtl"] .dropdown-menu {
-  left: auto;
-  right: 0;
+/* Force dropdown to always appear on the left side to prevent cutoff */
+.dropdown-menu {
+  left: 0 !important;
+  right: auto !important;
 }
 
-[dir="rtl"] .dropdown-item {
-  flex-direction: row-reverse;
+/* Keep dropdown items in LTR layout for consistency */
+.dropdown-item {
+  direction: ltr;
+  text-align: left;
 }
 
 [dir="rtl"] .mobile-auth-btn {
   flex-direction: row-reverse;
+}
+
+/* Ensure auth dropdown stays in place */
+[dir="rtl"] .auth-dropdown {
+  direction: ltr;
 }

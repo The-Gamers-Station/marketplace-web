@@ -185,13 +185,8 @@ const Header = memo(() => {
     }
   }, [handleSearchSubmit]);
   
-  // Memoize navigation items
-  const navigationItems = useMemo(() => [
-    { path: '/', label: t('header.home') },
-    { path: '/products', label: t('header.products') },
-    { path: '/contact', label: t('header.contact') },
-    { path: '/faq', label: t('header.faq') }
-  ], [t]);
+  // Memoize navigation items - removed per requirement
+  const navigationItems = useMemo(() => [], []);
 
   return (
     <header className="header">
@@ -214,32 +209,9 @@ const Header = memo(() => {
           <span className="logo-text">GamersStation</span>
         </Link>
 
-        {/* Navigation */}
-        <nav className="header-nav">
-          {navigationItems.map(({ path, label }) => (
-            <NavLink
-              key={path}
-              to={path}
-              isActive={activeLink === path}
-              onClick={() => handleLinkClick(path)}
-            >
-              {label}
-            </NavLink>
-          ))}
-        </nav>
+        {/* Navigation - removed per requirement */}
 
-        {/* Search Bar */}
-        <form className="header-search" onSubmit={(e) => handleSearchSubmit(e)}>
-          <Search className="search-icon" size={20} />
-          <input
-            type="text"
-            placeholder={t('header.searchPlaceholder')}
-            className="search-input"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onKeyPress={(e) => handleSearchKeyPress(e)}
-          />
-        </form>
+        {/* Search Bar - removed per requirement */}
 
         {/* User Actions */}
         <div className="header-actions">
@@ -294,32 +266,9 @@ const Header = memo(() => {
       {/* Mobile Menu Overlay */}
       <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
         <div className="mobile-menu-content">
-          {/* Mobile Search */}
-          <form className="mobile-search" onSubmit={(e) => handleSearchSubmit(e, true)}>
-            <Search className="mobile-search-icon" size={20} />
-            <input
-              type="text"
-              placeholder={t('header.searchPlaceholder')}
-              className="mobile-search-input"
-              value={mobileSearchValue}
-              onChange={(e) => setMobileSearchValue(e.target.value)}
-              onKeyPress={(e) => handleSearchKeyPress(e, true)}
-            />
-          </form>
+          {/* Mobile Search - removed per requirement */}
 
-          {/* Mobile Navigation */}
-          <nav className="mobile-nav">
-            {navigationItems.map(({ path, label }) => (
-              <MobileNavLink
-                key={path}
-                to={path}
-                isActive={activeLink === path}
-                onClick={() => handleMobileLinkClick(path)}
-              >
-                {label}
-              </MobileNavLink>
-            ))}
-          </nav>
+          {/* Mobile Navigation - removed per requirement */}
 
           {/* Mobile User Section */}
           <div className="mobile-user-section">

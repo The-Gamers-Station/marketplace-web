@@ -26,7 +26,6 @@ const LoginPage = () => {
     if (authService.isAuthenticated()) {
       // Get the redirect location from state or default to home
       const redirectTo = location.state?.redirectTo || location.state?.from || '/';
-      console.log('[LoginPage] User already authenticated, redirecting to:', redirectTo);
       navigate(redirectTo, { replace: true });
     }
   }, [navigate, location]);

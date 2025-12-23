@@ -752,6 +752,8 @@
 
   .step-connector {
     width: 60px;
+    margin: 0 0.5rem;
+    
   }
 
   .wizard-content {

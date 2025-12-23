@@ -1,7 +1,7 @@
-import API_BASE_URL, { apiRequest, buildApiUrl } from '../config/api';
-import authService from './authService';
-import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
+import API_BASE_URL, { apiRequest, buildApiUrl } from "../config/api";
+import authService from "./authService";
+import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
 
 class MessagingService {
   constructor() {
@@ -19,12 +19,12 @@ class MessagingService {
 
   // Start a new conversation
   async startConversation(postId, initialMessage) {
-    const response = await apiRequest('/conversations', {
-      method: 'POST',
+    const response = await apiRequest("/conversations", {
+      method: "POST",
       body: JSON.stringify({
         postId,
-        initialMessage
-      })
+        initialMessage,
+      }),
     });
     return response;
   }
@@ -33,7 +33,7 @@ class MessagingService {
   async getConversations(page = 0, size = 20) {
     const queryParams = new URLSearchParams({ page, size });
     const response = await apiRequest(`/conversations?${queryParams}`, {
-      method: 'GET'
+      method: "GET",
     });
     return response;
   }
@@ -41,7 +41,7 @@ class MessagingService {
   // Get single conversation
   async getConversation(conversationId) {
     const response = await apiRequest(`/conversations/${conversationId}`, {
-      method: 'GET'
+      method: "GET",
     });
     return response;
   }
@@ -49,27 +49,33 @@ class MessagingService {
   // Get messages in a conversation
   async getMessages(conversationId, cursor = null, size = 20) {
     const queryParams = new URLSearchParams({ size });
-    if (cursor) queryParams.append('cursor', cursor);
-    
-    const response = await apiRequest(`/conversations/${conversationId}/messages?${queryParams}`, {
-      method: 'GET'
-    });
+    if (cursor) queryParams.append("cursor", cursor);
+
+    const response = await apiRequest(
+      `/conversations/${conversationId}/messages?${queryParams}`,
+      {
+        method: "GET",
+      }
+    );
     return response;
   }
 
   // Send a message
   async sendMessage(conversationId, content) {
-    const response = await apiRequest(`/conversations/${conversationId}/messages`, {
-      method: 'POST',
-      body: JSON.stringify({ content })
-    });
+    const response = await apiRequest(
+      `/conversations/${conversationId}/messages`,
+      {
+        method: "POST",
+        body: JSON.stringify({ content }),
+      }
+    );
     return response;
   }
 
   // Mark messages as read
   async markMessagesAsRead(conversationId) {
     await apiRequest(`/conversations/${conversationId}/messages/read`, {
-      method: 'POST'
+      method: "POST",
     });
   }
 
@@ -77,39 +83,42 @@ class MessagingService {
   async updateMuteStatus(conversationId, muted) {
     const queryParams = new URLSearchParams({ muted });
     await apiRequest(`/conversations/${conversationId}/mute?${queryParams}`, {
-      method: 'PUT'
+      method: "PUT",
     });
   }
 
   async updateArchiveStatus(conversationId, archived) {
     const queryParams = new URLSearchParams({ archived });
-    await apiRequest(`/conversations/${conversationId}/archive?${queryParams}`, {
-      method: 'PUT'
-    });
+    await apiRequest(
+      `/conversations/${conversationId}/archive?${queryParams}`,
+      {
+        method: "PUT",
+      }
+    );
   }
 
   async updateBlockStatus(conversationId, blocked) {
     const queryParams = new URLSearchParams({ blocked });
     await apiRequest(`/conversations/${conversationId}/block?${queryParams}`, {
-      method: 'PUT'
+      method: "PUT",
     });
   }
 
   async markConversationAsSeen(conversationId) {
     await apiRequest(`/conversations/${conversationId}/seen`, {
-      method: 'POST'
+      method: "POST",
     });
   }
 
   // Get total unread messages count
   async getUnreadCount() {
     try {
-      const response = await apiRequest('/conversations?page=0&size=1', {
-        method: 'GET'
+      const response = await apiRequest("/conversations?page=0&size=1", {
+        method: "GET",
       });
       return response.totalUnreadConversations || 0;
     } catch (error) {
-      console.error('Error fetching unread count:', error);
+      // Error fetching unread count: error
       return 0;
     }
   }
@@ -130,20 +139,20 @@ class MessagingService {
 
     const token = authService.getAccessToken();
     if (!token) {
-      return Promise.reject(new Error('No authentication token available'));
+      return Promise.reject(new Error("No authentication token available"));
     }
 
-    const wsUrl = `${buildApiUrl('/ws')}?token=${encodeURIComponent(token)}`;
+    const wsUrl = `${buildApiUrl("/ws")}?token=${encodeURIComponent(token)}`;
 
     // Create STOMP client with SockJS factory
     this.stompClient = new Client({
       webSocketFactory: () => new SockJS(wsUrl),
       connectHeaders: {
         Authorization: `Bearer ${token}`,
-        token: token
+        token: token,
       },
       reconnectDelay: this.reconnectDelay,
-      debug: () => {} // silence logs
+      debug: () => {}, // silence logs
     });
 
     this.connectPromise = new Promise((resolve, reject) => {
@@ -151,7 +160,7 @@ class MessagingService {
 
       this.stompClient.onConnect = () => {
         settled = true;
-        console.log('WebSocket connected');
+        // WebSocket connected
         this.connectionRetryCount = 0;
         this.notifyConnectionStatus(true);
         this.connectPromise = null;
@@ -159,23 +168,23 @@ class MessagingService {
       };
 
       this.stompClient.onStompError = (frame) => {
-        console.error('STOMP error:', frame.headers?.message, frame.body);
+        // STOMP error: frame.headers?.message, frame.body
         this.notifyConnectionStatus(false);
         if (!settled && this.connectPromise) {
           settled = true;
-          const err = new Error(frame.headers?.message || 'STOMP error');
+          const err = new Error(frame.headers?.message || "STOMP error");
           this.connectPromise = null;
           reject(err);
         }
       };
 
       this.stompClient.onWebSocketError = (event) => {
-        console.error('WebSocket error:', event);
+        // WebSocket error: event
         this.notifyConnectionStatus(false);
         if (!settled && this.connectPromise) {
           settled = true;
           this.connectPromise = null;
-          reject(new Error('WebSocket error'));
+          reject(new Error("WebSocket error"));
         }
       };
 
@@ -228,13 +237,13 @@ class MessagingService {
       }
     );
 
-    this.subscriptions.set('messages', subscription);
+    this.subscriptions.set("messages", subscription);
 
     // Return cleanup function
     return () => {
       if (subscription && subscription.unsubscribe) {
         subscription.unsubscribe();
-        this.subscriptions.delete('messages');
+        this.subscriptions.delete("messages");
       }
     };
   }
@@ -251,13 +260,13 @@ class MessagingService {
       }
     );
 
-    this.subscriptions.set('read-receipts', subscription);
+    this.subscriptions.set("read-receipts", subscription);
 
     // Return cleanup function
     return () => {
       if (subscription && subscription.unsubscribe) {
         subscription.unsubscribe();
-        this.subscriptions.delete('read-receipts');
+        this.subscriptions.delete("read-receipts");
       }
     };
   }
@@ -295,7 +304,7 @@ class MessagingService {
         const messageData = JSON.parse(message.body);
         onMessageReceived(messageData);
       } catch (e) {
-        console.error('Failed to parse conversation message', e);
+        // Failed to parse conversation message: e
       }
     });
 
@@ -316,7 +325,7 @@ class MessagingService {
     await this.connect();
     this.stompClient.publish({
       destination: `/app/conversations/${conversationId}/typing`,
-      body: JSON.stringify({ typing })
+      body: JSON.stringify({ typing }),
     });
   }
 
@@ -325,7 +334,7 @@ class MessagingService {
     await this.connect();
     this.stompClient.publish({
       destination: `/app/conversations/${conversationId}/send`,
-      body: JSON.stringify({ content })
+      body: JSON.stringify({ content }),
     });
   }
 
@@ -338,7 +347,7 @@ class MessagingService {
   }
 
   notifyConnectionStatus(connected) {
-    this.connectionStatusHandlers.forEach(handler => {
+    this.connectionStatusHandlers.forEach((handler) => {
       handler(connected);
     });
   }
@@ -354,11 +363,13 @@ const messagingService = new MessagingService();
 
 // Auto-connect when user is authenticated
 if (authService.isAuthenticated()) {
-  messagingService.connect().catch(console.error);
+  messagingService.connect().catch(() => {
+    // Error connecting messaging service
+  });
 }
 
 // Disconnect on logout
-window.addEventListener('auth:logout', () => {
+window.addEventListener("auth:logout", () => {
   messagingService.disconnect();
 });
 

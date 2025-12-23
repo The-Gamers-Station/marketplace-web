@@ -1,12 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { User, MapPin, Star, StarHalf } from 'lucide-react';
+import { User, MapPin, Check, Package } from 'lucide-react';
 import './ProductCard.css';
 
 const ProductCard = ({
   id,
   title,
-  description,
   price,
   image,
   platforms,
@@ -14,8 +13,7 @@ const ProductCard = ({
   badge,
   username,
   location,
-  rating = 0,
-  reviewCount = 0
+  type,
 }) => {
   const { t } = useTranslation();
   
@@ -23,33 +21,6 @@ const ProductCard = ({
     e.preventDefault();
     // Force page refresh by using window.location
     window.location.href = `/product/${id}`;
-  };
-  // Function to render rating stars
-  const renderStars = (rating) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-    
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(
-        <Star key={i} className="star-icon star-filled" size={16} />
-      );
-    }
-    
-    if (hasHalfStar && fullStars < 5) {
-      stars.push(
-        <StarHalf key="half" className="star-icon star-half" size={16} />
-      );
-    }
-    
-    const emptyStars = 5 - Math.ceil(rating);
-    for (let i = 0; i < emptyStars; i++) {
-      stars.push(
-        <Star key={`empty-${i}`} className="star-icon star-empty" size={16} />
-      );
-    }
-    
-    return stars;
   };
 
   return (
@@ -60,10 +31,31 @@ const ProductCard = ({
         </div>
       )}
       
+      {/* Type Badge */}
+      <div className={`product-type-badge ${type === 'ASK' ? 'type-ask' : 'type-sell'}`}>
+        {type === 'ASK' ? (
+          <>
+            <Package size={14} />
+            <span>{t('productType.wanted')}</span>
+          </>
+        ) : (
+          <>
+            <Check size={14} />
+            <span>{t('productType.forSale')}</span>
+          </>
+        )}
+      </div>
+      
       <div className="product-image">
         <img
-          src={image || '/placeholder-game.jpg'}
-          alt={t('imageAlt.productImage', { productName: title })}
+          src={image || '/placeholder-game.svg'}
+          alt={t('imageAlt.productImage', { productName: title }) || title}
+          className="product-img"
+          loading="lazy"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = '/placeholder-game.svg';
+          }}
         />
       </div>
 
@@ -86,28 +78,9 @@ const ProductCard = ({
           </div>
         </div>
 
-        {/* Rating and Reviews - Moved Above Title */}
-        <div className="rating-section">
-          <div className="rating-stars">
-            {renderStars(rating)}
-          </div>
-          <div className="rating-info">
-            <span className="rating-value">{rating.toFixed(1)}</span>
-            {reviewCount > 0 && (
-              <span className="review-count">({reviewCount} {t('reviews')})</span>
-            )}
-          </div>
-        </div>
-
         {/* Product Info Section */}
-        <div className="product-info">
+         <div className="product-info">
           <h3 className="product-titlee">{title}</h3>
-          
-          <p className="product-description">
-            {description && description.length > 80
-              ? `${description.substring(0, 80)}...`
-              : description || t('noDescription')}
-          </p>
         </div>
 
         {/* Platforms Tags */}

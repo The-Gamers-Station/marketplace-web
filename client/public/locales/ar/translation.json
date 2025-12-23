@@ -245,7 +245,14 @@
       "location": "الموقع",
       "similarProducts": "إعلانات مشابهة",
       "posted": "تاريخ النشر",
-      "contactSeller": "تواصل مع البائع"
+      "contactSeller": "تواصل مع البائع",
+      "copyLink": "نسخ الرابط",
+      "linkCopied": "تم نسخ الرابط!",
+      "share": "مشاركة",
+      "addToWishlist": "إضافة للمفضلة",
+      "products": "المنتجات",
+      "responseTime": "وقت الاستجابة",
+      "verifiedSeller": "بائع موثق"
     },
     "faq": {
       "title": "الأسئلة الشائعة",
@@ -668,7 +675,7 @@
     "selectSubcategory": "اختر الفئة الفرعية",
     "productDetails": "تفاصيل المنتج",
     "locationImages": "الموقع والصور",
-    "submitProduct": "إرسال المنتج",
+    "submitProduct": "إرسال الاعلان",
     "submitting": "جاري الإرسال...",
     "successTitle": "نجح!",
     "successMessage": "تم إضافة المنتج بنجاح!",
@@ -825,9 +832,10 @@
     "sendError": "فشل إرسال الرسالة. حاول مرة أخرى.",
     "loadEarlierMessages": "تحميل الرسائل السابقة",
     "attachmentComingSoon": "المرفقات قريباً",
-    "interestedInProduct": "مهتم بالمنتج",
+    "interestedInProduct": "مرحباً، أنا مهتم بـ {{productName}}",
     "loadingConversations": "جاري تحميل المحادثات...",
-    "noConversations": "لا توجد محادثات حتى الآن"
+    "noConversations": "لا توجد محادثات حتى الآن",
+    "errorStartingConversation": "لا يمكن بدء المحادثة. يرجى المحاولة مرة أخرى."
   },
   "notFound": {
     "title": "404 - الصفحة غير موجودة",
@@ -874,5 +882,46 @@
     "sortPriceLow": "السعر: من الأقل للأعلى",
     "sortPriceHigh": "السعر: من الأعلى للأقل",
     "sortMostViewed": "الأكثر مشاهدة"
+  },
+  "productType": {
+    "forSale": "للبيع",
+    "wanted": "مطلوب"
+  },
+  "pagination": {
+    "showing": "عرض",
+    "of": "من",
+    "products": "منتجات",
+    "previous": "السابق",
+    "next": "التالي"
+  },
+  "cities": {
+    "Riyadh": "الرياض",
+    "Jeddah": "جدة",
+    "Mecca": "مكة المكرمة",
+    "Medina": "المدينة المنورة",
+    "Dammam": "الدمام",
+    "Dhahran": "الظهران",
+    "Khobar": "الخبر",
+    "Tabuk": "تبوك",
+    "Buraidah": "بريدة",
+    "Hail": "حائل",
+    "Abha": "أبها",
+    "Khamis Mushait": "خميس مشيط",
+    "Taif": "الطائف",
+    "Hofuf": "الهفوف",
+    "Jubail": "الجبيل",
+    "Yanbu": "ينبع",
+    "Najran": "نجران",
+    "Jizan": "جازان",
+    "Al Kharj": "الخرج",
+    "Qatif": "القطيف",
+    "Unaizah": "عنيزة",
+    "Arar": "عرعر",
+    "Sakaka": "سكاكا",
+    "Al Qurayyat": "القريات",
+    "Al Bahah": "الباحة",
+    "Cairo": "القاهرة",
+    "Giza": "الجيزة",
+    "Alexandria": "الإسكندرية"
   }
 }

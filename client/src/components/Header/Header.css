@@ -20,16 +20,19 @@
 }
 
 @keyframes glow {
-  0%, 100% {
+  0%,
+  100% {
     filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.5));
   }
   50% {
-    filter: drop-shadow(0 0 20px rgba(255, 107, 53, 0.8)) drop-shadow(0 0 30px rgba(255, 107, 53, 0.5));
+    filter: drop-shadow(0 0 20px rgba(255, 107, 53, 0.8))
+      drop-shadow(0 0 30px rgba(255, 107, 53, 0.5));
   }
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -53,20 +56,28 @@
   padding: 0 20px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 80px;
   position: relative;
 }
-
 
 .header-container > * {
   animation: fadeIn 0.6s ease;
   animation-fill-mode: both;
 }
 
-.header-container > *:nth-child(1) { animation-delay: 0.1s; }
-.header-container > *:nth-child(2) { animation-delay: 0.2s; }
-.header-container > *:nth-child(3) { animation-delay: 0.3s; }
-.header-container > *:nth-child(4) { animation-delay: 0.4s; }
+.header-container > *:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.header-container > *:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.header-container > *:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.header-container > *:nth-child(4) {
+  animation-delay: 0.4s;
+}
 
 /* Logo */
 .header-logo-link {
@@ -80,7 +91,6 @@
   gap: 10px;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  margin-right: auto;
 }
 
 .header-logo-link:hover .header-logo {
@@ -106,6 +116,7 @@
   color: white;
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
+  direction: ltr !important;
 }
 
 .header-logo-link:hover .logo-text {
@@ -128,7 +139,7 @@
 }
 
 .nav-link::before {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -2px;
   left: 50%;
@@ -152,7 +163,7 @@
 }
 
 .nav-link.active::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -2px;
   left: 0;
@@ -204,7 +215,6 @@
 .header-actions {
   display: flex;
   gap: 15px;
-  margin-left: auto;
 }
 
 .action-btn {
@@ -222,67 +232,67 @@
   position: relative;
   overflow: hidden;
 
-/* User Button Badge */
-.user-unread-badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #ff6b35;
-  color: white;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 3px 7px;
-  border-radius: 12px;
-  min-width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  animation: pulse 2s infinite;
-  z-index: 10;
-  border: 2px solid var(--bg-primary, #0f1823);
-}
-
-/* Dropdown Item Badge */
-.dropdown-badge {
-  margin-left: auto;
-  background: #ff6b35;
-  color: white;
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 8px;
-  min-width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* User Button Badge */
+  .user-unread-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff6b35;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 12px;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    animation: pulse 2s infinite;
+    z-index: 10;
+    border: 2px solid var(--bg-primary, #0f1823);
   }
-  50% {
-    transform: scale(1.1);
-    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.4);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-}
 
-/* Ensure dropdown item can display badge properly */
-.dropdown-item {
-  position: relative;
-}
+  /* Dropdown Item Badge */
+  .dropdown-badge {
+    margin-left: auto;
+    background: #ff6b35;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 8px;
+    min-width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+      transform: scale(1.1);
+      box-shadow: 0 2px 8px rgba(255, 107, 53, 0.4);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  /* Ensure dropdown item can display badge properly */
+  .dropdown-item {
+    position: relative;
+  }
 }
 
 .action-btn::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -353,8 +363,7 @@
 .action-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4),
-              0 5px 15px rgba(255, 107, 53, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(255, 107, 53, 0.2);
 }
 
 /* Mobile Menu Button */
@@ -539,26 +548,26 @@
   .header-nav {
     display: none;
   }
-  
+
   .header-container {
     padding: 0 15px;
     gap: 15px;
   }
-  
+
   /* On mobile, adjust language switcher position */
   .header-container .language-toggle {
     left: 10px;
   }
-  
+
   html[dir="rtl"] .header-container .language-toggle {
     left: 10px;
     right: auto;
   }
-  
+
   .header-container .header-logo {
     margin-left: 100px;
   }
-  
+
   html[dir="rtl"] .header-container .header-logo {
     margin-left: 0;
     margin-right: 100px;
@@ -572,10 +581,12 @@
 
   .header-logo {
     flex: 1;
+    gap: 8px;
   }
 
   .logo-text {
-    display: none;
+    font-size: 14px;
+    display: block;
   }
 
   .header-actions {
@@ -596,7 +607,7 @@
     width: 28px;
     height: 28px;
   }
-  
+
   .user-profile-img svg {
     width: 18px;
     height: 18px;
@@ -604,6 +615,15 @@
 }
 
 @media (max-width: 480px) {
+  .logo-text {
+    font-size: 12px;
+  }
+
+  .logo-icon {
+    width: 35px;
+    height: 35px;
+  }
+
   .user-btn {
     width: auto;
     min-width: 40px;
@@ -619,7 +639,7 @@
     display: flex !important;
     visibility: visible !important;
   }
-  
+
   .user-profile-img svg {
     width: 16px;
     height: 16px;
@@ -632,7 +652,7 @@
     display: flex !important;
     visibility: visible !important;
   }
-  
+
   .mobile-user-profile-img svg {
     display: block !important;
     visibility: visible !important;
@@ -698,13 +718,18 @@ body.mobile-menu-open {
 }
 
 .register-btn::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
   transition: left 0.5s ease;
 }
 
@@ -734,7 +759,7 @@ body.mobile-menu-open {
   background: white;
   border-radius: 12px;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-              0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
@@ -840,35 +865,35 @@ body.mobile-menu-open {
     background: rgba(99, 102, 241, 0.2);
     color: #a5b4fc;
   }
-  
+
   .auth-btn.login-btn:hover {
     background: rgba(99, 102, 241, 0.3);
   }
-  
+
   .dropdown-menu {
     background: #1f2937;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
   }
-  
+
   .dropdown-item {
     color: #e5e7eb;
   }
-  
+
   .dropdown-item:hover {
     background: #374151;
     color: #a5b4fc;
   }
-  
+
   .logout-item {
     border-top-color: #374151;
   }
-  
+
   .mobile-auth-btn,
   .mobile-action-btn {
     background: #374151;
     color: #e5e7eb;
   }
-  
+
   .mobile-login-btn {
     background: rgba(99, 102, 241, 0.2);
     color: #a5b4fc;
@@ -880,21 +905,21 @@ body.mobile-menu-open {
   .auth-buttons {
     gap: 0.5rem;
   }
-  
+
   .auth-btn {
     padding: 0.375rem 0.625rem;
     font-size: 0.75rem;
   }
-  
+
   .auth-btn span {
     display: none;
   }
-  
+
   .auth-btn svg {
     width: 16px;
     height: 16px;
   }
-  
+
   .dropdown-menu {
     left: auto !important;
     right: 0 !important;
@@ -902,10 +927,6 @@ body.mobile-menu-open {
   }
 }
 
-/* RTL Support */
-[dir="rtl"] .header {
-  direction: rtl;
-}
 
 /* Force dropdown to always appear on the left side to prevent cutoff */
 .dropdown-menu {

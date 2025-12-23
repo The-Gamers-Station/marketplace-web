@@ -195,13 +195,13 @@ const Header = memo(() => {
        
 
         {/* Mobile Menu Button */}
-        <button
+        {/* <button
           className="mobile-menu-btn"
           onClick={toggleMobileMenu}
           aria-label={t('header.toggleNavigation')}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        </button> */}
 
         {/* Logo - Using React Router Link for SPA navigation */}
         <Link to="/" className="header-logo">
@@ -263,14 +263,10 @@ const Header = memo(() => {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/*  
       <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
         <div className="mobile-menu-content">
-          {/* Mobile Search - removed per requirement */}
-
-          {/* Mobile Navigation - removed per requirement */}
-
-          {/* Mobile User Section */}
+          
           <div className="mobile-user-section">
             {isAuthenticated ? (
               <>
@@ -300,6 +296,7 @@ const Header = memo(() => {
           </div>
         </div>
       </div>
+      */}
     </header>
   );
 });

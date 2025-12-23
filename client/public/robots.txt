@@ -1,5 +1,5 @@
 # GamersStation Robots.txt
-# https://gamersstation.com/
+# https://gamersstation.eg/
 
 # Allow all crawlers
 User-agent: *
@@ -75,10 +75,10 @@ Allow: /*.ttf
 Allow: /*.eot
 
 # Sitemap location
-Sitemap: https://gamersstation.com/sitemap.xml
-Sitemap: https://gamersstation.com/sitemap-products.xml
-Sitemap: https://gamersstation.com/sitemap-categories.xml
-Sitemap: https://gamersstation.com/sitemap-merchants.xml
+Sitemap: https://gamersstation.eg/sitemap.xml
+Sitemap: https://gamersstation.eg/sitemap-products.xml
+Sitemap: https://gamersstation.eg/sitemap-categories.xml
+Sitemap: https://gamersstation.eg/sitemap-merchants.xml
 
 # Cache control for crawlers
 # Visit-time: 0000-0600

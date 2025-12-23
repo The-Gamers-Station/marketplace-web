@@ -18,10 +18,8 @@ export function register(config) {
 
         // Add some additional logging to localhost
         navigator.serviceWorker.ready.then(() => {
-          console.log(
-            'This web app is being served cache-first by a service worker. ' +
-            'To learn more, visit https://cra.link/PWA'
-          );
+          // This web app is being served cache-first by a service worker.
+          // To learn more, visit https://cra.link/PWA
         });
       } else {
         // Is not localhost. Just register service worker
@@ -42,7 +40,7 @@ function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
-      console.log('Service Worker registered successfully:', registration);
+      // Service Worker registered successfully: registration
 
       // Check for updates periodically
       const intervalId = setInterval(() => {
@@ -61,10 +59,8 @@ function registerValidSW(swUrl, config) {
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
-              console.log(
-                'New content is available and will be used when all ' +
-                'tabs for this page are closed. See https://cra.link/PWA.'
-              );
+              // New content is available and will be used when all
+              // tabs for this page are closed. See https://cra.link/PWA.
 
               // Execute callback
               if (config && config.onUpdate) {
@@ -75,7 +71,7 @@ function registerValidSW(swUrl, config) {
               showUpdateNotification();
             } else {
               // At this point, everything has been precached.
-              console.log('Content is cached for offline use.');
+              // Content is cached for offline use.
 
               // Execute callback
               if (config && config.onSuccess) {
@@ -92,7 +88,7 @@ function registerValidSW(swUrl, config) {
       });
     })
     .catch(error => {
-      console.error('Error during service worker registration:', error);
+      // Error during service worker registration: error
     });
 }
 
@@ -120,7 +116,7 @@ function checkValidServiceWorker(swUrl, config) {
       }
     })
     .catch(() => {
-      console.log('No internet connection found. App is running in offline mode.');
+      // No internet connection found. App is running in offline mode.
     });
 }
 
@@ -131,7 +127,7 @@ export function unregister() {
         registration.unregister();
       })
       .catch(error => {
-        console.error(error.message);
+        // error.message
       });
   }
 }
@@ -277,17 +273,17 @@ export function setupNetworkStatusMonitoring() {
   
   window.addEventListener('online', () => {
     if (wasOffline) {
-      console.log('Back online! Syncing data...');
+      // Back online! Syncing data...
       // Trigger background sync if supported
       if ('serviceWorker' in navigator && 'sync' in ServiceWorkerRegistration.prototype) {
         navigator.serviceWorker.ready.then(registration => {
           if (registration && registration.sync) {
             registration.sync.register('sync-posts').catch(err => {
-              console.log('Failed to register background sync:', err);
+              // Failed to register background sync: err
             });
           }
         }).catch(err => {
-          console.log('Service worker not ready:', err);
+          // Service worker not ready: err
         });
       }
       wasOffline = false;
@@ -295,7 +291,7 @@ export function setupNetworkStatusMonitoring() {
   });
   
   window.addEventListener('offline', () => {
-    console.log('App is offline. Some features may be limited.');
+    // App is offline. Some features may be limited.
     wasOffline = true;
   });
 }
@@ -304,7 +300,7 @@ export function setupNetworkStatusMonitoring() {
 export function preloadCriticalResources() {
   // Check if service workers are supported
   if (!('serviceWorker' in navigator)) {
-    console.log('Service Worker not supported, skipping resource preload');
+    // Service Worker not supported, skipping resource preload
     return;
   }
 
@@ -313,7 +309,7 @@ export function preloadCriticalResources() {
     '/api/v1/posts?page=0&size=12',
     '/api/v1/categories/tree',
     '/logo.svg',
-    '/placeholder-game.jpg'
+    '/placeholder-game.svg'
   ];
   
   // Preload after initial page load
@@ -322,7 +318,7 @@ export function preloadCriticalResources() {
       try {
         // Check if service worker is available
         if (!navigator.serviceWorker) {
-          console.log('Service Worker API not available');
+          // Service Worker API not available
           return;
         }
 
@@ -342,9 +338,9 @@ export function preloadCriticalResources() {
         }
 
         await cacheUrls(criticalUrls);
-        console.log('Critical resources preloaded successfully');
+        // Critical resources preloaded successfully
       } catch (err) {
-        console.log('Failed to preload resources:', err.message || err);
+        // Failed to preload resources: err.message || err
       }
     }, 5000); // Wait 5 seconds after page load
   });
@@ -356,11 +352,11 @@ export function monitorServiceWorkerPerformance() {
     const observer = new PerformanceObserver(list => {
       list.getEntries().forEach(entry => {
         if (entry.name.includes('sw.js')) {
-          console.log('Service Worker Performance:', {
-            name: entry.name,
-            duration: entry.duration,
-            startTime: entry.startTime
-          });
+          // Service Worker Performance: {
+          //   name: entry.name,
+          //   duration: entry.duration,
+          //   startTime: entry.startTime
+          // }
         }
       });
     });

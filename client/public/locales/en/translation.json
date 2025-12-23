@@ -245,7 +245,14 @@
       "location": "Location",
       "similarProducts": "Similar Products",
       "posted": "Posted",
-      "contactSeller": "Contact Seller"
+      "contactSeller": "Contact Seller",
+      "copyLink": "Copy Link",
+      "linkCopied": "Link copied to clipboard!",
+      "share": "Share",
+      "addToWishlist": "Add to Wishlist",
+      "products": "Products",
+      "responseTime": "Response Time",
+      "verifiedSeller": "Verified Seller"
     },
     "faq": {
       "title": "Frequently Asked Questions",
@@ -825,9 +832,10 @@
     "sendError": "Failed to send message. Please try again.",
     "loadEarlierMessages": "Load earlier messages",
     "attachmentComingSoon": "Attachments coming soon",
-    "interestedInProduct": "Interested in product",
+    "interestedInProduct": "Hi, I'm interested in {{productName}}",
     "loadingConversations": "Loading conversations...",
-    "noConversations": "No conversations yet"
+    "noConversations": "No conversations yet",
+    "errorStartingConversation": "Could not start conversation. Please try again."
   },
   "notFound": {
     "title": "404 - Page Not Found",
@@ -874,5 +882,46 @@
     "sortPriceLow": "Price: Low to High",
     "sortPriceHigh": "Price: High to Low",
     "sortMostViewed": "Most Viewed"
+  },
+  "productType": {
+    "forSale": "For Sale",
+    "wanted": "Wanted"
+  },
+  "pagination": {
+    "showing": "Showing",
+    "of": "of",
+    "products": "products",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "cities": {
+    "Riyadh": "Riyadh",
+    "Jeddah": "Jeddah",
+    "Mecca": "Mecca",
+    "Medina": "Medina",
+    "Dammam": "Dammam",
+    "Dhahran": "Dhahran",
+    "Khobar": "Khobar",
+    "Tabuk": "Tabuk",
+    "Buraidah": "Buraidah",
+    "Hail": "Hail",
+    "Abha": "Abha",
+    "Khamis Mushait": "Khamis Mushait",
+    "Taif": "Taif",
+    "Hofuf": "Hofuf",
+    "Jubail": "Jubail",
+    "Yanbu": "Yanbu",
+    "Najran": "Najran",
+    "Jizan": "Jizan",
+    "Al Kharj": "Al Kharj",
+    "Qatif": "Qatif",
+    "Unaizah": "Unaizah",
+    "Arar": "Arar",
+    "Sakaka": "Sakaka",
+    "Al Qurayyat": "Al Qurayyat",
+    "Al Bahah": "Al Bahah",
+    "Cairo": "Cairo",
+    "Giza": "Giza",
+    "Alexandria": "Alexandria"
   }
 }

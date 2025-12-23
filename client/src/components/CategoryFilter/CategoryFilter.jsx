@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import authService from '../../services/authService';
+// import { useNavigate } from 'react-router-dom';
+// import authService from '../../services/authService';
 import './CategoryFilter.css';
 
 const CategoryFilter = ({ onFilterChange }) => {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [selectedPlatform, setSelectedPlatform] = useState('all');
   const [selectedSubcategory, setSelectedSubcategory] = useState('all');
   
@@ -78,16 +78,16 @@ const CategoryFilter = ({ onFilterChange }) => {
 
 
   // Check if user is authenticated
-  const isAuthenticated = authService.isAuthenticated();
+  // const isAuthenticated = authService.isAuthenticated();
 
   // Handle Add Product button click
-  const handleAddProduct = () => {
-    if (isAuthenticated) {
-      navigate('/add-product');
-    } else {
-      navigate('/login');
-    }
-  };
+  // const handleAddProduct = () => {
+  //   if (isAuthenticated) {
+  //     navigate('/add-product');
+  //   } else {
+  //     navigate('/login');
+  //   }
+  // };
 
   // Handle platform selection
   const handlePlatformChange = (platform) => {

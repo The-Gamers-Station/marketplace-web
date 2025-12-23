@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import {
   ChevronLeft,
   ChevronRight,
-  Star,
   Heart,
   Share2,
   Shield,
@@ -25,6 +24,8 @@ import { postService } from '../../services/postService';
 import messagingService from '../../services/messagingService';
 import authService from '../../services/authService';
 import OptimizedImage from '../../components/OptimizedImage/OptimizedImage';
+import userService from '../../services/userService';
+import { getTranslatedCityName } from '../../utils/cityTranslations';
 import './ProductDetailsPage.css';
 
 const ProductDetailsPage = () => {
@@ -33,16 +34,18 @@ const ProductDetailsPage = () => {
   const { t, i18n } = useTranslation();
   const currentLang = i18n.language;
   const [selectedImage, setSelectedImage] = useState(0);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [postType, setPostType] = useState(null);
+  const [showCopyNotification, setShowCopyNotification] = useState(false);
+  const [sellerDetails, setSellerDetails] = useState(null);
 
   useEffect(() => {
     fetchProductDetails();
-  }, [id]);
+  }, [id, currentLang]);
 
   const fetchProductDetails = async () => {
     try {
@@ -52,6 +55,9 @@ const ProductDetailsPage = () => {
       // Fetch product details
       const postData = await postService.getPostById(id);
       
+      // Save post type
+      setPostType(postData.type);
+      
       // Transform Post data to Product format
       const transformedProduct = {
         id: postData.id,
@@ -60,8 +66,6 @@ const ProductDetailsPage = () => {
         price: postData.price || 0,
         originalPrice: postData.price ? Math.round(postData.price * 1.15) : 0, // Add 15% as original price
         discount: 14, // Calculate discount percentage
-        rating: Math.round((4.5 + Math.random() * 0.5) * 10) / 10, // Generate random rating for now
-        reviews: Math.floor(Math.random() * 500) + 50,
         sold: Math.floor(Math.random() * 1000) + 100,
         availability: postData.status === 'ACTIVE' ? t('pages.productDetails.available') : t('pages.productDetails.unavailable'),
         brand: 'GamersStation',
@@ -69,12 +73,13 @@ const ProductDetailsPage = () => {
         categoryId: postData.categoryId,
         sku: `GS-${postData.id}-${new Date().getFullYear()}`,
         images: postData.images?.length > 0
-          ? postData.images.map(img => img.url || '/placeholder-game.jpg')
-          : ['/placeholder-game.jpg', '/placeholder-game.jpg', '/placeholder-game.jpg', '/placeholder-game.jpg'], // Add multiple placeholders for testing
+          ? postData.images.map(img => img.url || '/placeholder-game.svg')
+          : ['/placeholder-game.svg', '/placeholder-game.svg', '/placeholder-game.svg', '/placeholder-game.svg'], // Add multiple placeholders for testing
         description: postData.localizedDescription?.[currentLang] || postData.description || 'منتج عالي الجودة من GamersStation',
+        type: postData.type, // Add type to product data
         specifications: {
           [t('pages.productDetails.condition.label')]: postData.condition === 'NEW' ? t('pages.productDetails.condition.new') : t('pages.productDetails.condition.used'),
-          [t('pages.productDetails.city')]: postData.cityName || 'Riyadh',
+          [t('pages.productDetails.city')]: getTranslatedCityName(postData.cityName, t),
           [t('pages.productDetails.publishDate')]: new Date(postData.createdAt).toLocaleDateString(currentLang === 'ar' ? 'ar-SA' : 'en-US'),
           [t('pages.productDetails.adNumber')]: postData.id,
           [t('pages.productDetails.views')]: postData.viewCount || 0,
@@ -82,20 +87,35 @@ const ProductDetailsPage = () => {
         seller: {
           id: postData.ownerId,
           name: postData.store?.nameEn || postData.ownerUsername || 'GamersStation',
-          rating: Math.round((4.5 + Math.random() * 0.5) * 10) / 10,
           responseTime: currentLang === 'ar' ? '1 ساعة' : '1 hour',
           products: Math.floor(Math.random() * 200) + 50,
-          verified: postData.store?.isVerified || false
+          verified: postData.store?.isVerified || false,
+          city: getTranslatedCityName(postData.cityName, t)
         }
       };
       
       setProduct(transformedProduct);
       
+      // Try to fetch seller details for avatar
+      if (postData.ownerId) {
+        try {
+          const userData = await userService.getUserById(postData.ownerId);
+          setSellerDetails({
+            avatar: userData.profileImageUrl,
+            storeName: userData.storeName,
+            username: userData.username,
+            city: getTranslatedCityName(userData.cityName || postData.cityName, t)
+          });
+        } catch (err) {
+          // Could not fetch seller details: err
+        }
+      }
+      
       // Fetch related products from same category
       let transformedRelated = [];
       
       // First try to get products from the same category
-      console.log('Fetching similar products for category ID:', postData.categoryId, 'Name:', postData.categoryName);
+      // Fetching similar products for category ID: postData.categoryId, 'Name:', postData.categoryName
       if (postData.categoryId) {
         try {
           const relatedData = await postService.getPosts({
@@ -106,7 +126,7 @@ const ProductDetailsPage = () => {
             direction: 'DESC'
           });
           
-          console.log('Related products response:', relatedData);
+          // Related products response: relatedData
           
           if (relatedData && relatedData.content) {
             transformedRelated = relatedData.content
@@ -115,20 +135,19 @@ const ProductDetailsPage = () => {
                 id: post.id,
                 name: post.localizedTitle?.[currentLang] || post.title || 'Untitled',
                 price: post.price || 0,
-                rating: Math.round((4.5 + Math.random() * 0.5) * 10) / 10,
-                image: post.images?.[0]?.url || '/placeholder-game.jpg'
+                image: post.images?.[0]?.url || '/placeholder-game.svg'
               }));
-            console.log('Transformed related products:', transformedRelated);
+            // Transformed related products: transformedRelated
           }
         } catch (err) {
-          console.error('Error fetching category products:', err);
+          // Error fetching category products: err
         }
       }
       
       // If we don't have enough related products, fetch random products
       if (transformedRelated.length < 4) {
         try {
-          console.log('Fetching additional products, current count:', transformedRelated.length);
+          // Fetching additional products, current count: transformedRelated.length
           const randomData = await postService.getPosts({
             page: 0, // API uses 0-based pagination
             size: 10,
@@ -136,7 +155,7 @@ const ProductDetailsPage = () => {
             direction: 'DESC'
           });
           
-          console.log('Random products response:', randomData);
+          // Random products response: randomData
           
           if (randomData && randomData.content) {
             const additionalProducts = randomData.content
@@ -145,15 +164,14 @@ const ProductDetailsPage = () => {
                 id: post.id,
                 name: post.localizedTitle?.[currentLang] || post.title || 'Untitled',
                 price: post.price || 0,
-                rating: Math.round((4.5 + Math.random() * 0.5) * 10) / 10,
-                image: post.images?.[0]?.url || '/placeholder-game.jpg'
+                image: post.images?.[0]?.url || '/placeholder-game.svg'
               }));
             
             transformedRelated = [...transformedRelated, ...additionalProducts].slice(0, 4);
-            console.log('Final related products:', transformedRelated);
+            // Final related products: transformedRelated
           }
         } catch (err) {
-          console.error('Error fetching random products:', err);
+          // Error fetching random products: err
         }
       } else {
         transformedRelated = transformedRelated.slice(0, 4);
@@ -162,7 +180,7 @@ const ProductDetailsPage = () => {
       setRelatedProducts(transformedRelated);
       
     } catch (err) {
-      console.error('Error fetching product details:', err);
+      // Error fetching product details: err
       setError(t('common.error'));
     } finally {
       setLoading(false);
@@ -185,7 +203,8 @@ const ProductDetailsPage = () => {
         break;
       case 'copy':
         navigator.clipboard.writeText(url);
-        alert(t('pages.productDetails.linkCopied'));
+        setShowCopyNotification(true);
+        setTimeout(() => setShowCopyNotification(false), 3000);
         break;
     }
     setShowShareMenu(false);
@@ -248,13 +267,6 @@ const ProductDetailsPage = () => {
         "@type": "Organization",
         "name": product.seller.name
       }
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": product.rating,
-      "reviewCount": product.reviews,
-      "bestRating": "5",
-      "worstRating": "1"
     }
   };
 
@@ -278,8 +290,8 @@ const ProductDetailsPage = () => {
           {/* Breadcrumb */}
           <div className="gaming-breadcrumb">
             <a href="/">{t('pages.productDetails.home')}</a>
-            <ChevronLeft className="breadcrumb-arrow" size={16} />
-            <a href="#">{product.category}</a>
+            {/* <ChevronLeft className="breadcrumb-arrow" size={16} />
+            <a href="#">{product.category}</a> */}
             <ChevronLeft className="breadcrumb-arrow" size={16} />
             <span className="current-page">{i18n.language === 'ar' ? product.arabicName : product.name}</span>
           </div>
@@ -314,9 +326,18 @@ const ProductDetailsPage = () => {
               
               {/* Main image */}
               <div className="main-image-wrapper">
-                <div className="image-badge">
-                  <Gamepad2 size={20} />
-                  <span>{product.category}</span>
+                <div className={`image-badge type-badge ${postType === 'ASK' ? 'badge-ask' : 'badge-sell'}`}>
+                  {postType === 'ASK' ? (
+                    <>
+                      <Package size={20} />
+                      <span>{currentLang === 'ar' ? 'مطلوب' : 'Wanted'}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Check size={20} />
+                      <span>{currentLang === 'ar' ? 'للبيع' : 'For Sale'}</span>
+                    </>
+                  )}
                 </div>
                 
                 <div className="main-product-image">
@@ -393,25 +414,119 @@ const ProductDetailsPage = () => {
                 </div>
               </div>
 
+              {/* Seller Information Card */}
+              <div className="seller-info-card">
+                <div className="seller-header">
+                  <div className="seller-avatar">
+                    {(sellerDetails?.avatar || product.seller.verified) ? (
+                      sellerDetails?.avatar ? (
+                        <OptimizedImage
+                          src={sellerDetails.avatar}
+                          alt={product.seller.name}
+                          className="seller-avatar-img"
+                          objectFit="cover"
+                        />
+                      ) : (
+                        <User size={32} className="seller-avatar-icon" />
+                      )
+                    ) : (
+                      <User size={32} className="seller-avatar-icon" />
+                    )}
+                    {product.seller.verified && (
+                      <div className="verified-badge" title={t('pages.productDetails.verifiedSeller')}>
+                        <Check size={12} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="seller-details">
+                    <h3 className="seller-name">{product.seller.name}</h3>
+                    <div className="seller-location">
+                      <MapPin size={14} />
+                      <span>{product.seller.city}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="seller-stats">
+                  <div className="stat-item">
+                    <span className="stat-value">{product.seller.products}</span>
+                    <span className="stat-label">{t('pages.productDetails.products')}</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-value">{product.seller.responseTime}</span>
+                    <span className="stat-label">{t('pages.productDetails.responseTime')}</span>
+                  </div>
+                </div>
+              </div>
+
               {/* Action Buttons */}
               <div className="action-section">
                 <button
                   className="btn-contact-seller"
                   onClick={async () => {
+                    // [ProductDetails] Contact seller clicked
+                    
                     if (!authService.isAuthenticated()) {
-                      navigate('/login');
+                      // [ProductDetails] User not authenticated, redirecting to login
+                      navigate('/login', {
+                        state: { redirectTo: `/product/${product.id}` }
+                      });
                       return;
                     }
                     
                     try {
+                      // [ProductDetails] Starting conversation for product: product.id, product.name
+                      
+                      const initialMessage = t('chat.interestedInProduct', { productName: product.name }) || `Hi, I'm interested in ${product.name}`;
+                      // [ProductDetails] Initial message: initialMessage
+                      
                       const conversation = await messagingService.startConversation(
                         product.id,
-                        t('chat.interestedInProduct', { productName: product.name }) || `Hi, I'm interested in ${product.name}`
+                        initialMessage
                       );
-                      navigate(`/chat/${conversation.id}`);
+                      
+                      // [ProductDetails] Conversation response: conversation
+                      
+                      if (!conversation || !conversation.id) {
+                        throw new Error('Invalid conversation response');
+                      }
+                      
+                      navigate(`/chat/${conversation.id}`, {
+                        state: {
+                          initialMessage,
+                          justCreated: true
+                        }
+                      });
                     } catch (error) {
-                      console.error('Error starting conversation:', error);
-                      alert(t('chat.errorStartingConversation') || 'Could not start conversation. Please try again.');
+                      // [ProductDetails] Error starting conversation: {
+                      //   error,
+                      //   message: error.message,
+                      //   response: error.response,
+                      //   productId: product.id
+                      // }
+                      
+                      // Show more specific error messages
+                      let errorMessage = t('chat.errorStartingConversation') || 'لا يمكن بدء المحادثة. يرجى المحاولة مرة أخرى';
+                      
+                      if (error.message.includes('[400]')) {
+                        if (error.message.includes('yourself')) {
+                          errorMessage = t('chat.cannotMessageYourself') || 'Cannot message yourself';
+                        } else if (error.message.includes('inactive')) {
+                          errorMessage = t('chat.productInactive') || 'Cannot start conversation on inactive product';
+                        } else {
+                          errorMessage = t('chat.invalidRequest') || 'Cannot start conversation. Please check the product details.';
+                        }
+                      } else if (error.message.includes('[401]') || error.message.includes('[403]')) {
+                        errorMessage = t('chat.authenticationError') || 'Authentication error. Please login again.';
+                        authService.clearTokens();
+                        navigate('/login', {
+                          state: { redirectTo: `/product/${product.id}` }
+                        });
+                        return;
+                      } else if (error.message.includes('[404]')) {
+                        errorMessage = t('chat.productNotFound') || 'Product not found.';
+                      }
+                      
+                      alert(errorMessage);
                     }
                   }}
                 >
@@ -420,13 +535,13 @@ const ProductDetailsPage = () => {
                 </button>
 
                 <div className="secondary-actions">
-                  <button
+                  {/* <button
                     className={`btn-icon ${isWishlisted ? 'active' : ''}`}
                     onClick={() => setIsWishlisted(!isWishlisted)}
                     aria-label={t('pages.productDetails.addToWishlist')}
                   >
                     <Heart size={20} />
-                  </button>
+                  </button> */}
                   <div className="share-wrapper">
                     <button
                       className="btn-icon"
@@ -439,28 +554,20 @@ const ProductDetailsPage = () => {
                       <div className="share-menu">
                         <button onClick={() => handleShare('whatsapp')}>WhatsApp</button>
                         <button onClick={() => handleShare('facebook')}>Facebook</button>
-                        <button onClick={() => handleShare('twitter')}>Twitter</button>
-                        <button onClick={() => handleShare('copy')}>{t('pages.productDetails.copyLink')}</button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
+                         <button onClick={() => handleShare('copy')}>{t('pages.productDetails.copyLink')}</button>
+                     </div>
+                   )}
+                 </div>
+               </div>
+             </div>
 
-              {/* Rating Section */}
-              <div className="rating-section">
-                <div className="rating-stars">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      size={20}
-                      className={i < Math.floor(product.rating) ? 'filled' : ''}
-                    />
-                  ))}
-                </div>
-                <span className="rating-text">{product.rating}</span>
-                <span className="reviews-count">({product.reviews} {t('pages.productDetails.reviews')})</span>
-              </div>
+             {/* Copy Link Notification */}
+             {showCopyNotification && (
+               <div className="copy-notification">
+                 <Check size={20} />
+                 <span>{t('pages.productDetails.linkCopied')}</span>
+               </div>
+             )}
 
             </div>
           </div>
@@ -498,10 +605,6 @@ const ProductDetailsPage = () => {
                     <div className="related-info">
                       <h3>{item.name}</h3>
                       <div className="related-price">{item.price} {t('currency')}</div>
-                      <div className="related-rating">
-                        <Star size={14} className="filled" />
-                        <span>{item.rating}</span>
-                      </div>
                     </div>
                   </a>
                 ))
@@ -515,10 +618,6 @@ const ProductDetailsPage = () => {
                     <div className="related-info">
                       <h3>{t('common.loading')}</h3>
                       <div className="related-price">-- {t('currency')}</div>
-                      <div className="related-rating">
-                        <Star size={14} />
-                        <span>--</span>
-                      </div>
                     </div>
                   </div>
                 ))

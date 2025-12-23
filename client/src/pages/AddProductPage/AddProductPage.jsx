@@ -108,6 +108,28 @@ const AddProductPage = () => {
           name: i18n.language === 'ar' ? 'الإكسسوارات' : 'Accessories'
         }
       ]
+    },
+    {
+      id: 'pc',
+      categoryId: 4,
+      name: t('categoryFilter.pc') || 'PC',
+      subcategories: [
+        {
+          id: 'devices',
+          categoryId: 400,
+          name: i18n.language === 'ar' ? 'الأجهزة' : 'Devices'
+        },
+        {
+          id: 'games',
+          categoryId: 401,
+          name: i18n.language === 'ar' ? 'الألعاب' : 'Games'
+        },
+        {
+          id: 'accessories',
+          categoryId: 402,
+          name: i18n.language === 'ar' ? 'الإكسسوارات' : 'Accessories'
+        }
+      ]
     }
   ];
 
@@ -491,7 +513,7 @@ const AddProductPage = () => {
                     <label htmlFor="title">
                       {t('addProduct.fields.title')}
                       <span className="char-count" style={{ marginLeft: '10px', fontSize: '0.85em', color: formData.title.trim().length < 5 ? '#ff3838' : '#666' }}>
-                        ({formData.title.trim().length}/5)
+                        {/* ({formData.title.trim().length}/5) */}
                       </span>
                     </label>
                     <div className="input-container">
@@ -515,7 +537,7 @@ const AddProductPage = () => {
                     <label htmlFor="description">
                       {t('addProduct.fields.description')}
                       <span className="char-count" style={{ marginLeft: '10px', fontSize: '0.85em', color: formData.description.trim().length < 20 || formData.description.trim().length > 5000 ? '#ff3838' : '#666' }}>
-                        ({formData.description.trim().length}/20-5000)
+                        {/* ({formData.description.trim().length}/20-5000) */}
                       </span>
                     </label>
                     <div className="textarea-container">
@@ -536,19 +558,29 @@ const AddProductPage = () => {
                   </div>
 
                   <div className="split-inputs">
-                    <FormInput
-                      label={t('addProduct.fields.price')}
-                      type="number"
-                      name="price"
-                      value={formData.price}
-                      onChange={handleChange}
-                      placeholder={t('addProduct.placeholders.price')}
-                      error={errors.price}
-                      required
-                      icon={<PriceIcon />}
-                      min="0"
-                      step="0.01"
-                    />
+                    <div className="input-group">
+                      <label htmlFor="price">
+                        {t('addProduct.fields.price')}
+                      </label>
+                      <div className="input-container">
+                        <PriceIcon />
+                        <input
+                          id="price"
+                          type="number"
+                          name="price"
+                          value={formData.price}
+                          onChange={handleChange}
+                          placeholder={t('addProduct.placeholders.price')}
+                          className={errors.price ? 'has-error' : ''}
+                          min="0"
+                          step="0.01"
+                          required
+                        />
+                      </div>
+                      {errors.price && (
+                        <span className="field-error">{errors.price}</span>
+                      )}
+                    </div>
 
                     <div className="input-group">
                       <label htmlFor="condition">

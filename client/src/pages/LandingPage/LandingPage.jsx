@@ -137,7 +137,7 @@ const LandingPage = () => {
           <ProductGrid
             categoryId={selectedCategoryId}
             subcategoryType={selectedSubcategoryType}
-            hideLoadMore={true}
+            hideLoadMore={false}
           />
           
           {/* Show All Products Button */}

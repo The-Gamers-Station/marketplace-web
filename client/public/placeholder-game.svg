@@ -1,0 +1,22 @@
+<svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="300" fill="#141B2D"/>
+  <rect x="0.5" y="0.5" width="299" height="299" stroke="url(#paint0_linear)" stroke-opacity="0.08"/>
+  <path d="M150 180C166.569 180 180 166.569 180 150C180 133.431 166.569 120 150 120C133.431 120 120 133.431 120 150C120 166.569 133.431 180 150 180Z" fill="url(#paint1_linear)"/>
+  <path d="M150 160V140" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+  <path d="M140 150H160" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="134" cy="135" r="2" fill="#FFFFFF"/>
+  <circle cx="166" cy="135" r="2" fill="#FFFFFF"/>
+  <circle cx="134" cy="165" r="2" fill="#FFFFFF"/>
+  <circle cx="166" cy="165" r="2" fill="#FFFFFF"/>
+  <text x="150" y="210" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="14">Game Image</text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="150" y1="0" x2="150" y2="300" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="paint1_linear" x1="150" y1="120" x2="150" y2="180" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF6B35"/>
+      <stop offset="1" stop-color="#FF8C42"/>
+    </linearGradient>
+  </defs>
+</svg>

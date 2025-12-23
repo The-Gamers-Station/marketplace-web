@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ProductCard from '../ProductCard/ProductCard';
 import postService from '../../services/postService';
 import { GameSpinner, SkeletonLoader } from '../Loading/Loading';
@@ -11,22 +12,20 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
 
   // Fetch products from backend
   const fetchProducts = async (pageNumber = 0, append = false) => {
     try {
       if (!append) {
         setLoading(true);
-      } else {
-        setLoadingMore(true);
       }
       setError(null);
 
       const params = {
         page: pageNumber,
-        size: 20,
+        size: 10, // Reduced from 20 to 10 to show pagination with fewer products
         sortBy: sortBy || 'createdAt',
         direction: direction || 'DESC',
       };
@@ -64,14 +63,23 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
         setProducts(transformedProducts);
       }
 
-      setHasMore(!response.last);
       setPage(pageNumber);
+      setTotalPages(response.totalPages || 0);
+      setTotalElements(response.totalElements || 0);
+      
+      // Debug logging
+      // console.log('Pagination Debug:', {
+      //   pageNumber,
+      //   totalPages: response.totalPages,
+      //   totalElements: response.totalElements,
+      //   productCount: transformedProducts.length,
+      //   hideLoadMore
+      // });
     } catch (err) {
       console.error('Error fetching products:', err);
       setError(err.message || t('common.error'));
     } finally {
       setLoading(false);
-      setLoadingMore(false);
     }
   };
 
@@ -80,12 +88,6 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
     fetchProducts(0, false);
   }, [categoryId, subcategoryType, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction]);
 
-  // Load more products
-  const handleLoadMore = () => {
-    if (!loadingMore && hasMore) {
-      fetchProducts(page + 1, true);
-    }
-  };
 
   // Loading state
   if (loading) {
@@ -140,7 +142,6 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
             key={product.id}
             id={product.id}
             title={product.title}
-            description={product.description}
             price={product.price}
             image={product.image}
             platforms={product.category ? [product.category] : []}
@@ -148,8 +149,6 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
             badge={product.onSale ? (i18n.language === 'ar' ? 'عرض' : 'Sale') : null}
             username={product.ownerUsername}
             location={product.cityName}
-            rating={product.rating}
-            reviewCount={product.reviews}
             originalPrice={product.originalPrice}
             condition={product.condition}
             type={product.type}
@@ -157,27 +156,87 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
         ))}
       </div>
       
-      {hasMore && !hideLoadMore && (
-        <div className="load-more">
-          <button
-            className={`load-more-btn ${loadingMore ? 'loading' : ''}`}
-            onClick={handleLoadMore}
-            disabled={loadingMore}
-          >
-            {loadingMore ? (
-              <>
-                <span className="button-loader-inline">
-                  <span className="loading-spinner-small"></span>
-                </span>
-                {i18n.language === 'ar' ? 'جاري التحميل...' : 'Loading...'}
-              </>
-            ) : (
-              <>
-                {i18n.language === 'ar' ? 'تحميل المزيد' : 'Load More'}
-                <span className="arrow-down">▼</span>
-              </>
-            )}
-          </button>
+      {/* Pagination */}
+      {!hideLoadMore && (
+        <div className="pagination-container">
+          <div className="pagination-info">
+            <span>{t('pagination.showing')} {page * 10 + 1} - {Math.min((page + 1) * 10, totalElements)} {t('pagination.of')} {totalElements} {t('pagination.products')}</span>
+          </div>
+          
+          <div className="pagination-controls">
+            <button
+              className="pagination-btn prev"
+              onClick={() => fetchProducts(page - 1, false)}
+              disabled={page === 0}
+              aria-label={t('common.previous')}
+            >
+              <ChevronLeft size={18} />
+            </button>
+            
+            <div className="page-numbers">
+              {/* First page */}
+              {page > 2 && (
+                <>
+                  <button
+                    className="page-number"
+                    onClick={() => fetchProducts(0, false)}
+                  >
+                    1
+                  </button>
+                  {page > 3 && <span className="page-dots">...</span>}
+                </>
+              )}
+              
+              {/* Pages around current page */}
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum;
+                if (totalPages <= 5) {
+                  pageNum = i;
+                } else if (page < 3) {
+                  pageNum = i;
+                } else if (page > totalPages - 4) {
+                  pageNum = totalPages - 5 + i;
+                } else {
+                  pageNum = page - 2 + i;
+                }
+                
+                if (pageNum >= 0 && pageNum < totalPages) {
+                  return (
+                    <button
+                      key={pageNum}
+                      className={`page-number ${pageNum === page ? 'active' : ''}`}
+                      onClick={() => pageNum !== page && fetchProducts(pageNum, false)}
+                    >
+                      {pageNum + 1}
+                    </button>
+                  );
+                }
+                return null;
+              })}
+              
+              {/* Last page */}
+              {page < totalPages - 3 && (
+                <>
+                  {page < totalPages - 4 && <span className="page-dots">...</span>}
+                  <button
+                    className="page-number"
+                    onClick={() => fetchProducts(totalPages - 1, false)}
+                  >
+                    {totalPages}
+                  </button>
+                </>
+              )}
+            </div>
+            
+            <button
+              className="pagination-btn next"
+              onClick={() => fetchProducts(page + 1, false)}
+              disabled={page >= totalPages - 1 || totalPages === 0}
+              aria-label={t('common.next')}
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
         </div>
       )}
     </div>

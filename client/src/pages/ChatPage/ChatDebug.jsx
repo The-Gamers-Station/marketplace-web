@@ -1,8 +1,6 @@
 import React from 'react';
 
 const ChatDebug = () => {
-  console.log('[ChatDebug] Component rendered');
-  
   return (
     <div style={{ padding: '50px', textAlign: 'center' }}>
       <h1>Chat Debug Page</h1>

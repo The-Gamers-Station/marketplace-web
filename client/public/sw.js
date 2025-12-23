@@ -11,9 +11,10 @@ const CACHE_NAMES = {
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/manifest.json',
+  '/offline.html',
+  '/site.webmanifest',
   '/robots.txt',
-  '/placeholder-game.jpg',
+  '/placeholder-game.svg',
   '/logo.svg'
 ];
 
@@ -26,22 +27,24 @@ const CACHE_LIMITS = {
 
 // Install event - cache static assets
 self.addEventListener('install', event => {
-  console.log('[SW] Installing service worker...');
+  // [SW] Installing service worker...
   
   event.waitUntil(
     caches.open(CACHE_NAMES.static)
       .then(cache => {
-        console.log('[SW] Caching static assets');
+        // [SW] Caching static assets
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => self.skipWaiting())
-      .catch(err => console.error('[SW] Install failed:', err))
+      .catch(err => { void err;
+        // [SW] Install failed: err
+      })
   );
 });
 
 // Activate event - clean old caches
 self.addEventListener('activate', event => {
-  console.log('[SW] Activating service worker...');
+  // [SW] Activating service worker...
   
   event.waitUntil(
     Promise.all([
@@ -53,7 +56,7 @@ self.addEventListener('activate', event => {
               return !Object.values(CACHE_NAMES).includes(cacheName);
             })
             .map(cacheName => {
-              console.log('[SW] Deleting old cache:', cacheName);
+              // [SW] Deleting old cache: cacheName
               return caches.delete(cacheName);
             })
         );
@@ -145,7 +148,7 @@ async function networkFirst(request, cacheName) {
     // Network failed, try cache
     const cacheResponse = await caches.match(request);
     if (cacheResponse) {
-      console.log('[SW] Network failed, serving from cache:', request.url);
+      // [SW] Network failed, serving from cache: request.url
       return cacheResponse;
     }
     
@@ -289,12 +292,12 @@ async function syncPosts() {
             await cache.delete(request);
           }
         } catch {
-          console.log('[SW] Sync failed for:', request.url);
+          // [SW] Sync failed for: request.url
         }
       })
     );
   } catch (error) {
-    console.error('[SW] Background sync error:', error);
+    // [SW] Background sync error: error
   }
 }
 
@@ -328,4 +331,4 @@ async function updateContent() {
   );
 }
 
-console.log('[SW] Service Worker loaded');
+// [SW] Service Worker loaded

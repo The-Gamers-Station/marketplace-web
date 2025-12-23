@@ -6,6 +6,7 @@
     <!-- Early Resource Hints for Critical Third-Party Domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://api.gamersstation.eg" crossorigin>
     <link rel="dns-prefetch" href="https://images.unsplash.com">
     <link rel="dns-prefetch" href="https://api.gamersstation.eg">
     
@@ -14,8 +15,8 @@
     <link rel="preload" href="/src/index.css" as="style">
     
     <!-- Prefetch Key Routes -->
-    <link rel="prefetch" href="/api/posts?page=1&limit=12">
-    <link rel="prefetch" href="/api/categories/tree">
+    <link rel="prefetch" href="/api/v1/posts?page=0&size=12">
+    <link rel="prefetch" href="/api/v1/categories/tree">
     
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -50,6 +51,7 @@
     <link rel="canonical" href="https://gamersstation.eg/" />
     <link rel="alternate" hreflang="ar-SA" href="https://gamersstation.eg/" />
     <link rel="alternate" hreflang="en-SA" href="https://gamersstation.eg/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://gamersstation.eg/" />
     
     <!-- PWA Meta Tags -->
     <meta name="mobile-web-app-capable" content="yes" />
@@ -95,6 +97,20 @@
           "urls": ["/products", "/login", "/register"]
         }
       ]
+    }
+    </script>
+    <!-- JSON-LD: WebSite with SearchAction -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "GamersStation",
+      "url": "https://gamersstation.eg/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://gamersstation.eg/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
     }
     </script>
   </head>
@@ -154,14 +170,14 @@
         // Log Largest Contentful Paint
         new PerformanceObserver((entryList) => {
           for (const entry of entryList.getEntries()) {
-            console.log('LCP:', entry.startTime);
+            // LCP: entry.startTime
           }
         }).observe({type: 'largest-contentful-paint', buffered: true});
         
         // Log First Input Delay
         new PerformanceObserver((entryList) => {
           for (const entry of entryList.getEntries()) {
-            console.log('FID:', entry.processingStart - entry.startTime);
+            // FID: entry.processingStart - entry.startTime
           }
         }).observe({type: 'first-input', buffered: true});
         

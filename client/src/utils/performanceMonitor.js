@@ -59,8 +59,8 @@ class PerformanceMonitor {
     try {
       paintObserver.observe({ entryTypes: ['paint'] });
       this.observers.set('paint', paintObserver);
-    } catch (e) {
-      console.warn('Paint observer not supported');
+    } catch (e) { void e;
+      // Paint observer not supported
     }
 
     // Largest Contentful Paint (LCP)
@@ -73,8 +73,8 @@ class PerformanceMonitor {
     try {
       lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
       this.observers.set('lcp', lcpObserver);
-    } catch (e) {
-      console.warn('LCP observer not supported');
+    } catch (e) { void e;
+      // LCP observer not supported
     }
 
     // First Input Delay (FID)
@@ -87,8 +87,8 @@ class PerformanceMonitor {
     try {
       fidObserver.observe({ entryTypes: ['first-input'] });
       this.observers.set('fid', fidObserver);
-    } catch (e) {
-      console.warn('FID observer not supported');
+    } catch (e) { void e;
+      // FID observer not supported
     }
 
     // Cumulative Layout Shift (CLS)
@@ -105,8 +105,8 @@ class PerformanceMonitor {
     try {
       clsObserver.observe({ entryTypes: ['layout-shift'] });
       this.observers.set('cls', clsObserver);
-    } catch (e) {
-      console.warn('CLS observer not supported');
+    } catch (e) { void e;
+      // CLS observer not supported
     }
 
     // Time to First Byte (TTFB)
@@ -141,8 +141,8 @@ class PerformanceMonitor {
     try {
       resourceObserver.observe({ entryTypes: ['resource'] });
       this.observers.set('resource', resourceObserver);
-    } catch (e) {
-      console.warn('Resource observer not supported');
+    } catch (e) { void e;
+      // Resource observer not supported
     }
   }
 
@@ -153,9 +153,7 @@ class PerformanceMonitor {
       timestamp: Date.now()
     };
     
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[Performance] ${name}: ${this.metrics[name].value}ms`);
-    }
+    // [Performance] ${name}: ${this.metrics[name].value}ms
   }
 
   // Log resource metric
@@ -180,7 +178,7 @@ class PerformanceMonitor {
     if (Object.keys(this.metrics).length === 0) return;
     
     // Example: Send to your analytics endpoint
-    if (process.env.NODE_ENV === 'production') {
+    if (import.meta.env && import.meta.env.PROD) {
       fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -190,7 +188,9 @@ class PerformanceMonitor {
           userAgent: navigator.userAgent,
           timestamp: Date.now()
         })
-      }).catch(err => console.error('Failed to send metrics:', err));
+      }).catch(err => {
+        // Failed to send metrics: err
+      });
     }
   }
 
@@ -212,9 +212,7 @@ if (typeof window !== 'undefined') {
     
     // Send metrics after 10 seconds
     setTimeout(() => {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[Performance] Final Metrics:', performanceMonitor.getMetrics());
-      }
+      // [Performance] Final Metrics: performanceMonitor.getMetrics()
     }, 10000);
   });
   

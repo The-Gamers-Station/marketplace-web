@@ -9,7 +9,7 @@ class UserService {
       });
       return response;
     } catch (error) {
-      console.error('Error fetching user profile:', error);
+      // Error fetching user profile: error
       throw error;
     }
   }
@@ -31,7 +31,7 @@ class UserService {
       
       return response;
     } catch (error) {
-      console.error('Error updating user profile:', error);
+      // Error updating user profile: error
       throw error;
     }
   }
@@ -44,7 +44,7 @@ class UserService {
       });
       return response;
     } catch (error) {
-      console.error('Error fetching public user profile:', error);
+      // Error fetching public user profile: error
       throw error;
     }
   }

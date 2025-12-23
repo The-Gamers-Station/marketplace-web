@@ -28,7 +28,7 @@ class PostService {
       
       return response;
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      // Error fetching posts: error
       throw error;
     }
   }
@@ -60,7 +60,7 @@ class PostService {
       
       return response;
     } catch (error) {
-      console.error('Error searching posts:', error);
+      // Error searching posts: error
       throw error;
     }
   }
@@ -73,7 +73,7 @@ class PostService {
       });
       return response;
     } catch (error) {
-      console.error('Error fetching post:', error);
+      // Error fetching post: error
       throw error;
     }
   }
@@ -129,7 +129,7 @@ class PostService {
       });
       return response;
     } catch (error) {
-      console.error('Error creating post:', error);
+      // Error creating post: error
       throw error;
     }
   }
@@ -143,7 +143,7 @@ class PostService {
       });
       return response;
     } catch (error) {
-      console.error('Error updating post:', error);
+      // Error updating post: error
       throw error;
     }
   }
@@ -156,7 +156,7 @@ class PostService {
       });
       return response;
     } catch (error) {
-      console.error('Error deleting post:', error);
+      // Error deleting post: error
       throw error;
     }
   }
@@ -178,7 +178,7 @@ class PostService {
       
       return response;
     } catch (error) {
-      console.error('Error fetching my posts:', error);
+      // Error fetching my posts: error
       throw error;
     }
   }
@@ -191,7 +191,7 @@ class PostService {
       });
       return response;
     } catch (error) {
-      console.error('Error marking post as sold:', error);
+      // Error marking post as sold: error
       throw error;
     }
   }

@@ -44,6 +44,7 @@
   padding: 0 20px;
   position: relative;
   z-index: 1;
+  isolation: isolate; /* Prevent z-index conflicts */
 }
 
 /* Gaming Breadcrumb */
@@ -80,10 +81,10 @@
 .product-main-card {
   background: rgba(10, 22, 40, 0.8);
   border-radius: 20px;
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to visible */
   position: relative;
   margin: 20px 0;
-  box-shadow: 
+  box-shadow:
     0 10px 40px rgba(0, 0, 0, 0.3),
     0 0 100px rgba(0, 168, 255, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -139,6 +140,8 @@
   gap: 20px;
   order: 2;
   align-self: start;
+  position: relative;
+  overflow: visible;
 }
 
 /* Thumbnails Sidebar - Enhanced visibility */
@@ -253,7 +256,7 @@
 
 .image-badge {
   position: absolute;
-  top: 20px;
+  top: 5px;
   right: 20px;
   background: rgba(255, 107, 53, 0.9);
   color: white;
@@ -267,6 +270,37 @@
   z-index: 2;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+/* Type-specific badge styles - Modern Design */
+.type-badge.badge-sell {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow:
+    0 6px 20px rgba(16, 185, 129, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  padding: 10px 20px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.type-badge.badge-ask {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow:
+    0 6px 20px rgba(59, 130, 246, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  padding: 10px 20px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.type-badge:hover {
+  transform: translateY(-1px) scale(1.02);
 }
 
 .main-product-image {
@@ -437,11 +471,136 @@
   text-overflow: ellipsis;
 }
 
+/* Seller Information Card */
+.seller-info-card {
+  background: linear-gradient(135deg, rgba(20, 40, 60, 0.5) 0%, rgba(20, 40, 60, 0.3) 100%);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  margin-top: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.seller-info-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.seller-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.seller-avatar {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 107, 53, 0.1);
+  border: 2px solid rgba(255, 107, 53, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.seller-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.seller-avatar-icon {
+  color: #ff6b35;
+  opacity: 0.8;
+}
+
+.verified-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #0a0e1a;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.5);
+}
+
+.verified-badge svg {
+  color: white;
+}
+
+.seller-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.seller-name {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+}
+
+.seller-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.seller-location svg {
+  color: #ff6b35;
+  flex-shrink: 0;
+}
+
+.seller-stats {
+  display: flex;
+  gap: 30px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-value {
+  color: #ff6b35;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
+}
+
+.stat-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+}
+
 /* Action Section */
 .action-section {
   display: flex;
   gap: 16px;
   align-items: center;
+  position: relative;
+  z-index: 50;
 }
 
 .btn-contact-seller {
@@ -459,6 +618,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+  width: 100%;
   box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
 }
 
@@ -471,6 +631,8 @@
 .secondary-actions {
   display: flex;
   gap: 12px;
+  position: relative;
+  z-index: 60;
 }
 
 .btn-icon {
@@ -502,14 +664,16 @@
 /* Share Menu */
 .share-wrapper {
   position: relative;
+  z-index: 100;
+  isolation: isolate; /* Create new stacking context */
 }
 
 .share-menu {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background: rgba(10, 22, 40, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(10, 22, 40, 0.98); /* Increased opacity */
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 12px;
   padding: 8px;
   display: flex;
@@ -517,8 +681,12 @@
   gap: 4px;
   min-width: 150px;
   backdrop-filter: blur(10px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  z-index: 10;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  z-index: 9999;
+  pointer-events: auto; /* Ensure menu is clickable */
+  transform: translateZ(0); /* Force GPU acceleration */
 }
 
 [dir="rtl"] .share-menu {
@@ -733,6 +901,107 @@
   direction: rtl;
 }
 
+/* RTL Support for Seller Information */
+[dir="rtl"] .seller-info-card {
+  direction: rtl;
+}
+
+[dir="rtl"] .seller-header {
+  direction: rtl;
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .seller-details {
+  text-align: right;
+}
+[dir="ltr"] .seller-details {
+  text-align: left;
+}
+
+/* [dir="rtl"] .seller-name {
+  text-align: right;
+}
+[dir="ltr"] .seller-name {
+  text-align: left;
+} */
+
+[dir="rtl"] .seller-location {
+  direction: rtl;
+  flex-direction: row-reverse;
+}
+
+/* Override the parent LTR forcing for seller section */
+[dir="rtl"] .seller-info-card,
+[dir="rtl"] .seller-info-card * {
+  direction: rtl !important;
+}
+
+[dir="ltr"] .seller-info-card,
+[dir="ltr"] .seller-info-card * {
+  direction: ltr !important;
+}
+
+/* Ensure proper text alignment with direction */
+[dir="rtl"] .seller-name {
+  direction: rtl !important;
+  text-align: right !important;
+  unicode-bidi: embed;
+}
+
+[dir="rtl"] .seller-details {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+[dir="rtl"] .seller-location {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+[dir="rtl"] .seller-location span {
+  direction: rtl !important;
+}
+
+[dir="rtl"] .stat-item {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+[dir="ltr"] .seller-name {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: embed;
+}
+
+[dir="ltr"] .seller-details {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+[dir="ltr"] .seller-location {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+[dir="ltr"] .stat-item {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* Reset the forced direction from product-info-section for seller card */
+[dir="rtl"] .product-info-section .seller-info-card {
+  direction: rtl !important;
+}
+
+[dir="rtl"] .seller-stats {
+  direction: rtl;
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .stat-item {
+  text-align: right;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .product-main-card {
@@ -810,6 +1079,22 @@
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 16px;
   }
+  
+  /* Move image badge outside of image on mobile */
+  .image-badge {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-top: 12px;
+    margin-bottom: 8px;
+    display: inline-flex;
+    width: fit-content;
+  }
+  
+  [dir="rtl"] .image-badge {
+    right: auto;
+    left: auto;
+  }
 }
 
 @media (max-width: 480px) {
@@ -823,18 +1108,25 @@
   }
   
   .action-section {
-    flex-direction: column;
+    flex-direction: column-reverse;
+    gap: 12px;
   }
   
   .btn-contact-seller {
     width: 100%;
-    padding: 12px 16px;
-    font-size: 0.9rem;
+    padding: 14px 16px;
+    font-size: 0.95rem;
   }
   
   .secondary-actions {
     width: 100%;
     justify-content: center;
+    gap: 16px;
+  }
+  
+  .btn-icon {
+    width: 48px;
+    height: 48px;
   }
   
   .related-grid {
@@ -860,6 +1152,39 @@
     font-size: 0.8rem;
   }
   
+  .seller-info-card {
+    padding: 16px;
+  }
+  
+  .seller-header {
+    gap: 12px;
+  }
+  
+  .seller-avatar {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .seller-name {
+    font-size: 1rem;
+  }
+  
+  .seller-location {
+    font-size: 0.85rem;
+  }
+  
+  .seller-stats {
+    gap: 20px;
+  }
+  
+  .stat-value {
+    font-size: 1.1rem;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+  }
+  
   .quick-info-grid {
     gap: 8px;
   }
@@ -867,5 +1192,74 @@
   .info-item {
     padding: 10px;
     gap: 8px;
+  }
+}
+
+/* Copy Notification Popup */
+.copy-notification {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  padding: 16px 24px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow:
+    0 10px 40px rgba(16, 185, 129, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  z-index: 10000;
+  animation: slideInUp 0.3s ease-out, slideOutDown 0.3s ease-out 2.7s;
+  animation-fill-mode: both;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.copy-notification svg {
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 100px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes slideOutDown {
+  from {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, 100px);
+  }
+}
+
+/* RTL Support for Copy Notification */
+[dir="rtl"] .copy-notification {
+  direction: rtl;
+}
+
+/* Mobile responsive for notification */
+@media (max-width: 768px) {
+  .copy-notification {
+    bottom: 20px;
+    font-size: 0.9rem;
+    padding: 14px 20px;
+    width: calc(100% - 40px);
+    max-width: 320px;
   }
 }

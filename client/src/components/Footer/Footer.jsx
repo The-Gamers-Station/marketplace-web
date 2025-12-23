@@ -105,7 +105,7 @@ const Footer = () => {
                 style={isMobile ? { cursor: 'pointer' } : {}}
               >
                 {t('footer.customerService.title')}
-                {isMobile && (
+                {/* {isMobile && (
                   <ChevronDown
                     size={14}
                     style={{
@@ -113,7 +113,7 @@ const Footer = () => {
                       transition: 'transform 0.3s ease'
                     }}
                   />
-                )}
+                )} */}
               </h3>
               <ul className={`footer-links ${isMobile && collapsedSections.customerService ? 'mobile-collapsed' : ''}`}>
                 <li><a href="/faq">{t('footer.customerService.faq')}</a></li>

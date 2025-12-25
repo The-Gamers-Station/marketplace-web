@@ -22,6 +22,11 @@ import {
   Eye,
   MessageSquare,
   Award,
+  Edit,
+  Trash2,
+  DollarSign,
+  Clock,
+  Tag,
 } from 'lucide-react';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -62,6 +67,9 @@ const ProfilePage = () => {
   const [conversations, setConversations] = useState([]);
   const [conversationsLoading, setConversationsLoading] = useState(false);
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteProductId, setDeleteProductId] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   // Check authentication
   useEffect(() => {
@@ -319,6 +327,37 @@ const ProfilePage = () => {
     });
   };
 
+  // Handle delete product
+  const handleDeleteProduct = async () => {
+    if (!deleteProductId) return;
+    
+    try {
+      setDeleteLoading(true);
+      await postService.deletePost(deleteProductId);
+      
+      // Remove the product from the list
+      setUserPosts(prev => prev.filter(post => post.id !== deleteProductId));
+      
+      // Show success popup
+      setPopupTitle(t('profile.deleteSuccessTitle') || 'Product Deleted!');
+      setPopupMessage(t('profile.deleteSuccess') || 'Your product has been deleted successfully.');
+      setShowSuccessPopup(true);
+      
+      // Close the modal
+      setShowDeleteModal(false);
+      setDeleteProductId(null);
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      // Show error popup
+      setPopupTitle(t('profile.deleteErrorTitle') || 'Delete Failed');
+      setPopupMessage(t('profile.deleteError') || 'Failed to delete product. Please try again.');
+      setShowSuccessPopup(true);
+      setShowDeleteModal(false);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
   if (loading) {
     return <PageLoader message={t('common.loading')} />;
   }
@@ -499,21 +538,65 @@ const ProfilePage = () => {
             {activeTab === 'posts' && (
               <div className="posts-section">
                 {userPosts.length > 0 ? (
-                  <div className="user-posts-grid">
+                  <div className="user-posts-list list-view">
                     {userPosts.map(post => (
-                      <div key={post.id} className="user-post-card" onClick={() => navigate(`/product/${post.id}`)}>
-                        <div className="post-image">
-                          <img src={post.images?.[0]?.url || `https://via.placeholder.com/300x200/1a1f36/ff6b35?text=${encodeURIComponent(post.title)}`} alt={post.title} />
-                          <div className="post-overlay">
-                            <span className="post-price">{t('currency')} {post.price}</span>
+                      <div key={post.id} className="user-post-item" onClick={() => navigate(`/product/${post.id}`)}>
+                        <div className="post-item-image">
+                          <img src={post.images?.[0]?.url || `https://via.placeholder.com/150x150/1a1f36/ff6b35?text=${encodeURIComponent(post.title)}`} alt={post.title} />
+                          <div className="post-type-badge">
+                            {post.type === 'SELL' ? t('productType.forSale') : t('productType.wanted')}
                           </div>
                         </div>
-                        <div className="post-info">
-                          <h3 className="post-title">{post.title}</h3>
-                          <div className="post-stats">
-                            <span><Eye size={14} /> {post.views || 0}</span>
-                            <span><Heart size={14} /> {post.likes || 0}</span>
+                        <div className="post-item-content">
+                          <div className="post-item-header">
+                            <h3 className="post-item-title">{post.title}</h3>
+                            <span className={`condition-badge ${post.condition?.toLowerCase()}`}>
+                              {post.condition && t(`addProduct.conditions.${post.condition.toLowerCase()}`)}
+                            </span>
                           </div>
+                          <div className="post-item-details">
+                            <div className="detail-item">
+                              <DollarSign size={14} />
+                              <span>{t('currency')} {post.price}</span>
+                            </div>
+                            <div className="detail-item">
+                              <MapPin size={14} />
+                              <span>{post.cityName}</span>
+                            </div>
+                            <div className="detail-item">
+                              <Clock size={14} />
+                              <span>{formatDate(post.createdAt)}</span>
+                            </div>
+                            <div className="detail-item">
+                              <Eye size={14} />
+                              <span>{post.views || 0} {t('profile.views')}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="post-item-actions">
+                          <button
+                            className="post-action-btn edit-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/edit-product/${post.id}`);
+                            }}
+                            title={t('profile.editProduct')}
+                          >
+                            <Edit size={18} />
+                            <span>{t('common.edit')}</span>
+                          </button>
+                          <button
+                            className="post-action-btn delete-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setDeleteProductId(post.id);
+                              setShowDeleteModal(true);
+                            }}
+                            title={t('profile.deleteProduct')}
+                          >
+                            <Trash2 size={18} />
+                            <span>{t('common.delete')}</span>
+                          </button>
                         </div>
                       </div>
                     ))}
@@ -645,6 +728,42 @@ const ProfilePage = () => {
         autoClose={true}
         autoCloseDelay={3000}
       />
+      
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2 className="modal-title">
+                <Trash2 size={24} />
+                {t('profile.deleteProductTitle')}
+              </h2>
+            </div>
+            <div className="modal-body">
+              {t('profile.deleteProductMessage')}
+            </div>
+            <div className="modal-actions">
+              <button
+                className="modal-btn modal-btn-cancel"
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setDeleteProductId(null);
+                }}
+                disabled={deleteLoading}
+              >
+                {t('common.cancel')}
+              </button>
+              <button
+                className="modal-btn modal-btn-delete"
+                onClick={handleDeleteProduct}
+                disabled={deleteLoading}
+              >
+                {deleteLoading ? t('common.deleting') : t('common.delete')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

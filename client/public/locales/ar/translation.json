@@ -534,7 +534,8 @@
     "edit": "تعديل",
     "language": "اللغة",
     "optional": "اختياري",
-    "showAllProducts": "عرض جميع المنتجات"
+    "showAllProducts": "عرض جميع المنتجات",
+    "deleting": "جاري الحذف..."
   },
   "auth": {
     "login": {
@@ -707,7 +708,11 @@
       "new": "جديد تماماً",
       "likeNew": "كالجديد",
       "good": "جيد",
-      "fair": "مقبول"
+      "fair": "مقبول",
+      "used": "مستعمل",
+      "forParts": "للأجزاء",
+      "used_good": "جيد",
+      "used_fair": "مقبول"
     },
     "types": {
       "sale": "للبيع",
@@ -734,6 +739,17 @@
     },
     "uploading": "جاري الرفع...",
     "addProductButton": "إضافة منتج"
+  },
+  "editProduct": {
+    "pageTitle": "تعديل المنتج",
+    "pageDescription": "تعديل إعلان المنتج الخاص بك",
+    "successTitle": "تم التحديث بنجاح!",
+    "successMessage": "تم تحديث منتجك بنجاح!",
+    "updating": "جاري التحديث...",
+    "updateProduct": "تحديث المنتج",
+    "errors": {
+      "updateFailed": "فشل تحديث المنتج. يرجى المحاولة مرة أخرى."
+    }
   },
   "imageAlt": {
     "logo": "شعار GamersStation",
@@ -797,7 +813,16 @@
     "youtubePlaceholder": "رابط قناة يوتيوب",
     "linkedinPlaceholder": "رابط ملف لينكد إن الشخصي",
     "githubPlaceholder": "رابط ملف جيت هاب الشخصي",
-    "websitePlaceholder": "رابط الموقع الشخصي"
+    "websitePlaceholder": "رابط الموقع الشخصي",
+    "views": "مشاهدة",
+    "editProduct": "تعديل المنتج",
+    "deleteProduct": "حذف المنتج",
+    "deleteProductTitle": "حذف المنتج",
+    "deleteProductMessage": "هل أنت متأكد من حذف هذا المنتج؟ لا يمكن التراجع عن هذا الإجراء.",
+    "deleteSuccess": "تم حذف منتجك بنجاح.",
+    "deleteSuccessTitle": "تم حذف المنتج!",
+    "deleteError": "فشل حذف المنتج. يرجى المحاولة مرة أخرى.",
+    "deleteErrorTitle": "فشل الحذف"
   },
   "chat": {
     "online": "متصل",

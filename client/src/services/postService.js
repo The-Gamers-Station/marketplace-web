@@ -3,197 +3,188 @@ import { API_ENDPOINTS, apiRequest } from '../config/api';
 class PostService {
   // Get posts with filters and pagination
   async getPosts(params = {}) {
-    try {
-      const queryParams = new URLSearchParams();
-      
-      // Add parameters if they exist
-      if (params.categoryId) queryParams.append('categoryId', params.categoryId);
-      if (params.categoryIds) queryParams.append('categoryIds', params.categoryIds);
-      if (params.cityId) queryParams.append('cityId', params.cityId);
-      if (params.regionId) queryParams.append('regionId', params.regionId);
-      if (params.type) queryParams.append('type', params.type);
-      if (params.condition) queryParams.append('condition', params.condition);
-      if (params.minPrice) queryParams.append('minPrice', params.minPrice);
-      if (params.maxPrice) queryParams.append('maxPrice', params.maxPrice);
-      if (params.page !== undefined) queryParams.append('page', params.page);
-      if (params.size !== undefined) queryParams.append('size', params.size);
-      if (params.sortBy) queryParams.append('sortBy', params.sortBy);
-      if (params.direction) queryParams.append('direction', params.direction);
-      
-      const url = `${API_ENDPOINTS.posts.list}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
-      
-      const response = await apiRequest(url, {
-        method: 'GET',
-      });
-      
-      return response;
-    } catch (error) {
-      // Error fetching posts: error
-      throw error;
-    }
+    const queryParams = new URLSearchParams();
+    
+    // Add parameters if they exist
+    if (params.categoryId) queryParams.append('categoryId', params.categoryId);
+    if (params.categoryIds) queryParams.append('categoryIds', params.categoryIds);
+    if (params.cityId) queryParams.append('cityId', params.cityId);
+    if (params.regionId) queryParams.append('regionId', params.regionId);
+    if (params.type) queryParams.append('type', params.type);
+    if (params.condition) queryParams.append('condition', params.condition);
+    if (params.minPrice) queryParams.append('minPrice', params.minPrice);
+    if (params.maxPrice) queryParams.append('maxPrice', params.maxPrice);
+    if (params.page !== undefined) queryParams.append('page', params.page);
+    if (params.size !== undefined) queryParams.append('size', params.size);
+    if (params.sortBy) queryParams.append('sortBy', params.sortBy);
+    if (params.direction) queryParams.append('direction', params.direction);
+    
+    const url = `${API_ENDPOINTS.posts.list}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    
+    const response = await apiRequest(url, {
+      method: 'GET',
+    });
+    
+    return response;
   }
   
   // Advanced search with query and filters
   async searchPosts(params = {}) {
-    try {
-      const queryParams = new URLSearchParams();
-      
-      // Add search parameters
-      if (params.q) queryParams.append('q', params.q);
-      if (params.categoryId) queryParams.append('categoryId', params.categoryId);
-      if (params.cityId) queryParams.append('cityId', params.cityId);
-      if (params.regionId) queryParams.append('regionId', params.regionId);
-      if (params.type) queryParams.append('type', params.type);
-      if (params.condition) queryParams.append('condition', params.condition);
-      if (params.minPrice) queryParams.append('minPrice', params.minPrice);
-      if (params.maxPrice) queryParams.append('maxPrice', params.maxPrice);
-      if (params.page !== undefined) queryParams.append('page', params.page);
-      if (params.size !== undefined) queryParams.append('size', params.size);
-      if (params.sortBy) queryParams.append('sortBy', params.sortBy);
-      if (params.direction) queryParams.append('direction', params.direction);
-      if (params.sort) queryParams.append('sort', params.sort);
-      
-      const url = `${API_ENDPOINTS.posts.search}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
-      const response = await apiRequest(url, {
-        method: 'GET',
-      });
-      
-      return response;
-    } catch (error) {
-      // Error searching posts: error
-      throw error;
-    }
+    const queryParams = new URLSearchParams();
+    
+    // Add search parameters
+    if (params.q) queryParams.append('q', params.q);
+    if (params.categoryId) queryParams.append('categoryId', params.categoryId);
+    if (params.cityId) queryParams.append('cityId', params.cityId);
+    if (params.regionId) queryParams.append('regionId', params.regionId);
+    if (params.type) queryParams.append('type', params.type);
+    if (params.condition) queryParams.append('condition', params.condition);
+    if (params.minPrice) queryParams.append('minPrice', params.minPrice);
+    if (params.maxPrice) queryParams.append('maxPrice', params.maxPrice);
+    if (params.page !== undefined) queryParams.append('page', params.page);
+    if (params.size !== undefined) queryParams.append('size', params.size);
+    if (params.sortBy) queryParams.append('sortBy', params.sortBy);
+    if (params.direction) queryParams.append('direction', params.direction);
+    if (params.sort) queryParams.append('sort', params.sort);
+    
+    const url = `${API_ENDPOINTS.posts.search}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    const response = await apiRequest(url, {
+      method: 'GET',
+    });
+    
+    return response;
   }
   
   // Get post by ID
   async getPostById(id) {
-    try {
-      const response = await apiRequest(API_ENDPOINTS.posts.getById(id), {
-        method: 'GET',
-      });
-      return response;
-    } catch (error) {
-      // Error fetching post: error
-      throw error;
-    }
+    const response = await apiRequest(API_ENDPOINTS.posts.getById(id), {
+      method: 'GET',
+    });
+    return response;
   }
   
   // Create a new post
   async createPost(data) {
-    try {
-      // Normalize enum values and types to match backend requirements
-      const normalizeType = (type) => {
-        if (!type) return undefined;
-        const map = {
-          SALE: 'SELL',
-          SELL: 'SELL',
-          WANTED: 'ASK',
-          ASK: 'ASK',
-          EXCHANGE: 'SELL' // backend does not support EXCHANGE; fallback to SELL
-        };
-        return map[type] || type;
+    // Normalize enum values and types to match backend requirements
+    const normalizeType = (type) => {
+      if (!type) return undefined;
+      const map = {
+        SALE: 'SELL',
+        SELL: 'SELL',
+        WANTED: 'ASK',
+        ASK: 'ASK',
+        EXCHANGE: 'SELL' // backend does not support EXCHANGE; fallback to SELL
       };
-  
-      const normalizeCondition = (cond) => {
-        if (!cond) return undefined;
-        const map = {
-          GOOD: 'USED_GOOD',
-          FAIR: 'USED_FAIR',
-          LIKE_NEW: 'LIKE_NEW',
-          NEW: 'NEW',
-          USED_GOOD: 'USED_GOOD',
-          USED_FAIR: 'USED_FAIR',
-          FOR_PARTS: 'FOR_PARTS'
-        };
-        return map[cond] || cond;
+      return map[type] || type;
+    };
+
+    const normalizeCondition = (cond) => {
+      if (!cond) return undefined;
+      const map = {
+        GOOD: 'USED_GOOD',
+        FAIR: 'USED_FAIR',
+        LIKE_NEW: 'LIKE_NEW',
+        NEW: 'NEW',
+        USED_GOOD: 'USED_GOOD',
+        USED_FAIR: 'USED_FAIR',
+        FOR_PARTS: 'FOR_PARTS'
       };
-  
-      const payload = {
-        title: data.title?.trim(),
-        description: data.description?.trim(),
-        type: normalizeType(data.type),
-        condition: normalizeCondition(data.condition),
-        price: data.price !== undefined && data.price !== '' ? Number(data.price) : undefined,
-        priceMin: data.priceMin !== undefined && data.priceMin !== '' ? Number(data.priceMin) : undefined,
-        priceMax: data.priceMax !== undefined && data.priceMax !== '' ? Number(data.priceMax) : undefined,
-        categoryId: data.categoryId != null ? Number(data.categoryId) : undefined,
-        cityId: data.cityId != null ? Number(data.cityId) : undefined,
-        imageUrls: Array.isArray(data.imageUrls) && data.imageUrls.length > 0
-          ? data.imageUrls
-          : (Array.isArray(data.images) && data.images.length > 0 ? data.images : ['https://via.placeholder.com/800x600?text=Product+Image'])
-      };
-  
-      const response = await apiRequest(API_ENDPOINTS.posts.create, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      });
-      return response;
-    } catch (error) {
-      // Error creating post: error
-      throw error;
-    }
+      return map[cond] || cond;
+    };
+
+    const payload = {
+      title: data.title?.trim(),
+      description: data.description?.trim(),
+      type: normalizeType(data.type),
+      condition: normalizeCondition(data.condition),
+      price: data.price !== undefined && data.price !== '' ? Number(data.price) : undefined,
+      priceMin: data.priceMin !== undefined && data.priceMin !== '' ? Number(data.priceMin) : undefined,
+      priceMax: data.priceMax !== undefined && data.priceMax !== '' ? Number(data.priceMax) : undefined,
+      categoryId: data.categoryId != null ? Number(data.categoryId) : undefined,
+      cityId: data.cityId != null ? Number(data.cityId) : undefined,
+      imageUrls: Array.isArray(data.imageUrls) && data.imageUrls.length > 0
+        ? data.imageUrls
+        : (Array.isArray(data.images) && data.images.length > 0 ? data.images : ['https://via.placeholder.com/800x600?text=Product+Image'])
+    };
+
+    const response = await apiRequest(API_ENDPOINTS.posts.create, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    return response;
   }
   
   // Update a post
   async updatePost(id, data) {
-    try {
-      const response = await apiRequest(API_ENDPOINTS.posts.update(id), {
-        method: 'PUT',
-        body: JSON.stringify(data),
-      });
-      return response;
-    } catch (error) {
-      // Error updating post: error
-      throw error;
-    }
+    // Normalize and send only fields allowed by UpdatePostRequest
+    const normalizeCondition = (cond) => {
+      if (!cond) return undefined;
+      const map = {
+        GOOD: 'USED_GOOD',
+        FAIR: 'USED_FAIR',
+        LIKE_NEW: 'LIKE_NEW',
+        NEW: 'NEW',
+        USED_GOOD: 'USED_GOOD',
+        USED_FAIR: 'USED_FAIR',
+        FOR_PARTS: 'FOR_PARTS',
+      };
+      return map[cond] || cond;
+    };
+
+    const payload = {
+      title: data.title?.trim(),
+      description: data.description?.trim(),
+      price: data.price !== undefined && data.price !== '' && !Number.isNaN(Number(data.price)) ? Number(data.price) : undefined,
+      priceMin: data.priceMin !== undefined && data.priceMin !== '' && !Number.isNaN(Number(data.priceMin)) ? Number(data.priceMin) : undefined,
+      priceMax: data.priceMax !== undefined && data.priceMax !== '' && !Number.isNaN(Number(data.priceMax)) ? Number(data.priceMax) : undefined,
+      condition: normalizeCondition(data.condition),
+      cityId: data.cityId !== undefined && data.cityId !== '' && !Number.isNaN(Number(data.cityId)) ? Number(data.cityId) : undefined,
+      // Only send images if we actually have at least one; otherwise omit to keep existing images
+      imageUrls: Array.isArray(data.imageUrls) && data.imageUrls.length > 0
+        ? data.imageUrls
+        : (Array.isArray(data.images) && data.images.length > 0
+            ? data.images.map(img => typeof img === 'string' ? img : (img?.url ?? null)).filter(Boolean)
+            : undefined),
+    };
+
+    const response = await apiRequest(API_ENDPOINTS.posts.update(id), {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    });
+    return response;
   }
   
   // Delete a post
   async deletePost(id) {
-    try {
-      const response = await apiRequest(API_ENDPOINTS.posts.delete(id), {
-        method: 'DELETE',
-      });
-      return response;
-    } catch (error) {
-      // Error deleting post: error
-      throw error;
-    }
+    const response = await apiRequest(API_ENDPOINTS.posts.delete(id), {
+      method: 'DELETE',
+    });
+    return response;
   }
   
   // Get my posts
   async getMyPosts(params = {}) {
-    try {
-      const queryParams = new URLSearchParams();
-      
-      if (params.page !== undefined) queryParams.append('page', params.page);
-      if (params.size !== undefined) queryParams.append('size', params.size);
-      if (params.sortBy) queryParams.append('sortBy', params.sortBy);
-      if (params.direction) queryParams.append('direction', params.direction);
-      
-      const url = `${API_ENDPOINTS.posts.myPosts}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
-      const response = await apiRequest(url, {
-        method: 'GET',
-      });
-      
-      return response;
-    } catch (error) {
-      // Error fetching my posts: error
-      throw error;
-    }
+    const queryParams = new URLSearchParams();
+    
+    if (params.page !== undefined) queryParams.append('page', params.page);
+    if (params.size !== undefined) queryParams.append('size', params.size);
+    if (params.sortBy) queryParams.append('sortBy', params.sortBy);
+    if (params.direction) queryParams.append('direction', params.direction);
+    
+    const url = `${API_ENDPOINTS.posts.myPosts}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    const response = await apiRequest(url, {
+      method: 'GET',
+    });
+    
+    return response;
   }
   
   // Mark post as sold
   async markAsSold(id) {
-    try {
-      const response = await apiRequest(API_ENDPOINTS.posts.markAsSold(id), {
-        method: 'POST',
-      });
-      return response;
-    } catch (error) {
-      // Error marking post as sold: error
-      throw error;
-    }
+    const response = await apiRequest(API_ENDPOINTS.posts.markAsSold(id), {
+      method: 'POST',
+    });
+    return response;
   }
   
   // Map category IDs to proper display names

@@ -37,10 +37,17 @@ VALUES
 
 -- Insert Nintendo categories with hardcoded IDs (300-302)
 INSERT INTO categories (id, parent_id, name_en, name_ar, slug, level, sort_order, is_active, created_at, updated_at)
-VALUES 
+VALUES
 (300, null, 'Nintendo Devices', 'أجهزة نينتندو', 'nintendo-devices', 1, 300, true, NOW(), NOW()),
 (301, null, 'Nintendo Games', 'ألعاب نينتندو', 'nintendo-games', 1, 301, true, NOW(), NOW()),
 (302, null, 'Nintendo Accessories', 'إكسسوارات نينتندو', 'nintendo-accessories', 1, 302, true, NOW(), NOW());
+
+-- Insert PC categories with hardcoded IDs (400-402)
+INSERT INTO categories (id, parent_id, name_en, name_ar, slug, level, sort_order, is_active, created_at, updated_at)
+VALUES
+(400, null, 'PC Devices', 'أجهزة الكمبيوتر', 'pc-devices', 1, 400, true, NOW(), NOW()),
+(401, null, 'PC Games', 'ألعاب الكمبيوتر', 'pc-games', 1, 401, true, NOW(), NOW()),
+(402, null, 'PC Accessories', 'إكسسوارات الكمبيوتر', 'pc-accessories', 1, 402, true, NOW(), NOW());
 
 -- Create an admin user (password should be set via API)
 -- Default phone: +966500000000, password will need to be set on first login

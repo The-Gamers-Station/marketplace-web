@@ -15,17 +15,17 @@ const CategoryFilter = ({ onFilterChange }) => {
     {
       key: 'devices',
       name: i18n.language === 'ar' ? 'الأجهزة' : 'Devices',
-      categoryIds: [100, 200, 300] // PlayStation, Xbox, Nintendo device IDs
+      categoryIds: [100, 200, 300, 400] // PlayStation, Xbox, Nintendo, PC device IDs
     },
     {
       key: 'games',
       name: i18n.language === 'ar' ? 'الألعاب' : 'Games',
-      categoryIds: [101, 201, 301] // PlayStation, Xbox, Nintendo game IDs
+      categoryIds: [101, 201, 301, 401] // PlayStation, Xbox, Nintendo, PC game IDs
     },
     {
       key: 'accessories',
       name: i18n.language === 'ar' ? 'الإكسسوارات' : 'Accessories',
-      categoryIds: [102, 202, 302] // PlayStation, Xbox, Nintendo accessories IDs
+      categoryIds: [102, 202, 302, 402] // PlayStation, Xbox, Nintendo, PC accessories IDs
     }
   ];
 
@@ -68,6 +68,17 @@ const CategoryFilter = ({ onFilterChange }) => {
         { key: 'devices', name: i18n.language === 'ar' ? 'الأجهزة' : 'Devices', categoryId: 300 },
         { key: 'games', name: i18n.language === 'ar' ? 'الألعاب' : 'Games', categoryId: 301 },
         { key: 'accessories', name: i18n.language === 'ar' ? 'الإكسسوارات' : 'Accessories', categoryId: 302 }
+      ]
+    },
+    {
+      name: t('categoryFilter.pc') || 'PC',
+      key: 'pc',
+      categoryId: null, // Will use subcategory IDs instead
+      categoryIds: [400, 401, 402], // All PC category IDs
+      subcategories: [
+        { key: 'devices', name: i18n.language === 'ar' ? 'الأجهزة' : 'Devices', categoryId: 400 },
+        { key: 'games', name: i18n.language === 'ar' ? 'الألعاب' : 'Games', categoryId: 401 },
+        { key: 'accessories', name: i18n.language === 'ar' ? 'الإكسسوارات' : 'Accessories', categoryId: 402 }
       ]
     }
   ];

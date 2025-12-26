@@ -568,11 +568,6 @@
     margin-left: 100px;
   }
 
-  html[dir="rtl"] .header-container .header-logo {
-    margin-left: 0;
-    margin-right: 100px;
-  }
-
   .mobile-menu-btn {
     display: flex;
     align-items: center;

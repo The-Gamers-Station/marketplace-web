@@ -210,6 +210,11 @@ const AddProductPage = () => {
     if (!formData.cityId) {
       newErrors.cityId = t('addProduct.errors.cityRequired');
     }
+
+    // Require at least one image
+    if (uploadedImages.length < 1) {
+      newErrors.images = t('addProduct.errors.imagesRequired') || 'Please upload at least one image';
+    }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -243,8 +248,8 @@ const AddProductPage = () => {
         categoryId: selectedCategoryId,
         price: parseFloat(formData.price),
         cityId: parseInt(formData.cityId),
-        // Use uploaded images or placeholder
-        imageUrls: uploadedImages.length > 0 ? uploadedImages : ['https://via.placeholder.com/800x600?text=Product+Image']
+        // Images are required by validation; submit current uploads
+        imageUrls: uploadedImages
       };
       
       await postService.createPost(postData);
@@ -283,20 +288,17 @@ const AddProductPage = () => {
   );
 
   const PriceIcon = () => (
-  <img
-    src="https://www.sama.gov.sa/ar-sa/Currency/SRS/PublishingImages/Saudi_Riyal_Symbol-1.png"
-    alt="Saudi Riyal symbol"
-    style={{ 
-      width: '20px', 
-      height: '20px', 
-      objectFit: 'contain', 
-      display: 'block',
-      filter: 'invert(1) brightness(2)',
-      opacity: '0.7'
-    }}
-    referrerPolicy="no-referrer"
-  />
-);
+    <img
+      src="https://www.sama.gov.sa/ar-sa/Currency/SRS/PublishingImages/Saudi_Riyal_Symbol-1.png"
+      alt="Saudi Riyal symbol"
+      style={{
+        objectFit: 'contain',
+        filter: 'invert(1) brightness(2)',
+        opacity: '0.7'
+      }}
+      referrerPolicy="no-referrer"
+    />
+  );
 
   const LocationIcon = () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -364,6 +366,8 @@ const AddProductPage = () => {
       }
   
       setUploadedImages(prev => [...prev, ...newImageUrls]);
+      // Clear images validation error on successful upload
+      setErrors(prev => ({ ...prev, images: '' }));
     } catch (error) {
       console.error('Error uploading images:', error);
       // Don't show alert for upload failures - we'll use placeholder images
@@ -637,7 +641,16 @@ const AddProductPage = () => {
                           <button
                             className="remove-image-btn"
                             onClick={() => {
-                              setUploadedImages(prev => prev.filter((_, i) => i !== index));
+                              setUploadedImages(prev => {
+                                const next = prev.filter((_, i) => i !== index);
+                                if (next.length === 0) {
+                                  setErrors(prevErr => ({
+                                    ...prevErr,
+                                    images: t('addProduct.errors.imagesRequired') || 'Please upload at least one image'
+                                  }));
+                                }
+                                return next;
+                              });
                             }}
                             type="button"
                           >
@@ -675,6 +688,9 @@ const AddProductPage = () => {
                         </label>
                       )}
                     </div>
+                    {errors.images && (
+                      <span className="field-error">{errors.images}</span>
+                    )}
                   </div>
                 </form>
               </div>

@@ -733,7 +733,8 @@
       "subcategoryRequired": "Please select a subcategory",
       "submitFailed": "Failed to add product. Please try again.",
       "tooManyImages": "You can upload up to 10 images",
-      "uploadInvalidFiles": "Some files are invalid. Allowed: JPG, JPEG, PNG, WEBP, GIF up to 10MB each"
+      "uploadInvalidFiles": "Some files are invalid. Allowed: JPG, JPEG, PNG, WEBP, GIF up to 10MB each",
+      "imagesRequired": "Please upload at least one image"
     },
     "uploading": "Uploading...",
     "addProductButton": "Add Product"

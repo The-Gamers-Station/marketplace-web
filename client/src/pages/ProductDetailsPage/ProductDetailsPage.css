@@ -569,31 +569,6 @@
   flex-shrink: 0;
 }
 
-.seller-stats {
-  display: flex;
-  gap: 30px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.stat-value {
-  color: #ff6b35;
-  font-size: 1.3rem;
-  font-weight: 700;
-  text-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
-}
-
-.stat-label {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.85rem;
-}
-
 /* Action Section */
 .action-section {
   display: flex;
@@ -962,11 +937,6 @@
   direction: rtl !important;
 }
 
-[dir="rtl"] .stat-item {
-  direction: rtl !important;
-  text-align: right !important;
-}
-
 [dir="ltr"] .seller-name {
   direction: ltr !important;
   text-align: left !important;
@@ -983,23 +953,9 @@
   text-align: left !important;
 }
 
-[dir="ltr"] .stat-item {
-  direction: ltr !important;
-  text-align: left !important;
-}
-
 /* Reset the forced direction from product-info-section for seller card */
 [dir="rtl"] .product-info-section .seller-info-card {
   direction: rtl !important;
-}
-
-[dir="rtl"] .seller-stats {
-  direction: rtl;
-  flex-direction: row-reverse;
-}
-
-[dir="rtl"] .stat-item {
-  text-align: right;
 }
 
 /* Responsive Design */
@@ -1171,18 +1127,6 @@
   
   .seller-location {
     font-size: 0.85rem;
-  }
-  
-  .seller-stats {
-    gap: 20px;
-  }
-  
-  .stat-value {
-    font-size: 1.1rem;
-  }
-  
-  .stat-label {
-    font-size: 0.8rem;
   }
   
   .quick-info-grid {

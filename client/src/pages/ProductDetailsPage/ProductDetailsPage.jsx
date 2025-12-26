@@ -86,9 +86,7 @@ const ProductDetailsPage = () => {
         },
         seller: {
           id: postData.ownerId,
-          name: postData.store?.nameEn || postData.ownerUsername || 'GamersStation',
-          responseTime: currentLang === 'ar' ? '1 ساعة' : '1 hour',
-          products: Math.floor(Math.random() * 200) + 50,
+          name: postData.store?.nameEn || postData.ownerUsername || (currentLang === 'ar' ? 'مجهول' : 'Anonymous'),
           verified: postData.store?.isVerified || false,
           city: getTranslatedCityName(postData.cityName, t)
         }
@@ -104,6 +102,7 @@ const ProductDetailsPage = () => {
             avatar: userData.profileImageUrl,
             storeName: userData.storeName,
             username: userData.username,
+            name: userData.name || userData.username || (currentLang === 'ar' ? 'مجهول' : 'Anonymous'),
             city: getTranslatedCityName(userData.cityName || postData.cityName, t)
           });
         } catch (err) {
@@ -439,21 +438,11 @@ const ProductDetailsPage = () => {
                     )}
                   </div>
                   <div className="seller-details">
-                    <h3 className="seller-name">{product.seller.name}</h3>
+                    <h3 className="seller-name">{sellerDetails?.name || product.seller.name}</h3>
                     <div className="seller-location">
                       <MapPin size={14} />
                       <span>{product.seller.city}</span>
                     </div>
-                  </div>
-                </div>
-                <div className="seller-stats">
-                  <div className="stat-item">
-                    <span className="stat-value">{product.seller.products}</span>
-                    <span className="stat-label">{t('pages.productDetails.products')}</span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-value">{product.seller.responseTime}</span>
-                    <span className="stat-label">{t('pages.productDetails.responseTime')}</span>
                   </div>
                 </div>
               </div>

@@ -114,23 +114,31 @@ export const apiRequest = async (url, options = {}, isRetry = false) => {
     }
   };
 
-  // Handle 401/403 - try to refresh token
+  // Handle 401/403 - try to refresh token only if user has a token (is logged in)
   if ((response.status === 401 || response.status === 403) && !isRetry) {
-    try {
-      // Dynamically import authService to avoid circular dependency
-      const { authService } = await import('../services/authService.js');
-      await authService.refreshToken();
-      // Retry the original request with new token
-      return apiRequest(url, options, true);
-    } catch (refreshError) {
-      console.error('Token refresh failed:', refreshError);
-      // Clear tokens and redirect to login
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
-      return;
+    const token = localStorage.getItem('accessToken');
+    
+    // Only attempt refresh if user was previously authenticated
+    if (token) {
+      try {
+        // Dynamically import authService to avoid circular dependency
+        const { authService } = await import('../services/authService.js');
+        await authService.refreshToken();
+        // Retry the original request with new token
+        return apiRequest(url, options, true);
+      } catch (refreshError) {
+        console.error('Token refresh failed:', refreshError);
+        // Clear tokens and redirect to login
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+        return;
+      }
     }
+    // If no token exists, just let the 401/403 error be handled normally
+    // This allows unauthenticated users to receive proper error messages
+    // without being redirected to login
   }
 
   if (response.ok) {

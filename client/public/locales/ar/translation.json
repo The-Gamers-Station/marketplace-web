@@ -735,7 +735,8 @@
       "subcategoryRequired": "الرجاء اختيار الفئة الفرعية",
       "submitFailed": "فشل إضافة المنتج. الرجاء المحاولة مرة أخرى.",
       "tooManyImages": "يمكنك رفع حتى 10 صور",
-      "uploadInvalidFiles": "بعض الملفات غير صالحة. المسموح: JPG، JPEG، PNG، WEBP، GIF حتى 10 ميجابايت لكل منها"
+      "uploadInvalidFiles": "بعض الملفات غير صالحة. المسموح: JPG، JPEG، PNG، WEBP، GIF حتى 10 ميجابايت لكل منها",
+      "imagesRequired": "الرجاء رفع صورة واحدة على الأقل"
     },
     "uploading": "جاري الرفع...",
     "addProductButton": "إضافة منتج"

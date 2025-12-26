@@ -198,7 +198,10 @@ class PostService {
       202: 'Xbox Accessories',
       300: 'Nintendo Devices',
       301: 'Nintendo Games',
-      302: 'Nintendo Accessories'
+      302: 'Nintendo Accessories',
+      400: 'PC Devices',
+      401: 'PC Games',
+      402: 'PC Accessories'
     };
     
     const arabicCategoryMap = {
@@ -210,7 +213,10 @@ class PostService {
       202: 'إكسسوارات إكس بوكس',
       300: 'أجهزة نينتندو',
       301: 'ألعاب نينتندو',
-      302: 'إكسسوارات نينتندو'
+      302: 'إكسسوارات نينتندو',
+      400: 'أجهزة الكمبيوتر',
+      401: 'ألعاب الكمبيوتر',
+      402: 'إكسسوارات الكمبيوتر'
     };
     
     // Check if we're in Arabic mode (you might need to pass language as parameter)

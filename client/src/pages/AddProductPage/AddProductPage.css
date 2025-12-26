@@ -421,14 +421,33 @@
   color: var(--primary-color);
 }
 
+/* Adjust SAR icon position to avoid border overlay */
+.input-container img[alt="Saudi Riyal symbol"] {
+  position: absolute;
+  left: 1.4rem; /* Moved 0.4rem (~1cm) to the right */
+  width: 20px;
+  height: 20px;
+}
+
 .input-container input {
   width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
+  padding: 1rem 1rem 1rem 3.4rem; /* Increased left padding to account for repositioned icon */
   background: transparent;
   border: none;
   color: var(--text-primary);
   font-size: 1rem;
   transition: all 0.3s ease;
+}
+
+/* Remove up/down arrows from number inputs */
+.input-container input[type="number"]::-webkit-outer-spin-button,
+.input-container input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-container input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .input-container input:focus {
@@ -809,6 +828,11 @@
   direction: rtl;
 }
 
+:root[dir="rtl"] .input-container img[alt="Saudi Riyal symbol"] {
+  right: 1.4rem; /* Adjusted for RTL */
+  left: auto;
+}
+
 :root[dir="rtl"] .step-connector {
   margin: 0 1rem;
   margin-bottom: 1.5rem;
@@ -847,6 +871,11 @@
   left: auto;
 }
 
+:root[dir="rtl"] .input-container input {
+  padding: 1rem 3.4rem 1rem 1rem; /* Increased right padding for RTL */
+  text-align: right;
+}
+
 :root[dir="rtl"] .textarea-container textarea {
   padding: 1rem 3rem 1rem 1rem;
   text-align: right;
@@ -874,8 +903,13 @@
   right: auto;
 }
 
+:root[dir="ltr"] .input-container img[alt="Saudi Riyal symbol"] {
+  left: 1.4rem; /* Adjusted for LTR */
+  right: auto;
+}
+
 :root[dir="ltr"] .input-container input {
-  padding: 1rem 1rem 1rem 3rem;
+  padding: 1rem 1rem 1rem 3.4rem; /* Increased left padding for LTR */
   text-align: left;
 }
 

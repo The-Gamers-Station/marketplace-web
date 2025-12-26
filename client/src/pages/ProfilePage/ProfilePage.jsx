@@ -19,7 +19,6 @@ import {
   Save,
   X,
   Upload,
-  Eye,
   MessageSquare,
   Award,
   Edit,
@@ -566,10 +565,6 @@ const ProfilePage = () => {
                             <div className="detail-item">
                               <Clock size={14} />
                               <span>{formatDate(post.createdAt)}</span>
-                            </div>
-                            <div className="detail-item">
-                              <Eye size={14} />
-                              <span>{post.views || 0} {t('profile.views')}</span>
                             </div>
                           </div>
                         </div>

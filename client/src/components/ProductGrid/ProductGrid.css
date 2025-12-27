@@ -38,17 +38,7 @@
   position: relative;
 }
 
-.product-grid::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #ff6b35, transparent);
-  animation: shimmer 2s infinite;
-}
+ 
 
 /* Grid Header */
 .grid-header {

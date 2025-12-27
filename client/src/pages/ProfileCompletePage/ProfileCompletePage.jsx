@@ -18,6 +18,7 @@ const ProfileCompletePage = () => {
   });
   const [cities, setCities] = useState([]);
   const [errors, setErrors] = useState({});
+  const [success, setSuccess] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingCities, setIsLoadingCities] = useState(true);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
@@ -52,10 +53,43 @@ const ProfileCompletePage = () => {
       ...prev,
       [name]: value
     }));
-    // Clear error for this field
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+    
+    // Real-time validation
+    validateField(name, value);
+  };
+
+  const validateField = (name, value) => {
+    const newErrors = { ...errors };
+    const newSuccess = { ...success };
+    
+    // Clear previous messages
+    delete newErrors[name];
+    delete newSuccess[name];
+    
+    if (name === 'username') {
+      if (!value.trim()) {
+        newErrors.username = t('auth.errors.usernameRequired');
+      } else if (value.trim().length < 3) {
+        newErrors.username = t('auth.errors.usernameTooShort', { min: 3 });
+      } else if (value.trim().length > 20) {
+        newErrors.username = t('auth.errors.usernameTooLong', { max: 20 });
+      } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+        newErrors.username = t('auth.errors.usernameInvalid');
+      } else {
+        newSuccess.username = t('auth.success.usernameValid');
+      }
     }
+    
+    if (name === 'email' && value) {
+      if (!/\S+@\S+\.\S+/.test(value)) {
+        newErrors.email = t('auth.errors.emailInvalid');
+      } else {
+        newSuccess.email = t('auth.success.emailValid');
+      }
+    }
+    
+    setErrors(newErrors);
+    setSuccess(newSuccess);
   };
 
   const validateForm = () => {
@@ -185,9 +219,13 @@ const ProfileCompletePage = () => {
                 onChange={handleChange}
                 placeholder={t('profileComplete.placeholders.username')}
                 error={errors.username}
+                success={success.username}
                 required
                 icon={<UserIcon />}
                 disabled={isLoading}
+                minLength={3}
+                maxLength={20}
+                pattern="[a-zA-Z0-9_]+"
               />
 
               <FormInput
@@ -198,6 +236,7 @@ const ProfileCompletePage = () => {
                 onChange={handleChange}
                 placeholder={t('profileComplete.placeholders.email')}
                 error={errors.email}
+                success={success.email}
                 icon={<EmailIcon />}
                 disabled={isLoading}
               />

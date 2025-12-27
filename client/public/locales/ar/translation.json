@@ -10,7 +10,8 @@
     "myProfile": "ملفي الشخصي",
     "logout": "تسجيل الخروج",
     "login": "دخول",
-    "register": "تسجيل"
+    "register": "تسجيل",
+    "search": "بحث"
   },
   "hero": {
     "mainTitle": "عالمك للألعاب",
@@ -39,7 +40,13 @@
     "xbox": "إكس بوكس",
     "nintendo": "نينتندو",
     "pc": "كمبيوتر",
+    "mobile": "موبايل",
+    "vr": "الواقع الافتراضي",
+    "retro": "ريترو",
     "accessories": "إكسسوارات",
+    "controllers": "أذرع التحكم",
+    "storageMedia": "التخزين والوسائط",
+    "collectibles": "المقتنيات",
     "showAsCards": "أظهر حسب البطاقة",
     "console": "جهاز الألعاب",
     "games": "الألعاب",
@@ -252,7 +259,9 @@
       "addToWishlist": "إضافة للمفضلة",
       "products": "المنتجات",
       "responseTime": "وقت الاستجابة",
-      "verifiedSeller": "بائع موثق"
+      "verifiedSeller": "بائع موثق",
+      "viewProduct": "عرض المنتج",
+      "viewDetails": "عرض التفاصيل"
     },
     "faq": {
       "title": "الأسئلة الشائعة",
@@ -516,7 +525,8 @@
       "ctaTitle": "هل أنت تاجر؟",
       "ctaSubtitle": "انضم إلى منصتنا وابدأ ببيع منتجاتك لآلاف العملاء",
       "learnMore": "اعرف المزيد",
-      "immediateDelivery": "فوري"
+      "immediateDelivery": "فوري",
+      "quickView": "عرض سريع"
     }
   },
   "common": {
@@ -535,7 +545,8 @@
     "language": "اللغة",
     "optional": "اختياري",
     "showAllProducts": "عرض جميع المنتجات",
-    "deleting": "جاري الحذف..."
+    "deleting": "جاري الحذف...",
+    "clear": "مسح"
   },
   "auth": {
     "login": {
@@ -635,7 +646,13 @@
       "usernameRequired": "اسم المستخدم مطلوب",
       "usernameShort": "اسم المستخدم يجب أن يكون 3 أحرف على الأقل",
       "usernameInvalid": "اسم المستخدم يمكن أن يحتوي على أحرف وأرقام وشرطات سفلية فقط",
+      "usernameTooShort": "اسم المستخدم يجب أن يكون {{min}} أحرف على الأقل",
+      "usernameTooLong": "اسم المستخدم يجب ألا يتجاوز {{max}} حرف",
       "cityRequired": "المدينة مطلوبة"
+    },
+    "success": {
+      "usernameValid": "اسم المستخدم صالح!",
+      "emailValid": "البريد الإلكتروني صحيح"
     }
   },
   "profileComplete": {
@@ -726,8 +743,8 @@
       "titleRequired": "عنوان المنتج مطلوب",
       "titleTooShort": "يجب أن يكون العنوان 5 أحرف على الأقل",
       "descriptionRequired": "الوصف مطلوب",
-      "descriptionTooShort": "الوصف يجب أن يكون 20 حرفًا على الأقل",
-      "descriptionTooLong": "الوصف يجب ألا يتجاوز 5000 حرف",
+      "descriptionTooShort": "الوصف يجب أن يكون 10 أحرف على الأقل",
+      "descriptionTooLong": "الوصف يجب ألا يتجاوز 200 حرف",
       "priceRequired": "السعر مطلوب وصحيح",
       "cityRequired": "الرجاء اختيار مدينة",
       "typeRequired": "الرجاء اختيار نوع الإعلان",
@@ -823,7 +840,8 @@
     "deleteSuccess": "تم حذف منتجك بنجاح.",
     "deleteSuccessTitle": "تم حذف المنتج!",
     "deleteError": "فشل حذف المنتج. يرجى المحاولة مرة أخرى.",
-    "deleteErrorTitle": "فشل الحذف"
+    "deleteErrorTitle": "فشل الحذف",
+    "notLoggedIn": "يرجى تسجيل الدخول لعرض ملفك الشخصي"
   },
   "chat": {
     "online": "متصل",
@@ -861,7 +879,12 @@
     "interestedInProduct": "مرحباً، أنا مهتم بـ {{productName}}",
     "loadingConversations": "جاري تحميل المحادثات...",
     "noConversations": "لا توجد محادثات حتى الآن",
-    "errorStartingConversation": "لا يمكن بدء المحادثة. يرجى المحاولة مرة أخرى."
+    "errorStartingConversation": "لا يمكن بدء المحادثة. يرجى المحاولة مرة أخرى.",
+    "cannotMessageYourself": "لا يمكنك مراسلة نفسك",
+    "productInactive": "لا يمكن بدء محادثة على منتج غير نشط",
+    "invalidRequest": "لا يمكن بدء المحادثة. يرجى التحقق من تفاصيل المنتج.",
+    "authenticationError": "خطأ في المصادقة. يرجى تسجيل الدخول مرة أخرى.",
+    "productNotFound": "المنتج غير موجود."
   },
   "notFound": {
     "title": "404 - الصفحة غير موجودة",

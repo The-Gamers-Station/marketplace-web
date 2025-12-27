@@ -554,8 +554,23 @@
 
 .upload-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 1rem;
+}
+
+/* Mobile optimized upload grid */
+@media (max-width: 640px) {
+  .upload-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .upload-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
 }
 
 .upload-trigger {
@@ -600,6 +615,16 @@
   background: var(--bg-primary);
   padding: 2px 6px;
   border-radius: 4px;
+}
+
+/* Mobile optimizations for upload hint */
+@media (max-width: 480px) {
+  .upload-hint-small {
+    bottom: 4px;
+    right: 4px;
+    font-size: 0.7rem;
+    padding: 1px 4px;
+  }
 }
 
 .uploaded-image-preview {
@@ -821,6 +846,31 @@
     font-size: 0.9rem;
     padding: 0.5rem 1rem;
   }
+
+  .upload-trigger {
+    min-height: 100px;
+  }
+
+  .upload-trigger svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .upload-trigger span {
+    font-size: 0.85rem;
+  }
+
+  .uploaded-image-preview {
+    min-height: 100px;
+  }
+
+  .upload-hint {
+    font-size: 0.85rem;
+  }
+
+  .media-upload-area h3 {
+    font-size: 1.1rem;
+  }
 }
 
 /* RTL Support for AddProduct page */
@@ -913,15 +963,6 @@
   text-align: left;
 }
 
-:root[dir="ltr"] .textarea-container svg {
-  left: 1rem;
-  right: auto;
-}
-
-:root[dir="ltr"] .textarea-container textarea {
-  padding: 1rem 1rem 1rem 3rem;
-  text-align: left;
-}
 
 /* Success Popup */
 .success-popup-overlay {
@@ -1084,6 +1125,29 @@
   }
 }
 
+.success-popup-button {
+  margin-top: 2rem;
+  padding: 0.875rem 2rem;
+  background: var(--primary-gradient);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 180px;
+}
+
+.success-popup-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+}
+
+.success-popup-button:active {
+  transform: translateY(0);
+}
+
 /* Mobile Responsive for Success Popup */
 @media (max-width: 480px) {
   .success-popup {
@@ -1111,10 +1175,23 @@
     backdrop-filter: blur(20px);
     border: 1px solid var(--border-color);
     border-radius: 20px;
-    padding: 2.5rem;
+    padding: 1.25rem;
     width: 100%;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     animation: slideUp 0.5s ease;
+  }
+  
+  /* Mobile photo upload improvements */
+  .media-upload-area {
+    margin-top: 1.5rem;
+  }
+
+  .remove-image-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    top: 4px;
+    right: 4px;
   }
 }
 

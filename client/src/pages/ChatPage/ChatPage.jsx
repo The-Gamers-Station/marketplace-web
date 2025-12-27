@@ -370,9 +370,7 @@ const ChatPage = () => {
         err.message.includes("[400]") &&
         err.message.includes("yourself")
       ) {
-        setError(
-          t("chat.cannotMessageYourself") || "You cannot message yourself"
-        );
+        setError(t("chat.cannotMessageYourself"));
       } else if (err.message.includes("[404]")) {
         setError(t("chat.productNotFound") || "Product not found");
       } else {
@@ -499,12 +497,15 @@ const ChatPage = () => {
       <div className="chat-container">
         {/* Chat Header */}
         <div className="chat-header">
-          <div className="chat-header-left">
-            <button className="chat-back-btn" onClick={() => navigate(-1)}>
-              <ArrowLeft size={24} />
-            </button>
+          <button className="chat-back-btn" onClick={() => navigate(-1)}>
+            <ArrowLeft size={24} />
+          </button>
 
-            <div className="chat-user-info">
+          <div className="chat-header-left">
+            <div className="chat-header">
+              <div className="chat-user-details">
+                <h3>{chatInfo?.sellerName}</h3>
+              </div>
               <div className="chat-user-avatar">
                 {chatInfo?.sellerAvatar ? (
                   <img src={chatInfo.sellerAvatar} alt={chatInfo.sellerName} />
@@ -513,13 +514,11 @@ const ChatPage = () => {
                 )}
               </div>
 
-              <div className="chat-user-details">
-                <h3>{chatInfo?.sellerName}</h3>
-              </div>
+              
             </div>
-          </div>
 
-          <div className="chat-header-right"></div>
+            
+          </div>
         </div>
 
         {/* Product Info Bar */}
@@ -549,7 +548,7 @@ const ChatPage = () => {
         <div className="chat-messages">
           <div className="messages-container">
             {/* Load more button */}
-            {hasMore && !loadingMore && (
+            {/* {hasMore && !loadingMore && (
               <button
                 className="load-more-btn"
                 onClick={() => loadMessages(true, cursor)}
@@ -562,7 +561,7 @@ const ChatPage = () => {
               <div className="loading-more">
                 <Loader2 className="spinner" size={20} />
               </div>
-            )}
+            )} */}
 
             {/* Error message */}
             {error && (

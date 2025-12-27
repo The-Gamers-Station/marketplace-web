@@ -17,11 +17,13 @@ const FormInput = ({
   pattern,
   maxLength,
   minLength,
+  success,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const isPasswordType = type === 'password';
   const inputType = isPasswordType && showPassword ? 'text' : type;
+  const hasSuccess = !!success && !error;
 
   const handleFocus = () => setIsFocused(true);
   const handleBlur = (e) => {
@@ -34,7 +36,7 @@ const FormInput = ({
   };
 
   return (
-    <div className={`form-input-container ${isFocused ? 'focused' : ''} ${error ? 'error' : ''} ${disabled ? 'disabled' : ''}`}>
+    <div className={`form-input-container ${isFocused ? 'focused' : ''} ${error ? 'error' : ''} ${hasSuccess ? 'success' : ''} ${disabled ? 'disabled' : ''}`}>
       {label && (
         <label className="form-input-label" htmlFor={name}>
           {label}
@@ -55,6 +57,7 @@ const FormInput = ({
           onBlur={handleBlur}
           placeholder={placeholder}
           className="form-input-field"
+          aria-invalid={!!error}
           required={required}
           autoComplete={autoComplete}
           disabled={disabled}
@@ -91,6 +94,15 @@ const FormInput = ({
             <path d="M12 8V12M12 16H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
           <span>{error}</span>
+        </div>
+      )}
+      {!error && success && (
+        <div className="form-input-success" aria-live="polite">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/>
+          </svg>
+          <span>{success}</span>
         </div>
       )}
     </div>

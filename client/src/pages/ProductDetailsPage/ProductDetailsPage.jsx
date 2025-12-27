@@ -78,7 +78,20 @@ const ProductDetailsPage = () => {
         description: postData.localizedDescription?.[currentLang] || postData.description || 'منتج عالي الجودة من GamersStation',
         type: postData.type, // Add type to product data
         specifications: {
-          [t('pages.productDetails.condition.label')]: postData.condition === 'NEW' ? t('pages.productDetails.condition.new') : t('pages.productDetails.condition.used'),
+          [t('pages.productDetails.condition.label')]: (() => {
+            switch (postData.condition) {
+              case 'NEW':
+                return t('addProduct.conditions.new');
+              case 'LIKE_NEW':
+                return t('addProduct.conditions.likeNew');
+              case 'USED_GOOD':
+                return t('addProduct.conditions.good');
+              case 'USED_FAIR':
+                return t('addProduct.conditions.fair');
+              default:
+                return postData.condition === 'NEW' ? t('pages.productDetails.condition.new') : t('pages.productDetails.condition.used');
+            }
+          })(),
           [t('pages.productDetails.city')]: getTranslatedCityName(postData.cityName, t),
           [t('pages.productDetails.publishDate')]: new Date(postData.createdAt).toLocaleDateString(currentLang === 'ar' ? 'ar-SA' : 'en-US'),
           [t('pages.productDetails.adNumber')]: postData.id,
@@ -105,8 +118,8 @@ const ProductDetailsPage = () => {
             name: userData.name || userData.username || (currentLang === 'ar' ? 'مجهول' : 'Anonymous'),
             city: getTranslatedCityName(userData.cityName || postData.cityName, t)
           });
-        } catch (err) {
-          // Could not fetch seller details: err
+        } catch {
+          // Could not fetch seller details
         }
       }
       
@@ -114,7 +127,6 @@ const ProductDetailsPage = () => {
       let transformedRelated = [];
       
       // First try to get products from the same category
-      // Fetching similar products for category ID: postData.categoryId, 'Name:', postData.categoryName
       if (postData.categoryId) {
         try {
           const relatedData = await postService.getPosts({
@@ -125,8 +137,6 @@ const ProductDetailsPage = () => {
             direction: 'DESC'
           });
           
-          // Related products response: relatedData
-          
           if (relatedData && relatedData.content) {
             transformedRelated = relatedData.content
               .filter(post => post.id !== postData.id)
@@ -136,25 +146,21 @@ const ProductDetailsPage = () => {
                 price: post.price || 0,
                 image: post.images?.[0]?.url || '/placeholder-game.svg'
               }));
-            // Transformed related products: transformedRelated
           }
-        } catch (err) {
-          // Error fetching category products: err
+        } catch {
+          // Error fetching category products
         }
       }
       
       // If we don't have enough related products, fetch random products
       if (transformedRelated.length < 4) {
         try {
-          // Fetching additional products, current count: transformedRelated.length
           const randomData = await postService.getPosts({
             page: 0, // API uses 0-based pagination
             size: 10,
             sortBy: 'createdAt',
             direction: 'DESC'
           });
-          
-          // Random products response: randomData
           
           if (randomData && randomData.content) {
             const additionalProducts = randomData.content
@@ -167,10 +173,9 @@ const ProductDetailsPage = () => {
               }));
             
             transformedRelated = [...transformedRelated, ...additionalProducts].slice(0, 4);
-            // Final related products: transformedRelated
           }
-        } catch (err) {
-          // Error fetching random products: err
+        } catch {
+          // Error fetching random products
         }
       } else {
         transformedRelated = transformedRelated.slice(0, 4);
@@ -178,8 +183,7 @@ const ProductDetailsPage = () => {
         
       setRelatedProducts(transformedRelated);
       
-    } catch (err) {
-      // Error fetching product details: err
+    } catch {
       setError(t('common.error'));
     } finally {
       setLoading(false);
@@ -289,8 +293,7 @@ const ProductDetailsPage = () => {
           {/* Breadcrumb */}
           <div className="gaming-breadcrumb">
             <a href="/">{t('pages.productDetails.home')}</a>
-            {/* <ChevronLeft className="breadcrumb-arrow" size={16} />
-            <a href="#">{product.category}</a> */}
+            
             <ChevronLeft className="breadcrumb-arrow" size={16} />
             <span className="current-page">{i18n.language === 'ar' ? product.arabicName : product.name}</span>
           </div>
@@ -498,7 +501,7 @@ const ProductDetailsPage = () => {
                       
                       if (error.message.includes('[400]')) {
                         if (error.message.includes('yourself')) {
-                          errorMessage = t('chat.cannotMessageYourself') || 'Cannot message yourself';
+                          errorMessage = t('chat.cannotMessageYourself');
                         } else if (error.message.includes('inactive')) {
                           errorMessage = t('chat.productInactive') || 'Cannot start conversation on inactive product';
                         } else {
@@ -561,25 +564,33 @@ const ProductDetailsPage = () => {
             </div>
           </div>
 
-          {/* Similar Products Section - Always Show */}
-          <div className="related-products">
-            <h2 className="section-title">
-              <Gamepad2 size={24} />
-              {t('pages.productDetails.similarProducts')}
-            </h2>
-            <div className="related-grid">
+          {/* Similar Products Section - Modern Design */}
+          <div className="related-products modern">
+            <div className="section-header">
+              <div className="section-title-wrapper">
+                <div className="title-icon">
+                  <Gamepad2 size={28} />
+                </div>
+                <h2 className="section-title">
+                  {t('pages.productDetails.similarProducts')}
+                </h2>
+              </div>
+              <div className="section-line"></div>
+            </div>
+            
+            <div className="related-grid modern-grid">
               {relatedProducts.length > 0 ? (
-                relatedProducts.map((item) => (
-                  <a
+                relatedProducts.map((item, index) => (
+                  <div
                     key={item.id}
-                    href={`/product/${item.id}`}
-                    className="related-card"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigate(`/product/${item.id}`);
-                    }}
+                    className="related-card modern-card"
+                    style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className="related-image">
+                    <div className="card-glow-effect"></div>
+                    
+                    {/* Image Section */}
+                    <div className="related-image-wrapper">
+                      <div className="image-overlay"></div>
                       {item.image.startsWith('http') ? (
                         <OptimizedImage
                           src={item.image}
@@ -588,25 +599,58 @@ const ProductDetailsPage = () => {
                           objectFit="cover"
                         />
                       ) : (
-                        <Gamepad2 size={60} className="related-icon" />
+                        <div className="placeholder-image">
+                          <Gamepad2 size={80} className="related-icon" />
+                        </div>
                       )}
+                      
+                      {/* Quick View Button */}
+                      <button
+                        className="quick-view-btn"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigate(`/product/${item.id}`);
+                        }}
+                        aria-label={t('pages.productDetails.viewProduct')}
+                      >
+                        <Eye size={20} />
+                      </button>
                     </div>
-                    <div className="related-info">
-                      <h3>{item.name}</h3>
-                      <div className="related-price">{item.price} {t('currency')}</div>
+                    
+                    {/* Info Section */}
+                    <div className="related-content">
+                      <h3 className="related-title">{item.name}</h3>
+                      
+                      <div className="price-section">
+                        <div className="price-wrapper">
+                          <span className="currency-prefix">{t('currency')}</span>
+                          <span className="price-value">{item.price.toLocaleString()}</span>
+                        </div>
+                      </div>
+                      
+                      {/* Action Button */}
+                      <button
+                        className="view-product-btn"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigate(`/product/${item.id}`);
+                        }}
+                      >
+                        <span>{t('pages.productDetails.viewDetails') || 'View Details'}</span>
+                        <ChevronRight size={16} />
+                      </button>
                     </div>
-                  </a>
+                  </div>
                 ))
               ) : (
-                // Placeholder cards when no products are available
+                // Modern Skeleton Loaders
                 [...Array(4)].map((_, index) => (
-                  <div key={`placeholder-${index}`} className="related-card">
-                    <div className="related-image">
-                      <Gamepad2 size={60} className="related-icon" />
-                    </div>
-                    <div className="related-info">
-                      <h3>{t('common.loading')}</h3>
-                      <div className="related-price">-- {t('currency')}</div>
+                  <div key={`skeleton-${index}`} className="related-card modern-card skeleton-card">
+                    <div className="skeleton-image"></div>
+                    <div className="related-content">
+                      <div className="skeleton-title"></div>
+                      <div className="skeleton-price"></div>
+                      <div className="skeleton-button"></div>
                     </div>
                   </div>
                 ))

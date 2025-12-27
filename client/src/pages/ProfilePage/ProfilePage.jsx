@@ -26,6 +26,7 @@ import {
   DollarSign,
   Clock,
   Tag,
+  HandCoins,
 } from 'lucide-react';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -542,20 +543,34 @@ const ProfilePage = () => {
                       <div key={post.id} className="user-post-item" onClick={() => navigate(`/product/${post.id}`)}>
                         <div className="post-item-image">
                           <img src={post.images?.[0]?.url || `https://via.placeholder.com/150x150/1a1f36/ff6b35?text=${encodeURIComponent(post.title)}`} alt={post.title} />
-                          <div className="post-type-badge">
-                            {post.type === 'SELL' ? t('productType.forSale') : t('productType.wanted')}
-                          </div>
                         </div>
+                          {/* <div className="post-type-badge">
+                            {post.type === 'SELL' ? t('productType.forSale') : t('productType.wanted')}
+                          </div> */}
                         <div className="post-item-content">
                           <div className="post-item-header">
                             <h3 className="post-item-title">{post.title}</h3>
                             <span className={`condition-badge ${post.condition?.toLowerCase()}`}>
-                              {post.condition && t(`addProduct.conditions.${post.condition.toLowerCase()}`)}
+                              {post.condition && (() => {
+                                switch (post.condition) {
+                                  case 'NEW':
+                                    return t('addProduct.conditions.new');
+                                  case 'LIKE_NEW':
+                                    return t('addProduct.conditions.likeNew');
+                                  case 'USED_GOOD':
+                                    return t('addProduct.conditions.good');
+                                  case 'USED_FAIR':
+                                    return t('addProduct.conditions.fair');
+                                  default:
+                                    return post.condition;
+                                }
+                              })()}
                             </span>
                           </div>
                           <div className="post-item-details">
                             <div className="detail-item">
-                              <DollarSign size={14} />
+                               
+                                  <HandCoins  size={14} />
                               <span>{t('currency')} {post.price}</span>
                             </div>
                             <div className="detail-item">

@@ -54,13 +54,13 @@
 }
 
 .profile-card {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(20, 30, 45, 0.95);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   padding: 3rem 2.5rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-              0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5),
+              0 0 80px rgba(255, 107, 53, 0.1);
 }
 
 /* Header */
@@ -90,22 +90,22 @@
 .profile-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 .profile-subtitle {
   font-size: 1rem;
-  color: #6b7280;
+  color: var(--text-secondary);
   margin: 0;
 }
 
 /* Error Message */
 .error-message {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: 12px;
-  color: #dc2626;
+  color: #ff6b6b;
   padding: 1rem;
   margin-bottom: 1.5rem;
   text-align: center;
@@ -125,12 +125,12 @@
   display: block;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--text-secondary);
   margin-bottom: 0.5rem;
 }
 
 .form-label .required {
-  color: #ef4444;
+  color: var(--primary-color);
 }
 
 .select-wrapper {
@@ -142,7 +142,7 @@
 .select-wrapper svg {
   position: absolute;
   left: 1rem;
-  color: #9ca3af;
+  color: var(--text-muted);
   pointer-events: none;
 }
 
@@ -150,39 +150,46 @@
   width: 100%;
   padding: 0.875rem 1rem 0.875rem 3rem;
   font-size: 1rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--border-color);
   border-radius: 12px;
-  background: white;
-  color: #111827;
+  background: rgba(15, 24, 35, 0.8);
+  color: var(--text-primary);
   transition: all 0.2s ease;
   appearance: none;
   cursor: pointer;
 }
 
 .form-select:hover:not(:disabled) {
-  border-color: #d1d5db;
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(26, 35, 50, 0.8);
 }
 
 .form-select:focus {
   outline: none;
-  border-color: #ff6b35;
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+  background: rgba(26, 35, 50, 0.9);
 }
 
 .form-select.error {
-  border-color: #ef4444;
+  border-color: #ff6b6b;
 }
 
 .form-select:disabled {
-  background: #f9fafb;
-  color: #9ca3af;
+  background: rgba(15, 24, 35, 0.4);
+  color: var(--text-muted);
   cursor: not-allowed;
+}
+
+.form-select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 .error-text {
   display: block;
   font-size: 0.875rem;
-  color: #ef4444;
+  color: #ff6b6b;
   margin-top: 0.5rem;
 }
 
@@ -198,17 +205,18 @@
   padding: 0.875rem 1.5rem;
   font-size: 1rem;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--text-secondary);
   background: transparent;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--border-color);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .btn-skip:hover:not(:disabled) {
-  border-color: #d1d5db;
-  background: #f9fafb;
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
 }
 
 .btn-submit {
@@ -257,67 +265,16 @@
   text-align: center;
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--border-color);
 }
 
 .info-text p {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--text-muted);
   margin: 0;
 }
 
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  .profile-card {
-    background: rgba(17, 24, 39, 0.95);
-    border-color: rgba(55, 65, 81, 0.5);
-  }
-  
-  .profile-title {
-    color: #f9fafb;
-  }
-  
-  .profile-subtitle {
-    color: #9ca3af;
-  }
-  
-  .form-label {
-    color: #d1d5db;
-  }
-  
-  .form-select {
-    background: #1f2937;
-    border-color: #374151;
-    color: #f9fafb;
-  }
-  
-  .form-select:hover:not(:disabled) {
-    border-color: #4b5563;
-  }
-  
-  .btn-skip {
-    color: #9ca3af;
-    border-color: #374151;
-  }
-  
-  .btn-skip:hover:not(:disabled) {
-    border-color: #4b5563;
-    background: #1f2937;
-  }
-  
-  .info-text {
-    border-top-color: #374151;
-  }
-  
-  .info-text p {
-    color: #9ca3af;
-  }
-  
-  .error-message {
-    background: #7f1d1d;
-    border-color: #991b1b;
-  }
-}
+/* Remove dark mode media query since we're using dark theme by default */
 
 /* RTL Support */
 [dir="rtl"] .select-wrapper svg {

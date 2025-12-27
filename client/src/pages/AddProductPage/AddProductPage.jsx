@@ -30,7 +30,6 @@ const AddProductPage = () => {
   
   const [formData, setFormData] = useState({
     title: '',
-    description: '',
     price: '',
     condition: 'NEW',
     type: '',
@@ -157,12 +156,47 @@ const AddProductPage = () => {
     }
   };
 
+  // Convert Arabic numerals to English
+  const convertArabicToEnglish = (str) => {
+    const arabicNumerals = '٠١٢٣٤٥٦٧٨٩';
+    const englishNumerals = '0123456789';
+    
+    let converted = str;
+    for (let i = 0; i < arabicNumerals.length; i++) {
+      const regex = new RegExp(arabicNumerals[i], 'g');
+      converted = converted.replace(regex, englishNumerals[i]);
+    }
+    return converted;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    // Special handling for price field
+    if (name === 'price') {
+      // Convert Arabic numerals to English
+      const convertedValue = convertArabicToEnglish(value);
+      
+      // Allow only numbers and decimal point
+      const numericValue = convertedValue.replace(/[^\d.]/g, '');
+      
+      // Ensure only one decimal point
+      const parts = numericValue.split('.');
+      const finalValue = parts.length > 2
+        ? parts[0] + '.' + parts.slice(1).join('')
+        : numericValue;
+      
+      setFormData(prev => ({
+        ...prev,
+        [name]: finalValue
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+    
     // Clear error for this field
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
@@ -193,14 +227,6 @@ const AddProductPage = () => {
       newErrors.title = t('addProduct.errors.titleRequired');
     } else if (formData.title.trim().length < 5) {
       newErrors.title = t('addProduct.errors.titleTooShort') || 'Title must be at least 5 characters';
-    }
-    
-    if (!formData.description.trim()) {
-      newErrors.description = t('addProduct.errors.descriptionRequired');
-    } else if (formData.description.trim().length < 20) {
-      newErrors.description = t('addProduct.errors.descriptionTooShort') || 'Description must be at least 20 characters';
-    } else if (formData.description.trim().length > 5000) {
-      newErrors.description = t('addProduct.errors.descriptionTooLong') || 'Description must not exceed 5000 characters';
     }
     
     if (!formData.price || parseFloat(formData.price) <= 0) {
@@ -244,10 +270,13 @@ const AddProductPage = () => {
       }
       
       const postData = {
-        ...formData,
+        title: formData.title,
+        description: 'Product for sale/wanted as described in the title', // Default description to satisfy API minimum 20 chars requirement
+        type: formData.type,
         categoryId: selectedCategoryId,
         price: parseFloat(formData.price),
         cityId: parseInt(formData.cityId),
+        condition: formData.condition,
         // Images are required by validation; submit current uploads
         imageUrls: uploadedImages
       };
@@ -275,15 +304,6 @@ const AddProductPage = () => {
       <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       <line x1="12" y1="5" x2="12" y2="9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  );
-
-  const DescriptionIcon = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <polyline points="14 2 14 8 20 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <line x1="9" y1="13" x2="15" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <line x1="9" y1="17" x2="15" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 
@@ -402,6 +422,12 @@ const AddProductPage = () => {
                 <span></span>
                 <span></span>
               </div>
+              <button
+                className="success-popup-button"
+                onClick={() => navigate('/')}
+              >
+                {t('common.showAllProducts') || 'Show All Products'}
+              </button>
             </div>
           </div>
         )}
@@ -517,7 +543,7 @@ const AddProductPage = () => {
                     <label htmlFor="title">
                       {t('addProduct.fields.title')}
                       <span className="char-count" style={{ marginLeft: '10px', fontSize: '0.85em', color: formData.title.trim().length < 5 ? '#ff3838' : '#666' }}>
-                        {/* ({formData.title.trim().length}/5) */}
+                        ({formData.title.trim().length}/5+)
                       </span>
                     </label>
                     <div className="input-container">
@@ -537,49 +563,25 @@ const AddProductPage = () => {
                     )}
                   </div>
 
-                  <div className="input-group">
-                    <label htmlFor="description">
-                      {t('addProduct.fields.description')}
-                      <span className="char-count" style={{ marginLeft: '10px', fontSize: '0.85em', color: formData.description.trim().length < 20 || formData.description.trim().length > 5000 ? '#ff3838' : '#666' }}>
-                        {/* ({formData.description.trim().length}/20-5000) */}
-                      </span>
-                    </label>
-                    <div className="textarea-container">
-                      <DescriptionIcon />
-                      <textarea
-                        id="description"
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        placeholder={t('addProduct.placeholders.description')}
-                        className={errors.description ? 'has-error' : ''}
-                        rows="5"
-                      />
-                    </div>
-                    {errors.description && (
-                      <span className="field-error">{errors.description}</span>
-                    )}
-                  </div>
-
                   <div className="split-inputs">
                     <div className="input-group">
                       <label htmlFor="price">
-                        {t('addProduct.fields.price')}
+                        {t('addProduct.fields.price')}   
                       </label>
                       <div className="input-container">
-                        <PriceIcon />
                         <input
                           id="price"
-                          type="number"
+                          type="text"
+                          inputMode="decimal"
+                          pattern="[0-9]*"
                           name="price"
                           value={formData.price}
                           onChange={handleChange}
                           placeholder={t('addProduct.placeholders.price')}
                           className={errors.price ? 'has-error' : ''}
-                          min="0"
-                          step="0.01"
                           required
                         />
+                        {/* <PriceIcon /> */}
                       </div>
                       {errors.price && (
                         <span className="field-error">{errors.price}</span>

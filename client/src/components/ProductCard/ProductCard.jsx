@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { User, MapPin, Check, Package } from 'lucide-react';
+import { getTranslatedCityName } from '../../utils/cityTranslations';
 import './ProductCard.css';
 
 const ProductCard = ({
@@ -72,7 +73,7 @@ const ProductCard = ({
             {location && (
               <div className="user-location">
                 <MapPin size={11} />
-                <span>{location}</span>
+                <span>{getTranslatedCityName(location, t)}</span>
               </div>
             )}
           </div>

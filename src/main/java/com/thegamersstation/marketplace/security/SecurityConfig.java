@@ -94,10 +94,10 @@ public class SecurityConfig {
         
         // Allow specific origins (configure via environment variable in production)
         configuration.setAllowedOriginPatterns(Arrays.asList(
+                "https://thegamersstation.com",
+                "https://www.thegamersstation.com",
             "http://localhost:3000",
             "http://localhost:5173",
-            "http://80.66.87.82:5174",
-            "http://80.66.87.82:3001",
             "http://localhost:8080"
         ));
         

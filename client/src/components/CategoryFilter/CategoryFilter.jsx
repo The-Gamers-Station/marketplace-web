@@ -152,9 +152,7 @@ const CategoryFilter = ({ onFilterChange }) => {
                   selectedPlatform === platform.key ? 'active' : ''
                 }`}
                 onClick={() => handlePlatformChange(platform)}
-                style={{
-                  '--platform-gradient': platform.gradient
-                }}
+                 
               >
                 <span className="pill-icon">{platform.icon}</span>
                 <span className="pill-text">{platform.name}</span>

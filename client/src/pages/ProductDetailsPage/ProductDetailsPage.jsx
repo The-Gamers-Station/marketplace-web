@@ -415,6 +415,7 @@ const ProductDetailsPage = () => {
                   </div>
                 </div>
               </div>
+  {/* </div> */}
 
               {/* Seller Information Card */}
               <div className="seller-info-card">
@@ -563,6 +564,7 @@ const ProductDetailsPage = () => {
 
             </div>
           </div>
+
 
           {/* Similar Products Section - Modern Design */}
           <div className="related-products modern">

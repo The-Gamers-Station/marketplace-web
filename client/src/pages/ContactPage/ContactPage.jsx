@@ -119,7 +119,7 @@ const ContactPage = () => {
         <div className="container">
           <div className="contact-content">
             <h1 className="contact-title">
-              <MessageSquare className="title-icon" />
+               
               {t('pages.contact.title', 'تواصل معنا')}
             </h1>
             <p className="hero-subtitle">
@@ -258,7 +258,7 @@ const ContactPage = () => {
                     <>
                       <Send size={18} />
                       {t('pages.contact.send')}
-                      <ArrowLeft size={18} className="arrow-icon" />
+                      {/* <ArrowLeft size={18} className="arrow-icon" /> */}
                     </>
                   )}
                 </button>
@@ -272,18 +272,18 @@ const ContactPage = () => {
                 <h3>{t('pages.contact.contactInfo')}</h3>
                 <div className="info-items">
                   <div className="info-item">
-                    <div className="info-icon">
-                      <Mail size={20} />
+                    <div className="info">
+                      <Mail size={15} />
                     </div>
                     <div className="info-content">
                       <span className="info-label">{t('pages.contact.email')}</span>
-                      <a href="mailto:contact@thegamersstation.com">contact@thegamersstation.com</a>
+                      <a href="mailto:contact@thegamersstation.com" className="emaila">contact@thegamersstation.com</a>
                     </div>
                   </div>
 
                   <div className="info-item">
-                    <div className="info-icon">
-                      <Phone size={20} />
+                    <div className="info">
+                      <Phone size={15} />
                     </div>
                     <div className="info-content">
                       <span className="info-label">{t('pages.contact.phone')}</span>

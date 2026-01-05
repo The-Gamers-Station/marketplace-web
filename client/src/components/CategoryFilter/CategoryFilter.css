@@ -119,7 +119,7 @@
 
 /* Active Platform Pill */
 .platform-pill-modern.active {
-  background: var(--platform-gradient);
+  background: rgba(255, 107, 53);
   color: white !important;
   border-color: transparent;
   transform: scale(1.02);

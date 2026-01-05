@@ -81,7 +81,8 @@
 .product-main-card {
   background: rgba(10, 22, 40, 0.8);
   border-radius: 20px;
-  overflow: visible; /* Changed from hidden to visible */
+   
+  overflow: hidden;
   position: relative;
   margin: 20px 0;
   box-shadow:
@@ -346,6 +347,8 @@
 /* Product Header Info */
 .product-header-info {
   margin-bottom: 10px;
+ width: 100%;
+ overflow: hidden;
 }
 
 .product-title {
@@ -365,8 +368,11 @@
 
 .product-brief {
   color: rgba(255, 255, 255, 0.7);
-  line-height: 1.6;
+  
   margin: 0;
+  width: 500px;
+ 
+  overflow:  auto;
 }
 
 /* Price Display */
@@ -749,6 +755,87 @@
   font-size: 0.85rem;
 }
 
+/* Product Description Section */
+.product-description-section {
+  margin: 40px 0;
+  background: rgba(20, 40, 60, 0.3);
+  border-radius: 20px;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.product-description-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.03) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.product-description-section .section-header {
+  margin-bottom: 20px;
+}
+
+.product-description-section .section-title {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.description-content {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.8;
+  font-size: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.description-content p {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Responsive Description Section */
+@media (max-width: 768px) {
+  .product-description-section {
+    margin: 30px 0;
+    padding: 20px;
+    border-radius: 16px;
+  }
+  
+  .product-description-section .section-title {
+    font-size: 1.25rem;
+  }
+  
+  .description-content {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-description-section {
+    margin: 20px 0;
+    padding: 16px;
+  }
+  
+  .product-description-section .section-title {
+    font-size: 1.1rem;
+  }
+  
+  .description-content {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+}
 
 /* Related Products - Modern Design */
 .related-products.modern {

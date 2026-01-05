@@ -405,24 +405,30 @@ textarea {
 
 .info-item {
   display: flex;
-  align-items: flex-start;
-  gap: 15px;
+  justify-content: space-between;
+  /* align-items: flex-start; */
+  gap: 5px;
 }
+ .emaila{
+  font-size: 12px;
+ }
 
-.info-icon {
-  width: 40px;
-  height: 40px;
+.info {
+  width: 5px;
+  height: clamp(28px, 5vw, 36px);
   background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, rgba(255, 107, 53, 0.1) 100%);
   border: 1px solid rgba(255, 107, 53, 0.3);
-  border-radius: 10px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.info-icon svg {
+.info svg {
   color: #ff6b35;
+  width: 60%;
+  height: 60%;
 }
 
 .info-content {
@@ -438,7 +444,7 @@ textarea {
   letter-spacing: 0.5px;
 }
 
-.info-content a,
+ 
 .info-content span {
   color: var(--text-primary);
   font-size: 0.95rem;
@@ -607,14 +613,9 @@ textarea {
     gap: 15px;
   }
 
-  .info-icon {
-    width: 36px;
-    height: 36px;
-  }
-
-  .info-icon svg {
-    width: 18px;
-    height: 18px;
+  .info {
+    width: 3px;
+    height: 30px;
   }
 
   .info-content {
@@ -760,15 +761,10 @@ textarea {
     gap: 12px;
   }
 
-  .info-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-  }
-
-  .info-icon svg {
-    width: 16px;
-    height: 16px;
+  .info {
+    width: 6px;
+    height: 26px;
+    border-radius: 6px;
   }
 
   .info-label {

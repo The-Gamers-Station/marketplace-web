@@ -94,11 +94,13 @@ public class SecurityConfig {
         
         // Allow specific origins (configure via environment variable in production)
         configuration.setAllowedOriginPatterns(Arrays.asList(
-                "https://thegamersstation.com",
-                "https://www.thegamersstation.com",
-            "http://localhost:3000",
+            "https://thegamersstation.com",
+            "https://www.thegamersstation.com",
+                "http://localhost:[*]",        // Allows any port on localhost (5173, 5174, etc.)
             "http://localhost:5173",
-            "http://localhost:8080"
+            "http://localhost:5174",  // Vite HMR port
+            "http://localhost:3000",
+            "http://80.66.87.82:3001"
         ));
         
         configuration.setAllowedMethods(Arrays.asList(

@@ -26,4 +26,4 @@ media:
   storage:
     local:
       upload-dir: uploads
-      base-url: http://80.66.87.82/api/v1/uploads
+      base-url: http://91.98.156.117/api/v1/uploads

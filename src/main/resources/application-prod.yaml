@@ -22,8 +22,8 @@ messaging:
     enabled: true
 
 # Use local storage as fallback in production when S3 fails
-media:
-  storage:
-    local:
-      upload-dir: uploads
-      base-url: http://91.98.156.117/api/v1/uploads
+#media:
+#  storage:
+#    local:
+#      upload-dir: uploads
+#      base-url: http://91.98.156.117/api/v1/uploads

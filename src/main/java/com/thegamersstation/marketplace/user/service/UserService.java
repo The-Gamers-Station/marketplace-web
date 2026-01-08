@@ -27,7 +27,16 @@ public class UserService {
     public UserProfileDto getCurrentUserProfile(Long userId) {
         User user = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        return userMapper.toProfileDto(user);
+        
+        UserProfileDto profileDto = userMapper.toProfileDto(user);
+        
+        // Add city name if cityId exists
+        if (user.getCityId() != null) {
+            cityRepository.findById(user.getCityId())
+                    .ifPresent(city -> profileDto.setCityName(city.getNameEn()));
+        }
+        
+        return profileDto;
     }
 
     @Transactional(readOnly = true)
@@ -102,6 +111,15 @@ public class UserService {
         }
 
         User savedUser = usersRepository.save(user);
-        return userMapper.toProfileDto(savedUser);
+        
+        UserProfileDto profileDto = userMapper.toProfileDto(savedUser);
+        
+        // Add city name if cityId exists
+        if (savedUser.getCityId() != null) {
+            cityRepository.findById(savedUser.getCityId())
+                    .ifPresent(city -> profileDto.setCityName(city.getNameEn()));
+        }
+        
+        return profileDto;
     }
 }

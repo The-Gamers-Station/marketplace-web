@@ -64,8 +64,6 @@ const ProductDetailsPage = () => {
         name: postData.localizedTitle?.[currentLang] || postData.title || 'Untitled Product',
         arabicName: postData.localizedTitle?.ar || postData.title || 'منتج بدون اسم',
         price: postData.price || 0,
-        originalPrice: postData.price ? Math.round(postData.price * 1.15) : 0, // Add 15% as original price
-        discount: 14, // Calculate discount percentage
         sold: Math.floor(Math.random() * 1000) + 100,
         availability: postData.status === 'ACTIVE' ? t('pages.productDetails.available') : t('pages.productDetails.unavailable'),
         brand: 'GamersStation',
@@ -376,12 +374,6 @@ const ProductDetailsPage = () => {
                   <span className="currency-symbol">{t('currency')}</span>
                   <span className="price-amount">{product.price.toLocaleString()}</span>
                 </div>
-                {product.originalPrice > product.price && (
-                  <div className="original-price">
-                    <span>{product.originalPrice} {t('currency')}</span>
-                    <span className="discount-badge">-{product.discount}%</span>
-                  </div>
-                )}
               </div>
 
               {/* Quick Info Grid */}
@@ -453,79 +445,86 @@ const ProductDetailsPage = () => {
 
               {/* Action Buttons */}
               <div className="action-section">
-                <button
-                  className="btn-contact-seller"
-                  onClick={async () => {
-                    // [ProductDetails] Contact seller clicked
-                    
-                    if (!authService.isAuthenticated()) {
-                      // [ProductDetails] User not authenticated, redirecting to login
-                      navigate('/login', {
-                        state: { redirectTo: `/product/${product.id}` }
-                      });
-                      return;
-                    }
-                    
-                    try {
-                      // [ProductDetails] Starting conversation for product: product.id, product.name
+                {/* Only show contact button if user is not the owner */}
+                {(() => {
+                  const currentUser = authService.getCurrentUser();
+                  const isOwner = currentUser && currentUser.userId === product.seller.id;
+                  return !isOwner;
+                })() && (
+                  <button
+                    className="btn-contact-seller"
+                    onClick={async () => {
+                      // [ProductDetails] Contact seller clicked
                       
-                      const initialMessage = t('chat.interestedInProduct', { productName: product.name }) || `Hi, I'm interested in ${product.name}`;
-                      // [ProductDetails] Initial message: initialMessage
-                      
-                      const conversation = await messagingService.startConversation(
-                        product.id,
-                        initialMessage
-                      );
-                      
-                      // [ProductDetails] Conversation response: conversation
-                      
-                      if (!conversation || !conversation.id) {
-                        throw new Error('Invalid conversation response');
-                      }
-                      
-                      navigate(`/chat/${conversation.id}`, {
-                        state: {
-                          initialMessage,
-                          justCreated: true
-                        }
-                      });
-                    } catch (error) {
-                      // [ProductDetails] Error starting conversation: {
-                      //   error,
-                      //   message: error.message,
-                      //   response: error.response,
-                      //   productId: product.id
-                      // }
-                      
-                      // Show more specific error messages
-                      let errorMessage = t('chat.errorStartingConversation') || 'لا يمكن بدء المحادثة. يرجى المحاولة مرة أخرى';
-                      
-                      if (error.message.includes('[400]')) {
-                        if (error.message.includes('yourself')) {
-                          errorMessage = t('chat.cannotMessageYourself');
-                        } else if (error.message.includes('inactive')) {
-                          errorMessage = t('chat.productInactive') || 'Cannot start conversation on inactive product';
-                        } else {
-                          errorMessage = t('chat.invalidRequest') || 'Cannot start conversation. Please check the product details.';
-                        }
-                      } else if (error.message.includes('[401]') || error.message.includes('[403]')) {
-                        errorMessage = t('chat.authenticationError') || 'Authentication error. Please login again.';
-                        authService.clearTokens();
+                      if (!authService.isAuthenticated()) {
+                        // [ProductDetails] User not authenticated, redirecting to login
                         navigate('/login', {
                           state: { redirectTo: `/product/${product.id}` }
                         });
                         return;
-                      } else if (error.message.includes('[404]')) {
-                        errorMessage = t('chat.productNotFound') || 'Product not found.';
                       }
                       
-                      alert(errorMessage);
-                    }
-                  }}
-                >
-                  <MessageCircle size={20} />
-                  <span>{t('pages.productDetails.contactSeller')}</span>
-                </button>
+                      try {
+                        // [ProductDetails] Starting conversation for product: product.id, product.name
+                        
+                        const initialMessage = t('chat.interestedInProduct', { productName: product.name }) || `Hi, I'm interested in ${product.name}`;
+                        // [ProductDetails] Initial message: initialMessage
+                        
+                        const conversation = await messagingService.startConversation(
+                          product.id,
+                          initialMessage
+                        );
+                        
+                        // [ProductDetails] Conversation response: conversation
+                        
+                        if (!conversation || !conversation.id) {
+                          throw new Error('Invalid conversation response');
+                        }
+                        
+                        navigate(`/chat/${conversation.id}`, {
+                          state: {
+                            initialMessage,
+                            justCreated: true
+                          }
+                        });
+                      } catch (error) {
+                        // [ProductDetails] Error starting conversation: {
+                        //   error,
+                        //   message: error.message,
+                        //   response: error.response,
+                        //   productId: product.id
+                        // }
+                        
+                        // Show more specific error messages
+                        let errorMessage = t('chat.errorStartingConversation') || 'لا يمكن بدء المحادثة. يرجى المحاولة مرة أخرى';
+                        
+                        if (error.message.includes('[400]')) {
+                          if (error.message.includes('yourself')) {
+                            errorMessage = t('chat.cannotMessageYourself');
+                          } else if (error.message.includes('inactive')) {
+                            errorMessage = t('chat.productInactive') || 'Cannot start conversation on inactive product';
+                          } else {
+                            errorMessage = t('chat.invalidRequest') || 'Cannot start conversation. Please check the product details.';
+                          }
+                        } else if (error.message.includes('[401]') || error.message.includes('[403]')) {
+                          errorMessage = t('chat.authenticationError') || 'Authentication error. Please login again.';
+                          authService.clearTokens();
+                          navigate('/login', {
+                            state: { redirectTo: `/product/${product.id}` }
+                          });
+                          return;
+                        } else if (error.message.includes('[404]')) {
+                          errorMessage = t('chat.productNotFound') || 'Product not found.';
+                        }
+                        
+                        alert(errorMessage);
+                      }
+                    }}
+                  >
+                    <MessageCircle size={20} />
+                    <span>{t('pages.productDetails.contactSeller')}</span>
+                  </button>
+                )}
 
                 <div className="secondary-actions">
                   {/* <button

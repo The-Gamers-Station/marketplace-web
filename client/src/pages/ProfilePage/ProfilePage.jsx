@@ -38,6 +38,7 @@ import userService from '../../services/userService';
 import postService from '../../services/postService';
 import messagingService from '../../services/messagingService';
 import { uploadFile } from '../../config/api';
+import { getTranslatedCityName } from '../../utils/cityTranslations';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
@@ -92,6 +93,12 @@ const ProfilePage = () => {
         
         // Get current user profile
         const userProfile = await userService.getCurrentUserProfile();
+        console.log('=== USER PROFILE API RESPONSE ===');
+        console.log('Full userProfile object:', JSON.stringify(userProfile, null, 2));
+        console.log('userProfile.city:', userProfile.city);
+        console.log('userProfile.cityName:', userProfile.cityName);
+        console.log('userProfile.cityId:', userProfile.cityId);
+        console.log('================================');
         setUser(userProfile);
         setEditedUser(userProfile);
         
@@ -484,7 +491,7 @@ const ProfilePage = () => {
                     <div className="profile-meta">
                       <span className="meta-item">
                         <MapPin size={16} />
-                        {user?.city || t('profile.noLocation')}
+                        {user?.cityName ? getTranslatedCityName(user.cityName, t) : t('profile.noLocation')}
                       </span>
                       <span className="meta-item">
                         <Calendar size={16} />

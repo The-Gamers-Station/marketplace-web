@@ -88,14 +88,15 @@ export default defineConfig({
     include: [
       'react', 'react-dom', 'react-router-dom', 'react-helmet-async',
       'react-i18next', 'i18next', 'i18next-browser-languagedetector',
-      'i18next-http-backend', 'lucide-react'
+      'i18next-http-backend', 'lucide-react', 'react/jsx-runtime', 'react/jsx-dev-runtime'
     ],
     esbuildOptions: {
       define: {
         global: 'globalThis'
       },
-      target: 'es2018'
-    }
+      target: 'es2020'
+    },
+    force: true
   },
 
   build: {
@@ -164,7 +165,8 @@ export default defineConfig({
       '@utils': '/src/utils',
       '@assets': '/src/assets'
     },
-    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
+    dedupe: ['react', 'react-dom', 'react-router-dom']
   },
 
   preview: {

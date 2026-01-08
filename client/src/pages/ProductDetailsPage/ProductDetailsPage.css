@@ -82,7 +82,7 @@
   background: rgba(10, 22, 40, 0.8);
   border-radius: 20px;
    
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   margin: 20px 0;
   box-shadow:
@@ -611,6 +611,16 @@
   align-items: center;
   position: relative;
   z-index: 50;
+  isolation: isolate;
+}
+
+/* When only secondary actions are present */
+.action-section:has(.secondary-actions:only-child) {
+  justify-content: flex-end;
+}
+
+[dir="rtl"] .action-section:has(.secondary-actions:only-child) {
+  justify-content: flex-start;
 }
 
 .btn-contact-seller {
@@ -674,7 +684,7 @@
 /* Share Menu */
 .share-wrapper {
   position: relative;
-  z-index: 100;
+  z-index: 9999;
   isolation: isolate; /* Create new stacking context */
 }
 
@@ -694,9 +704,10 @@
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.5),
     0 0 0 1px rgba(255, 255, 255, 0.1);
-  z-index: 9999;
+  z-index: 10000;
   pointer-events: auto; /* Ensure menu is clickable */
   transform: translateZ(0); /* Force GPU acceleration */
+  will-change: transform; /* Optimize rendering */
 }
 
 [dir="rtl"] .share-menu {

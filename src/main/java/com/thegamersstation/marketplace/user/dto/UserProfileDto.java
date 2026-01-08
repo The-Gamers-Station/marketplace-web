@@ -31,6 +31,9 @@ public class UserProfileDto {
     @Schema(description = "City ID", example = "1")
     private Long cityId;
 
+    @Schema(description = "City name", example = "Riyadh")
+    private String cityName;
+
     @Schema(description = "User role", example = "USER")
     private User.UserRole role;
 

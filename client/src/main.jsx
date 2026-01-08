@@ -9,9 +9,7 @@ import performanceMonitor from './utils/performanceMonitor'
  
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+  <App />
 )
 
 // Register service worker for offline functionality and performance

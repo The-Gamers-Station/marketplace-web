@@ -63,10 +63,10 @@ aws:
   access-key-id: ${AWS_ACCESS_KEY_ID:}
   secret-access-key: ${AWS_SECRET_ACCESS_KEY:}
   s3:
-    bucket-name: ${AWS_S3_BUCKET_NAME:gs-marketplace}
-    region: ${AWS_S3_REGION:us-east-1}
+    bucket-name: ${AWS_S3_BUCKET_NAME:gamers-station-marketplace}
+    region: ${AWS_S3_REGION:me-south-1}
   cloudfront:
-    domain: ${AWS_CLOUDFRONT_DOMAIN:}
+    domain: ${AWS_CLOUDFRONT_DOMAIN:d2s2tw7g1k5ok1.cloudfront.net}
 
 # Messaging Configuration
 messaging:

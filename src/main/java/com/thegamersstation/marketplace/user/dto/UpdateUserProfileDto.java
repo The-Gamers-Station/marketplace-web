@@ -14,9 +14,7 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Update user profile request")
 public class UpdateUserProfileDto {
 
-    @Schema(description = "Username (3-50 characters, alphanumeric with underscores)", example = "gamer123")
     @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
-    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username can only contain letters, numbers, and underscores")
     private String username;
 
     @Schema(description = "Email address", example = "user@example.com")

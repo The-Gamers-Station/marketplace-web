@@ -134,7 +134,7 @@ const ProfileCompletePage = () => {
         profileData.email = formData.email.trim();
       }
       
-      await userService.updateProfile(profileData);
+        await userService.updateProfile(profileData);
       
       // Show success popup then navigate
       setShowSuccessPopup(true);

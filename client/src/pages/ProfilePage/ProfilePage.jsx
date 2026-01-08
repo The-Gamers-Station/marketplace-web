@@ -37,8 +37,8 @@ import authService from '../../services/authService';
 import userService from '../../services/userService';
 import postService from '../../services/postService';
 import messagingService from '../../services/messagingService';
+import cityService from '../../services/cityService';
 import { uploadFile } from '../../config/api';
-import { getTranslatedCityName } from '../../utils/cityTranslations';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
@@ -71,6 +71,8 @@ const ProfilePage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteProductId, setDeleteProductId] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [cities, setCities] = useState([]);
+  const [loadingCities, setLoadingCities] = useState(false);
 
   // Check authentication
   useEffect(() => {
@@ -93,12 +95,6 @@ const ProfilePage = () => {
         
         // Get current user profile
         const userProfile = await userService.getCurrentUserProfile();
-        console.log('=== USER PROFILE API RESPONSE ===');
-        console.log('Full userProfile object:', JSON.stringify(userProfile, null, 2));
-        console.log('userProfile.city:', userProfile.city);
-        console.log('userProfile.cityName:', userProfile.cityName);
-        console.log('userProfile.cityId:', userProfile.cityId);
-        console.log('================================');
         setUser(userProfile);
         setEditedUser(userProfile);
         
@@ -185,9 +181,22 @@ const ProfilePage = () => {
   }, []);
 
   // Handle edit mode
-  const handleEdit = () => {
+  const handleEdit = async () => {
     setIsEditing(true);
     setEditedUser({ ...user });
+    
+    // Fetch cities if not already loaded
+    if (cities.length === 0) {
+      try {
+        setLoadingCities(true);
+        const citiesData = await cityService.getCities();
+        setCities(citiesData);
+      } catch (error) {
+        console.error('Error fetching cities:', error);
+      } finally {
+        setLoadingCities(false);
+      }
+    }
   };
 
   const handleCancelEdit = () => {
@@ -216,9 +225,9 @@ const ProfilePage = () => {
         updateData.email = editedUser.email || null;
       }
       
-      // Include cityId only if user doesn't have one yet (for profile completion)
-      if (!user.cityId && editedUser.cityId) {
-        updateData.cityId = editedUser.cityId;
+      // Allow updating cityId anytime
+      if (editedUser.cityId && editedUser.cityId !== user.cityId) {
+        updateData.cityId = parseInt(editedUser.cityId);
       }
       
       // If there's a new profile image URL, add it to the update data (only allow http/https)
@@ -474,8 +483,28 @@ const ProfilePage = () => {
                       onChange={(e) => handleInputChange('username', e.target.value)}
                       placeholder={t('profile.username')}
                     />
+                    <input
+                      type="email"
+                      className="edit-input email-input"
+                      value={editedUser.email || ''}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      placeholder={t('profile.email') || 'Email'}
+                    />
+                    <select
+                      className="edit-input city-select"
+                      value={editedUser.cityId || ''}
+                      onChange={(e) => handleInputChange('cityId', e.target.value)}
+                      disabled={loadingCities}
+                    >
+                      <option value="">{t('profile.selectCity') || 'Select City'}</option>
+                      {cities.map(city => (
+                        <option key={city.id} value={city.id}>
+                          {i18n.language === 'ar' ? city.nameAr : city.nameEn}
+                        </option>
+                      ))}
+                    </select>
                     <div className="edit-actions">
-                      <button className="save-btn" onClick={handleSaveProfile} disabled={avatarUploading || backgroundUploading}>
+                      <button className="save-btn" onClick={handleSaveProfile} disabled={avatarUploading || backgroundUploading || loadingCities}>
                         <Save size={16} />
                         {t('profile.save')}
                       </button>
@@ -491,7 +520,7 @@ const ProfilePage = () => {
                     <div className="profile-meta">
                       <span className="meta-item">
                         <MapPin size={16} />
-                        {user?.cityName ? getTranslatedCityName(user.cityName, t) : t('profile.noLocation')}
+                        {user?.city ? (i18n.language === 'ar' ? user.city.nameAr : user.city.nameEn) : t('profile.noLocation')}
                       </span>
                       <span className="meta-item">
                         <Calendar size={16} />

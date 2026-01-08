@@ -30,10 +30,16 @@ public class UserService {
         
         UserProfileDto profileDto = userMapper.toProfileDto(user);
         
-        // Add city name if cityId exists
+        // Add city information if cityId exists
         if (user.getCityId() != null) {
             cityRepository.findById(user.getCityId())
-                    .ifPresent(city -> profileDto.setCityName(city.getNameEn()));
+                    .ifPresent(city -> profileDto.setCity(
+                        UserProfileDto.CityInfo.builder()
+                            .id(city.getId())
+                            .nameEn(city.getNameEn())
+                            .nameAr(city.getNameAr())
+                            .build()
+                    ));
         }
         
         return profileDto;
@@ -114,10 +120,16 @@ public class UserService {
         
         UserProfileDto profileDto = userMapper.toProfileDto(savedUser);
         
-        // Add city name if cityId exists
+        // Add city information if cityId exists
         if (savedUser.getCityId() != null) {
             cityRepository.findById(savedUser.getCityId())
-                    .ifPresent(city -> profileDto.setCityName(city.getNameEn()));
+                    .ifPresent(city -> profileDto.setCity(
+                        UserProfileDto.CityInfo.builder()
+                            .id(city.getId())
+                            .nameEn(city.getNameEn())
+                            .nameAr(city.getNameAr())
+                            .build()
+                    ));
         }
         
         return profileDto;

@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, memo } from 'react';
+import React, { lazy, Suspense, useEffect, memo, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
@@ -144,6 +144,7 @@ PageLoader.displayName = 'PageLoader';
 
 function App() {
   const { i18n, ready } = useTranslation();
+  const [forceReady, setForceReady] = useState(false);
 
   useEffect(() => {
     // Set initial direction based on language
@@ -151,6 +152,18 @@ function App() {
     document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = currentLang;
   }, [i18n.language]);
+
+  // Timeout fallback: if i18n doesn't load in 5 seconds, force render anyway
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!ready) {
+        console.warn('i18n loading timeout - forcing app to render');
+        setForceReady(true);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, [ready]);
 
   // Global error handlers to prevent white screen crashes
   useEffect(() => {
@@ -220,8 +233,8 @@ function App() {
     preloadPages();
   }, []);
 
-  // Wait for i18n to be ready
-  if (!ready) {
+  // Wait for i18n to be ready (with timeout fallback)
+  if (!ready && !forceReady) {
     return <PageLoader />;
   }
 

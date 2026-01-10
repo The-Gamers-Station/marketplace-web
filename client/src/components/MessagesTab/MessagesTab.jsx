@@ -118,15 +118,11 @@ const MessagesTab = ({ conversations, setConversations, loading, setLoading }) =
       </div>
 
       <div className="conversations-list">
-      {conversations
-        .filter(conversation => {
-          // Filter to show only conversations where current user is the seller
+      {conversations.map(conversation => {
+          // Determine who the other participant is
           const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-          return conversation.seller?.id === currentUser?.id;
-        })
-        .map(conversation => {
-          // Since we filtered for seller, the other participant is always the buyer
-          const otherParticipant = conversation.buyer;
+          const isUserSeller = conversation.seller?.id === currentUser?.id;
+          const otherParticipant = isUserSeller ? conversation.buyer : conversation.seller;
 
           return (
             <div 

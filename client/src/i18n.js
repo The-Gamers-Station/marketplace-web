@@ -11,7 +11,7 @@ i18n
     // Don't force a language, let the detector handle it
     supportedLngs: ['ar', 'en'],
     fallbackLng: 'ar', // Arabic as default
-    debug: false,
+    debug: true, // Enable debug to see errors
     
     // Detection options - check localStorage first
     detection: {
@@ -65,6 +65,12 @@ i18n
     postProcess: false,
     returnNull: false,
     returnEmptyString: false,
+  })
+  .then(() => {
+    console.log('i18n initialized successfully');
+  })
+  .catch((err) => {
+    console.error('i18n initialization failed:', err);
   });
 
 export default i18n;

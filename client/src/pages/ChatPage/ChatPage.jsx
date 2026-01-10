@@ -641,12 +641,26 @@ const ChatPage = () => {
               }
               value={message}
               onChange={(e) => {
-                setMessage(e.target.value);
-                handleTyping();
+                const value = e.target.value;
+                // Limit to 250 characters
+                if (value.length <= 250) {
+                  setMessage(value);
+                  handleTyping();
+                }
               }}
               onBlur={handleTypingStop}
               disabled={sending}
+              maxLength={250}
             />
+            <span className="char-counter" style={{ 
+              fontSize: '0.75rem', 
+              color: message.length >= 250 ? '#ff4444' : 'rgba(255, 255, 255, 0.5)',
+              position: 'absolute',
+              bottom: '8px',
+              right: '60px'
+            }}>
+              {message.length}/250
+            </span>
 
             <button
               type="submit"

@@ -657,13 +657,13 @@
 }
 
 /* Edit Product Button - Same styling as Contact Seller */
-.btn-edit-product {
-  background: #ff6b35;
+.btn-contact-seller.btn-edit-product {
+  background: #ff6b35 !important;
   box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
 }
 
-.btn-edit-product:hover {
-  background: #ff5722;
+.btn-contact-seller.btn-edit-product:hover {
+  background: #ff5722 !important;
   box-shadow: 0 6px 30px rgba(255, 107, 53, 0.4);
 }
 

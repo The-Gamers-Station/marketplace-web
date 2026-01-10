@@ -236,8 +236,39 @@ export const uploadFile = async (file, folder = 'posts') => {
   }
 
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Upload failed: ${error || response.statusText}`);
+    let errorText = '';
+    try {
+      errorText = await response.text();
+    } catch {
+      errorText = '';
+    }
+    
+    // Try to parse JSON error response
+    let errorJson = null;
+    try {
+      errorJson = JSON.parse(errorText);
+    } catch {
+      // Not JSON, use raw text
+    }
+    
+    // Extract bilingual messages if available
+    let messageAr = null;
+    let messageEn = null;
+    
+    if (errorJson) {
+      messageAr = errorJson.messageAr || errorJson.message_ar || null;
+      messageEn = errorJson.messageEn || errorJson.message_en || null;
+    }
+    
+    // Create ApiError with bilingual support
+    const error = new ApiError(
+      `[${response.status}] Upload failed`,
+      response.status,
+      messageAr || 'فشل رفع الملف. يرجى المحاولة مرة أخرى.',
+      messageEn || 'Upload failed. Please try again.'
+    );
+    
+    throw error;
   }
 
   return response.json();

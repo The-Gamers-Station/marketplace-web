@@ -347,8 +347,8 @@
 /* Product Header Info */
 .product-header-info {
   margin-bottom: 10px;
- width: 100%;
- overflow: hidden;
+  width: 100%;
+  overflow: hidden;
 }
 
 .product-title {
@@ -357,6 +357,9 @@
   margin: 0 0 8px;
   font-weight: 700;
   line-height: 1.2;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .product-arabic-title {
@@ -364,15 +367,20 @@
   color: rgba(255, 255, 255, 0.8);
   margin: 0 0 16px;
   font-weight: 500;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .product-brief {
   color: rgba(255, 255, 255, 0.7);
-  
   margin: 0;
-  width: 500px;
- 
-  overflow:  auto;
+  max-width: 100%;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
 }
 
 /* Price Display */
@@ -1449,10 +1457,27 @@
   
   .product-title {
     font-size: 1.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
   
   .product-arabic-title {
     font-size: 1.2rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  
+  .product-brief {
+    font-size: 0.9rem;
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .product-header-info {
+    width: 100%;
+    overflow: visible;
   }
   
   .price-amount {
@@ -1551,6 +1576,18 @@
   .product-main-card {
     margin: 10px 0;
     padding: 16px;
+  }
+  
+  .product-title {
+    font-size: 1.2rem;
+  }
+  
+  .product-arabic-title {
+    font-size: 1rem;
+  }
+  
+  .product-brief {
+    font-size: 0.85rem;
   }
   
   /* Make thumbnails smaller on very small screens */
@@ -1706,6 +1743,7 @@
   }
   
   .quick-info-grid {
+    grid-template-columns: 1fr;
     gap: 8px;
   }
   
@@ -1717,6 +1755,10 @@
   .info-icon {
     width: 20px;
     height: 20px;
+  }
+  
+  .price-amount {
+    font-size: 1.8rem;
   }
 }
 

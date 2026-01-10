@@ -6,6 +6,7 @@ import FormInput from '../../components/FormInput/FormInput';
 import SuccessPopup from '../../components/SuccessPopup/SuccessPopup';
 import userService from '../../services/userService';
 import cityService from '../../services/cityService';
+import { showError } from '../../components/ErrorNotification/ErrorNotification';
 import './ProfileCompletePage.css';
 
 const ProfileCompletePage = () => {
@@ -31,6 +32,7 @@ const ProfileCompletePage = () => {
         setCities(citiesData);
       } catch (error) {
         console.error('Error fetching cities:', error);
+        showError(error);
       } finally {
         setIsLoadingCities(false);
       }
@@ -145,18 +147,12 @@ const ProfileCompletePage = () => {
       }, 2000);
     } catch (error) {
       console.error('Error updating profile:', error);
-      setErrors({
-        general: error.message || t('profileComplete.errors.updateFailed')
-      });
+      showError(error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSkip = () => {
-    // User can browse without completing profile
-    navigate('/');
-  };
 
   // Icon components
   const UserIcon = () => (
@@ -270,16 +266,8 @@ const ProfileCompletePage = () => {
 
               <div className="form-actions">
                 <button
-                  type="button"
-                  className="btn-skip"
-                  onClick={handleSkip}
-                  disabled={isLoading}
-                >
-                  {t('profileComplete.skipForNow')}
-                </button>
-                <button
                   type="submit"
-                  className={`btn-submit ${isLoading ? 'loading' : ''}`}
+                  className={`btn-submit btn-submit-full ${isLoading ? 'loading' : ''}`}
                   disabled={isLoading}
                 >
                   {isLoading ? (

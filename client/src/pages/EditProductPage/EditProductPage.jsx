@@ -9,6 +9,7 @@ import postService from '../../services/postService';
 import cityService from '../../services/cityService';
 import authService from '../../services/authService';
 import { uploadFile } from '../../config/api';
+import { showError } from '../../components/ErrorNotification/ErrorNotification';
 import './EditProductPage.css';
 
 const EditProductPage = () => {
@@ -160,6 +161,7 @@ const EditProductPage = () => {
       setCities(citiesData);
     } catch (error) {
       console.error('Error fetching cities:', error);
+      showError(error);
     } finally {
       setLoadingCities(false);
     }
@@ -209,6 +211,7 @@ const EditProductPage = () => {
       }
     } catch (error) {
       console.error('Error fetching product:', error);
+      showError(error);
       navigate('/profile');
     } finally {
       setLoadingProduct(false);
@@ -318,7 +321,7 @@ const EditProductPage = () => {
       }, 3000);
     } catch (error) {
       console.error('Error updating post:', error);
-      setErrors({ submit: error.message || t('editProduct.errors.updateFailed') || 'Failed to update product' });
+      showError(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -426,8 +429,7 @@ const EditProductPage = () => {
       setUploadedImages(prev => [...prev, ...newImageUrls]);
     } catch (error) {
       console.error('Error uploading images:', error);
-      // Don't show alert for upload failures - we'll use placeholder images
-      console.warn('Image upload failed, will use placeholder images instead');
+      showError(error);
     } finally {
       setUploadingImage(false);
     }

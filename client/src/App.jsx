@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+import ErrorNotification, { showError } from './components/ErrorNotification/ErrorNotification';
 import './App.css';
 
 // Error Boundary Component
@@ -18,6 +19,8 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     console.error('Error boundary caught:', error, errorInfo);
+    // Clear any failed chunk load flags
+    window.sessionStorage.removeItem('page-has-been-force-refreshed');
   }
 
   render() {
@@ -149,6 +152,58 @@ function App() {
     document.documentElement.lang = currentLang;
   }, [i18n.language]);
 
+  // Global error handlers to prevent white screen crashes
+  useEffect(() => {
+    // Handle unhandled promise rejections
+    const handleUnhandledRejection = (event) => {
+      console.error('Unhandled promise rejection:', event.reason);
+      
+      // Show error notification for API errors
+      if (event.reason && event.reason.name === 'ApiError') {
+        showError(event.reason);
+      }
+      
+      // Prevent default error handling that might cause white screen
+      event.preventDefault();
+    };
+
+    // Handle global errors
+    const handleGlobalError = (event) => {
+      // Ignore CORS and network errors from images
+      if (event.message && (
+        event.message.includes('Failed to fetch') ||
+        event.message.includes('NetworkError') ||
+        event.message.includes('CORS') ||
+        event.message.includes('blocked by CORS')
+      )) {
+        console.debug('Network/CORS error ignored:', event.message);
+        event.preventDefault();
+        return;
+      }
+
+      // Ignore WebSocket errors
+      if (event.message && (
+        event.message.includes('WebSocket') ||
+        event.message.includes('websocket') ||
+        event.message.includes('SockJS')
+      )) {
+        console.debug('WebSocket error ignored:', event.message);
+        event.preventDefault();
+        return;
+      }
+
+      console.error('Global error:', event.error || event.message);
+    };
+
+    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+    window.addEventListener('error', handleGlobalError);
+
+    return () => {
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+      window.removeEventListener('error', handleGlobalError);
+    };
+  }, []);
+
   // Preload critical pages after initial render
   useEffect(() => {
     const preloadPages = async () => {
@@ -176,6 +231,7 @@ function App() {
         <Router>
           <div className="App">
             <ScrollToTop />
+            <ErrorNotification />
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 <Route path="/" element={<LandingPage />} />

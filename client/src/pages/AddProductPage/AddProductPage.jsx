@@ -9,6 +9,7 @@ import postService from "../../services/postService";
 import cityService from "../../services/cityService";
 import authService from "../../services/authService";
 import { uploadFile } from "../../config/api";
+import { showError } from "../../components/ErrorNotification/ErrorNotification";
 import "./AddProductPage.css";
 
 const AddProductPage = () => {
@@ -151,6 +152,7 @@ const AddProductPage = () => {
       setCities(citiesData);
     } catch (error) {
       console.error("Error fetching cities:", error);
+      showError(error);
     } finally {
       setLoadingCities(false);
     }
@@ -310,9 +312,7 @@ const AddProductPage = () => {
       }, 3000);
     } catch (error) {
       console.error("Error creating post:", error);
-      setErrors({
-        submit: error.message || t("addProduct.errors.submitFailed"),
-      });
+      showError(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -527,8 +527,7 @@ const AddProductPage = () => {
       setErrors((prev) => ({ ...prev, images: "" }));
     } catch (error) {
       console.error("Error uploading images:", error);
-      // Don't show alert for upload failures - we'll use placeholder images
-      console.warn("Image upload failed, will use placeholder images instead");
+      showError(error);
     } finally {
       setUploadingImage(false);
     }

@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import FormInput from '../../components/FormInput/FormInput';
 import LanguageSwitcher from '../../components/LanguageSwitcher/LanguageSwitcher';
 import authService from '../../services/authService';
+import { showError } from '../../components/ErrorNotification/ErrorNotification';
 import './RegisterPage.css';
 
 const RegisterPage = () => {
@@ -93,7 +94,7 @@ const RegisterPage = () => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      setErrors({ phoneNumber: error.message || t('auth.errors.requestOtpFailed') });
+      showError(error);
     }
   };
 
@@ -119,7 +120,7 @@ const RegisterPage = () => {
       }, 1500);
     } catch (error) {
       setIsLoading(false);
-      setErrors({ otp: error.message || t('auth.errors.verifyOtpFailed') });
+      showError(error);
     }
   };
 
@@ -135,7 +136,7 @@ const RegisterPage = () => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      setErrors({ otp: error.message || t('auth.errors.requestOtpFailed') });
+      showError(error);
     }
   };
 

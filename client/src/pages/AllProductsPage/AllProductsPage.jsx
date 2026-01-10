@@ -9,6 +9,7 @@ import ProductGrid from '../../components/ProductGrid/ProductGrid';
 import SEO from '../../components/SEO/SEO';
 import categoryService from '../../services/categoryService';
 import cityService from '../../services/cityService';
+import { showError } from '../../components/ErrorNotification/ErrorNotification';
 import './AllProductsPage.css';
 
 const AllProductsPage = () => {
@@ -54,6 +55,7 @@ const AllProductsPage = () => {
         setCities(citiesData);
       } catch (error) {
         console.error('Error loading data:', error);
+        showError(error);
       } finally {
         setLoading(false);
       }

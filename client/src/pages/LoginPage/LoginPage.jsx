@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import FormInput from '../../components/FormInput/FormInput';
 import LanguageSwitcher from '../../components/LanguageSwitcher/LanguageSwitcher';
 import authService from '../../services/authService';
+import { showError } from '../../components/ErrorNotification/ErrorNotification';
 import './LoginPage.css';
 
 const LoginPage = () => {
@@ -103,7 +104,8 @@ const LoginPage = () => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      setErrors({ phoneNumber: error.message || t('auth.errors.requestOtpFailed') });
+      // Show error notification instead of inline error
+      showError(error);
     }
   };
 
@@ -140,7 +142,8 @@ const LoginPage = () => {
       }
     } catch (error) {
       setIsLoading(false);
-      setErrors({ otp: error.message || t('auth.errors.verifyOtpFailed') });
+      // Show error notification instead of inline error
+      showError(error);
     }
   };
 
@@ -156,7 +159,8 @@ const LoginPage = () => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      setErrors({ otp: error.message || t('auth.errors.requestOtpFailed') });
+      // Show error notification instead of inline error
+      showError(error);
     }
   };
 

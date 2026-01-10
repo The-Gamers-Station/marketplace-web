@@ -79,84 +79,124 @@ export const getDefaultHeaders = () => {
   return headers;
 };
 
+// Import error handler
+import { ApiError, parseErrorResponse } from '../utils/errorHandler.js';
+
 // API request helper with robust error handling and safe JSON parsing
 export const apiRequest = async (url, options = {}, isRetry = false) => {
-  const response = await fetch(buildApiUrl(url), {
-    ...options,
-    headers: {
-      ...getDefaultHeaders(),
-      ...(options.headers || {}),
-    },
-  });
-
-  const contentType = response.headers.get('Content-Type') || '';
-
-  // 204 No Content => return null to avoid JSON parse errors
-  if (response.status === 204) {
-    return null;
-  }
-
-  // Read body once (stream is consumable only once)
-  let bodyText = '';
   try {
-    bodyText = await response.text();
-  } catch {
-    bodyText = '';
-  }
+    const response = await fetch(buildApiUrl(url), {
+      ...options,
+      headers: {
+        ...getDefaultHeaders(),
+        ...(options.headers || {}),
+      },
+    });
 
-  // Helper: try to parse JSON safely if content-type indicates JSON and body is not empty
-  const tryParseJson = () => {
-    if (!contentType.toLowerCase().includes('application/json') || !bodyText) return null;
-    try {
-      return JSON.parse(bodyText);
-    } catch {
+    const contentType = response.headers.get('Content-Type') || '';
+
+    // 204 No Content => return null to avoid JSON parse errors
+    if (response.status === 204) {
       return null;
     }
-  };
 
-  // Handle 401/403 - try to refresh token only if user has a token (is logged in)
-  if ((response.status === 401 || response.status === 403) && !isRetry) {
-    const token = localStorage.getItem('accessToken');
-    
-    // Only attempt refresh if user was previously authenticated
-    if (token) {
-      try {
-        // Dynamically import authService to avoid circular dependency
-        const { authService } = await import('../services/authService.js');
-        await authService.refreshToken();
-        // Retry the original request with new token
-        return apiRequest(url, options, true);
-      } catch (refreshError) {
-        console.error('Token refresh failed:', refreshError);
-        // Clear tokens and redirect to login
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
-        window.location.href = '/login';
-        return;
-      }
+    // Read body once (stream is consumable only once)
+    let bodyText = '';
+    try {
+      bodyText = await response.text();
+    } catch {
+      bodyText = '';
     }
-    // If no token exists, just let the 401/403 error be handled normally
-    // This allows unauthenticated users to receive proper error messages
-    // without being redirected to login
+
+    // Helper: try to parse JSON safely if content-type indicates JSON and body is not empty
+    const tryParseJson = () => {
+      if (!contentType.toLowerCase().includes('application/json') || !bodyText) return null;
+      try {
+        return JSON.parse(bodyText);
+      } catch {
+        return null;
+      }
+    };
+
+    // Handle 401/403 - try to refresh token only if user has a token (is logged in)
+    if ((response.status === 401 || response.status === 403) && !isRetry) {
+      const token = localStorage.getItem('accessToken');
+      
+      // Only attempt refresh if user was previously authenticated
+      if (token) {
+        try {
+          // Dynamically import authService to avoid circular dependency
+          const { authService } = await import('../services/authService.js');
+          await authService.refreshToken();
+          // Retry the original request with new token
+          return apiRequest(url, options, true);
+        } catch (refreshError) {
+          console.error('Token refresh failed:', refreshError);
+          // Clear tokens and redirect to login
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('user');
+          window.location.href = '/login';
+          return;
+        }
+      }
+      // If no token exists, just let the 401/403 error be handled normally
+      // This allows unauthenticated users to receive proper error messages
+      // without being redirected to login
+    }
+
+    if (response.ok) {
+      const json = tryParseJson();
+      if (json !== null) return json;
+      // Fallback: return text or null if empty
+      return bodyText || null;
+    }
+
+    // Error path: build meaningful message from ProblemDetail (Spring) or raw text
+    const errorJson = tryParseJson();
+    
+    // Extract messages from error response
+    let messageAr = null;
+    let messageEn = null;
+    
+    if (errorJson) {
+      messageAr = errorJson.messageAr || errorJson.message_ar || null;
+      messageEn = errorJson.messageEn || errorJson.message_en || null;
+    }
+    
+    const message =
+      (errorJson && (errorJson.message || errorJson.detail || errorJson.title)) ||
+      bodyText ||
+      response.statusText ||
+      'API request failed';
+
+    // Create ApiError with bilingual support
+    const error = new ApiError(
+      `[${response.status}] ${message}`,
+      response.status,
+      messageAr,
+      messageEn
+    );
+    
+    // Attach errorJson for further processing
+    error.errorJson = errorJson;
+    
+    throw error;
+  } catch (error) {
+    // Handle network errors or other fetch failures
+    if (error instanceof ApiError) {
+      throw error;
+    }
+    
+    // Network error or other exception
+    const networkError = new ApiError(
+      error.message || 'Network request failed',
+      0, // No status code for network errors
+      'خطأ في الاتصال بالشبكة. يرجى التحقق من اتصالك بالإنترنت.',
+      'Network connection error. Please check your internet connection.'
+    );
+    throw networkError;
   }
-
-  if (response.ok) {
-    const json = tryParseJson();
-    if (json !== null) return json;
-    // Fallback: return text or null if empty
-    return bodyText || null;
-  }
-
-  // Error path: build meaningful message from ProblemDetail (Spring) or raw text
-  const errorJson = tryParseJson();
-  const message =
-    (errorJson && (errorJson.message || errorJson.detail || errorJson.title)) ||
-    bodyText ||
-    response.statusText ||
-    'API request failed';
-
-  throw new Error(`[${response.status}] ${message}`);
 };
 
 // File upload helper

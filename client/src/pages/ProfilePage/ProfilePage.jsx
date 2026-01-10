@@ -39,6 +39,7 @@ import postService from '../../services/postService';
 import messagingService from '../../services/messagingService';
 import cityService from '../../services/cityService';
 import { uploadFile } from '../../config/api';
+import { showError } from '../../components/ErrorNotification/ErrorNotification';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
@@ -106,6 +107,7 @@ const ProfilePage = () => {
           setUserPosts(fetchedPosts);
         } catch (error) {
           console.error('Error fetching user posts:', error);
+          showError(error);
           setUserPosts([]);
         }
         
@@ -123,6 +125,7 @@ const ProfilePage = () => {
         
       } catch (error) {
         console.error('Error fetching user data:', error);
+        showError(error);
       } finally {
         setLoading(false);
       }
@@ -153,6 +156,7 @@ const ProfilePage = () => {
           setUnreadMessagesCount(count);
         } catch (error) {
           console.error('Error fetching unread count:', error);
+          showError(error);
           setUnreadMessagesCount(0);
         }
       }
@@ -193,6 +197,7 @@ const ProfilePage = () => {
         setCities(citiesData);
       } catch (error) {
         console.error('Error fetching cities:', error);
+        showError(error);
       } finally {
         setLoadingCities(false);
       }
@@ -257,10 +262,7 @@ const ProfilePage = () => {
       setShowSuccessPopup(true);
     } catch (error) {
       console.error('Error updating profile:', error);
-      // Show error popup
-      setPopupTitle(t('profile.updateErrorTitle') || 'Update Failed');
-      setPopupMessage(t('profile.updateError') || 'Failed to update profile. Please try again.');
-      setShowSuccessPopup(true);
+      showError(error);
     } finally {
       setLoading(false);
     }
@@ -364,10 +366,7 @@ const ProfilePage = () => {
       setDeleteProductId(null);
     } catch (error) {
       console.error('Error deleting product:', error);
-      // Show error popup
-      setPopupTitle(t('profile.deleteErrorTitle') || 'Delete Failed');
-      setPopupMessage(t('profile.deleteError') || 'Failed to delete product. Please try again.');
-      setShowSuccessPopup(true);
+      showError(error);
       setShowDeleteModal(false);
     } finally {
       setDeleteLoading(false);

@@ -15,6 +15,7 @@ import {
 import Header from "../../components/Header/Header";
 import messagingService from "../../services/messagingService";
 import authService from "../../services/authService";
+import { showError } from "../../components/ErrorNotification/ErrorNotification";
 import "./ChatPage.css";
 
 const ChatPage = () => {
@@ -278,7 +279,8 @@ const ChatPage = () => {
         unsubscribeStatus =
           messagingService.onConnectionStatusChange(setConnectionStatus);
       } catch (error) {
-        // Failed to setup subscriptions
+        console.error('Failed to setup subscriptions:', error);
+        showError(error);
       }
     };
 

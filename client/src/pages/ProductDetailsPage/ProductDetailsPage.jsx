@@ -26,6 +26,7 @@ import authService from '../../services/authService';
 import OptimizedImage from '../../components/OptimizedImage/OptimizedImage';
 import userService from '../../services/userService';
 import { getTranslatedCityName } from '../../utils/cityTranslations';
+import { showError } from '../../components/ErrorNotification/ErrorNotification';
 import './ProductDetailsPage.css';
 
 const ProductDetailsPage = () => {
@@ -517,7 +518,7 @@ const ProductDetailsPage = () => {
                           errorMessage = t('chat.productNotFound') || 'Product not found.';
                         }
                         
-                        alert(errorMessage);
+                        showError({ messageAr: errorMessage, messageEn: errorMessage });
                       }
                     }}
                   >

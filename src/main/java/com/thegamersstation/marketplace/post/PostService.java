@@ -188,7 +188,14 @@ public class PostService {
         }
         
         if (request.getImageUrls() != null) {
+            // Remove all existing images (this will trigger cascade delete)
+            List<PostImage> oldImages = new ArrayList<>(post.getImages());
             post.getImages().clear();
+            
+            // Flush to ensure old images are deleted before adding new ones
+            postRepository.flush();
+            
+            // Add new images
             for (int i = 0; i < request.getImageUrls().size(); i++) {
                 PostImage image = PostImage.builder()
                     .post(post)

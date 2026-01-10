@@ -356,14 +356,17 @@ const EditProductPage = () => {
       // Show success popup
       setShowSuccessPopup(true);
       
+      // Keep button disabled until redirect
       // Redirect after delay
       setTimeout(() => {
         navigate('/profile');
+        // Only reset after navigation
+        setIsSubmitting(false);
       }, 3000);
     } catch (error) {
       console.error('Error updating post:', error);
       showError(error);
-    } finally {
+      // Only reset on error
       setIsSubmitting(false);
     }
   };
@@ -465,17 +468,37 @@ const EditProductPage = () => {
             <div className="success-popup">
               <div className="success-popup-icon">
                 <svg className="success-checkmark" viewBox="0 0 52 52">
-                  <circle className="success-checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-                  <path className="success-checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                  <circle
+                    className="success-checkmark-circle"
+                    cx="26"
+                    cy="26"
+                    r="25"
+                    fill="none"
+                  />
+                  <path
+                    className="success-checkmark-check"
+                    fill="none"
+                    d="M14.1 27.2l7.1 7.2 16.7-16.8"
+                  />
                 </svg>
               </div>
-              <h2 className="success-popup-title">{t('editProduct.successTitle') || 'Updated Successfully!'}</h2>
-              <p className="success-popup-message">{t('editProduct.successMessage') || 'Product updated successfully!'}</p>
+              <h2 className="success-popup-title">
+                {t('editProduct.successTitle') || 'Updated Successfully!'}
+              </h2>
+              <p className="success-popup-message">
+                {t('editProduct.successMessage') || 'Product updated successfully!'}
+              </p>
               <div className="success-popup-loader">
                 <span></span>
                 <span></span>
                 <span></span>
               </div>
+              <button
+                className="success-popup-button"
+                onClick={() => navigate('/profile')}
+              >
+                {t('common.goToProfile') || 'Go to Profile'}
+              </button>
             </div>
           </div>
         )}

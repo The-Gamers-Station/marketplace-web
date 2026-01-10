@@ -656,6 +656,17 @@
   box-shadow: 0 6px 30px rgba(255, 107, 53, 0.4);
 }
 
+/* Edit Product Button - Same styling as Contact Seller */
+.btn-edit-product {
+  background: #ff6b35;
+  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+}
+
+.btn-edit-product:hover {
+  background: #ff5722;
+  box-shadow: 0 6px 30px rgba(255, 107, 53, 0.4);
+}
+
 .secondary-actions {
   display: flex;
   gap: 12px;

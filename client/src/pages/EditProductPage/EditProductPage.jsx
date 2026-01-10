@@ -347,7 +347,7 @@ const EditProductPage = () => {
 
   const PriceIcon = () => (
     <img
-      src="https://www.sama.gov.sa/ar-sa/Currency/SRS/PublishingImages/Saudi_Riyal_Symbol-1.png"
+      src="/images/Saudi_Riyal_Symbol-1.png"
       alt="Saudi Riyal symbol"
       style={{ 
         width: '20px', 

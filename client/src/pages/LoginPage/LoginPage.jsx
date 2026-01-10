@@ -106,6 +106,20 @@ const LoginPage = () => {
       setIsLoading(false);
       // Show error notification instead of inline error
       showError(error);
+      
+      // If rate limited (429), set resend timer to retryAfter value
+      if (error.status === 429 && error.errorJson?.retryAfter) {
+        setResendTimer(error.errorJson.retryAfter);
+        const interval = setInterval(() => {
+          setResendTimer((prev) => {
+            if (prev <= 1) {
+              clearInterval(interval);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+      }
     }
   };
 
@@ -161,6 +175,20 @@ const LoginPage = () => {
       setIsLoading(false);
       // Show error notification instead of inline error
       showError(error);
+      
+      // If rate limited (429), set resend timer to retryAfter value
+      if (error.status === 429 && error.errorJson?.retryAfter) {
+        setResendTimer(error.errorJson.retryAfter);
+        const interval = setInterval(() => {
+          setResendTimer((prev) => {
+            if (prev <= 1) {
+              clearInterval(interval);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+      }
     }
   };
 

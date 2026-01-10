@@ -38,7 +38,10 @@ public class AuthService {
         String phoneNumber = PhoneValidator.normalize(request.getPhoneNumber());
         
         if (phoneNumber == null) {
-            throw new BusinessRuleException("Invalid phone number format");
+            throw new BusinessRuleException(
+                "Invalid phone number format",
+                "صيغة رقم الجوال غير صحيحة"
+            );
         }
 
         log.info("OTP requested for phone: {}", phoneNumber);
@@ -60,7 +63,10 @@ public class AuthService {
         String phoneNumber = PhoneValidator.normalize(request.getPhoneNumber());
         
         if (phoneNumber == null) {
-            throw new BusinessRuleException("Invalid phone number format");
+            throw new BusinessRuleException(
+                "Invalid phone number format",
+                "صيغة رقم الجوال غير صحيحة"
+            );
         }
 
         log.info("OTP verification attempt for phone: {}", phoneNumber);
@@ -69,7 +75,10 @@ public class AuthService {
         boolean isValid = otpService.verifyOtp(phoneNumber, request.getCode());
         
         if (!isValid) {
-            throw new BusinessRuleException("Invalid or expired OTP code");
+            throw new BusinessRuleException(
+                "Invalid or expired OTP code",
+                "رمز التحقق غير صحيح أو منتهي الصلاحية"
+            );
         }
 
         // Find or create user
@@ -78,7 +87,10 @@ public class AuthService {
 
         // Check if user is active
         if (!user.getIsActive()) {
-            throw new BusinessRuleException("Account is deactivated. Please contact support.");
+            throw new BusinessRuleException(
+                "Account is deactivated. Please contact support.",
+                "حسابك غير مفعّل. يرجى التواصل مع الدعم الفني."
+            );
         }
 
         // Generate tokens
@@ -109,12 +121,18 @@ public class AuthService {
      */
     public AuthResponseDto refreshToken(String refreshToken) {
         if (refreshToken == null || refreshToken.isBlank()) {
-            throw new BusinessRuleException("Refresh token is required");
+            throw new BusinessRuleException(
+                "Refresh token is required",
+                "رمز التحديث مطلوب"
+            );
         }
 
         // Validate refresh token
         if (!jwtUtil.validateRefreshToken(refreshToken)) {
-            throw new BusinessRuleException("Invalid or expired refresh token");
+            throw new BusinessRuleException(
+                "Invalid or expired refresh token",
+                "رمز التحديث غير صحيح أو منتهي الصلاحية"
+            );
         }
 
         // Extract user ID from refresh token
@@ -122,11 +140,17 @@ public class AuthService {
 
         // Find user
         User user = usersRepository.findById(userId)
-                .orElseThrow(() -> new BusinessRuleException("User not found"));
+                .orElseThrow(() -> new BusinessRuleException(
+                    "User not found",
+                    "المستخدم غير موجود"
+                ));
 
         // Check if user is active
         if (!user.getIsActive()) {
-            throw new BusinessRuleException("Account is deactivated");
+            throw new BusinessRuleException(
+                "Account is deactivated",
+                "حسابك غير مفعّل"
+            );
         }
 
         // Generate new access token

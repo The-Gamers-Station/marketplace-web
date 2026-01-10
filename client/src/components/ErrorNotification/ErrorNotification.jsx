@@ -26,16 +26,40 @@ const ErrorNotification = () => {
       
       // Get the appropriate message based on language
       let message = '';
-      if (error.getLocalizedMessage) {
+      
+      // Try to get message from errorJson first (most accurate)
+      if (error.errorJson) {
+        const messageAr = error.errorJson.messageAr || error.errorJson.message_ar;
+        const messageEn = error.errorJson.messageEn || error.errorJson.message_en;
+        
+        if (currentLang === 'ar' && messageAr) {
+          message = messageAr;
+        } else if (currentLang === 'en' && messageEn) {
+          message = messageEn;
+        }
+      }
+      
+      // If not found, try getLocalizedMessage method
+      if (!message && error.getLocalizedMessage) {
         message = error.getLocalizedMessage(currentLang);
-      } else if (error.messageAr && currentLang === 'ar') {
-        message = error.messageAr;
-      } else if (error.messageEn && currentLang === 'en') {
-        message = error.messageEn;
-      } else if (error.message) {
+      }
+      
+      // Try direct properties
+      if (!message) {
+        if (error.messageAr && currentLang === 'ar') {
+          message = error.messageAr;
+        } else if (error.messageEn && currentLang === 'en') {
+          message = error.messageEn;
+        }
+      }
+      
+      // Try error.message as fallback
+      if (!message && error.message) {
         message = error.message;
-      } else {
-        // Fallback message
+      }
+      
+      // Final fallback message
+      if (!message) {
         message = currentLang === 'ar' 
           ? 'عذراً، حدث خطأ غير متوقع. يرجى محاولة تحديث الصفحة أو التواصل مع الدعم الفني إذا استمرت المشكلة.'
           : 'An unexpected error occurred. Please try refreshing the page or contact support if the issue persists.';

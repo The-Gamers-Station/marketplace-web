@@ -68,8 +68,11 @@ export const buildApiUrl = (endpoint) => `${API_BASE_URL}${endpoint}`;
 // Default headers
 export const getDefaultHeaders = () => {
   const token = localStorage.getItem('accessToken');
+  const currentLang = localStorage.getItem('i18nextLng') || 'ar';
+  
   const headers = {
     'Content-Type': 'application/json',
+    'Accept-Language': currentLang,
   };
   
   if (token) {
@@ -108,12 +111,14 @@ export const apiRequest = async (url, options = {}, isRetry = false) => {
       bodyText = '';
     }
 
-    // Helper: try to parse JSON safely if content-type indicates JSON and body is not empty
+    // Helper: try to parse JSON safely
     const tryParseJson = () => {
-      if (!contentType.toLowerCase().includes('application/json') || !bodyText) return null;
+      if (!bodyText) return null;
+      
+      // Try to parse JSON (works with application/json and application/problem+json)
       try {
         return JSON.parse(bodyText);
-      } catch {
+      } catch (e) {
         return null;
       }
     };

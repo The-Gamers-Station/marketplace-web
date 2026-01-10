@@ -60,6 +60,10 @@ export const ERROR_MESSAGES = {
   RESOURCE_LOCKED: {
     ar: 'هذا المحتوى مقفل حالياً. يرجى المحاولة لاحقاً.',
     en: 'This content is currently locked. Please try again later.'
+  },
+  RATE_LIMIT_EXCEEDED: {
+    ar: 'عدد كبير من الطلبات. يرجى المحاولة لاحقاً.',
+    en: 'Too many requests. Please try again later.'
   }
 };
 
@@ -71,6 +75,7 @@ export const getErrorMessageByStatus = (status) => {
     403: ERROR_MESSAGES.FORBIDDEN,
     404: ERROR_MESSAGES.NOT_FOUND,
     422: ERROR_MESSAGES.VALIDATION_ERROR,
+    429: ERROR_MESSAGES.RATE_LIMIT_EXCEEDED,
     500: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
     502: ERROR_MESSAGES.SERVICE_UNAVAILABLE,
     503: ERROR_MESSAGES.SERVICE_UNAVAILABLE,
@@ -172,6 +177,7 @@ export class ApiError extends Error {
   }
   
   getLocalizedMessage(language = 'ar') {
+    // First priority: Use the actual API response messages
     if (language === 'ar' && this.messageAr) {
       return this.messageAr;
     }
@@ -179,6 +185,20 @@ export class ApiError extends Error {
       return this.messageEn;
     }
     
+    // Second priority: Try to extract from errorJson if available
+    if (this.errorJson) {
+      const messageAr = this.errorJson.messageAr || this.errorJson.message_ar;
+      const messageEn = this.errorJson.messageEn || this.errorJson.message_en;
+      
+      if (language === 'ar' && messageAr) {
+        return messageAr;
+      }
+      if (language === 'en' && messageEn) {
+        return messageEn;
+      }
+    }
+    
+    // Third priority: Use status code fallback messages
     const messages = getErrorMessageByStatus(this.status);
     return messages[language] || messages.en || this.message;
   }

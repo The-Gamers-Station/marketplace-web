@@ -69,7 +69,7 @@ public class UserService {
         if (updateDto.getUsername() != null &&
             !updateDto.getUsername().equals(user.getUsername())) {
             if (usersRepository.existsByUsername(updateDto.getUsername())) {
-                throw new BusinessRuleException("Username already taken");
+                throw new BusinessRuleException("Username already taken","راحت عليك في واحد قبلك سبقك واخذ الاسم");
             }
             user.setUsername(updateDto.getUsername());
         }

@@ -174,14 +174,18 @@ public class MediaService {
      */
     private void validateImage(MultipartFile file) {
         if (file == null || file.isEmpty()) {
-            throw new BusinessRuleException("File is required");
+            throw new BusinessRuleException(
+                "File is required",
+                "الملف مطلوب"
+            );
         }
 
         // Check file size
         long maxSizeBytes = maxSizeMb * 1024L * 1024L;
         if (file.getSize() > maxSizeBytes) {
             throw new BusinessRuleException(
-                    String.format("File size exceeds maximum allowed size of %d MB", maxSizeMb)
+                    String.format("File size exceeds maximum allowed size of %d MB", maxSizeMb),
+                    String.format("حجم الملف يتجاوز الحد الأقصى المسموح وهو %d ميجابايت", maxSizeMb)
             );
         }
 
@@ -189,7 +193,8 @@ public class MediaService {
         String contentType = file.getContentType();
         if (contentType == null || !ALLOWED_IMAGE_TYPES.contains(contentType.toLowerCase())) {
             throw new BusinessRuleException(
-                    "Invalid file type. Allowed types: " + String.join(", ", ALLOWED_IMAGE_TYPES)
+                    "Invalid file type. Allowed types: " + String.join(", ", ALLOWED_IMAGE_TYPES),
+                    "نوع الملف غير صحيح. الأنواع المسموحة: " + String.join(", ", ALLOWED_IMAGE_TYPES)
             );
         }
 
@@ -199,7 +204,8 @@ public class MediaService {
             String extension = getFileExtension(originalFilename).toLowerCase();
             if (!ALLOWED_EXTENSIONS.contains(extension)) {
                 throw new BusinessRuleException(
-                        "Invalid file extension. Allowed extensions: " + String.join(", ", ALLOWED_EXTENSIONS)
+                        "Invalid file extension. Allowed extensions: " + String.join(", ", ALLOWED_EXTENSIONS),
+                        "امتداد الملف غير صحيح. الامتدادات المسموحة: " + String.join(", ", ALLOWED_EXTENSIONS)
                 );
             }
         }
@@ -248,10 +254,16 @@ public class MediaService {
 
         } catch (S3Exception e) {
             log.error("Failed to upload image to S3: {}", e.awsErrorDetails().errorMessage(), e);
-            throw new BusinessRuleException("Failed to upload image. Please try again.");
+            throw new BusinessRuleException(
+                "Failed to upload image. Please try again.",
+                "فشل رفع الصورة. يرجى المحاولة مرة أخرى."
+            );
         } catch (IOException e) {
             log.error("Failed to read image file", e);
-            throw new BusinessRuleException("Failed to upload image. Please try again.");
+            throw new BusinessRuleException(
+                "Failed to upload image. Please try again.",
+                "فشل رفع الصورة. يرجى المحاولة مرة أخرى."
+            );
         }
     }
 
@@ -280,7 +292,10 @@ public class MediaService {
 
         } catch (IOException e) {
             log.error("Failed to upload image to local storage", e);
-            throw new BusinessRuleException("Failed to upload image. Please try again.");
+            throw new BusinessRuleException(
+                "Failed to upload image. Please try again.",
+                "فشل رفع الصورة. يرجى المحاولة مرة أخرى."
+            );
         }
     }
 

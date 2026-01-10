@@ -56,7 +56,10 @@ public class SimulatedOtpService implements OtpService {
 
         // Validate phone format
         if (!PhoneValidator.isValid(phoneNumber)) {
-            throw new BusinessRuleException("Invalid phone number format");
+            throw new BusinessRuleException(
+                "Invalid phone number format",
+                "صيغة رقم الهاتف غير صحيحة"
+            );
         }
 
         // Validate rate limits and business rules
@@ -126,8 +129,8 @@ public class SimulatedOtpService implements OtpService {
 
         if (attemptsToday >= maxAttemptsPerDay) {
             throw new BusinessRuleException(
-                    String.format("Maximum OTP attempts (%d) reached for today. Please try again tomorrow.", 
-                            maxAttemptsPerDay)
+                    String.format("Maximum OTP attempts (%d) reached for today. Please try again tomorrow.", maxAttemptsPerDay),
+                    String.format("تم بلوغ الحد الأقصى من محاولات رمز التحقق (%d) لليوم. يرجى المحاولة غداً.", maxAttemptsPerDay)
             );
         }
 

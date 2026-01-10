@@ -516,6 +516,12 @@ const ProfilePage = () => {
                 ) : (
                   <>
                     <h1 className="profile-username">{user?.username || t('profile.anonymous')}</h1>
+                    {user?.phoneNumber && (
+                      <div className="profile-phone">
+                        <Phone size={16} />
+                        <span>{user.phoneNumber.replace(/^\+?966/, '0').replace(/\+$/, '')}</span>
+                      </div>
+                    )}
                     <div className="profile-meta">
                       <span className="meta-item">
                         <MapPin size={16} />

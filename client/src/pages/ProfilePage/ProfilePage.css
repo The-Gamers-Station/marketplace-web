@@ -166,6 +166,37 @@
   background-clip: text;
 }
 
+.profile-phone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.08), rgba(255, 107, 53, 0.04));
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  border-radius: 10px;
+  width: fit-content;
+  transition: all 0.3s ease;
+}
+
+.profile-phone:hover {
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.12), rgba(255, 107, 53, 0.06));
+  border-color: rgba(255, 107, 53, 0.3);
+  transform: translateX(4px);
+}
+
+.profile-phone svg {
+  color: var(--primary-color);
+  flex-shrink: 0;
+}
+
+.profile-phone span {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+}
+
 .profile-meta {
   display: flex;
   gap: 20px;
@@ -996,6 +1027,19 @@
 
   .profile-username {
     font-size: 1.8rem;
+  }
+
+  .profile-phone {
+    margin: 0 auto 12px;
+    padding: 8px 14px;
+  }
+
+  .profile-phone span {
+    font-size: 0.95rem;
+  }
+
+  .profile-phone:hover {
+    transform: translateX(0);
   }
 
   .profile-meta {

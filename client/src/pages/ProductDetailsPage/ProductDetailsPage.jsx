@@ -182,8 +182,10 @@ const ProductDetailsPage = () => {
         
       setRelatedProducts(transformedRelated);
       
-    } catch {
+    } catch (error) {
+      console.error('Error fetching product details:', error);
       setError(t('common.error'));
+      showError(error);
     } finally {
       setLoading(false);
     }

@@ -134,6 +134,7 @@ const ChatPage = () => {
         }
 
         setError(t("chat.loadError"));
+        showError(err);
       } finally {
         setLoading(false);
       }
@@ -198,7 +199,8 @@ const ChatPage = () => {
       setHasMore(response.hasMore);
       setCursor(response.nextCursor);
     } catch (err) {
-      // Error loading messages
+      console.error('Error loading messages:', err);
+      showError(err);
     } finally {
       setLoadingMore(false);
     }

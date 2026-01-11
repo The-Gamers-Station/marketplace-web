@@ -491,6 +491,18 @@ const ProductDetailsPage = () => {
                       }
                       
                       try {
+                        // Check if conversation already exists for this product
+                        const conversations = await messagingService.getConversations(0, 100);
+                        const existingConversation = conversations?.content?.find(
+                          conv => conv.post?.id === product.id
+                        );
+                        
+                        if (existingConversation) {
+                          // Navigate to existing conversation without sending a message
+                          navigate(`/chat/${existingConversation.id}`);
+                          return;
+                        }
+                        
                         // [ProductDetails] Starting conversation for product: product.id, product.name
                         
                         const initialMessage = t('chat.interestedInProduct', { productName: product.name }) || `Hi, I'm interested in ${product.name}`;

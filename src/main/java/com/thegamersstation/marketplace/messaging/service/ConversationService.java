@@ -59,12 +59,7 @@ public class ConversationService {
             .findByPostAndSellerAndBuyer(post, post.getOwner(), buyer);
         
         if (existingConversation.isPresent()) {
-            // Send message to existing conversation
-            messageService.sendMessage(
-                existingConversation.get().getId(),
-                SendMessageRequest.builder().content(request.getInitialMessage()).build(),
-                buyerId
-            );
+            // Return existing conversation without sending message
             return getConversation(existingConversation.get().getId(), buyerId);
         }
         

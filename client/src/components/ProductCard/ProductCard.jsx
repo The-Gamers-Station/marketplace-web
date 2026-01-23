@@ -61,39 +61,45 @@ const ProductCard = ({
       </div>
 
       <div className="product-content">
-        {/* Title Section */}
-        <h3 className="product-titlee">{title}</h3>
+        {/* User Info Section - Enhanced */}
+        <div className="user-info-section">
+          <div className="user-avatar">
+            <User size={16} />
+          </div>
+          <div className="user-details">
+            <div className="user-name">
+              <span className="username-text">{username || t('anonymous')}</span>
+            </div>
+            {location && (
+              <div className="user-location">
+                <MapPin size={11} />
+                <span>{getTranslatedCityName(location, t)}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Product Info Section */}
+         <div className="product-info">
+          <h3 className="product-titlee">{title}</h3>
+        </div>
 
         {/* Platforms Tags */}
         {platforms && platforms.length > 0 && (
           <div className="product-platforms">
-            {platforms.slice(0, 2).map((platform, index) => (
+            {platforms.slice(0, 3).map((platform, index) => (
               <span key={index} className="platform-tag">{platform}</span>
             ))}
-            {platforms.length > 2 && (
-              <span className="platform-tag more">+{platforms.length - 2}</span>
+            {platforms.length > 3 && (
+              <span className="platform-tag more">+{platforms.length - 3}</span>
             )}
           </div>
         )}
 
-        {/* Price Section */}
+        {/* Price Section - At Bottom of Card */}
         <div className="current-price">
           <span className="price-currency">{t('currency')}</span>
           <span className="price-valuee">{price || '0'}</span>
-        </div>
-
-        {/* User Info at Bottom */}
-        <div className="user-info-bottom">
-          <span className="username-text">{username || t('anonymous')}</span>
-          {location && (
-            <>
-              <span className="separator">|</span>
-              <span className="location-text">
-                <MapPin size={10} />
-                {getTranslatedCityName(location, t)}
-              </span>
-            </>
-          )}
         </div>
       </div>
     </a>

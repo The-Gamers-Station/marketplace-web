@@ -1,5 +1,6 @@
 package com.thegamersstation.marketplace.otp;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.thegamersstation.marketplace.common.exception.BusinessRuleException;
@@ -7,22 +8,41 @@ import com.thegamersstation.marketplace.common.exception.RateLimitExceededExcept
 import com.thegamersstation.marketplace.common.validation.PhoneValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
-@ConditionalOnProperty(name = "otp.provider", havingValue = "simulated", matchIfMissing = true)
+@ConditionalOnProperty(name = "otp.isEnabled", havingValue = "true", matchIfMissing = true)
 @RequiredArgsConstructor
-public class SimulatedOtpService implements OtpService {
+public class SmsOtpService implements OtpService {
 
     private final OtpLogRepository otpLogRepository;
+    private final OkHttpClient httpClient = new OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
+            .build();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Value("${otp.sms.api-url}")
+    private String apiUrl;
+
+    @Value("${otp.sms.auth-token}")
+    private String authToken;
+
+    @Value("${otp.sms.sender}")
+    private String sender;
 
     @Value("${otp.code-length}")
     private int codeLength;
@@ -52,7 +72,7 @@ public class SimulatedOtpService implements OtpService {
 
     @Override
     public void sendOtp(String phoneNumber, String ipAddress) {
-        log.info("Sending simulated OTP to phone: {}", phoneNumber);
+        log.info("Sending OTP via SMS to phone: {}", phoneNumber);
 
         // Validate phone format
         if (!PhoneValidator.isValid(phoneNumber)) {
@@ -65,33 +85,37 @@ public class SimulatedOtpService implements OtpService {
         // Validate rate limits and business rules
         validateOtpRequest(phoneNumber, ipAddress);
 
-        // Generate 4-digit OTP code
+        // Generate OTP code
         String code = generateOtpCode();
 
         // Store in cache with phone as key
         otpCache.put(phoneNumber, code);
 
+        // Send SMS via Taqnyat API
+        boolean success = sendSms(phoneNumber, code);
+
         // Log the attempt
-        OtpLog log = OtpLog.builder()
+        OtpLog otpLog = OtpLog.builder()
                 .phoneNumber(phoneNumber)
                 .ipAddress(ipAddress)
-                .success(false) // Mark as pending
+                .success(success)
                 .attemptedAt(Instant.now())
                 .build();
-        otpLogRepository.save(log);
+        otpLogRepository.save(otpLog);
 
-        // In development, log the OTP code
-        SimulatedOtpService.log.warn("🔐 OTP CODE for {}: {} (expires in {} minutes)", 
-                phoneNumber, code, ttlMinutes);
+        if (!success) {
+            throw new BusinessRuleException(
+                "Failed to send OTP. Please try again.",
+                "فشل إرسال رمز التحقق. يرجى المحاولة مرة أخرى."
+            );
+        }
+
+        log.info("✅ OTP sent successfully to {} (expires in {} minutes)", phoneNumber, ttlMinutes);
     }
 
     @Override
     public boolean verifyOtp(String phoneNumber, String code) {
         log.info("Verifying OTP for phone: {}", phoneNumber);
-
-
-        if (code.equals("1111"))
-            return true;
 
         if (code == null || code.isBlank()) {
             return false;
@@ -178,4 +202,45 @@ public class SimulatedOtpService implements OtpService {
         return String.valueOf(code);
     }
 
+    private boolean sendSms(String phoneNumber, String code) {
+        try {
+            // Format phone number for Saudi Arabia (remove +966 and use plain number)
+            String formattedPhone = phoneNumber.replace("+", "");
+
+            // Build message body with OTP code
+            String messageBody = String.format("رمز التحقق الخاص بك هو: %s\nYour verification code is: %s", code, code);
+
+            // Build request payload
+            Map<String, Object> payload = Map.of(
+                    "sender", sender,
+                    "recipients", List.of(formattedPhone),
+                    "body", messageBody
+            );
+
+            String jsonPayload = objectMapper.writeValueAsString(payload);
+
+            // Build HTTP request
+            Request request = new Request.Builder()
+                    .url(apiUrl)
+                    .post(RequestBody.create(jsonPayload, MediaType.get("application/json")))
+                    .addHeader("Content-Type", "application/json")
+                    .addHeader("Authorization", authToken)
+                    .build();
+
+            // Execute request
+            try (Response response = httpClient.newCall(request).execute()) {
+                if (response.isSuccessful()) {
+                    log.info("SMS API response: {}", response.body().string());
+                    return true;
+                } else {
+                    log.error("SMS API error: {} - {}", response.code(), response.body().string());
+                    return false;
+                }
+            }
+
+        } catch (IOException e) {
+            log.error("Failed to send SMS", e);
+            return false;
+        }
+    }
 }

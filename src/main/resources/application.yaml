@@ -50,6 +50,10 @@ otp:
   ttl-minutes: 5
   resend-cooldown-seconds: 60
   max-attempts-per-day: 5
+  sms:
+    auth-token: ${SMS_AUTH_TOKEN}
+    sender: GStation
+    api-url: https://api.taqnyat.sa/v1/messages
 
 # Media Configuration
 media:

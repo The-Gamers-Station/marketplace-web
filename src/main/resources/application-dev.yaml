@@ -11,9 +11,8 @@ logging:
     org.springframework.security: DEBUG
     org.flywaydb: INFO
 
-# Dev-specific overrides
 otp:
-  provider: simulated
+  isEnabled: true
 
 messaging:
   ably:

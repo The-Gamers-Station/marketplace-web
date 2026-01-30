@@ -15,8 +15,8 @@ management:
       exposure:
         include: health,info,metrics
 
-otp:
-  provider: simulated
 messaging:
   ably:
     enabled: true
+otp:
+  isEnabled: true

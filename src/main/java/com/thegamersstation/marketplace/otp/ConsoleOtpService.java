@@ -52,8 +52,8 @@ public class ConsoleOtpService implements OtpService {
     private final Random random = new Random();
 
     @Override
-    public void sendOtp(String phoneNumber, String ipAddress) {
-        log.info("Sending OTP to console for phone: {}", phoneNumber);
+    public void sendOtp(String phoneNumber, String ipAddress, String language) {
+        log.info("Sending OTP to console for phone: {} in language: {}", phoneNumber, language);
 
         // Validate phone format
         if (!PhoneValidator.isValid(phoneNumber)) {
@@ -82,8 +82,14 @@ public class ConsoleOtpService implements OtpService {
         otpLogRepository.save(log);
 
         // In development, log the OTP code
-        ConsoleOtpService.log.warn("🔐 OTP CODE for {}: {} (expires in {} minutes)", 
-                phoneNumber, code, ttlMinutes);
+        String messageBody;
+        if ("en".equalsIgnoreCase(language)) {
+            messageBody = String.format("Your verification code: %s  For login thegamersstation.com", code);
+        } else {
+            messageBody = String.format("رمز التحقق:%s لدخول منصة thegamersstation.com", code);
+        }
+        ConsoleOtpService.log.warn("🔐 OTP CODE for {}: {} | Message: {} (expires in {} minutes)", 
+                phoneNumber, code, messageBody, ttlMinutes);
     }
 
     @Override

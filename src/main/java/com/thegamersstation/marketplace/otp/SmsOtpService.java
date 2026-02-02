@@ -71,8 +71,8 @@ public class SmsOtpService implements OtpService {
     private final Random random = new Random();
 
     @Override
-    public void sendOtp(String phoneNumber, String ipAddress) {
-        log.info("Sending OTP via SMS to phone: {}", phoneNumber);
+    public void sendOtp(String phoneNumber, String ipAddress, String language) {
+        log.info("Sending OTP via SMS to phone: {} in language: {}", phoneNumber, language);
 
         // Validate phone format
         if (!PhoneValidator.isValid(phoneNumber)) {
@@ -92,7 +92,7 @@ public class SmsOtpService implements OtpService {
         otpCache.put(phoneNumber, code);
 
         // Send SMS via Taqnyat API
-        boolean success = sendSms(phoneNumber, code);
+        boolean success = sendSms(phoneNumber, code, language);
 
         // Log the attempt
         OtpLog otpLog = OtpLog.builder()
@@ -202,13 +202,19 @@ public class SmsOtpService implements OtpService {
         return String.valueOf(code);
     }
 
-    private boolean sendSms(String phoneNumber, String code) {
+    private boolean sendSms(String phoneNumber, String code, String language) {
         try {
             // Format phone number for Saudi Arabia (remove +966 and use plain number)
             String formattedPhone = phoneNumber.replace("+", "");
 
-            // Build message body with OTP code
-            String messageBody = String.format("رمز التحقق الخاص بك هو: %s\nYour verification code is: %s", code, code);
+            // Build message body based on language
+            String messageBody;
+            if ("en".equalsIgnoreCase(language)) {
+                messageBody = String.format("Your verification code: %s  For login thegamersstation.com", code);
+            } else {
+                // Default to Arabic
+                messageBody = String.format("رمز التحقق:%s لدخول منصة thegamersstation.com", code);
+            }
 
             // Build request payload
             Map<String, Object> payload = Map.of(

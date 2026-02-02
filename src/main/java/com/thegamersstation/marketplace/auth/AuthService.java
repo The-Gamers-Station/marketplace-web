@@ -34,7 +34,7 @@ public class AuthService {
     /**
      * Request OTP for phone number
      */
-    public OtpResponseDto requestOtp(OtpRequestDto request, String ipAddress) {
+    public OtpResponseDto requestOtp(OtpRequestDto request, String ipAddress, String language) {
         String phoneNumber = PhoneValidator.normalize(request.getPhoneNumber());
         
         if (phoneNumber == null) {
@@ -43,10 +43,10 @@ public class AuthService {
                 "صيغة رقم الجوال غير صحيحة"
             );
         }
+        
+        log.info("OTP requested for phone: {} with language: {}", phoneNumber, language);
 
-        log.info("OTP requested for phone: {}", phoneNumber);
-
-        otpService.sendOtp(phoneNumber, ipAddress);
+        otpService.sendOtp(phoneNumber, ipAddress, language);
 
         return OtpResponseDto.builder()
                 .message("OTP sent successfully")

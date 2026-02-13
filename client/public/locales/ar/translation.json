@@ -742,10 +742,13 @@
     "errors": {
       "titleRequired": "عنوان المنتج مطلوب",
       "titleTooShort": "يجب أن يكون العنوان 5 أحرف على الأقل",
+      "titleTooLong": "يجب ألا يتجاوز العنوان 100 حرف",
       "descriptionRequired": "الوصف مطلوب",
       "descriptionTooShort": "الوصف يجب أن يكون 10 أحرف على الأقل",
       "descriptionTooLong": "الوصف يجب ألا يتجاوز 200 حرف",
       "priceRequired": "السعر مطلوب وصحيح",
+      "priceTooLong": "السعر طويل جداً",
+      "priceTooHigh": "السعر يتجاوز الحد الأقصى المسموح",
       "cityRequired": "الرجاء اختيار مدينة",
       "typeRequired": "الرجاء اختيار نوع الإعلان",
       "categoryRequired": "الرجاء اختيار الفئة",

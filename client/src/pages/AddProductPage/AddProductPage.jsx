@@ -355,6 +355,10 @@ const AddProductPage = () => {
       newErrors.title =
         t("addProduct.errors.titleTooShort") ||
         "Title must be at least 5 characters";
+    } else if (formData.title.trim().length > 100) {
+      newErrors.title =
+        t("addProduct.errors.titleTooLong") ||
+        "Title must not exceed 100 characters";
     }
 
     // Validate description
@@ -368,6 +372,14 @@ const AddProductPage = () => {
 
     if (!formData.price || parseFloat(formData.price) <= 0) {
       newErrors.price = t("addProduct.errors.priceRequired");
+    } else if (formData.price.length > 10) {
+      newErrors.price =
+        t("addProduct.errors.priceTooLong") ||
+        "Price is too long";
+    } else if (parseFloat(formData.price) > 9999999999) {
+      newErrors.price =
+        t("addProduct.errors.priceTooHigh") ||
+        "Price exceeds maximum allowed value";
     }
 
     if (!formData.cityId) {

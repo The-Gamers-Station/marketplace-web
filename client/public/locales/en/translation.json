@@ -740,10 +740,13 @@
     "errors": {
       "titleRequired": "Product title is required",
       "titleTooShort": "Title must be at least 5 characters",
+      "titleTooLong": "Title must not exceed 100 characters",
       "descriptionRequired": "Description is required",
       "descriptionTooShort": "Description must be at least 10 characters",
       "descriptionTooLong": "Description must not exceed 200 characters",
       "priceRequired": "Valid price is required",
+      "priceTooLong": "Price is too long",
+      "priceTooHigh": "Price exceeds maximum allowed value",
       "cityRequired": "Please select a city",
       "typeRequired": "Please select a listing type",
       "categoryRequired": "Please select a category",

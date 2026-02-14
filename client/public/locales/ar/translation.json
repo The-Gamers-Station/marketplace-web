@@ -939,6 +939,10 @@
     "forSale": "للبيع",
     "wanted": "مطلوب"
   },
+  "postTypeToggle": {
+    "forSale": "للبيع",
+    "wanted": "مطلوب"
+  },
   "pagination": {
     "showing": "عرض",
     "of": "من",

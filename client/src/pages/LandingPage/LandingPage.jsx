@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Header from '../../components/Header/Header';
 // import Hero from '../../components/Hero/Hero';
 import CategoryFilter from '../../components/CategoryFilter/CategoryFilter';
+import PostTypeToggle from '../../components/PostTypeToggle/PostTypeToggle';
 import ProductGrid from '../../components/ProductGrid/ProductGrid';
 import Footer from '../../components/Footer/Footer';
 import SEO from '../../components/SEO/SEO';
@@ -17,6 +18,7 @@ const LandingPage = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedSubcategoryType, setSelectedSubcategoryType] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedPostType, setSelectedPostType] = useState(null);
   
   // Handle search submission
   const handleSearchSubmit = (e) => {
@@ -116,6 +118,12 @@ const LandingPage = () => {
         <Header />
         {/* <Hero /> */}
         
+        {/* Post Type Toggle */}
+        <PostTypeToggle
+          selectedType={selectedPostType}
+          onTypeChange={setSelectedPostType}
+        />
+        
         {/* Search Bar */}
         <div className="landing-search-container">
           <form className="landing-search-form" onSubmit={handleSearchSubmit}>
@@ -137,6 +145,7 @@ const LandingPage = () => {
           <ProductGrid
             categoryId={selectedCategoryId}
             subcategoryType={selectedSubcategoryType}
+            postType={selectedPostType}
             hideLoadMore={false}
           />
           

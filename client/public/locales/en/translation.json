@@ -937,6 +937,10 @@
     "forSale": "For Sale",
     "wanted": "Wanted"
   },
+  "postTypeToggle": {
+    "forSale": "For Sale",
+    "wanted": "Wanted"
+  },
   "pagination": {
     "showing": "Showing",
     "of": "of",

@@ -6,7 +6,7 @@ import postService from '../../services/postService';
 import { GameSpinner, SkeletonLoader } from '../Loading/Loading';
 import './ProductGrid.css';
 
-const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction, hideLoadMore = false }) => {
+const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction, postType, hideLoadMore = false }) => {
   const { t, i18n } = useTranslation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,6 +49,9 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
       if (condition) {
         params.condition = condition;
       }
+      if (postType) {
+        params.type = postType;
+      }
 
       // Use search endpoint if search query is provided
       const response = searchQuery
@@ -86,7 +89,7 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
   // Fetch products on mount and when filters change
   useEffect(() => {
     fetchProducts(0, false);
-  }, [categoryId, subcategoryType, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction]);
+  }, [categoryId, subcategoryType, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction, postType]);
 
 
   // Loading state

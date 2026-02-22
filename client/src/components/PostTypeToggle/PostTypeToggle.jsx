@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ShoppingBag, Search } from 'lucide-react';
+import { Tag, HandHelping } from 'lucide-react';
 import './PostTypeToggle.css';
 
 const PostTypeToggle = ({ selectedType, onTypeChange }) => {
@@ -23,7 +23,7 @@ const PostTypeToggle = ({ selectedType, onTypeChange }) => {
           onClick={() => handleToggle('SELL')}
           aria-pressed={selectedType === 'SELL'}
         >
-          <ShoppingBag size={16} />
+          <Tag />
           <span>{t('postTypeToggle.forSale')}</span>
         </button>
         
@@ -32,7 +32,7 @@ const PostTypeToggle = ({ selectedType, onTypeChange }) => {
           onClick={() => handleToggle('ASK')}
           aria-pressed={selectedType === 'ASK'}
         >
-          <Search size={16} />
+          <HandHelping />
           <span>{t('postTypeToggle.wanted')}</span>
         </button>
       </div>

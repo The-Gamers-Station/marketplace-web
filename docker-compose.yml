@@ -63,7 +63,7 @@ services:
       dockerfile: Dockerfile
     container_name: marketplace-client
     ports:
-      - "3001:5173"
+      - "3001:80"
     networks:
       - marketplace-network
     restart: unless-stopped

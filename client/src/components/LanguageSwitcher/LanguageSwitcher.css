@@ -135,10 +135,10 @@ html[dir="rtl"] .language-toggle {
     font-size: 12px;
   }
   
-  /* On mobile, hide text and just show flags/abbreviations */
+  /* On mobile, keep text visible */
   @media (max-width: 480px) {
     .language-toggle-btn {
-      padding: 6px 10px;
+      padding: 6px 12px;
       gap: 2px;
     }
     
@@ -146,9 +146,10 @@ html[dir="rtl"] .language-toggle {
       margin: 0 4px;
     }
     
-    /* Hide text labels on very small screens */
     .flag-text {
-      display: none;
+      display: inline;
+      font-size: 12px;
+      font-weight: 700;
     }
     
     .flag-img {

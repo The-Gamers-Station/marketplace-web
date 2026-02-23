@@ -939,7 +939,9 @@
   },
   "postTypeToggle": {
     "forSale": "For Sale",
-    "wanted": "Wanted"
+    "forSaleDesc": "Browse items for sale",
+    "wanted": "Wanted",
+    "wantedDesc": "Browse buying requests"
   },
   "pagination": {
     "showing": "Showing",

@@ -941,7 +941,9 @@
   },
   "postTypeToggle": {
     "forSale": "للبيع",
-    "wanted": "مطلوب"
+    "forSaleDesc": "عرض المنتجات المعروضة للبيع",
+    "wanted": "مطلوب",
+    "wantedDesc": "عرض طلبات الشراء"
   },
   "pagination": {
     "showing": "عرض",

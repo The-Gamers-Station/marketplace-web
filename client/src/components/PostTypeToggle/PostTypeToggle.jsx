@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tag, HandHelping } from 'lucide-react';
+import { Package, HelpCircle } from 'lucide-react';
 import './PostTypeToggle.css';
 
 const PostTypeToggle = ({ selectedType, onTypeChange }) => {
@@ -23,8 +23,11 @@ const PostTypeToggle = ({ selectedType, onTypeChange }) => {
           onClick={() => handleToggle('SELL')}
           aria-pressed={selectedType === 'SELL'}
         >
-          <Tag />
-          <span>{t('postTypeToggle.forSale')}</span>
+          <Package />
+          <div className="toggle-btn-text">
+            <span className="toggle-btn-title">{t('postTypeToggle.forSale')}</span>
+            <span className="toggle-btn-subtitle">{t('postTypeToggle.forSaleDesc')}</span>
+          </div>
         </button>
         
         <button
@@ -32,8 +35,11 @@ const PostTypeToggle = ({ selectedType, onTypeChange }) => {
           onClick={() => handleToggle('ASK')}
           aria-pressed={selectedType === 'ASK'}
         >
-          <HandHelping />
-          <span>{t('postTypeToggle.wanted')}</span>
+          <HelpCircle />
+          <div className="toggle-btn-text">
+            <span className="toggle-btn-title">{t('postTypeToggle.wanted')}</span>
+            <span className="toggle-btn-subtitle">{t('postTypeToggle.wantedDesc')}</span>
+          </div>
         </button>
       </div>
     </div>

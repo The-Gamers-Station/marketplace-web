@@ -232,6 +232,11 @@
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .product-platforms {
+  justify-content: flex-end;
 }
 
 .platform-tag {
@@ -344,9 +349,12 @@
   gap: 4px;
   position: absolute;
   bottom: 16px;
-  left: 16px;
+  right: 16px;
+  left: auto;
   padding: 8px 12px;
   border-radius: 8px;
+  background: rgba(20, 30, 45, 0.9);
+  z-index: 5;
 }
 
 .current-price .price-currency {
@@ -445,11 +453,10 @@
   }
 }
 
-/* RTL support - price stays on left */
+/* RTL support - price stays on right */
 [dir="rtl"] .current-price {
-  /* Price always stays on left side */
-  left: 16px;
-  right: auto;
+  right: 16px;
+  left: auto;
 }
 
 /* Responsive price position */
@@ -457,8 +464,18 @@
   .current-price {
     font-size: 14px;
     padding: 6px 10px;
-    bottom: 14px;
-    left: 14px;
+    bottom: 12px;
+    right: 12px;
+    left: auto;
+    background: rgba(20, 30, 45, 0.95);
+  }
+  
+  .price-valuee {
+    font-size: 16px;
+  }
+  
+  .current-price .price-currency {
+    font-size: 11px;
   }
   
   .current-price .price-currency {
@@ -470,8 +487,7 @@
   }
   
   [dir="rtl"] .current-price {
-    /* Price always stays on left side */
-    left: 14px;
-    right: auto;
+    right: 14px;
+    left: auto;
   }
 }

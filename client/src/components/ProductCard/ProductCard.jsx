@@ -9,14 +9,14 @@ const ProductCard = ({
   title,
   price,
   image,
-  platforms,
   isHighlighted,
   badge,
   username,
   location,
   type,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === 'ar';
   
   const handleCardClick = (e) => {
     e.preventDefault();
@@ -84,22 +84,20 @@ const ProductCard = ({
           <h3 className="product-titlee">{title}</h3>
         </div>
 
-        {/* Platforms Tags */}
-        {platforms && platforms.length > 0 && (
-          <div className="product-platforms">
-            {platforms.slice(0, 3).map((platform, index) => (
-              <span key={index} className="platform-tag">{platform}</span>
-            ))}
-            {platforms.length > 3 && (
-              <span className="platform-tag more">+{platforms.length - 3}</span>
-            )}
-          </div>
-        )}
 
         {/* Price Section - At Bottom of Card */}
         <div className="current-price">
-          <span className="price-currency">{t('currency')}</span>
-          <span className="price-valuee">{price || '0'}</span>
+          {isArabic ? (
+            <>
+              <span className="price-currency">{t('currency')}</span>
+              <span className="price-valuee">{price || '0'}</span>
+            </>
+          ) : (
+            <>
+              <span className="price-valuee">{price || '0'}</span>
+              <span className="price-currency">{t('currency')}</span>
+            </>
+          )}
         </div>
       </div>
     </a>

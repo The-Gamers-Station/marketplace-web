@@ -156,11 +156,6 @@ const CategoryFilter = ({ onFilterChange }) => {
               >
                 <span className="pill-icon">{platform.icon}</span>
                 <span className="pill-text">{platform.name}</span>
-                {selectedPlatform === platform.key && (
-                  <span className="pill-indicator">
-                    <Sparkles size={14} />
-                  </span>
-                )}
               </button>
             ))}
           </div>

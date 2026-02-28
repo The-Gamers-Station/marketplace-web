@@ -18,7 +18,7 @@ const LandingPage = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedSubcategoryType, setSelectedSubcategoryType] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedPostType, setSelectedPostType] = useState(null);
+  const [selectedPostType, setSelectedPostType] = useState('SELL');
   
   // Handle search submission
   const handleSearchSubmit = (e) => {

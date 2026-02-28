@@ -8,6 +8,7 @@ import com.thegamersstation.marketplace.messaging.dto.*;
 import com.thegamersstation.marketplace.messaging.entity.Conversation;
 import com.thegamersstation.marketplace.messaging.entity.ConversationParticipantStatus;
 import com.thegamersstation.marketplace.messaging.entity.Message;
+import com.thegamersstation.marketplace.common.util.StringUtil;
 import com.thegamersstation.marketplace.messaging.mapper.MessageMapper;
 import com.thegamersstation.marketplace.messaging.repository.ConversationParticipantStatusRepository;
 import com.thegamersstation.marketplace.messaging.repository.ConversationRepository;
@@ -84,7 +85,7 @@ public class MessageService {
         conversationRepository.updateLastMessage(
             conversationId,
             message.getCreatedAt(),
-            truncateMessage(sanitizedContent)
+            StringUtil.truncatePreview(sanitizedContent)
         );
         
         // Convert to DTO
@@ -245,10 +246,6 @@ public class MessageService {
         }
     }
     
-    private String truncateMessage(String message) {
-        if (message == null) return null;
-        return message.length() > 200 ? message.substring(0, 197) + "..." : message;
-    }
     
     // DTO for read receipts
     @lombok.Data

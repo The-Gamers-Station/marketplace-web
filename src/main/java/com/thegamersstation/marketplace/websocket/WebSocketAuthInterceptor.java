@@ -10,6 +10,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import com.thegamersstation.marketplace.security.JwtUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,10 +40,12 @@ public class WebSocketAuthInterceptor implements ChannelInterceptor {
                     // Validate token
                     if (jwtUtil.validateAccessToken(token)) {
                         Long userId = jwtUtil.extractUserId(token);
+                        String role = jwtUtil.extractRole(token);
                         
-                        // Create authentication
+                        // Create authentication with actual role from JWT
+                        String springRole = (role != null) ? "ROLE_" + role : "ROLE_USER";
                         List<SimpleGrantedAuthority> authorities = Collections.singletonList(
-                            new SimpleGrantedAuthority("ROLE_USER")
+                            new SimpleGrantedAuthority(springRole)
                         );
                         
                         Authentication auth = new UsernamePasswordAuthenticationToken(

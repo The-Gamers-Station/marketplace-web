@@ -170,10 +170,8 @@ public class StoreService {
      * List all active stores
      */
     public List<StoreDto> getAllStores() {
-        List<Store> stores = storeRepository.findAll();
-        return storeMapper.toDtoList(stores.stream()
-            .filter(Store::getIsActive)
-            .toList());
+        List<Store> stores = storeRepository.findByIsActiveTrue();
+        return storeMapper.toDtoList(stores);
     }
     
     /**

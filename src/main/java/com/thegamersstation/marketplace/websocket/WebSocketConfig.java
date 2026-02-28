@@ -21,7 +21,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("*")  // Configure appropriately for production
+                .setAllowedOriginPatterns(
+                    "https://thegamersstation.com",
+                    "https://www.thegamersstation.com",
+                    "http://localhost:[*]",
+                    "http://localhost:5173",
+                    "http://localhost:5174",
+                    "http://localhost:3000"
+                )
                 .withSockJS()
                 .setSessionCookieNeeded(false);
     }

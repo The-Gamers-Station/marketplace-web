@@ -132,8 +132,6 @@
   flex-direction: column;
   flex: 1;
   gap: 12px;
-  position: relative;
-  padding-bottom: 50px; /* Space for price at bottom */
 }
 
 /* User Info Section */
@@ -227,35 +225,6 @@
   text-overflow: ellipsis;
 }
 
-/* Platform Tags */
-.product-platforms {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-}
-
-[dir="rtl"] .product-platforms {
-  justify-content: flex-end;
-}
-
-.platform-tag {
-  background: rgba(255, 107, 53, 0.15);
-  color: #ff8c42;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  border: 1px solid rgba(255, 107, 53, 0.3);
-}
-
-.platform-tag.more {
-  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
-  color: white;
-  border: none;
-}
 
 /* Rating Section - Above Title */
 .rating-section {
@@ -346,15 +315,13 @@
 .current-price {
   display: flex;
   align-items: baseline;
+  justify-content: flex-end;
+  direction: ltr;
   gap: 4px;
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-  left: auto;
+  margin-top: auto;
   padding: 8px 12px;
   border-radius: 8px;
   background: rgba(20, 30, 45, 0.9);
-  z-index: 5;
 }
 
 .current-price .price-currency {
@@ -453,20 +420,12 @@
   }
 }
 
-/* RTL support - price stays on right */
-[dir="rtl"] .current-price {
-  right: 16px;
-  left: auto;
-}
 
 /* Responsive price position */
 @media (max-width: 768px) {
   .current-price {
     font-size: 14px;
     padding: 6px 10px;
-    bottom: 12px;
-    right: 12px;
-    left: auto;
     background: rgba(20, 30, 45, 0.95);
   }
   
@@ -486,8 +445,4 @@
     font-size: 18px;
   }
   
-  [dir="rtl"] .current-price {
-    right: 14px;
-    left: auto;
-  }
 }

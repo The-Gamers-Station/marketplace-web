@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import com.thegamersstation.marketplace.common.exception.BusinessRuleException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,62 +45,20 @@ public class PostService {
     
     @Transactional
     public PostDto createPost(CreatePostRequest request, Long userId) {
-        log.info("=== CREATE POST DEBUG START ===");
-        log.info("User ID: {}", userId);
-        log.info("Requested Category ID: {}", request.getCategoryId());
-        log.info("Post Type: {}", request.getType());
-        log.info("City ID: {}", request.getCityId());
+        log.info("Creating post for user {} in category {}", userId, request.getCategoryId());
         
         User user = usersRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
-        log.info("User found: {} ({})", user.getUsername(), user.getPhoneNumber());
-        
-        // Debug: Check if category exists
-        log.info("Attempting to find category with ID: {}", request.getCategoryId());
         Category category = categoryRepository.findById(request.getCategoryId())
-            .orElseThrow(() -> {
-                // Log all available categories for debugging
-                List<Category> allCategories = categoryRepository.findAll();
-                log.error("❌ CATEGORY NOT FOUND - ID: {}", request.getCategoryId());
-                log.error("📊 Total categories in database: {}", allCategories.size());
-                log.error("📋 Available category IDs and names:");
-                allCategories.forEach(cat ->
-                    log.error("   - ID: {} | Name: {} | Slug: {} | Active: {} | Level: {}",
-                        cat.getId(), cat.getNameEn(), cat.getSlug(), cat.getIsActive(), cat.getLevel())
-                );
-                
-                // Check if there are any categories with similar names
-                String requestedIdStr = String.valueOf(request.getCategoryId());
-                log.error("🔍 Searching for categories with names containing 'xbox' or 'nintendo' (case-insensitive):");
-                allCategories.stream()
-                    .filter(cat -> cat.getNameEn().toLowerCase().contains("xbox") ||
-                                   cat.getNameEn().toLowerCase().contains("nintendo") ||
-                                   cat.getSlug().toLowerCase().contains("xbox") ||
-                                   cat.getSlug().toLowerCase().contains("nintendo"))
-                    .forEach(cat -> log.error("   🎮 Found: ID={}, Name={}, Slug={}, Active={}",
-                        cat.getId(), cat.getNameEn(), cat.getSlug(), cat.getIsActive()));
-                
-                return new ResourceNotFoundException(
-                    String.format("Category not found with ID: %d. Available IDs: %s",
-                        request.getCategoryId(),
-                        allCategories.stream()
-                            .map(c -> c.getId().toString())
-                            .limit(20)
-                            .collect(Collectors.joining(", ")))
-                );
-            });
-        
-        log.info("✅ Category found: ID={}, Name={}, Slug={}, Active={}, Level={}",
-            category.getId(), category.getNameEn(), category.getSlug(),
-            category.getIsActive(), category.getLevel());
+            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
         
         if (!category.getIsActive()) {
-            log.error("❌ Category is INACTIVE: ID={}, Name={}", category.getId(), category.getNameEn());
-            throw new IllegalArgumentException("Category is not active");
+            throw new BusinessRuleException(
+                "Category is not active",
+                "التصنيف غير مفعّل"
+            );
         }
-        
-        log.info("✅ Category is active, proceeding with post creation");
         
         City city = cityRepository.findById(request.getCityId())
             .orElseThrow(() -> new ResourceNotFoundException("City not found"));
@@ -154,7 +114,10 @@ public class PostService {
         }
         
         if (post.getStatus() == Post.PostStatus.SOLD || post.getStatus() == Post.PostStatus.BLOCKED) {
-            throw new IllegalStateException("Cannot update Post in current status");
+            throw new BusinessRuleException(
+                "Cannot update post in current status",
+                "لا يمكن تحديث الإعلان في حالته الحالية"
+            );
         }
         
         if (request.getTitle() != null) {

@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -62,6 +63,20 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
            "AND m.isRead = false")
     long countConversationsWithUnreadMessages(@Param("userId") Long userId);
     
+    /**
+     * Count unread messages for multiple conversations in a single query.
+     * Returns a list of [conversationId, unreadCount] pairs.
+     */
+    @Query("SELECT m.conversation.id, COUNT(m) FROM Message m " +
+           "WHERE m.conversation.id IN :conversationIds " +
+           "AND m.sender.id != :userId " +
+           "AND m.isRead = false " +
+           "GROUP BY m.conversation.id")
+    List<Object[]> countUnreadMessagesByConversationIds(
+        @Param("conversationIds") List<Long> conversationIds,
+        @Param("userId") Long userId
+    );
+
     @Modifying
     @Query("UPDATE Conversation c SET c.lastMessageAt = :lastMessageAt, " +
            "c.lastMessagePreview = :preview WHERE c.id = :conversationId")

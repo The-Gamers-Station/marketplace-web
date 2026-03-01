@@ -258,18 +258,15 @@
   color: white !important;
 }
 
-/* Icon styling in subcategory pills */
-.subcategory-pill svg {
-  opacity: 0.8;
+/* Emoji styling in subcategory pills */
+.pill-emoji {
+  font-size: 1.1rem;
+  line-height: 1;
   transition: transform 0.25s ease;
 }
 
-.subcategory-pill:hover svg {
-  transform: scale(1.1);
-}
-
-.subcategory-pill.active svg {
-  opacity: 1;
+.subcategory-pill:hover .pill-emoji {
+  transform: scale(1.15);
 }
 
 /* Responsive Design */

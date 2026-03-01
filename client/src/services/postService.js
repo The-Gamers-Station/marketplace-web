@@ -1,4 +1,5 @@
 import { API_ENDPOINTS, apiRequest } from '../config/api';
+import { categoryService } from './categoryService';
 
 class PostService {
   // Get posts with filters and pagination
@@ -187,43 +188,17 @@ class PostService {
     return response;
   }
   
-  // Map category IDs to proper display names
+  // Map category IDs to display names using cached API data
   getCategoryDisplayName(categoryId) {
-    const categoryMap = {
-      100: 'PlayStation Devices',
-      101: 'PlayStation Games',
-      102: 'PlayStation Accessories',
-      200: 'Xbox Devices',
-      201: 'Xbox Games',
-      202: 'Xbox Accessories',
-      300: 'Nintendo Devices',
-      301: 'Nintendo Games',
-      302: 'Nintendo Accessories',
-      400: 'PC Devices',
-      401: 'PC Games',
-      402: 'PC Accessories'
-    };
-    
-    const arabicCategoryMap = {
-      100: 'أجهزة بلايستيشن',
-      101: 'ألعاب بلايستيشن',
-      102: 'إكسسوارات بلايستيشن',
-      200: 'أجهزة إكس بوكس',
-      201: 'ألعاب إكس بوكس',
-      202: 'إكسسوارات إكس بوكس',
-      300: 'أجهزة نينتندو',
-      301: 'ألعاب نينتندو',
-      302: 'إكسسوارات نينتندو',
-      400: 'أجهزة الكمبيوتر',
-      401: 'ألعاب الكمبيوتر',
-      402: 'إكسسوارات الكمبيوتر'
-    };
-    
-    // Check if we're in Arabic mode (you might need to pass language as parameter)
-    const isArabic = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl';
-    const map = isArabic ? arabicCategoryMap : categoryMap;
-    
-    return map[categoryId] || 'Uncategorized';
+    const cached = categoryService.categoriesCache;
+    if (cached) {
+      const cat = cached.find(c => c.id === categoryId);
+      if (cat) {
+        const isArabic = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl';
+        return isArabic ? cat.nameAr : cat.nameEn;
+      }
+    }
+    return 'Uncategorized';
   }
   
   // Transform backend post to frontend product format

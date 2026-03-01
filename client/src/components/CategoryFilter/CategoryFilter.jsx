@@ -56,7 +56,7 @@ const CategoryFilter = ({ onFilterChange }) => {
       name: t('categoryFilter.all'),
       key: 'all',
       icon: <LayoutGrid size={18} />,
-      gradient: 'linear-gradient(135deg, #667eea, #764ba2)',
+      indicator: null,
       categoryId: null,
       subcategories: genericSubcategories
     },
@@ -64,7 +64,7 @@ const CategoryFilter = ({ onFilterChange }) => {
       name: t('categoryFilter.playstation'),
       key: 'playstation',
       icon: <Gamepad2 size={18} />,
-      gradient: 'linear-gradient(135deg, #003791, #00439c)',
+      indicator: '#0050a0',
       categoryIds: [100, 101, 102],
       subcategories: [
         { key: 'devices', name: t('categoryFilter.console'), icon: subcategoryIcons.devices, categoryId: 100 },
@@ -76,7 +76,7 @@ const CategoryFilter = ({ onFilterChange }) => {
       name: t('categoryFilter.xbox'),
       key: 'xbox',
       icon: <Gamepad2 size={18} />,
-      gradient: 'linear-gradient(135deg, #107c10, #0e7a0d)',
+      indicator: '#52b043',
       categoryIds: [200, 201, 202],
       subcategories: [
         { key: 'devices', name: t('categoryFilter.console'), icon: subcategoryIcons.devices, categoryId: 200 },
@@ -88,7 +88,7 @@ const CategoryFilter = ({ onFilterChange }) => {
       name: t('categoryFilter.nintendo'),
       key: 'nintendo',
       icon: <Gamepad2 size={18} />,
-      gradient: 'linear-gradient(135deg, #e60012, #ff0000)',
+      indicator: '#e4000f',
       categoryIds: [300, 301, 302],
       subcategories: [
         { key: 'devices', name: t('categoryFilter.console'), icon: subcategoryIcons.devices, categoryId: 300 },
@@ -100,7 +100,7 @@ const CategoryFilter = ({ onFilterChange }) => {
       name: t('categoryFilter.pc'),
       key: 'pc',
       icon: <Monitor size={18} />,
-      gradient: 'linear-gradient(135deg, #ff6b35, #ff4757)',
+      indicator: '#ff6b35',
       categoryIds: [400, 401, 402],
       subcategories: [
         { key: 'devices', name: t('categoryFilter.devices'), icon: subcategoryIcons.devices, categoryId: 400 },
@@ -108,7 +108,6 @@ const CategoryFilter = ({ onFilterChange }) => {
         { key: 'accessories', name: t('categoryFilter.accessories'), icon: subcategoryIcons.accessories, categoryId: 402 }
       ]
     },
-    
   ];
 
   const currentPlatform = platforms.find(p => p.key === selectedPlatform);
@@ -152,10 +151,15 @@ const CategoryFilter = ({ onFilterChange }) => {
                   selectedPlatform === platform.key ? 'active' : ''
                 }`}
                 onClick={() => handlePlatformChange(platform)}
-                 
               >
                 <span className="pill-icon">{platform.icon}</span>
                 <span className="pill-text">{platform.name}</span>
+                {platform.indicator && (
+                  <span
+                    className="pill-indicator-dot"
+                    style={{ background: platform.indicator }}
+                  />
+                )}
               </button>
             ))}
           </div>

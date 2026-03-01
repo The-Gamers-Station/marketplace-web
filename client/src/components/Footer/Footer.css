@@ -694,17 +694,17 @@
 
 .footer-bottom-content {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 16px;
 }
 
 .copyright {
   font-size: 14px;
   color: var(--text-secondary);
   text-align: center;
-  width: 100%;
+  flex: 1;
 }
 
 .footer-bottom-links {

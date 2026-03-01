@@ -1,13 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Package, HelpCircle } from 'lucide-react';
 import './PostTypeToggle.css';
 
 const PostTypeToggle = ({ selectedType, onTypeChange }) => {
   const { t } = useTranslation();
 
   const handleToggle = (type) => {
-    // If clicking the same type, deselect (show all)
     if (selectedType === type) {
       onTypeChange(null);
     } else {
@@ -18,27 +16,29 @@ const PostTypeToggle = ({ selectedType, onTypeChange }) => {
   return (
     <div className="post-type-toggle">
       <div className="toggle-container">
-        <button
-          className={`toggle-btn ${selectedType === 'SELL' ? 'active' : ''}`}
-          onClick={() => handleToggle('SELL')}
-          aria-pressed={selectedType === 'SELL'}
-        >
-          <Package />
-          <div className="toggle-btn-text">
-            <span className="toggle-btn-title">{t('postTypeToggle.forSale')}</span>
-            <span className="toggle-btn-subtitle">{t('postTypeToggle.forSaleDesc')}</span>
-          </div>
-        </button>
-        
+        {/* ASK first → appears on RIGHT in RTL */}
         <button
           className={`toggle-btn ${selectedType === 'ASK' ? 'active' : ''}`}
           onClick={() => handleToggle('ASK')}
           aria-pressed={selectedType === 'ASK'}
         >
-          <HelpCircle />
+          <span className="toggle-icon-emoji">🔍</span>
           <div className="toggle-btn-text">
             <span className="toggle-btn-title">{t('postTypeToggle.wanted')}</span>
             <span className="toggle-btn-subtitle">{t('postTypeToggle.wantedDesc')}</span>
+          </div>
+        </button>
+
+        {/* SELL second → appears on LEFT in RTL (active/orange) */}
+        <button
+          className={`toggle-btn ${selectedType === 'SELL' ? 'active' : ''}`}
+          onClick={() => handleToggle('SELL')}
+          aria-pressed={selectedType === 'SELL'}
+        >
+          <span className="toggle-icon-emoji">📦</span>
+          <div className="toggle-btn-text">
+            <span className="toggle-btn-title">{t('postTypeToggle.forSale')}</span>
+            <span className="toggle-btn-subtitle">{t('postTypeToggle.forSaleDesc')}</span>
           </div>
         </button>
       </div>

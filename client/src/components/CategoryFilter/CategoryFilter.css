@@ -169,6 +169,22 @@
   animation: sparkle 2s ease-in-out infinite;
 }
 
+/* Colored platform indicator dot */
+.pill-indicator-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px currentColor;
+  opacity: 0.9;
+}
+
+.platform-pill-modern.active .pill-indicator-dot {
+  opacity: 1;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
 
 /* Subcategory Section */
 .subcategory-section {

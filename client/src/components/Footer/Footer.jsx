@@ -9,6 +9,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import './Footer.css';
 
 const Footer = () => {
@@ -131,6 +132,7 @@ const Footer = () => {
             <p className="copyright">
               {t('footer.bottom.copyright', { year: currentYear })}
             </p>
+            <LanguageSwitcher />
           </div>
         </div>
       </div>

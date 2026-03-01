@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, ArrowRight, Search } from 'lucide-react';
+import { Plus, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Header from '../../components/Header/Header';
@@ -17,17 +17,8 @@ const LandingPage = () => {
   // State for selected category filter
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedSubcategoryType, setSelectedSubcategoryType] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const [selectedPostType, setSelectedPostType] = useState('SELL');
-  
-  // Handle search submission
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/products?q=${encodeURIComponent(searchQuery.trim())}`);
-    }
-  };
-  
+
   // Handle category filter change
   const handleCategoryChange = (categoryId, categoryIds) => {
     if (categoryIds) {
@@ -123,22 +114,6 @@ const LandingPage = () => {
           selectedType={selectedPostType}
           onTypeChange={setSelectedPostType}
         />
-        
-        {/* Search Bar */}
-        <div className="landing-search-container">
-          <form className="landing-search-form" onSubmit={handleSearchSubmit}>
-            <button type="submit" className="landing-search-btn" aria-label={t('header.search')}>
-              <Search size={20} />
-            </button>
-            <input
-              type="text"
-              className="landing-search-input"
-              placeholder={t('header.searchPlaceholder', 'ابحث عن سلعة')}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </form>
-        </div>
         
         <CategoryFilter onFilterChange={handleCategoryChange} />
         <main className="main-content">

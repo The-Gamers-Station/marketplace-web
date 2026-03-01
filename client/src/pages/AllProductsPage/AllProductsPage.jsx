@@ -168,18 +168,6 @@ const AllProductsPage = () => {
       
       <div className="all-products-page">
         <div className="container">
-          {/* Page Header */}
-          <div className="page-header">
-            <h1 className="page-title">{t('allProducts.title')}</h1>
-            <p className="page-subtitle">{t('allProducts.subtitle')}</p>
-          </div>
-
-          {/* Post Type Toggle */}
-          <PostTypeToggle
-            selectedType={filters.postType || null}
-            onTypeChange={handlePostTypeChange}
-          />
-
           {/* Search Bar */}
           <div className="search-section">
             <div className="search-container">

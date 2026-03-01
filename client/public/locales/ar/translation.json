@@ -981,5 +981,11 @@
     "Cairo": "القاهرة",
     "Giza": "الجيزة",
     "Alexandria": "الإسكندرية"
+  },
+  "searchOverlay": {
+    "placeholder": "ابحث باسم المنتج",
+    "popularKeywords": "كلمات البحث الشائعة",
+    "recentKeywords": "كلمات البحث السابقة",
+    "deleteAll": "حذف الكل"
   }
 }

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MapPin, Check, Package } from 'lucide-react';
+import { MapPin, ArrowLeft } from 'lucide-react';
 import { getTranslatedCityName } from '../../utils/cityTranslations';
 import './ProductCard.css';
 
@@ -38,16 +38,24 @@ const ProductCard = ({
   badge,
   username,
   location,
-  type,
+  condition,
 }) => {
   const { t, i18n } = useTranslation();
   const isArabic = i18n.language === 'ar';
   const avatarColor = useMemo(() => getAvatarColor(username), [username]);
   const initial = useMemo(() => getInitial(username), [username]);
-  
+
+  const getConditionLabel = (cond) => {
+    const map = {
+      NEW: t('condition.new', 'جديد'),
+      USED: t('condition.used', 'مستعمل'),
+      LIKE_NEW: t('condition.likeNew', 'شبه جديد'),
+    };
+    return map[cond] || cond;
+  };
+
   const handleCardClick = (e) => {
     e.preventDefault();
-    // Force page refresh by using window.location
     window.location.href = `/product/${id}`;
   };
 
@@ -58,21 +66,13 @@ const ProductCard = ({
           <span className="product-badge">{badge}</span>
         </div>
       )}
-      
-      {/* Type Badge */}
-      <div className={`product-type-badge ${type === 'ASK' ? 'type-ask' : 'type-sell'}`}>
-        {type === 'ASK' ? (
-          <>
-            <Package size={14} />
-            <span>{t('productType.wanted')}</span>
-          </>
-        ) : (
-          <>
-            <Check size={14} />
-            <span>{t('productType.forSale')}</span>
-          </>
-        )}
-      </div>
+
+      {/* Condition Badge */}
+      {condition && (
+        <div className="condition-badge">
+          {getConditionLabel(condition)}
+        </div>
+      )}
       
       <div className="product-image">
         <img
@@ -114,6 +114,9 @@ const ProductCard = ({
 
         {/* Price Section - At Bottom of Card */}
         <div className="current-price">
+          <button className="card-nav-btn" aria-label="View product">
+            <ArrowLeft size={15} />
+          </button>
           {isArabic ? (
             <>
               <img src="/sar.svg" alt="SAR" className="price-currency-icon" />

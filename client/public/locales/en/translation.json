@@ -979,5 +979,11 @@
     "Cairo": "Cairo",
     "Giza": "Giza",
     "Alexandria": "Alexandria"
+  },
+  "searchOverlay": {
+    "placeholder": "Search by product name",
+    "popularKeywords": "Popular Search Keywords",
+    "recentKeywords": "Recent Search Keywords",
+    "deleteAll": "Delete All"
   }
 }

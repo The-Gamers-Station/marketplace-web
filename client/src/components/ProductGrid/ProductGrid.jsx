@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutGrid } from 'lucide-react';
 import ProductCard from '../ProductCard/ProductCard';
 import postService from '../../services/postService';
 import { GameSpinner, SkeletonLoader } from '../Loading/Loading';
@@ -139,6 +139,17 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
 
   return (
     <div className="product-grid">
+      {/* Section Header */}
+      <div className="grid-section-header">
+        <h2 className="grid-section-title">{t('common.products', 'المنتجات')}</h2>
+        {totalElements > 0 && (
+          <span className="grid-section-count">
+            <LayoutGrid size={14} />
+            {totalElements} {t('pagination.products', 'منتجات')}
+          </span>
+        )}
+      </div>
+
       <div className="grid-container">
         {products.map(product => (
           <ProductCard

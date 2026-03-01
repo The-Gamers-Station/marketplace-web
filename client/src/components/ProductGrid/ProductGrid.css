@@ -427,6 +427,46 @@
   transform: scaleX(-1);
 }
 
+/* Section Header */
+.grid-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px 20px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.grid-section-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.grid-section-count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 6px 14px;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .grid-section-header {
+    padding: 0 16px 16px;
+  }
+  .grid-section-title {
+    font-size: 1.2rem;
+  }
+}
+
 /* Pagination Styles */
 .pagination-container {
   display: flex;

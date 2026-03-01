@@ -48,8 +48,11 @@ const ProductCard = ({
   const getConditionLabel = (cond) => {
     const map = {
       NEW: t('condition.new', 'جديد'),
-      USED: t('condition.used', 'مستعمل'),
       LIKE_NEW: t('condition.likeNew', 'شبه جديد'),
+      USED: t('condition.used', 'مستعمل'),
+      USED_GOOD: t('condition.usedGood', 'مستعمل - جيد'),
+      USED_FAIR: t('condition.usedFair', 'مستعمل - مقبول'),
+      FOR_PARTS: t('condition.forParts', 'قطع غيار'),
     };
     return map[cond] || cond;
   };

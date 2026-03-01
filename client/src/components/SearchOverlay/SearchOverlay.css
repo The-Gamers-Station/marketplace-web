@@ -234,3 +234,35 @@ html[dir='rtl'] .sheet-back-btn svg {
   border-color: #ef4444;
   color: #ef4444;
 }
+
+/* ── Popular keyword tags ────────────────────────────────────────────────── */
+.popular-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  direction: rtl;
+}
+
+.popular-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.popular-tag:hover,
+.popular-tag:active {
+  background: #e5e7eb;
+  border-color: #d1d5db;
+  color: #111827;
+}

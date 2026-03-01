@@ -16,20 +16,6 @@ const PostTypeToggle = ({ selectedType, onTypeChange }) => {
   return (
     <div className="post-type-toggle">
       <div className="toggle-container">
-        {/* ASK first → appears on RIGHT in RTL */}
-        <button
-          className={`toggle-btn ${selectedType === 'ASK' ? 'active' : ''}`}
-          onClick={() => handleToggle('ASK')}
-          aria-pressed={selectedType === 'ASK'}
-        >
-          <span className="toggle-icon-emoji">🔍</span>
-          <div className="toggle-btn-text">
-            <span className="toggle-btn-title">{t('postTypeToggle.wanted')}</span>
-            <span className="toggle-btn-subtitle">{t('postTypeToggle.wantedDesc')}</span>
-          </div>
-        </button>
-
-        {/* SELL second → appears on LEFT in RTL (active/orange) */}
         <button
           className={`toggle-btn ${selectedType === 'SELL' ? 'active' : ''}`}
           onClick={() => handleToggle('SELL')}
@@ -39,6 +25,18 @@ const PostTypeToggle = ({ selectedType, onTypeChange }) => {
           <div className="toggle-btn-text">
             <span className="toggle-btn-title">{t('postTypeToggle.forSale')}</span>
             <span className="toggle-btn-subtitle">{t('postTypeToggle.forSaleDesc')}</span>
+          </div>
+        </button>
+
+        <button
+          className={`toggle-btn ${selectedType === 'ASK' ? 'active' : ''}`}
+          onClick={() => handleToggle('ASK')}
+          aria-pressed={selectedType === 'ASK'}
+        >
+          <span className="toggle-icon-emoji">🔍</span>
+          <div className="toggle-btn-text">
+            <span className="toggle-btn-title">{t('postTypeToggle.wanted')}</span>
+            <span className="toggle-btn-subtitle">{t('postTypeToggle.wantedDesc')}</span>
           </div>
         </button>
       </div>

@@ -8,6 +8,19 @@ const RECENT_SEARCHES_KEY = 'gs_recent_searches';
 const MAX_RECENT = 10;
 const DISMISS_THRESHOLD = 100;
 
+const POPULAR_KEYWORDS = [
+  'iphone pro 14 max',
+  'ايفون 16 برو ماكس',
+  'psp',
+  'توسان 2018',
+  'box',
+  'ايفون 17 برو جديد',
+  'noot box',
+  'فوجي فيلم',
+  'كرت شاشه 5060',
+  'جينيسيس',
+];
+
 const SearchOverlay = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -165,6 +178,24 @@ const SearchOverlay = ({ isOpen, onClose }) => {
 
         {/* Scrollable content */}
         <div className="sheet-content">
+          {/* Popular keywords */}
+          <section className="sheet-section">
+            <h3 className="sheet-section-title">
+              {t('searchOverlay.popularKeywords')}
+            </h3>
+            <div className="popular-tags">
+              {POPULAR_KEYWORDS.map((kw) => (
+                <button
+                  key={kw}
+                  className="popular-tag"
+                  onClick={() => handleSearch(kw)}
+                >
+                  {kw}
+                </button>
+              ))}
+            </div>
+          </section>
+
           {/* Recent searches */}
           {recentSearches.length > 0 && (
             <section className="sheet-section">

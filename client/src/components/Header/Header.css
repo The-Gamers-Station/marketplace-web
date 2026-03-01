@@ -218,13 +218,13 @@
   align-items: center;
 }
 
-/* Icon-only header buttons */
+/* Icon-only header buttons — sized to match logo (45px) */
 .header-icon-btn {
-  width: 46px !important;
-  height: 46px !important;
+  width: 38px !important;
+  height: 38px !important;
   background: rgba(255, 255, 255, 0.07) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 14px !important;
+  border-radius: 12px !important;
   color: rgba(255, 255, 255, 0.85) !important;
   display: flex !important;
   align-items: center !important;
@@ -233,6 +233,11 @@
   transition: all 0.25s ease !important;
   padding: 0 !important;
   position: relative;
+}
+
+.header-icon-btn svg {
+  width: 18px !important;
+  height: 18px !important;
 }
 
 .header-icon-btn:hover {

@@ -133,12 +133,6 @@ const CategoryFilter = ({ onFilterChange }) => {
                 onClick={() => handlePlatformChange(platform)}
               >
                 <span className="pill-text">{platform.name}</span>
-                {platform.indicator && (
-                  <span
-                    className="pill-indicator-dot"
-                    style={{ background: platform.indicator }}
-                  />
-                )}
               </button>
             ))}
           </div>

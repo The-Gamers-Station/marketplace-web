@@ -623,7 +623,8 @@ const ProductDetailsPage = () => {
                   <div
                     key={item.id}
                     className="related-card modern-card"
-                    style={{ animationDelay: `${index * 0.1}s` }}
+                    style={{ animationDelay: `${index * 0.1}s`, cursor: 'pointer' }}
+                    onClick={() => navigate(`/product/${item.id}`)}
                   >
                     <div className="card-glow-effect"></div>
                     

@@ -293,9 +293,9 @@
   }
   
   .grid-container {
-    padding: 0 20px;
-    grid-template-columns: 1fr;
-    gap: 20px;
+    padding: 0 16px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
   
   .load-more {
@@ -324,9 +324,9 @@
 
 @media (max-width: 480px) {
   .grid-container {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 0 16px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 0 12px;
   }
   
   .product-grid {

@@ -1,8 +1,33 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { User, MapPin, Check, Package } from 'lucide-react';
+import { MapPin, Check, Package } from 'lucide-react';
 import { getTranslatedCityName } from '../../utils/cityTranslations';
 import './ProductCard.css';
+
+const AVATAR_COLORS = [
+  'linear-gradient(135deg, #ff6b35, #ff8c42)',
+  'linear-gradient(135deg, #6366f1, #8b5cf6)',
+  'linear-gradient(135deg, #10b981, #059669)',
+  'linear-gradient(135deg, #f43f5e, #e11d48)',
+  'linear-gradient(135deg, #3b82f6, #2563eb)',
+  'linear-gradient(135deg, #f59e0b, #d97706)',
+  'linear-gradient(135deg, #ec4899, #db2777)',
+  'linear-gradient(135deg, #14b8a6, #0d9488)',
+];
+
+const getInitial = (name) => {
+  if (!name) return '?';
+  return name.charAt(0).toUpperCase();
+};
+
+const getAvatarColor = (name) => {
+  if (!name) return AVATAR_COLORS[0];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+};
 
 const ProductCard = ({
   id,
@@ -17,6 +42,8 @@ const ProductCard = ({
 }) => {
   const { t, i18n } = useTranslation();
   const isArabic = i18n.language === 'ar';
+  const avatarColor = useMemo(() => getAvatarColor(username), [username]);
+  const initial = useMemo(() => getInitial(username), [username]);
   
   const handleCardClick = (e) => {
     e.preventDefault();
@@ -63,8 +90,8 @@ const ProductCard = ({
       <div className="product-content">
         {/* User Info Section - Enhanced */}
         <div className="user-info-section">
-          <div className="user-avatar">
-            <User size={16} />
+          <div className="user-avatar" style={{ background: avatarColor }}>
+            <span className="avatar-initial">{initial}</span>
           </div>
           <div className="user-details">
             <div className="user-name">
@@ -89,13 +116,13 @@ const ProductCard = ({
         <div className="current-price">
           {isArabic ? (
             <>
-              <span className="price-currency">{t('currency')}</span>
+              <img src="/sar.svg" alt="SAR" className="price-currency-icon" />
               <span className="price-valuee">{price || '0'}</span>
             </>
           ) : (
             <>
               <span className="price-valuee">{price || '0'}</span>
-              <span className="price-currency">{t('currency')}</span>
+              <img src="/sar.svg" alt="SAR" className="price-currency-icon" />
             </>
           )}
         </div>

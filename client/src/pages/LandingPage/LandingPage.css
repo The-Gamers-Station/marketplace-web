@@ -63,6 +63,14 @@
   animation: bounceIn 0.6s ease-out 0.5s both;
 }
 
+/* Hide floating button when modal is open */
+.sort-modal-overlay ~ .floating-add-btn,
+body:has(.sort-modal-overlay) .floating-add-btn {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8);
+}
+
 .floating-add-btn:hover {
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 8px 30px rgba(255, 107, 53, 0.5),

@@ -261,7 +261,13 @@
       "responseTime": "Response Time",
       "verifiedSeller": "Verified Seller",
       "viewProduct": "View Product",
-      "viewDetails": "View Details"
+      "viewDetails": "View Details",
+      "askingPrice": "Asking Price",
+      "photos": "photos",
+      "onePhoto": "1 photo",
+      "twoPhotos": "2 photos",
+      "multiplePhotos": "{{count}} photos",
+      "manyPhotos": "{{count}} photos"
     },
     "faq": {
       "title": "Frequently Asked Questions",
@@ -546,7 +552,10 @@
     "optional": "optional",
     "showAllProducts": "Show All Products",
     "deleting": "Deleting...",
-    "clear": "Clear"
+    "clear": "Clear",
+    "products": "Products",
+    "apply": "Apply",
+    "reset": "Reset"
   },
   "auth": {
     "login": {

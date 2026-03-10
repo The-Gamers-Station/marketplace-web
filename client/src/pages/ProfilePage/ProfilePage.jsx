@@ -612,7 +612,7 @@ const ProfilePage = () => {
                             <div className="detail-item">
                                
                                   <HandCoins  size={14} />
-                              <span>{t('currency')} {post.price}</span>
+                              <span>{t('currency')} {Number(post.price || 0).toLocaleString()}</span>
                             </div>
                             <div className="detail-item">
                               <MapPin size={14} />

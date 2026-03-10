@@ -261,7 +261,13 @@
       "responseTime": "وقت الاستجابة",
       "verifiedSeller": "بائع موثق",
       "viewProduct": "عرض المنتج",
-      "viewDetails": "عرض التفاصيل"
+      "viewDetails": "عرض التفاصيل",
+      "askingPrice": "السعر المطلوب",
+      "photos": "صور",
+      "onePhoto": "صورة واحدة",
+      "twoPhotos": "صورتان",
+      "multiplePhotos": "{{count}} صور",
+      "manyPhotos": "{{count}} صورة"
     },
     "faq": {
       "title": "الأسئلة الشائعة",

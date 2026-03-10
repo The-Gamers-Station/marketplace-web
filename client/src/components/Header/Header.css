@@ -180,7 +180,7 @@
 
 .search-icon {
   position: absolute;
-  right: 15px;
+  inset-inline-end: 15px;
   top: 50%;
   transform: translateY(-50%);
   color: rgba(255, 255, 255, 0.4);
@@ -197,8 +197,7 @@
   color: white;
   font-size: 14px;
   transition: all 0.3s ease;
-  text-align: right;
-  direction: rtl;
+  text-align: start;
 }
 
 .search-input::placeholder {
@@ -265,7 +264,7 @@
   .user-unread-badge {
     position: absolute;
     top: -8px;
-    right: -8px;
+    inset-inline-end: -8px;
     background: #ff6b35;
     color: white;
     font-size: 0.75rem;
@@ -284,7 +283,7 @@
 
   /* Dropdown Item Badge */
   .dropdown-badge {
-    margin-left: auto;
+    margin-inline-start: auto;
     background: #ff6b35;
     color: white;
     font-size: 0.65rem;
@@ -464,7 +463,7 @@
 
 .mobile-search-icon {
   position: absolute;
-  right: 15px;
+  inset-inline-end: 15px;
   top: 50%;
   transform: translateY(-50%);
   color: rgba(255, 255, 255, 0.4);
@@ -481,8 +480,7 @@
   color: white;
   font-size: 16px;
   transition: all 0.3s ease;
-  text-align: right;
-  direction: rtl;
+  text-align: start;
 }
 
 .mobile-search-input::placeholder {
@@ -508,8 +506,7 @@
   padding: 15px 20px;
   border-radius: 12px;
   transition: all 0.3s ease;
-  text-align: right;
-  direction: rtl;
+  text-align: start;
   position: relative;
 }
 
@@ -522,7 +519,7 @@
 .mobile-nav-link.active {
   background: rgba(255, 107, 53, 0.1);
   color: #ff6b35;
-  border-left: 3px solid #ff6b35;
+  border-inline-start: 3px solid #ff6b35;
 }
 
 /* Mobile User Section */
@@ -550,8 +547,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  text-align: right;
-  direction: rtl;
+  text-align: end;
 }
 
 .mobile-action-btn:hover {
@@ -562,7 +558,7 @@
 
 .mobile-action-btn span {
   flex: 1;
-  text-align: right;
+  text-align: end;
 }
 
 /* Responsive */
@@ -774,8 +770,7 @@ body.mobile-menu-open {
 .dropdown-menu {
   position: absolute;
   top: 100%;
-  left: auto;
-  right: 0;
+  inset-inline-end: 0;
   margin-top: 0.5rem;
   min-width: 220px;
   max-width: 280px;
@@ -944,30 +939,8 @@ body.mobile-menu-open {
   }
 
   .dropdown-menu {
-    left: auto !important;
-    right: 0 !important;
     min-width: 200px;
   }
 }
 
 
-/* Force dropdown to always appear on the left side to prevent cutoff */
-.dropdown-menu {
-  left: 0 !important;
-  right: auto !important;
-}
-
-/* Keep dropdown items in LTR layout for consistency */
-.dropdown-item {
-  direction: ltr;
-  text-align: left;
-}
-
-[dir="rtl"] .mobile-auth-btn {
-  flex-direction: row-reverse;
-}
-
-/* Ensure auth dropdown stays in place */
-[dir="rtl"] .auth-dropdown {
-  direction: ltr;
-}

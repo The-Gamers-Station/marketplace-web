@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronLeft, ChevronRight, LayoutGrid } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown, ArrowUpDown, Check } from 'lucide-react';
 import ProductCard from '../ProductCard/ProductCard';
 import postService from '../../services/postService';
 import { GameSpinner, SkeletonLoader } from '../Loading/Loading';
 import './ProductGrid.css';
 
-const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction, postType, hideLoadMore = false }) => {
+const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPrice, maxPrice, condition, sortBy: externalSortBy, direction: externalDirection, postType, hideLoadMore = false }) => {
   const { t, i18n } = useTranslation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,6 +14,11 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
+  
+  // Sort state
+  const [sortBy, setSortBy] = useState(externalSortBy || 'createdAt');
+  const [direction, setDirection] = useState(externalDirection || 'DESC');
+  const [showSortModal, setShowSortModal] = useState(false);
 
   // Fetch products from backend
   const fetchProducts = async (pageNumber = 0, append = false) => {
@@ -86,6 +91,22 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
     }
   };
 
+  // Handle sort change
+  const handleSortChange = (newSortBy, newDirection) => {
+    setSortBy(newSortBy);
+    setDirection(newDirection);
+    setShowSortModal(false);
+  };
+
+  // Get current sort option label
+  const getCurrentSortLabel = () => {
+    if (sortBy === 'createdAt' && direction === 'DESC') return t('allProducts.sortNewest');
+    if (sortBy === 'createdAt' && direction === 'ASC') return t('allProducts.sortOldest');
+    if (sortBy === 'price' && direction === 'ASC') return t('allProducts.sortPriceLow');
+    if (sortBy === 'price' && direction === 'DESC') return t('allProducts.sortPriceHigh');
+    return t('allProducts.sortNewest');
+  };
+
   // Fetch products on mount and when filters change
   useEffect(() => {
     fetchProducts(0, false);
@@ -139,10 +160,115 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
 
   return (
     <div className="product-grid">
-      {/* Section Header */}
+      {/* Section Header with Sort */}
       <div className="grid-section-header">
         <h2 className="grid-section-title">{t('common.products', 'المنتجات')}</h2>
+        
+
+        {/* Sort Button - Mobile */}
+        <button 
+          className="sort-mobile-btn mobile-sort"
+          onClick={() => setShowSortModal(true)}
+        >
+          <ArrowUpDown size={16} />
+          <span>{getCurrentSortLabel()}</span>
+        </button>
       </div>
+      
+      {/* Mobile Sort Modal */}
+      {showSortModal && (
+        <div 
+          className="sort-modal-overlay mobile-sort" 
+          onClick={(e) => {
+            if (e.target.classList.contains('sort-modal-overlay')) {
+              setShowSortModal(false);
+            }
+          }}
+          onTouchStart={(e) => {
+            const touchStartY = e.touches[0].clientY;
+            const handleTouchMove = (moveEvent) => {
+              const touchEndY = moveEvent.touches[0].clientY;
+              const deltaY = touchEndY - touchStartY;
+              if (deltaY > 100) {
+                setShowSortModal(false);
+                document.removeEventListener('touchmove', handleTouchMove);
+              }
+            };
+            document.addEventListener('touchmove', handleTouchMove);
+            document.addEventListener('touchend', () => {
+              document.removeEventListener('touchmove', handleTouchMove);
+            }, { once: true });
+          }}
+        >
+          <div className="sort-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="sort-modal-header">
+              <div className="sort-modal-handle" />
+              <h3>{t('allProducts.sortBy')}</h3>
+            </div>
+            
+            <div className="sort-modal-options">
+              <label className="sort-modal-option">
+                <input
+                  type="radio"
+                  name="sort"
+                  checked={sortBy === 'createdAt' && direction === 'DESC'}
+                  onChange={() => handleSortChange('createdAt', 'DESC')}
+                />
+                <span>{t('allProducts.sortNewest')}</span>
+                {sortBy === 'createdAt' && direction === 'DESC' && <Check size={20} className="check-icon" />}
+              </label>
+              
+              <label className="sort-modal-option">
+                <input
+                  type="radio"
+                  name="sort"
+                  checked={sortBy === 'createdAt' && direction === 'ASC'}
+                  onChange={() => handleSortChange('createdAt', 'ASC')}
+                />
+                <span>{t('allProducts.sortOldest')}</span>
+                {sortBy === 'createdAt' && direction === 'ASC' && <Check size={20} className="check-icon" />}
+              </label>
+              
+              <label className="sort-modal-option">
+                <input
+                  type="radio"
+                  name="sort"
+                  checked={sortBy === 'price' && direction === 'ASC'}
+                  onChange={() => handleSortChange('price', 'ASC')}
+                />
+                <span>{t('allProducts.sortPriceLow')}</span>
+                {sortBy === 'price' && direction === 'ASC' && <Check size={20} className="check-icon" />}
+              </label>
+              
+              <label className="sort-modal-option">
+                <input
+                  type="radio"
+                  name="sort"
+                  checked={sortBy === 'price' && direction === 'DESC'}
+                  onChange={() => handleSortChange('price', 'DESC')}
+                />
+                <span>{t('allProducts.sortPriceHigh')}</span>
+                {sortBy === 'price' && direction === 'DESC' && <Check size={20} className="check-icon" />}
+              </label>
+            </div>
+            
+            <div className="sort-modal-actions">
+              <button className="sort-modal-apply" onClick={() => setShowSortModal(false)}>
+                {t('common.apply', 'Apply')}
+              </button>
+              <button 
+                className="sort-modal-reset" 
+                onClick={() => {
+                  handleSortChange('createdAt', 'DESC');
+                  setShowSortModal(false);
+                }}
+              >
+                {t('common.reset', 'Reset')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="grid-container">
         {products.map(product => (

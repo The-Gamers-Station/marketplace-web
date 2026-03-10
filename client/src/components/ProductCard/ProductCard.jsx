@@ -118,16 +118,18 @@ const ProductCard = ({
         {/* Price Section - At Bottom of Card */}
         <div className="current-price">
           <button className="card-nav-btn" aria-label="View product">
-            <ArrowLeft size={15} />
+            <span className="rtl-flip">
+              <ArrowLeft size={15} />
+            </span>
           </button>
           {isArabic ? (
             <>
               <img src="/sar.svg" alt="SAR" className="price-currency-icon" />
-              <span className="price-valuee">{price || '0'}</span>
+              <span className="price-valuee">{Number(price || 0).toLocaleString()}</span>
             </>
           ) : (
             <>
-              <span className="price-valuee">{price || '0'}</span>
+              <span className="price-valuee">{Number(price || 0).toLocaleString()}</span>
               <img src="/sar.svg" alt="SAR" className="price-currency-icon" />
             </>
           )}

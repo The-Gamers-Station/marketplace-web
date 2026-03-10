@@ -124,16 +124,16 @@ const LandingPage = () => {
             hideLoadMore={false}
           />
           
-          {/* Show All Products Button */}
-          <div className="show-all-products-container">
-            <button
-              className="show-all-products-btn"
-              onClick={() => navigate('/products')}
-            >
-              {t('common.showAllProducts', 'Show All Products')}
-              <ArrowRight size={20} className="arrow-icon" />
-            </button>
-          </div>
+          {/*/!* Show All Products Button *!/*/}
+          {/*<div className="show-all-products-container">*/}
+          {/*  <button*/}
+          {/*    className="show-all-products-btn"*/}
+          {/*    onClick={() => navigate('/products')}*/}
+          {/*  >*/}
+          {/*    {t('common.showAllProducts', 'Show All Products')}*/}
+          {/*    <ArrowRight size={20} className="arrow-icon" />*/}
+          {/*  </button>*/}
+          {/*</div>*/}
         </main>
         <Footer />
         

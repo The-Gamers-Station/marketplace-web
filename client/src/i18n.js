@@ -68,9 +68,23 @@ i18n
   })
   .then(() => {
     console.log('i18n initialized successfully');
+    // Set initial direction immediately after initialization
+    const currentLang = i18n.language || i18n.resolvedLanguage || 'ar';
+    const direction = currentLang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = direction;
+    document.documentElement.lang = currentLang;
+    console.log('Initial direction set:', direction, 'for language:', currentLang);
   })
   .catch((err) => {
     console.error('i18n initialization failed:', err);
   });
+
+// Listen for language changes and update direction
+i18n.on('languageChanged', (lng) => {
+  const direction = lng === 'ar' ? 'rtl' : 'ltr';
+  document.documentElement.dir = direction;
+  document.documentElement.lang = lng;
+  console.log('Language changed:', lng, 'Direction:', direction);
+});
 
 export default i18n;

@@ -60,6 +60,15 @@ export const API_ENDPOINTS = {
   media: {
     uploadImage: '/media/upload',
   },
+  
+  // Orders
+  orders: {
+    create: '/orders',
+    accept: (id) => `/orders/${id}/accept`,
+    reject: (id) => `/orders/${id}/reject`,
+    myPurchases: '/orders/my-purchases',
+    customerOrders: '/orders/customer-orders',
+  },
 };
 
 // Helper function to build full API URL

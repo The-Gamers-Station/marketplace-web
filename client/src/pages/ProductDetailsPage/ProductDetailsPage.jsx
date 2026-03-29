@@ -30,6 +30,7 @@ import OptimizedImage from '../../components/OptimizedImage/OptimizedImage';
 import userService from '../../services/userService';
 import { getTranslatedCityName } from '../../utils/cityTranslations';
 import { showError } from '../../components/ErrorNotification/ErrorNotification';
+import BuyModal from '../../components/BuyModal/BuyModal';
 import './ProductDetailsPage.css';
 
 const ProductDetailsPage = () => {
@@ -49,6 +50,7 @@ const ProductDetailsPage = () => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [fullscreenImage, setFullscreenImage] = useState(false);
   const [sellerAdCount, setSellerAdCount] = useState(0);
+  const [isBuyModalOpen, setIsBuyModalOpen] = useState(false);
 
   useEffect(() => {
     fetchProductDetails();
@@ -553,6 +555,28 @@ const ProductDetailsPage = () => {
               {(() => {
                 const currentUser = authService.getCurrentUser();
                 const isOwner = currentUser && currentUser.userId === product.seller.id;
+                return !isOwner && postType === 'SELL';
+              })() && (
+                <button
+                  className="btn-buy-with-trust"
+                  onClick={() => {
+                    if (!authService.isAuthenticated()) {
+                      navigate('/login', {
+                        state: { redirectTo: `/product/${product.id}` }
+                      });
+                      return;
+                    }
+                    setIsBuyModalOpen(true);
+                  }}
+                >
+                  <Shield size={20} />
+                  <span>{t('orders.buyWithTrust')}</span>
+                </button>
+              )}
+
+              {(() => {
+                const currentUser = authService.getCurrentUser();
+                const isOwner = currentUser && currentUser.userId === product.seller.id;
                 return !isOwner;
               })() && (
                 <button
@@ -726,6 +750,19 @@ const ProductDetailsPage = () => {
 
         <Footer />
       </div>
+      
+      {/* Buy with Trust Modal */}
+      {product && (
+        <BuyModal
+          isOpen={isBuyModalOpen}
+          onClose={() => setIsBuyModalOpen(false)}
+          product={{
+            id: product.id,
+            name: product.name,
+            price: product.price
+          }}
+        />
+      )}
     </>
   );
 };

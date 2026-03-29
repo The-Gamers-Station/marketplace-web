@@ -107,3 +107,13 @@ app:
   i18n:
     default-locale: ar
     supported-locales: en,ar
+
+# Waffy Integration (Escrow/Contract Management)
+waffy:
+  base-url: ${WAFFY_BASE_URL:https://dev-api.waffyapp.com}
+  auth-url: ${WAFFY_AUTH_URL:https://dev-auth.waffyapp.com}
+  admin-user-id: ${WAFFY_ADMIN_USER_ID:your-admin-user-id}
+  oauth:
+    username: ${WAFFY_OAUTH_USERNAME:}
+    password: ${WAFFY_OAUTH_PASSWORD:}
+    client-auth: ${WAFFY_OAUTH_CLIENT_AUTH:}

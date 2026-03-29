@@ -33,6 +33,7 @@ import Footer from '../../components/Footer/Footer';
 import { PageLoader } from '../../components/Loading/Loading';
 import SuccessPopup from '../../components/SuccessPopup/SuccessPopup';
 import MessagesTab from '../../components/MessagesTab/MessagesTab';
+import OrdersTab from '../../components/OrdersTab/OrdersTab';
 import authService from '../../services/authService';
 import userService from '../../services/userService';
 import postService from '../../services/postService';
@@ -140,7 +141,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tab = params.get('tab');
-    if (tab && ['posts', 'messages'].includes(tab)) {
+    if (tab && ['posts', 'messages', 'orders'].includes(tab)) {
       setActiveTab(tab);
     }
   }, [location]);
@@ -553,6 +554,14 @@ const ProfilePage = () => {
             </button>
             
             <button
+              className={`tab-btn ${activeTab === 'orders' ? 'active' : ''}`}
+              onClick={() => setActiveTab('orders')}
+            >
+              <Shield size={18} />
+              {t('orders.orders')}
+            </button>
+            
+            <button
               className={`tab-btn ${activeTab === 'messages' ? 'active' : ''}`}
               onClick={() => setActiveTab('messages')}
             >
@@ -670,6 +679,12 @@ const ProfilePage = () => {
                   <Heart size={48} />
                   <p>{t('profile.noFavorites')}</p>
                 </div>
+              </div>
+            )}
+
+            {activeTab === 'orders' && (
+              <div className="orders-section">
+                <OrdersTab />
               </div>
             )}
   

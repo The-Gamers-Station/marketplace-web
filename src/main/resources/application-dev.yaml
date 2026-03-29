@@ -12,7 +12,7 @@ logging:
     org.flywaydb: INFO
 
 otp:
-  isEnabled: true
+  isEnabled: false
 
 messaging:
   ably:

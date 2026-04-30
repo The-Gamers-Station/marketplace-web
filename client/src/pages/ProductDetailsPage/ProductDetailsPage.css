@@ -404,10 +404,11 @@
   display: flex;
   align-items: baseline;
   gap: 8px;
+  direction: ltr;
 }
 
 [dir="rtl"] .price-value-row {
-  flex-direction: row-reverse;
+  justify-content: flex-end;
 }
 
 .price-amount {

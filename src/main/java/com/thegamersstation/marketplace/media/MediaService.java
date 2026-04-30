@@ -231,7 +231,6 @@ public class MediaService {
                     .key(s3Key)
                     .contentType(contentType)
                     .contentLength(file.getSize())
-                    .acl(ObjectCannedACL.PUBLIC_READ)
                     .build();
 
             s3Client.putObject(

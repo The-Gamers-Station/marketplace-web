@@ -119,6 +119,9 @@ const AllProductsPage = lazyWithRetry(() =>
 const EditProductPage = lazyWithRetry(() =>
   import(/* webpackChunkName: "edit-product" */ './pages/EditProductPage/EditProductPage')
 );
+const PrivacyPolicyPage = lazyWithRetry(() =>
+  import(/* webpackChunkName: "privacy-policy" */ './pages/PrivacyPolicyPage/PrivacyPolicyPage')
+);
 
 // Modern Loading component with professional design
 const PageLoader = memo(() => {
@@ -260,6 +263,7 @@ function App() {
                 <Route path="/edit-product/:id" element={<EditProductPage />} />
                 <Route path="/chat" element={<ChatPage />} />
                 <Route path="/chat/:chatId" element={<ChatPage />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>

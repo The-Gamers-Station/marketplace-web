@@ -119,6 +119,7 @@ const Footer = () => {
               <ul className={`footer-links ${isMobile && collapsedSections.customerService ? 'mobile-collapsed' : ''}`}>
                 <li><a href="/faq">{t('footer.customerService.faq')}</a></li>
                 <li><a href="/contact">{t('footer.customerService.contact')}</a></li>
+                <li><a href="/privacy-policy">{t('footer.legal.privacy')}</a></li>
               </ul>
             </div>
           </div>

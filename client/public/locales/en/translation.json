@@ -994,5 +994,69 @@
     "popularKeywords": "Popular Search Keywords",
     "recentKeywords": "Recent Search Keywords",
     "deleteAll": "Delete All"
+  },
+  "privacyPolicy": {
+    "pageTitle": "Privacy Policy & Terms of Service",
+    "pageDescription": "Privacy Policy and Terms of Service for Gamers Station marketplace",
+    "heroTitle": "Privacy Policy & Terms of Service",
+    "heroSubtitle": "Your trust matters to us. Read our terms of service and privacy policy to understand how we operate and protect your data.",
+    "terms": {
+      "title": "Terms of Service & Disclaimer",
+      "nature": {
+        "title": "Nature of the Platform",
+        "content": "Gamers Station (thegamersstation.com) is an online marketplace and advertising space that allows users to list their gaming-related products for sale or post purchase requests. The platform acts solely as a technical intermediary connecting buyers and sellers. We do not sell any products directly, we do not own them, and we do not provide any shipping, delivery, or payment collection services."
+      },
+      "eligibility": {
+        "title": "Legal Eligibility",
+        "content": "By registering on the platform, the user acknowledges and agrees that they are legally eligible to conduct buying and selling transactions in accordance with applicable local laws and regulations."
+      },
+      "responsibility": {
+        "title": "Responsibility for Products and Listings",
+        "content": "Listing an item for sale constitutes a personal declaration by the seller of full ownership and the legal right to sell it.\nThe entire responsibility for verifying the safety, quality, legality, and description of the product lies solely with the parties involved in the transaction (the buyer and the seller).\nThe platform holds no legal or financial liability resulting from scams, fraud, damage, or failure of either party to fulfill their agreement."
+      },
+      "evaluation": {
+        "title": "Product Evaluation and Condition",
+        "content": "The condition of the listed goods depends entirely on the seller's own description and uploaded photos (e.g., New, Like New, Used).\nAny product grading or description on the website serves as a guide to assist users only, and does not constitute any guarantee or warranty from the platform."
+      },
+      "payment": {
+        "title": "Payment and Financial Transactions",
+        "content": "The payment method and the final price of the product are agreed upon directly between the buyer and the seller outside the platform.\nThe platform does not provide payment collection, escrow, or financial intermediary services. The involved parties bear full responsibility for transferring and receiving funds.\nThe listed price is set independently by the seller and does not include any commissions, taxes, or delivery fees related to the website."
+      },
+      "shipping": {
+        "title": "Shipping and Delivery",
+        "content": "The platform does not offer any shipping or delivery services, nor does it provide transport documentation for goods.\nThe buyer and the seller are fully responsible for arranging a suitable delivery method (such as hand-to-hand delivery or using third-party shipping companies at their own expense and discretion)."
+      },
+      "returns": {
+        "title": "Return and Exchange Policy",
+        "content": "The platform is not responsible for any returns or exchanges.\nIn the event of any dispute or discrepancy between the received item and the listed description, the dispute must be resolved amicably or legally directly between the buyer and the seller, without any liability or intervention from the platform."
+      },
+      "sellerObligations": {
+        "title": "Seller Obligations",
+        "content": "The seller agrees to act with honesty and seriousness, and is responsible for removing the listing from the platform immediately if the item becomes unavailable or is sold.\nThe seller must perform a factory reset and erase all personal data from electronic devices or accounts before handover. The platform is not responsible for any data leaks or data remaining on sold items."
+      },
+      "prohibited": {
+        "title": "Prohibited Items",
+        "content": "It is strictly forbidden to list or request any products, items, or accounts that violate local laws and regulations, or infringe upon intellectual property rights. The website reserves the right to remove violating listings and ban offending accounts immediately."
+      }
+    },
+    "privacy": {
+      "title": "Privacy and Data Security Policy",
+      "dataCollection": {
+        "title": "Data Collection Consent",
+        "content": "Registering on the platform constitutes consent by the user for the collection and sharing of the contact information necessary to enable members to buy, sell, and complete transactions."
+      },
+      "requiredData": {
+        "title": "Required Data",
+        "content": "The basic information collected during account creation includes:\n• Username\n• Mobile Number\n• Email Address\n\nWe emphasize that the platform does not request or store any banking information or credit card details."
+      },
+      "dataUse": {
+        "title": "Use of Data",
+        "content": "Contact information is used to connect the buyer with the seller and facilitate their agreement.\nUsers are strictly prohibited from using the contact details of other members for any purposes outside the scope of buying and selling within the platform."
+      },
+      "reporting": {
+        "title": "Reporting Violations",
+        "content": "Buyers and sellers must report to the platform administration immediately if they suspect any manipulation, fraud, or misuse of data by the other party, so that necessary technical measures can be taken."
+      }
+    }
   }
 }

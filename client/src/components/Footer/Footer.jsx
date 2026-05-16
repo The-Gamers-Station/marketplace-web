@@ -42,33 +42,33 @@ const Footer = () => {
 
   return (
     <footer className="footer">
-      {/* Features Section */}
-      <div className="footer-features">
-        <div className="footer-container">
-          <div className="features-grid">
-            <div className="feature-item">
-              <Gamepad2 className="feature-icon" size={24} />
-              <h4>{t('footer.features.latestGames')}</h4>
-              <p>{t('footer.features.latestGamesDesc')}</p>
-            </div>
-            <div className="feature-item">
-              <Shield className="feature-icon" size={24} />
-              <h4>{t('footer.features.securePayment')}</h4>
-              <p>{t('footer.features.securePaymentDesc')}</p>
-            </div>
-            {/*<div className="feature-item">*/}
-            {/*  <Truck className="feature-icon" size={24} />*/}
-            {/*  <h4>{t('footer.features.fastShipping')}</h4>*/}
-            {/*  <p>{t('footer.features.fastShippingDesc')}</p>*/}
-            {/*</div>*/}
-            {/*<div className="feature-item">*/}
-            {/*  <CreditCard className="feature-icon" size={24} />*/}
-            {/*  <h4>{t('footer.features.multiplePayment')}</h4>*/}
-            {/*  <p>{t('footer.features.multiplePaymentDesc')}</p>*/}
-            {/*</div>*/}
-          </div>
-        </div>
-      </div>
+      {/*/!* Features Section *!/*/}
+      {/*<div className="footer-features">*/}
+      {/*  <div className="footer-container">*/}
+      {/*    <div className="features-grid">*/}
+      {/*      <div className="feature-item">*/}
+      {/*        <Gamepad2 className="feature-icon" size={24} />*/}
+      {/*        <h4>{t('footer.features.latestGames')}</h4>*/}
+      {/*        <p>{t('footer.features.latestGamesDesc')}</p>*/}
+      {/*      </div>*/}
+      {/*      <div className="feature-item">*/}
+      {/*        <Shield className="feature-icon" size={24} />*/}
+      {/*        <h4>{t('footer.features.securePayment')}</h4>*/}
+      {/*        <p>{t('footer.features.securePaymentDesc')}</p>*/}
+      {/*      </div>*/}
+      {/*      /!*<div className="feature-item">*!/*/}
+      {/*      /!*  <Truck className="feature-icon" size={24} />*!/*/}
+      {/*      /!*  <h4>{t('footer.features.fastShipping')}</h4>*!/*/}
+      {/*      /!*  <p>{t('footer.features.fastShippingDesc')}</p>*!/*/}
+      {/*      /!*</div>*!/*/}
+      {/*      /!*<div className="feature-item">*!/*/}
+      {/*      /!*  <CreditCard className="feature-icon" size={24} />*!/*/}
+      {/*      /!*  <h4>{t('footer.features.multiplePayment')}</h4>*!/*/}
+      {/*      /!*  <p>{t('footer.features.multiplePaymentDesc')}</p>*!/*/}
+      {/*      /!*</div>*!/*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
 
       {/* Main Footer Content */}
       <div className="footer-main">

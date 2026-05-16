@@ -70,10 +70,10 @@ const LandingPage = () => {
           "@id": "https://gamersstation.eg/#logo"
         },
         "sameAs": [
-          "https://www.facebook.com/GamersStationApp",
-          "https://www.twitter.com/GamersStationApp",
-          "https://www.instagram.com/GamersStationApp",
-          "https://www.youtube.com/@GamersStationApp"
+          "https://www.facebook.com/GamerStationApp",
+          "https://www.twitter.com/GamerStationApp",
+          "https://www.instagram.com/GamerStationApp",
+          "https://www.youtube.com/@GamerStationApp"
         ],
         "address": {
           "@type": "PostalAddress",

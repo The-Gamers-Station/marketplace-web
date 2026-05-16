@@ -272,18 +272,18 @@ const ContactPage = () => {
                 <h3>{t('pages.contact.contactInfo')}</h3>
                 <div className="info-items">
                   <div className="info-item">
-                    <div className="info">
-                      <Mail size={15} />
+                    <div className="info-icon-box">
+                      <Mail size={18} />
                     </div>
                     <div className="info-content">
                       <span className="info-label">{t('pages.contact.email')}</span>
-                      <a href="mailto:contact@thegamersstation.com" className="emaila">contact@thegamersstation.com</a>
+                      <a href="mailto:contact@thegamersstation.com" dir="ltr">contact@thegamersstation.com</a>
                     </div>
                   </div>
 
                   <div className="info-item">
-                    <div className="info">
-                      <Phone size={15} />
+                    <div className="info-icon-box">
+                      <Phone size={18} />
                     </div>
                     <div className="info-content">
                       <span className="info-label">{t('pages.contact.phone')}</span>

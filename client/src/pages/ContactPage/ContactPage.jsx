@@ -287,7 +287,7 @@ const ContactPage = () => {
                     </div>
                     <div className="info-content">
                       <span className="info-label">{t('pages.contact.phone')}</span>
-                      <a href="tel:+201234567890" dir="ltr">+20 123 456 7890</a>
+                      <a href="tel:+966509551004" dir="ltr">+966 50 955 1004</a>
                     </div>
                   </div>
                 </div>

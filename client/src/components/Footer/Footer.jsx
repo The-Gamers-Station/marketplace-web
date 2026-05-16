@@ -56,16 +56,16 @@ const Footer = () => {
               <h4>{t('footer.features.securePayment')}</h4>
               <p>{t('footer.features.securePaymentDesc')}</p>
             </div>
-            <div className="feature-item">
-              <Truck className="feature-icon" size={24} />
-              <h4>{t('footer.features.fastShipping')}</h4>
-              <p>{t('footer.features.fastShippingDesc')}</p>
-            </div>
-            <div className="feature-item">
-              <CreditCard className="feature-icon" size={24} />
-              <h4>{t('footer.features.multiplePayment')}</h4>
-              <p>{t('footer.features.multiplePaymentDesc')}</p>
-            </div>
+            {/*<div className="feature-item">*/}
+            {/*  <Truck className="feature-icon" size={24} />*/}
+            {/*  <h4>{t('footer.features.fastShipping')}</h4>*/}
+            {/*  <p>{t('footer.features.fastShippingDesc')}</p>*/}
+            {/*</div>*/}
+            {/*<div className="feature-item">*/}
+            {/*  <CreditCard className="feature-icon" size={24} />*/}
+            {/*  <h4>{t('footer.features.multiplePayment')}</h4>*/}
+            {/*  <p>{t('footer.features.multiplePaymentDesc')}</p>*/}
+            {/*</div>*/}
           </div>
         </div>
       </div>
@@ -117,7 +117,7 @@ const Footer = () => {
                 )} */}
               </h3>
               <ul className={`footer-links ${isMobile && collapsedSections.customerService ? 'mobile-collapsed' : ''}`}>
-                <li><a href="/faq">{t('footer.customerService.faq')}</a></li>
+                {/*<li><a href="/faq">{t('footer.customerService.faq')}</a></li>*/}
                 <li><a href="/contact">{t('footer.customerService.contact')}</a></li>
                 <li><a href="/privacy-policy">{t('footer.legal.privacy')}</a></li>
               </ul>

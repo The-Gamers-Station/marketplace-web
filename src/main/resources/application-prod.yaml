@@ -9,6 +9,12 @@ logging:
     root: WARN
     com.thegamersstation.marketplace: INFO
 
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
 management:
   endpoints:
     web:

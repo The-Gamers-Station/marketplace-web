@@ -26,6 +26,9 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @org.springframework.beans.factory.annotation.Value("${cors.allowed-origin-patterns:}")
+    private String additionalCorsOrigins;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -92,16 +95,15 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Allow specific origins (configure via environment variable in production)
-        configuration.setAllowedOriginPatterns(Arrays.asList(
+        // Production origins + any additional origins from config (dev overrides)
+        List<String> origins = new java.util.ArrayList<>(Arrays.asList(
             "https://thegamersstation.com",
-            "https://www.thegamersstation.com",
-                "http://localhost:[*]",        // Allows any port on localhost (5173, 5174, etc.)
-            "http://localhost:5173",
-            "http://localhost:5174",  // Vite HMR port
-            "http://localhost:3000",
-            "http://80.66.87.82:3001"
+            "https://www.thegamersstation.com"
         ));
+        if (additionalCorsOrigins != null && !additionalCorsOrigins.isBlank()) {
+            origins.addAll(Arrays.asList(additionalCorsOrigins.split(",")));
+        }
+        configuration.setAllowedOriginPatterns(origins);
         
         configuration.setAllowedMethods(Arrays.asList(
             "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"

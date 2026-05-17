@@ -88,4 +88,8 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
     
     @Query("SELECT c FROM Conversation c WHERE c.post.id = :postId")
     Page<Conversation> findByPostId(@Param("postId") Long postId, Pageable pageable);
+
+    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Conversation c " +
+           "WHERE c.id = :conversationId AND (c.seller.id = :userId OR c.buyer.id = :userId)")
+    boolean isParticipant(@Param("conversationId") Long conversationId, @Param("userId") Long userId);
 }

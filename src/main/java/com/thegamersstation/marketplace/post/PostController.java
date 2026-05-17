@@ -18,11 +18,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
 @RequestMapping("/posts")
 @RequiredArgsConstructor
 @Tag(name = "Posts", description = "Post management endpoints")
 public class PostController {
+    
+    private static final Set<String> ALLOWED_SORT_FIELDS = Set.of(
+        "createdAt", "price", "title", "updatedAt"
+    );
     
     private final PostService PostService;
     
@@ -71,7 +77,8 @@ public class PostController {
         @RequestParam(defaultValue = "createdAt") String sortBy,
         @RequestParam(defaultValue = "DESC") Sort.Direction direction
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        String safeSortBy = ALLOWED_SORT_FIELDS.contains(sortBy) ? sortBy : "createdAt";
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, safeSortBy));
         PageResponseDto<PostDto> ads = PostService.searchPosts(categoryId, categoryIds, cityId, type, condition, minPrice, maxPrice, pageable);
         return ResponseEntity.ok(ads);
     }
@@ -127,7 +134,8 @@ public class PostController {
         @RequestParam(defaultValue = "DESC") Sort.Direction direction
     ) {
         Long userId = SecurityUtil.getCurrentUserId();
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        String safeSortBy = ALLOWED_SORT_FIELDS.contains(sortBy) ? sortBy : "createdAt";
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, safeSortBy));
         PageResponseDto<PostDto> ads = PostService.getMyPosts(userId, pageable);
         return ResponseEntity.ok(ads);
     }

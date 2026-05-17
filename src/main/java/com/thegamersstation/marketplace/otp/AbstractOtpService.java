@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Random;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.HexFormat;
 
 /**
  * Base class for OTP services containing shared validation, rate-limiting, and code generation logic.
@@ -17,7 +21,7 @@ import java.util.Random;
 public abstract class AbstractOtpService implements OtpService {
 
     protected final OtpLogRepository otpLogRepository;
-    protected final Random random = new Random();
+    protected final SecureRandom random = new SecureRandom();
 
     @Value("${otp.code-length}")
     protected int codeLength;
@@ -93,7 +97,7 @@ public abstract class AbstractOtpService implements OtpService {
                 .ipAddress(ipAddress)
                 .success(success)
                 .attemptedAt(Instant.now())
-                .code(code)
+                .code(code != null ? hashOtpCode(code) : null)
                 .expiresAt(code != null ? Instant.now().plusSeconds(ttlMinutes * 60L) : null)
                 .build();
         return otpLogRepository.save(otpLog);
@@ -107,7 +111,8 @@ public abstract class AbstractOtpService implements OtpService {
             return false;
         }
 
-        OtpLog validOtp = otpLogRepository.findValidOtp(phoneNumber, code.trim(), Instant.now());
+        String hashedCode = hashOtpCode(code.trim());
+        OtpLog validOtp = otpLogRepository.findValidOtp(phoneNumber, hashedCode, Instant.now());
         if (validOtp != null) {
             // Invalidate the OTP after successful verification
             validOtp.setExpiresAt(Instant.now());
@@ -118,6 +123,19 @@ public abstract class AbstractOtpService implements OtpService {
 
         log.warn("No valid OTP found in DB for phone: {}", phoneNumber);
         return false;
+    }
+
+    /**
+     * Hash OTP code with SHA-256 for secure storage.
+     */
+    protected String hashOtpCode(String code) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(code.getBytes(StandardCharsets.UTF_8));
+            return HexFormat.of().formatHex(hash);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("SHA-256 not available", e);
+        }
     }
 
     @Override

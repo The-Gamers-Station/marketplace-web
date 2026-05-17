@@ -16,6 +16,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
+import java.util.HexFormat;
+import java.util.UUID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -24,6 +31,7 @@ public class AuthService {
     private final OtpService otpService;
     private final UsersRepository usersRepository;
     private final JwtUtil jwtUtil;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Value("${otp.ttl-minutes}")
     private int otpTtlMinutes;
@@ -101,6 +109,9 @@ public class AuthService {
         );
         String refreshToken = jwtUtil.generateRefreshToken(user.getId());
 
+        // Store refresh token with a new family (new login session)
+        storeRefreshToken(user.getId(), refreshToken, UUID.randomUUID().toString());
+
         log.info("User authenticated successfully: {} (isNew: {})", phoneNumber, user.getId() == null);
 
         return AuthResponseDto.builder()
@@ -117,8 +128,12 @@ public class AuthService {
     }
 
     /**
-     * Refresh access token using refresh token
+     * Refresh access token using refresh token.
+     * Implements token rotation with family-based theft detection:
+     * - Each refresh token is single-use (consumed after one rotation).
+     * - If a consumed token is replayed, the entire family is revoked.
      */
+    @Transactional
     public AuthResponseDto refreshToken(String refreshToken) {
         if (refreshToken == null || refreshToken.isBlank()) {
             throw new BusinessRuleException(
@@ -127,7 +142,7 @@ public class AuthService {
             );
         }
 
-        // Validate refresh token
+        // Validate JWT signature and expiry
         if (!jwtUtil.validateRefreshToken(refreshToken)) {
             throw new BusinessRuleException(
                 "Invalid or expired refresh token",
@@ -135,33 +150,72 @@ public class AuthService {
             );
         }
 
-        // Extract user ID from refresh token
-        Long userId = jwtUtil.extractUserId(refreshToken);
+        // Look up the token in the database by its jti hash
+        String jti = jwtUtil.extractJti(refreshToken);
+        if (jti == null) {
+            throw new BusinessRuleException(
+                "Invalid refresh token format",
+                "صيغة رمز التحديث غير صحيحة"
+            );
+        }
 
-        // Find user
+        String jtiHash = hashJti(jti);
+        RefreshToken storedToken = refreshTokenRepository.findByTokenHash(jtiHash)
+                .orElseThrow(() -> new BusinessRuleException(
+                    "Refresh token not recognized",
+                    "رمز التحديث غير معروف"
+                ));
+
+        // THEFT DETECTION: if the token was already consumed, an attacker is replaying it.
+        // Revoke the entire family to protect the user.
+        if (storedToken.getIsConsumed()) {
+            refreshTokenRepository.revokeFamily(storedToken.getTokenFamily());
+            log.warn("Refresh token reuse detected for user {}. Family {} revoked.",
+                    storedToken.getUserId(), storedToken.getTokenFamily());
+            throw new BusinessRuleException(
+                "Suspicious activity detected. Please log in again.",
+                "تم اكتشاف نشاط مشبوه. يرجى تسجيل الدخول مرة أخرى."
+            );
+        }
+
+        // If the token or its family has been revoked, reject.
+        if (storedToken.getIsRevoked()) {
+            throw new BusinessRuleException(
+                "Refresh token has been revoked",
+                "تم إلغاء رمز التحديث"
+            );
+        }
+
+        // Mark current token as consumed (single-use)
+        storedToken.setIsConsumed(true);
+        refreshTokenRepository.save(storedToken);
+
+        // Validate user
+        Long userId = jwtUtil.extractUserId(refreshToken);
         User user = usersRepository.findById(userId)
                 .orElseThrow(() -> new BusinessRuleException(
                     "User not found",
                     "المستخدم غير موجود"
                 ));
 
-        // Check if user is active
         if (!user.getIsActive()) {
+            refreshTokenRepository.revokeFamily(storedToken.getTokenFamily());
             throw new BusinessRuleException(
                 "Account is deactivated",
                 "حسابك غير مفعّل"
             );
         }
 
-        // Generate new access token
+        // Issue new tokens (rotation) in the SAME family
         String newAccessToken = jwtUtil.generateAccessToken(
-                user.getId(), 
-                user.getPhoneNumber(), 
+                user.getId(),
+                user.getPhoneNumber(),
                 user.getRole().name()
         );
-
-        // Optionally generate new refresh token (token rotation)
         String newRefreshToken = jwtUtil.generateRefreshToken(user.getId());
+
+        // Store the new refresh token in the same family
+        storeRefreshToken(user.getId(), newRefreshToken, storedToken.getTokenFamily());
 
         log.info("Token refreshed for user: {}", userId);
 
@@ -175,6 +229,36 @@ public class AuthService {
                 .role(user.getRole().name())
                 .profileCompleted(user.getProfileCompleted())
                 .build();
+    }
+
+    /**
+     * Persist a refresh token record for revocation tracking.
+     */
+    private void storeRefreshToken(Long userId, String jwt, String family) {
+        String jti = jwtUtil.extractJti(jwt);
+        Instant expiresAt = jwtUtil.extractExpiration(jwt).toInstant();
+
+        RefreshToken entity = RefreshToken.builder()
+                .userId(userId)
+                .tokenFamily(family)
+                .tokenHash(hashJti(jti))
+                .expiresAt(expiresAt)
+                .build();
+
+        refreshTokenRepository.save(entity);
+    }
+
+    /**
+     * SHA-256 hash of a jti value for safe storage.
+     */
+    private String hashJti(String jti) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(jti.getBytes(StandardCharsets.UTF_8));
+            return HexFormat.of().formatHex(hash);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("SHA-256 not available", e);
+        }
     }
 
     /**

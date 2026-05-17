@@ -35,8 +35,8 @@ public class ConsoleOtpService extends AbstractOtpService {
         logOtpAttemptWithCode(phoneNumber, ipAddress, true, code);
 
         String messageBody = buildOtpMessage(code, language);
-        log.warn("OTP CODE for {}: {} | Message: {} (expires in {} minutes)",
-                phoneNumber, code, messageBody, ttlMinutes);
+        log.info("OTP generated for {} (code masked: {}***, expires in {} minutes)",
+                phoneNumber, code.substring(0, 1), ttlMinutes);
     }
 
     @Override

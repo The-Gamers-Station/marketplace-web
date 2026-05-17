@@ -93,10 +93,8 @@ public class AuthController {
      * Extract client IP address from request
      */
     private String getClientIp(HttpServletRequest request) {
-        String xForwardedFor = request.getHeader("X-Forwarded-For");
-        if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
-            return xForwardedFor.split(",")[0].trim();
-        }
+        // Rely on Spring's forward-headers-strategy: native to resolve
+        // the correct remote address from trusted proxy headers
         return request.getRemoteAddr();
     }
 

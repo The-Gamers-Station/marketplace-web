@@ -13,6 +13,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -55,6 +56,22 @@ public class MediaService {
             "jpg", "jpeg", "png", "webp", "gif"
     );
 
+    /**
+     * Whitelist of allowed upload folder names to prevent path traversal.
+     */
+    private static final Set<String> ALLOWED_FOLDERS = Set.of(
+            "posts", "avatars", "stores", "backgrounds"
+    );
+
+    /**
+     * Image file signatures (magic bytes) for content verification.
+     */
+    private static final byte[] JPEG_SIGNATURE = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF};
+    private static final byte[] PNG_SIGNATURE = {(byte) 0x89, 0x50, 0x4E, 0x47};
+    private static final byte[] GIF87_SIGNATURE = {0x47, 0x49, 0x46, 0x38, 0x37};
+    private static final byte[] GIF89_SIGNATURE = {0x47, 0x49, 0x46, 0x38, 0x39};
+    private static final byte[] WEBP_RIFF = {0x52, 0x49, 0x46, 0x46};
+
     public MediaService(
             @Value("${aws.access-key-id:}") String awsAccessKey,
             @Value("${aws.secret-access-key:}") String awsSecretKey,
@@ -83,6 +100,7 @@ public class MediaService {
      * @return Public URL of uploaded image (CloudFront URL for S3, local URL otherwise)
      */
     public String uploadImage(MultipartFile file, String folder) {
+        validateFolder(folder);
         validateImage(file);
 
         if ("s3".equalsIgnoreCase(storageProvider) && s3Client != null) {
@@ -170,7 +188,34 @@ public class MediaService {
     }
 
     /**
-     * Validate image file
+     * Validate folder name against whitelist to prevent path traversal.
+     */
+    private void validateFolder(String folder) {
+        if (folder == null || !ALLOWED_FOLDERS.contains(folder.toLowerCase())) {
+            throw new BusinessRuleException(
+                "Invalid upload folder. Allowed: " + String.join(", ", ALLOWED_FOLDERS),
+                "مجلد الرفع غير صحيح"
+            );
+        }
+    }
+
+    /**
+     * Validate that a resolved path is within the upload root directory.
+     */
+    private void validatePathWithinUploadRoot(Path resolvedPath) {
+        Path uploadRoot = Paths.get(localUploadDir).normalize().toAbsolutePath();
+        Path normalizedPath = resolvedPath.normalize().toAbsolutePath();
+        if (!normalizedPath.startsWith(uploadRoot)) {
+            log.warn("Path traversal attempt detected: {}", resolvedPath);
+            throw new BusinessRuleException(
+                "Invalid file path",
+                "مسار الملف غير صحيح"
+            );
+        }
+    }
+
+    /**
+     * Validate image file: size, content type, extension, and magic bytes.
      */
     private void validateImage(MultipartFile file) {
         if (file == null || file.isEmpty()) {
@@ -209,6 +254,51 @@ public class MediaService {
                 );
             }
         }
+
+        // Verify file content via magic bytes
+        validateImageMagicBytes(file);
+    }
+
+    /**
+     * Verify file content matches a known image signature (magic bytes).
+     */
+    private void validateImageMagicBytes(MultipartFile file) {
+        try (InputStream is = file.getInputStream()) {
+            byte[] header = new byte[12];
+            int bytesRead = is.read(header);
+            if (bytesRead < 3) {
+                throw new BusinessRuleException(
+                    "File is too small to be a valid image",
+                    "الملف صغير جداً ليكون صورة صالحة"
+                );
+            }
+
+            boolean valid = startsWith(header, JPEG_SIGNATURE)
+                    || startsWith(header, PNG_SIGNATURE)
+                    || startsWith(header, GIF87_SIGNATURE)
+                    || startsWith(header, GIF89_SIGNATURE)
+                    || startsWith(header, WEBP_RIFF);
+
+            if (!valid) {
+                throw new BusinessRuleException(
+                    "File content does not match a valid image format",
+                    "محتوى الملف لا يطابق صيغة صورة صحيحة"
+                );
+            }
+        } catch (IOException e) {
+            throw new BusinessRuleException(
+                "Failed to read file content",
+                "فشل قراءة محتوى الملف"
+            );
+        }
+    }
+
+    private static boolean startsWith(byte[] data, byte[] prefix) {
+        if (data.length < prefix.length) return false;
+        for (int i = 0; i < prefix.length; i++) {
+            if (data[i] != prefix[i]) return false;
+        }
+        return true;
     }
 
     /**
@@ -273,6 +363,7 @@ public class MediaService {
         try {
             // Create directory if it doesn't exist
             Path uploadPath = Paths.get(localUploadDir, folder);
+            validatePathWithinUploadRoot(uploadPath);
             Files.createDirectories(uploadPath);
 
             // Generate unique filename
@@ -282,6 +373,7 @@ public class MediaService {
 
             // Save file
             Path filePath = uploadPath.resolve(uniqueFilename);
+            validatePathWithinUploadRoot(filePath);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
             // Return public URL
@@ -329,7 +421,14 @@ public class MediaService {
         try {
             // Extract path from URL
             String relativePath = imageUrl.replace(localBaseUrl + "/", "");
-            Path filePath = Paths.get(localUploadDir, relativePath);
+            Path filePath = Paths.get(localUploadDir, relativePath).normalize().toAbsolutePath();
+            Path uploadRoot = Paths.get(localUploadDir).normalize().toAbsolutePath();
+
+            // Prevent path traversal: ensure resolved path is within upload root
+            if (!filePath.startsWith(uploadRoot)) {
+                log.warn("Path traversal attempt in delete: {}", imageUrl);
+                return;
+            }
 
             if (Files.exists(filePath)) {
                 Files.delete(filePath);

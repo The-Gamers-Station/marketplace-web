@@ -69,16 +69,16 @@ const MessagesTab = ({ conversations, setConversations, loading, setLoading }) =
     
     // If less than 24 hours, show time
     if (diff < 24 * 60 * 60 * 1000) {
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Riyadh' });
     }
     
     // If less than a week, show day
     if (diff < 7 * 24 * 60 * 60 * 1000) {
-      return date.toLocaleDateString([], { weekday: 'short' });
+      return date.toLocaleDateString([], { weekday: 'short', timeZone: 'Asia/Riyadh' });
     }
     
     // Otherwise show date
-    return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    return date.toLocaleDateString([], { month: 'short', day: 'numeric', timeZone: 'Asia/Riyadh' });
   };
 
   const handleConversationClick = (conversation) => {

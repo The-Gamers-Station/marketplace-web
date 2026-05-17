@@ -341,7 +341,8 @@ const ProfilePage = () => {
     return date.toLocaleDateString(i18n.language === 'ar' ? 'ar-SA' : 'en-US', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
+      timeZone: 'Asia/Riyadh'
     });
   };
 

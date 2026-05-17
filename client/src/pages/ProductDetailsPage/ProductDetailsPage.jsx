@@ -98,7 +98,7 @@ const ProductDetailsPage = () => {
             }
           })(),
           [t('pages.productDetails.city')]: getTranslatedCityName(postData.cityName, t),
-          [t('pages.productDetails.publishDate')]: new Date(postData.createdAt).toLocaleDateString(currentLang === 'ar' ? 'ar-SA' : 'en-US'),
+          [t('pages.productDetails.publishDate')]: new Date(postData.createdAt).toLocaleDateString(currentLang === 'ar' ? 'ar-SA' : 'en-US', { timeZone: 'Asia/Riyadh' }),
           [t('pages.productDetails.adNumber')]: postData.id,
           [t('pages.productDetails.views')]: postData.viewCount || 0,
         },

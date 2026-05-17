@@ -432,6 +432,7 @@ const ChatPage = () => {
         {
           hour: "2-digit",
           minute: "2-digit",
+          timeZone: "Asia/Riyadh",
         }
       );
     } else {
@@ -440,6 +441,7 @@ const ChatPage = () => {
         {
           day: "numeric",
           month: "short",
+          timeZone: "Asia/Riyadh",
         }
       );
     }

@@ -821,6 +821,11 @@
   padding: 0 4px;
 }
 
+/* Flip pagination arrows in RTL */
+[dir="rtl"] .pagination-btn svg {
+  transform: scaleX(-1);
+}
+
 /* Responsive Pagination */
 @media (max-width: 768px) {
   .pagination-controls {
@@ -841,20 +846,6 @@
     padding: 0 2px;
   }
   
-  /* Hide some page numbers on mobile */
-  .page-number:not(.active):not(:first-child):not(:last-child) {
-    display: none;
-  }
-  
-  .page-number.active {
-    display: flex;
-  }
-  
-  /* Show adjacent pages to active */
-  .page-number.active + .page-number,
-  .page-number + .page-number.active {
-    display: flex;
-  }
 }
 
 @media (max-width: 480px) {

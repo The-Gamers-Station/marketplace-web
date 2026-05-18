@@ -308,7 +308,7 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
             
             <div className="page-numbers">
               {/* First page */}
-              {page > 2 && (
+              {totalPages > 5 && page > 2 && (
                 <>
                   <button
                     className="page-number"
@@ -348,7 +348,7 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
               })}
               
               {/* Last page */}
-              {page < totalPages - 3 && (
+              {totalPages > 5 && page < totalPages - 3 && (
                 <>
                   {page < totalPages - 4 && <span className="page-dots">...</span>}
                   <button

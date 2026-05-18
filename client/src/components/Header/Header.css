@@ -258,7 +258,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 
   /* User Button Badge */
   .user-unread-badge {

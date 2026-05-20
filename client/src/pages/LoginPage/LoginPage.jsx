@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import FormInput from '../../components/FormInput/FormInput';
 import LanguageSwitcher from '../../components/LanguageSwitcher/LanguageSwitcher';
 import authService from '../../services/authService';
+import { useAuth } from '../../context/AuthContext';
 import { showError } from '../../components/ErrorNotification/ErrorNotification';
 import './LoginPage.css';
 
@@ -12,6 +13,7 @@ const LoginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated, login } = useAuth();
   const [step, setStep] = useState('phone'); // 'phone' or 'otp'
   const [formData, setFormData] = useState({
     phoneNumber: '',
@@ -24,12 +26,11 @@ const LoginPage = () => {
 
   // Redirect if already authenticated
   useEffect(() => {
-    if (authService.isAuthenticated()) {
-      // Get the redirect location from state or default to home
+    if (isAuthenticated) {
       const redirectTo = location.state?.redirectTo || location.state?.from || '/';
       navigate(redirectTo, { replace: true });
     }
-  }, [navigate, location]);
+  }, [isAuthenticated, navigate, location]);
 
   // Start resend timer
   const startResendTimer = () => {
@@ -135,7 +136,10 @@ const LoginPage = () => {
     try {
       const formattedPhone = authService.formatPhoneNumber(formData.phoneNumber);
       const response = await authService.verifyOtp(formattedPhone, formData.otp);
-      
+
+      // Update AuthContext state so the rest of the app knows we're logged in
+      login(response);
+
       setIsLoading(false);
       setShowSuccess(true);
       

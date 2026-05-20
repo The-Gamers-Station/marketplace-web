@@ -232,6 +232,38 @@ public class AuthService {
     }
 
     /**
+     * Logout user by revoking their refresh token family.
+     */
+    @Transactional
+    public void logout(String refreshToken) {
+        if (refreshToken == null || refreshToken.isBlank()) {
+            return; // Silently ignore — user is already effectively logged out
+        }
+
+        try {
+            if (!jwtUtil.validateRefreshToken(refreshToken)) {
+                return; // Token already expired or invalid — nothing to revoke
+            }
+
+            String jti = jwtUtil.extractJti(refreshToken);
+            if (jti == null) {
+                return;
+            }
+
+            String jtiHash = hashJti(jti);
+            refreshTokenRepository.findByTokenHash(jtiHash)
+                    .ifPresent(storedToken -> {
+                        refreshTokenRepository.revokeFamily(storedToken.getTokenFamily());
+                        log.info("User {} logged out. Family {} revoked.",
+                                storedToken.getUserId(), storedToken.getTokenFamily());
+                    });
+        } catch (Exception e) {
+            log.warn("Error during logout token revocation: {}", e.getMessage());
+            // Don't throw — logout should always succeed from the client's perspective
+        }
+    }
+
+    /**
      * Persist a refresh token record for revocation tracking.
      */
     private void storeRefreshToken(Long userId, String jwt, String family) {

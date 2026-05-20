@@ -4,6 +4,8 @@ import { HelmetProvider } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import ErrorNotification, { showError } from './components/ErrorNotification/ErrorNotification';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import './App.css';
 
 // Error Boundary Component
@@ -244,31 +246,39 @@ function App() {
   return (
     <ErrorBoundary>
       <HelmetProvider>
-        <Router>
-          <div className="App">
-            <ScrollToTop />
-            <ErrorNotification />
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/products" element={<AllProductsPage />} />
-                <Route path="/faq" element={<FAQPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-                <Route path="/product/:id" element={<ProductDetailsPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/profile/complete" element={<ProfileCompletePage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/add-product" element={<AddProductPage />} />
-                <Route path="/edit-product/:id" element={<EditProductPage />} />
-                <Route path="/chat" element={<ChatPage />} />
-                <Route path="/chat/:chatId" element={<ChatPage />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </Suspense>
-          </div>
-        </Router>
+        <AuthProvider>
+          <Router>
+            <div className="App">
+              <ScrollToTop />
+              <ErrorNotification />
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  {/* Public routes */}
+                  <Route path="/" element={<LandingPage />} />
+                  <Route path="/products" element={<AllProductsPage />} />
+                  <Route path="/faq" element={<FAQPage />} />
+                  <Route path="/contact" element={<ContactPage />} />
+                  <Route path="/product/:id" element={<ProductDetailsPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+
+                  {/* Protected routes — require authentication */}
+                  <Route element={<ProtectedRoute />}>
+                    <Route path="/profile/complete" element={<ProfileCompletePage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/add-product" element={<AddProductPage />} />
+                    <Route path="/edit-product/:id" element={<EditProductPage />} />
+                    <Route path="/chat" element={<ChatPage />} />
+                    <Route path="/chat/:chatId" element={<ChatPage />} />
+                  </Route>
+
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+              </Suspense>
+            </div>
+          </Router>
+        </AuthProvider>
       </HelmetProvider>
     </ErrorBoundary>
   );

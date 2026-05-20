@@ -89,6 +89,25 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/logout")
+    @Operation(
+        summary = "Logout and revoke session",
+        description = "Revoke the refresh token family so the session cannot be reused. Always returns 200.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Logged out successfully")
+        }
+    )
+    public ResponseEntity<Void> logout(
+            @RequestHeader(value = "Authorization", required = false) String authHeader
+    ) {
+        String refreshToken = null;
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            refreshToken = authHeader.substring(7);
+        }
+        authService.logout(refreshToken);
+        return ResponseEntity.ok().build();
+    }
+
     /**
      * Extract client IP address from request
      */

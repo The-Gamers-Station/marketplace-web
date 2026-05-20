@@ -42,7 +42,8 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/auth/otp/request",
                     "/auth/otp/verify",
-                    "/auth/refresh"
+                    "/auth/refresh",
+                    "/auth/logout"
                 ).permitAll()
                 
                 // Public endpoints - Documentation

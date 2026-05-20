@@ -9,6 +9,7 @@ export const API_ENDPOINTS = {
     requestOtp: '/auth/otp/request',
     verifyOtp: '/auth/otp/verify',
     refresh: '/auth/refresh',
+    logout: '/auth/logout',
   },
   
   // Posts/Products
@@ -85,8 +86,124 @@ export const getDefaultHeaders = () => {
 // Import error handler
 import { ApiError, parseErrorResponse } from '../utils/errorHandler.js';
 
+// ---------------------------------------------------------------------------
+// Refresh-token queue: centralises 401 handling so that concurrent requests
+// that all receive 401 share a single token-refresh round-trip instead of
+// each independently triggering one (which would cause the server's
+// token-reuse detection to revoke the entire session).
+// ---------------------------------------------------------------------------
+let _isRefreshing = false;
+let _failedQueue = []; // { resolve, reject } for each queued caller
+
+const _processQueue = (error) => {
+  _failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error);
+    } else {
+      resolve(); // signal caller to retry with the fresh token
+    }
+  });
+  _failedQueue = [];
+};
+
+/**
+ * Wait for the in-flight refresh to finish.
+ * Returns a promise that resolves when the queue is drained successfully,
+ * or rejects if the refresh failed.
+ */
+const _enqueue = () =>
+  new Promise((resolve, reject) => {
+    _failedQueue.push({ resolve, reject });
+  });
+
+/**
+ * Trigger a token refresh (if one isn't already running) and replay
+ * the original request once the new token is available.
+ *
+ * @param {Function} replayFn  – a zero-arg function that re-executes the
+ *                               original request with the fresh token.
+ * @returns {Promise<*>}       – result of the replayed request, or throws.
+ */
+const _handleUnauthorised = async (replayFn) => {
+  // No stored token at all → user was never logged in; don't try to refresh
+  if (!localStorage.getItem('accessToken')) {
+    return null; // let the caller fall through to normal error handling
+  }
+
+  if (_isRefreshing) {
+    // Another request already kicked off a refresh → just wait in line
+    await _enqueue();
+    return replayFn();
+  }
+
+  _isRefreshing = true;
+
+  try {
+    const { authService } = await import('../services/authService.js');
+    await authService.refreshToken();
+
+    // Refresh succeeded → drain the queue so all waiters can retry
+    _processQueue(null);
+
+    // Replay this request (the one that triggered the refresh)
+    return replayFn();
+  } catch (refreshError) {
+    // Refresh failed → reject every queued caller
+    _processQueue(refreshError);
+
+    // Clear local auth state
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+    window.location.href = '/login';
+    return undefined;
+  } finally {
+    _isRefreshing = false;
+  }
+};
+
+// ---------------------------------------------------------------------------
+// Core helpers
+// ---------------------------------------------------------------------------
+
+/** Safely parse a response body as JSON; returns null on failure. */
+const _tryParseJson = (text) => {
+  if (!text) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+};
+
+/** Build an ApiError from a non-OK response. */
+const _buildApiError = (status, bodyText, statusText) => {
+  const errorJson = _tryParseJson(bodyText);
+
+  let messageAr = null;
+  let messageEn = null;
+  if (errorJson) {
+    messageAr = errorJson.messageAr || errorJson.message_ar || null;
+    messageEn = errorJson.messageEn || errorJson.message_en || null;
+  }
+
+  const message =
+    (errorJson && (errorJson.message || errorJson.detail || errorJson.title)) ||
+    bodyText ||
+    statusText ||
+    'API request failed';
+
+  const error = new ApiError(`[${status}] ${message}`, status, messageAr, messageEn);
+  error.errorJson = errorJson;
+  return error;
+};
+
+// ---------------------------------------------------------------------------
+// apiRequest
+// ---------------------------------------------------------------------------
+
 // API request helper with robust error handling and safe JSON parsing
-export const apiRequest = async (url, options = {}, isRetry = false) => {
+export const apiRequest = async (url, options = {}, _isRetry = false) => {
   try {
     const response = await fetch(buildApiUrl(url), {
       ...options,
@@ -96,12 +213,8 @@ export const apiRequest = async (url, options = {}, isRetry = false) => {
       },
     });
 
-    const contentType = response.headers.get('Content-Type') || '';
-
-    // 204 No Content => return null to avoid JSON parse errors
-    if (response.status === 204) {
-      return null;
-    }
+    // 204 No Content → nothing to parse
+    if (response.status === 204) return null;
 
     // Read body once (stream is consumable only once)
     let bodyText = '';
@@ -111,128 +224,63 @@ export const apiRequest = async (url, options = {}, isRetry = false) => {
       bodyText = '';
     }
 
-    // Helper: try to parse JSON safely
-    const tryParseJson = () => {
-      if (!bodyText) return null;
-      
-      // Try to parse JSON (works with application/json and application/problem+json)
-      try {
-        return JSON.parse(bodyText);
-      } catch (e) {
-        return null;
-      }
-    };
-
-    // Handle 401/403 - try to refresh token only if user has a token (is logged in)
-    if ((response.status === 401 || response.status === 403) && !isRetry) {
-      const token = localStorage.getItem('accessToken');
-      
-      // Only attempt refresh if user was previously authenticated
-      if (token) {
-        try {
-          // Dynamically import authService to avoid circular dependency
-          const { authService } = await import('../services/authService.js');
-          await authService.refreshToken();
-          // Retry the original request with new token
-          return apiRequest(url, options, true);
-        } catch (refreshError) {
-          console.error('Token refresh failed:', refreshError);
-          // Clear tokens and redirect to login
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
-          localStorage.removeItem('user');
-          window.location.href = '/login';
-          return;
-        }
-      }
-      // If no token exists, just let the 401/403 error be handled normally
-      // This allows unauthenticated users to receive proper error messages
-      // without being redirected to login
+    // ---- 401 / 403 → queue-based refresh --------------------------------
+    if ((response.status === 401 || response.status === 403) && !_isRetry) {
+      const result = await _handleUnauthorised(
+        () => apiRequest(url, options, true),
+      );
+      // If _handleUnauthorised returned null the user was never logged in;
+      // fall through to the normal error path below.
+      if (result !== null && result !== undefined) return result;
     }
 
+    // ---- Success --------------------------------------------------------
     if (response.ok) {
-      const json = tryParseJson();
+      const json = _tryParseJson(bodyText);
       if (json !== null) return json;
-      // Fallback: return text or null if empty
       return bodyText || null;
     }
 
-    // Error path: build meaningful message from ProblemDetail (Spring) or raw text
-    const errorJson = tryParseJson();
-    
-    // Extract messages from error response
-    let messageAr = null;
-    let messageEn = null;
-    
-    if (errorJson) {
-      messageAr = errorJson.messageAr || errorJson.message_ar || null;
-      messageEn = errorJson.messageEn || errorJson.message_en || null;
-    }
-    
-    const message =
-      (errorJson && (errorJson.message || errorJson.detail || errorJson.title)) ||
-      bodyText ||
-      response.statusText ||
-      'API request failed';
-
-    // Create ApiError with bilingual support
-    const error = new ApiError(
-      `[${response.status}] ${message}`,
-      response.status,
-      messageAr,
-      messageEn
-    );
-    
-    // Attach errorJson for further processing
-    error.errorJson = errorJson;
-    
-    throw error;
+    // ---- Error ----------------------------------------------------------
+    throw _buildApiError(response.status, bodyText, response.statusText);
   } catch (error) {
-    // Handle network errors or other fetch failures
-    if (error instanceof ApiError) {
-      throw error;
-    }
-    
-    // Network error or other exception
-    const networkError = new ApiError(
+    if (error instanceof ApiError) throw error;
+
+    // Network error or other fetch failure
+    throw new ApiError(
       error.message || 'Network request failed',
-      0, // No status code for network errors
+      0,
       'خطأ في الاتصال بالشبكة. يرجى التحقق من اتصالك بالإنترنت.',
-      'Network connection error. Please check your internet connection.'
+      'Network connection error. Please check your internet connection.',
     );
-    throw networkError;
   }
 };
 
-// File upload helper
-export const uploadFile = async (file, folder = 'posts') => {
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('folder', folder);
+// ---------------------------------------------------------------------------
+// File upload helper (also uses the shared refresh queue)
+// ---------------------------------------------------------------------------
 
+export const uploadFile = async (file, folder = 'posts', _isRetry = false) => {
   const response = await fetch(buildApiUrl('/media/upload'), {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-      // Don't set Content-Type - let browser set it with boundary for multipart
+      // Don't set Content-Type – let browser set it with boundary for multipart
     },
-    body: formData,
+    body: (() => {
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('folder', folder);
+      return fd;
+    })(),
   });
 
-  if ((response.status === 401 || response.status === 403)) {
-    try {
-      const { authService } = await import('../services/authService.js');
-      await authService.refreshToken();
-      // Retry upload with new token
-      return uploadFile(file, folder);
-    } catch (refreshError) {
-      console.error('Token refresh failed:', refreshError);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
-      return;
-    }
+  // ---- 401 / 403 → same queue as apiRequest -----------------------------
+  if ((response.status === 401 || response.status === 403) && !_isRetry) {
+    const result = await _handleUnauthorised(
+      () => uploadFile(file, folder, true),
+    );
+    if (result !== null && result !== undefined) return result;
   }
 
   if (!response.ok) {
@@ -242,33 +290,22 @@ export const uploadFile = async (file, folder = 'posts') => {
     } catch {
       errorText = '';
     }
-    
-    // Try to parse JSON error response
-    let errorJson = null;
-    try {
-      errorJson = JSON.parse(errorText);
-    } catch {
-      // Not JSON, use raw text
-    }
-    
-    // Extract bilingual messages if available
+
+    const errorJson = _tryParseJson(errorText);
+
     let messageAr = null;
     let messageEn = null;
-    
     if (errorJson) {
       messageAr = errorJson.messageAr || errorJson.message_ar || null;
       messageEn = errorJson.messageEn || errorJson.message_en || null;
     }
-    
-    // Create ApiError with bilingual support
-    const error = new ApiError(
+
+    throw new ApiError(
       `[${response.status}] Upload failed`,
       response.status,
       messageAr || 'فشل رفع الملف. يرجى المحاولة مرة أخرى.',
-      messageEn || 'Upload failed. Please try again.'
+      messageEn || 'Upload failed. Please try again.',
     );
-    
-    throw error;
   }
 
   return response.json();

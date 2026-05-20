@@ -726,6 +726,63 @@ const ProductDetailsPage = () => {
 
         <Footer />
       </div>
+
+      {/* Fullscreen Image Viewer */}
+      {fullscreenImage && (
+        <div className="fullscreen-overlay" onClick={() => setFullscreenImage(false)}>
+          <button
+            className="fullscreen-close"
+            onClick={() => setFullscreenImage(false)}
+            aria-label="Close fullscreen"
+          >
+            &times;
+          </button>
+
+          {product.images.length > 1 && (
+            <button
+              className="fullscreen-nav fullscreen-prev"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedImage((prev) => (prev - 1 + product.images.length) % product.images.length);
+              }}
+              aria-label="Previous image"
+            >
+              <ChevronLeft size={32} />
+            </button>
+          )}
+
+          <div className="fullscreen-image-container" onClick={(e) => e.stopPropagation()}>
+            {product.images[selectedImage].startsWith('http') ? (
+              <img
+                src={product.images[selectedImage]}
+                alt={product.name}
+                className="fullscreen-img"
+              />
+            ) : (
+              <Gamepad2 size={200} className="fullscreen-placeholder-icon" />
+            )}
+          </div>
+
+          {product.images.length > 1 && (
+            <button
+              className="fullscreen-nav fullscreen-next"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedImage((prev) => (prev + 1) % product.images.length);
+              }}
+              aria-label="Next image"
+            >
+              <ChevronRight size={32} />
+            </button>
+          )}
+
+          {product.images.length > 1 && (
+            <div className="fullscreen-counter">
+              {selectedImage + 1} / {product.images.length}
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 };

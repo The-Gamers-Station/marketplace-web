@@ -208,6 +208,7 @@ const Header = memo(() => {
         <Link to="/" className="header-logo">
           <img src="/logo.svg" alt="GamersStation" className="logo-icon" loading="eager" />
           <span className="logo-text">GamersStation</span>
+          <span className="logo-beta">beta</span>
         </Link>
 
         {/* Navigation - removed per requirement */}

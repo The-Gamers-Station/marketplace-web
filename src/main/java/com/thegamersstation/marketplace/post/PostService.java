@@ -65,7 +65,9 @@ public class PostService {
         
         // Sanitize content
         String sanitizedTitle = contentSanitizer.sanitize(request.getTitle());
-        String sanitizedDescription = contentSanitizer.sanitize(request.getDescription());
+        String sanitizedDescription = contentSanitizer.maskPhoneNumbers(
+            contentSanitizer.sanitize(request.getDescription())
+        );
         
         // Link to store if user is a store manager
         Store store = null;
@@ -125,7 +127,9 @@ public class PostService {
         }
         
         if (request.getDescription() != null) {
-            post.setDescription(contentSanitizer.sanitize(request.getDescription()));
+            post.setDescription(contentSanitizer.maskPhoneNumbers(
+                contentSanitizer.sanitize(request.getDescription())
+            ));
         }
         
         if (request.getPrice() != null) {

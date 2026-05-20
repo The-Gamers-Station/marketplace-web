@@ -13,6 +13,14 @@ public class ContentSanitizer {
     private static final Pattern CONTROL_CHARS = Pattern.compile("[\\p{Cntrl}&&[^\n\r\t]]");
 
     /**
+     * Pattern to detect Saudi phone numbers in various formats:
+     * +966XXXXXXXXX, 966XXXXXXXXX, 05XXXXXXXX — with optional spaces or dashes.
+     */
+    private static final Pattern PHONE_PATTERN = Pattern.compile(
+        "(?:\\+?966[\\s\\-]?|0)([5-9])\\d[\\s\\-]?\\d{3}[\\s\\-]?\\d{4}"
+    );
+
+    /**
      * OWASP HTML Sanitizer policy: strips all HTML tags and attributes.
      * This is far more robust than regex-based stripping.
      */
@@ -65,6 +73,18 @@ public class ContentSanitizer {
         sanitized = sanitized.replaceAll("[!@#$%^&*()]{4,}", "***");
 
         return sanitized;
+    }
+
+    /**
+     * Replaces any phone numbers found in the content with *******.
+     * Covers Saudi formats: +966XXXXXXXXX, 966XXXXXXXXX, 05XXXXXXXX
+     * with optional spaces or dashes between digit groups.
+     */
+    public String maskPhoneNumbers(String content) {
+        if (content == null || content.isBlank()) {
+            return content;
+        }
+        return PHONE_PATTERN.matcher(content).replaceAll("*******");
     }
 
     /**

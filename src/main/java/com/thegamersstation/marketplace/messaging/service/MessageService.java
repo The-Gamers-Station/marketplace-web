@@ -13,6 +13,7 @@ import com.thegamersstation.marketplace.messaging.mapper.MessageMapper;
 import com.thegamersstation.marketplace.messaging.repository.ConversationParticipantStatusRepository;
 import com.thegamersstation.marketplace.messaging.repository.ConversationRepository;
 import com.thegamersstation.marketplace.messaging.repository.MessageRepository;
+import com.thegamersstation.marketplace.notification.EmailNotificationService;
 import com.thegamersstation.marketplace.user.repository.User;
 import com.thegamersstation.marketplace.user.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,7 @@ public class MessageService {
     private final ContentSanitizer contentSanitizer;
     private final ProfanityFilter profanityFilter;
     private final SimpMessagingTemplate messagingTemplate;
+    private final EmailNotificationService emailNotificationService;
     
     private static final int MAX_MESSAGE_LENGTH = 5000;
     private static final int DEFAULT_PAGE_SIZE = 20;
@@ -93,6 +95,14 @@ public class MessageService {
         
         // Broadcast to recipient via WebSocket
         broadcastMessage(conversationId, recipientId, messageDto);
+        
+        // Send email notification to recipient (async, non-blocking)
+        User recipient = userRepository.findById(recipientId)
+            .orElse(null);
+        if (recipient != null) {
+            emailNotificationService.sendNewMessageNotification(
+                recipient, sender, StringUtil.truncatePreview(sanitizedContent), conversationId);
+        }
         
         log.info("Message sent in conversation {} by user {}", conversationId, senderId);
         

@@ -1,18 +1,23 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import HttpApi from 'i18next-http-backend';
+
+// Bundle translations inline — eliminates the render-blocking network fetch
+import ar from '../public/locales/ar/translation.json';
+import en from '../public/locales/en/translation.json';
 
 i18n
-  .use(HttpApi)
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    // Don't force a language, let the detector handle it
+    resources: {
+      ar: { translation: ar },
+      en: { translation: en },
+    },
     supportedLngs: ['ar', 'en'],
-    fallbackLng: 'ar', // Arabic as default
-    debug: true, // Enable debug to see errors
-    
+    fallbackLng: 'ar',
+    debug: import.meta.env.DEV,
+
     // Detection options - check localStorage first
     detection: {
       order: ['localStorage', 'cookie', 'navigator'],
@@ -21,70 +26,43 @@ i18n
       lookupCookie: 'i18nextLng',
       checkWhitelist: true,
     },
-    
-    backend: {
-      loadPath: '/locales/{{lng}}/translation.json',
-      // Add request caching
-      requestOptions: {
-        cache: 'default',
-      },
-      // Add reload strategy
-      reloadInterval: false,
-      allowMultiLoading: false,
-      crossDomain: false,
-    },
-    
+
     interpolation: {
-      escapeValue: false, // React already escapes values
-      // Add format caching
-      skipOnVariables: false,
+      escapeValue: false,
     },
-    
-    // Set default namespace
+
     defaultNS: 'translation',
     ns: ['translation'],
-    
+
     // Performance optimizations
-    load: 'languageOnly', // Don't load country-specific variations
+    load: 'languageOnly',
     cleanCode: true,
     nonExplicitSupportedLngs: false,
-    
+
     // React optimizations
     react: {
-      useSuspense: false, // Disable suspense to prevent loading issues
+      useSuspense: false,
       bindI18n: 'languageChanged loaded',
       bindI18nStore: 'added removed',
       transEmptyNodeValue: '',
       transSupportBasicHtmlNodes: true,
       transKeepBasicHtmlNodesFor: ['br', 'strong', 'i'],
     },
-    
-    // Cache settings
-    partialBundledLanguages: true,
+
     simplifyPluralSuffix: true,
-    postProcess: false,
     returnNull: false,
     returnEmptyString: false,
-  })
-  .then(() => {
-    console.log('i18n initialized successfully');
-    // Set initial direction immediately after initialization
-    const currentLang = i18n.language || i18n.resolvedLanguage || 'ar';
-    const direction = currentLang === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.dir = direction;
-    document.documentElement.lang = currentLang;
-    console.log('Initial direction set:', direction, 'for language:', currentLang);
-  })
-  .catch((err) => {
-    console.error('i18n initialization failed:', err);
   });
+
+// Set initial direction
+const initLang = i18n.language || i18n.resolvedLanguage || 'ar';
+document.documentElement.dir = initLang === 'ar' ? 'rtl' : 'ltr';
+document.documentElement.lang = initLang;
 
 // Listen for language changes and update direction
 i18n.on('languageChanged', (lng) => {
-  const direction = lng === 'ar' ? 'rtl' : 'ltr';
-  document.documentElement.dir = direction;
+  document.documentElement.dir = lng === 'ar' ? 'rtl' : 'ltr';
   document.documentElement.lang = lng;
-  console.log('Language changed:', lng, 'Direction:', direction);
 });
 
 export default i18n;

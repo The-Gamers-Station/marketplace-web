@@ -88,15 +88,14 @@ export default defineConfig({
     include: [
       'react', 'react-dom', 'react-router-dom', 'react-helmet-async',
       'react-i18next', 'i18next', 'i18next-browser-languagedetector',
-      'i18next-http-backend', 'lucide-react', 'react/jsx-runtime', 'react/jsx-dev-runtime'
+      'lucide-react', 'react/jsx-runtime', 'react/jsx-dev-runtime'
     ],
     esbuildOptions: {
       define: {
         global: 'globalThis'
       },
       target: 'es2020'
-    },
-    force: true
+    }
   },
 
   build: {
@@ -118,7 +117,11 @@ export default defineConfig({
     assetsInlineLimit: 4096,
     rollupOptions: {
       output: {
-        manualChunks: undefined,
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'i18n-vendor': ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
+          'ui-vendor': ['lucide-react'],
+        },
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name.split('.');
           const extType = info[info.length - 1];

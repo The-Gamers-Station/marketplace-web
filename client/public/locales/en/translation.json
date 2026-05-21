@@ -671,7 +671,7 @@
     "subtitle": "Complete your profile to start buying and selling",
     "fields": {
       "username": "Username",
-      "email": "Email (Optional)",
+      "email": "Email",
       "city": "City"
     },
     "placeholders": {
@@ -686,6 +686,8 @@
     "errors": {
       "updateFailed": "Failed to update profile. Please try again."
     },
+    "addEmailTitle": "Add Your Email",
+    "addEmailSubtitle": "Please add your email address to continue receiving important notifications.",
     "successTitle": "Welcome to GamersStation!",
     "successMessage": "Your profile has been completed successfully. Enjoy browsing!"
   },

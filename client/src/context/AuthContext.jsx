@@ -32,6 +32,7 @@ export function AuthProvider({ children }) {
           phoneNumber: data.phoneNumber,
           role: data.role,
           profileCompleted: data.profileCompleted,
+          hasEmail: data.hasEmail,
         };
         localStorage.setItem('user', JSON.stringify(freshUser));
         setUser(freshUser);
@@ -66,6 +67,7 @@ export function AuthProvider({ children }) {
       role: response.role,
       profileCompleted: response.profileCompleted,
       isNewUser: response.isNewUser,
+      hasEmail: response.hasEmail,
     };
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);

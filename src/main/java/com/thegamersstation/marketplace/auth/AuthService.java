@@ -114,6 +114,8 @@ public class AuthService {
 
         log.info("User authenticated successfully: {} (isNew: {})", phoneNumber, user.getId() == null);
 
+        boolean hasEmail = user.getEmail() != null && !user.getEmail().isBlank();
+
         return AuthResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -124,6 +126,7 @@ public class AuthService {
                 .role(user.getRole().name())
                 .profileCompleted(user.getProfileCompleted())
                 .isNewUser(!user.getProfileCompleted())
+                .hasEmail(hasEmail)
                 .build();
     }
 
@@ -219,6 +222,8 @@ public class AuthService {
 
         log.info("Token refreshed for user: {}", userId);
 
+        boolean hasEmail = user.getEmail() != null && !user.getEmail().isBlank();
+
         return AuthResponseDto.builder()
                 .accessToken(newAccessToken)
                 .refreshToken(newRefreshToken)
@@ -228,6 +233,7 @@ public class AuthService {
                 .phoneNumber(user.getPhoneNumber())
                 .role(user.getRole().name())
                 .profileCompleted(user.getProfileCompleted())
+                .hasEmail(hasEmail)
                 .build();
     }
 

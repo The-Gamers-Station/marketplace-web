@@ -59,9 +59,9 @@ public class EmailNotificationService {
                 ? senderUser.getUsername()
                 : "Someone";
 
-        String conversationLink = frontendUrl + "/messages/" + conversationId;
+        String conversationLink = frontendUrl + "/profile?tab=messages";
 
-        String subject = senderDisplayName + " sent you a message";
+        String subject = "New message | رسالة جديدة";
         String body = buildEmailBody(senderDisplayName, messagePreview, conversationLink);
 
         try {
@@ -99,17 +99,25 @@ public class EmailNotificationService {
     private String buildEmailBody(String senderName, String messagePreview, String conversationLink) {
         return """
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                    <h2 style="color: #333;">New message from %s</h2>
-                    <div style="background-color: #f5f5f5; padding: 16px; border-radius: 8px; margin: 16px 0;">
-                        <p style="color: #555; margin: 0;">%s</p>
+                    <!-- English -->
+                    <div style="direction: ltr; text-align: left;">
+                        <h2 style="color: #333;"> New message | رسالة جديدة</h2>
+                        <div style="background-color: #f5f5f5; padding: 16px; border-radius: 8px; margin: 16px 0;">
+                            <p style="color: #555; margin: 0;">%1$s : %2$s</p>
+                        </div>
                     </div>
-                    <a href="%s"
-                       style="display: inline-block; padding: 12px 24px; background-color: #007bff;
-                              color: #fff; text-decoration: none; border-radius: 6px;">
-                        View Conversation
-                    </a>
-                    <p style="color: #999; font-size: 12px; margin-top: 24px;">
-                        You are receiving this email because you have a Gamers Station account.
+                    <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 24px 0;">
+        
+                    <div style="text-align: center; margin-top: 24px;">
+                        <a href="%3$s"
+                           style="display: inline-block; padding: 12px 24px; background-color: #007bff;
+                                  color: #fff; text-decoration: none; border-radius: 6px;">
+                            View Conversation | عرض المحادثة
+                        </a>
+                    </div>
+                    <p style="color: #999; font-size: 12px; margin-top: 24px; text-align: center;">
+                        You are receiving this email because you have a Gamers Station account.<br>
+                        تصلك هذه الرسالة لأن لديك حساب في منصة محطة اللاعبين
                     </p>
                 </div>
                 """.formatted(escapeHtml(senderName), escapeHtml(messagePreview), conversationLink);

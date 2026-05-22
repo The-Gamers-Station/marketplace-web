@@ -23,6 +23,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws")
                 .setAllowedOriginPatterns(
                     "https://thegamersstation.com",
+                    "https://gamers-station.com/",
                     "https://www.thegamersstation.com",
                     "http://localhost:[*]",
                     "http://localhost:5173",

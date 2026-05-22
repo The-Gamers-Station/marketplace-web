@@ -99,8 +99,9 @@ public class SecurityConfig {
         // Production origins + any additional origins from config (dev overrides)
         List<String> origins = new java.util.ArrayList<>(Arrays.asList(
             "https://thegamersstation.com",
-            "https://gamers-station.com/",
-            "https://www.thegamersstation.com"
+            "https://www.thegamersstation.com",
+            "https://gamers-station.com",
+            "https://www.gamers-station.com"
         ));
         if (additionalCorsOrigins != null && !additionalCorsOrigins.isBlank()) {
             origins.addAll(Arrays.asList(additionalCorsOrigins.split(",")));

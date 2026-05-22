@@ -36,7 +36,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
         Pageable pageable
     );
     
-    @Query(value = "SELECT p FROM Post p LEFT JOIN FETCH p.owner LEFT JOIN FETCH p.category LEFT JOIN FETCH p.city LEFT JOIN FETCH p.images WHERE p.status = 'ACTIVE' " +
+    @Query(value = "SELECT p FROM Post p LEFT JOIN FETCH p.owner LEFT JOIN FETCH p.category LEFT JOIN FETCH p.city WHERE p.status = 'ACTIVE' " +
            "AND (:categoryId IS NULL OR p.category.id = :categoryId OR " +
            "(p.category.parentId = :categoryId)) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
@@ -74,7 +74,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
         Pageable pageable
     );
     
-    @Query(value = "SELECT p FROM Post p LEFT JOIN FETCH p.owner LEFT JOIN FETCH p.category LEFT JOIN FETCH p.city LEFT JOIN FETCH p.images WHERE p.status = 'ACTIVE' " +
+    @Query(value = "SELECT p FROM Post p LEFT JOIN FETCH p.owner LEFT JOIN FETCH p.category LEFT JOIN FETCH p.city WHERE p.status = 'ACTIVE' " +
            "AND (p.category.id IN :categoryIds) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
            "AND (:type IS NULL OR p.type = :type) " +
@@ -98,7 +98,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
         Pageable pageable
     );
     
-    @Query(value = "SELECT p FROM Post p LEFT JOIN FETCH p.owner LEFT JOIN FETCH p.category LEFT JOIN FETCH p.city LEFT JOIN FETCH p.images " +
+    @Query(value = "SELECT p FROM Post p LEFT JOIN FETCH p.owner LEFT JOIN FETCH p.category LEFT JOIN FETCH p.city " +
            "WHERE p.status = 'ACTIVE' " +
            "AND (:query IS NULL OR :query = '' OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(p.description) LIKE LOWER(CONCAT('%', :query, '%'))) " +
            "AND (:categoryId IS NULL OR p.category.id = :categoryId OR " +

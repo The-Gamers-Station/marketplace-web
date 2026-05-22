@@ -25,13 +25,13 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
         @Param("buyer") User buyer
     );
     
-    @Query("SELECT c FROM Conversation c " +
+    @Query(value = "SELECT c FROM Conversation c " +
            "LEFT JOIN FETCH c.post p " +
-           "LEFT JOIN FETCH p.images " +
            "LEFT JOIN FETCH c.seller s " +
            "LEFT JOIN FETCH c.buyer b " +
            "WHERE (c.seller.id = :userId OR c.buyer.id = :userId) " +
-           "ORDER BY c.lastMessageAt DESC NULLS LAST")
+           "ORDER BY c.lastMessageAt DESC NULLS LAST",
+           countQuery = "SELECT COUNT(c) FROM Conversation c WHERE c.seller.id = :userId OR c.buyer.id = :userId")
     Page<Conversation> findByParticipantId(@Param("userId") Long userId, Pageable pageable);
     
     @Query("SELECT c FROM Conversation c " +

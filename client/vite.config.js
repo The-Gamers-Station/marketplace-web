@@ -55,7 +55,8 @@ export default defineConfig({
     // FIX: Allow the Nginx upstream host name
     allowedHosts: [
       'client-frontend',
-        'gamers-station.com',
+      'gamers-station.com',
+      'www.gamers-station.com',
       'thegamersstation.com',
       'www.thegamersstation.com'
     ],

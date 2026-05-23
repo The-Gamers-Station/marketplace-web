@@ -6,6 +6,8 @@ import FormInput from '../../components/FormInput/FormInput';
 import SuccessPopup from '../../components/SuccessPopup/SuccessPopup';
 import userService from '../../services/userService';
 import cityService from '../../services/cityService';
+import regionService from '../../services/regionService';
+import SearchableSelect from '../../components/SearchableSelect/SearchableSelect';
 import { showError } from '../../components/ErrorNotification/ErrorNotification';
 import './ProfileCompletePage.css';
 
@@ -17,33 +19,57 @@ const ProfileCompletePage = () => {
     email: '',
     cityId: ''
   });
+  const [regions, setRegions] = useState([]);
   const [cities, setCities] = useState([]);
+  const [selectedRegionId, setSelectedRegionId] = useState('');
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingCities, setIsLoadingCities] = useState(true);
+  const [isLoadingRegions, setIsLoadingRegions] = useState(true);
+  const [isLoadingCities, setIsLoadingCities] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   // Determine if this is an existing user who only needs to add email
   const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
   const isEmailOnlyMode = storedUser.profileCompleted && !storedUser.hasEmail;
 
-  // Fetch cities on mount
+  // Fetch regions on mount
   useEffect(() => {
-    const fetchCities = async () => {
+    const fetchRegions = async () => {
       try {
-        const citiesData = await cityService.getCities();
-        setCities(citiesData);
+        const regionsData = await regionService.getRegions();
+        setRegions(regionsData);
       } catch (error) {
-        console.error('Error fetching cities:', error);
+        console.error('Error fetching regions:', error);
         showError(error);
       } finally {
-        setIsLoadingCities(false);
+        setIsLoadingRegions(false);
       }
     };
 
-    fetchCities();
+    fetchRegions();
   }, []);
+
+  // Fetch cities when region changes
+  useEffect(() => {
+    if (selectedRegionId) {
+      const fetchCities = async () => {
+        setIsLoadingCities(true);
+        try {
+          const citiesData = await cityService.getCities(selectedRegionId);
+          setCities(citiesData);
+        } catch (error) {
+          console.error('Error fetching cities:', error);
+          showError(error);
+        } finally {
+          setIsLoadingCities(false);
+        }
+      };
+      fetchCities();
+    } else {
+      setCities([]);
+    }
+  }, [selectedRegionId]);
 
   // Pre-fill form for existing users and fetch their profile
   useEffect(() => {
@@ -284,32 +310,55 @@ const ProfileCompletePage = () => {
               />
 
               {!isEmailOnlyMode && (
-                <div className="form-group">
-                  <label className="form-label">
-                    {t('profileComplete.fields.city')} <span className="required">*</span>
-                  </label>
-                  <div className="select-wrapper">
-                    <CityIcon />
-                    <select
-                      name="cityId"
-                      value={formData.cityId}
-                      onChange={handleChange}
-                      className={`form-select ${errors.cityId ? 'error' : ''}`}
-                      disabled={isLoading || isLoadingCities}
-                      required
-                    >
-                      <option value="">{t('profileComplete.placeholders.city')}</option>
-                      {cities.map(city => (
-                        <option key={city.id} value={city.id}>
-                          {i18n.language === 'ar' ? city.nameAr : city.nameEn}
-                        </option>
-                      ))}
-                    </select>
+                <>
+                  <div className="form-group">
+                    <label className="form-label">
+                      {t('profileComplete.fields.region')} <span className="required">*</span>
+                    </label>
+                    <SearchableSelect
+                      options={regions}
+                      value={selectedRegionId}
+                      onChange={(val) => {
+                        setSelectedRegionId(val);
+                        setFormData((prev) => ({ ...prev, cityId: '' }));
+                      }}
+                      placeholder={t('profileComplete.placeholders.region')}
+                      searchPlaceholder={t('profileComplete.placeholders.searchRegion')}
+                      disabled={isLoading || isLoadingRegions}
+                      hasError={!!errors.regionId}
+                      getOptionLabel={(r) => i18n.language === 'ar' ? r.nameAr : r.nameEn}
+                      getOptionValue={(r) => r.id}
+                    />
+                    {errors.regionId && (
+                      <span className="error-text">{errors.regionId}</span>
+                    )}
                   </div>
-                  {errors.cityId && (
-                    <span className="error-text">{errors.cityId}</span>
-                  )}
-                </div>
+
+                  <div className="form-group">
+                    <label className="form-label">
+                      {t('profileComplete.fields.city')} <span className="required">*</span>
+                    </label>
+                    <SearchableSelect
+                      options={cities}
+                      value={formData.cityId}
+                      onChange={(val) => {
+                        setFormData((prev) => ({ ...prev, cityId: val }));
+                        if (errors.cityId) {
+                          setErrors((prev) => ({ ...prev, cityId: '' }));
+                        }
+                      }}
+                      placeholder={t('profileComplete.placeholders.city')}
+                      searchPlaceholder={t('profileComplete.placeholders.searchCity')}
+                      disabled={isLoading || !selectedRegionId || isLoadingCities}
+                      hasError={!!errors.cityId}
+                      getOptionLabel={(c) => i18n.language === 'ar' ? c.nameAr : c.nameEn}
+                      getOptionValue={(c) => c.id}
+                    />
+                    {errors.cityId && (
+                      <span className="error-text">{errors.cityId}</span>
+                    )}
+                  </div>
+                </>
               )}
 
               <div className="form-actions">

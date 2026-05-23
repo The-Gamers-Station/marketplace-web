@@ -28,10 +28,14 @@
 
 /* SOLD Overlay */
 .product-card-sold {
-  filter: grayscale(100%);
   pointer-events: none;
   opacity: 0.75;
   position: relative;
+}
+
+.product-card-sold .product-image,
+.product-card-sold .product-content {
+  filter: grayscale(100%);
 }
 
 .product-card-sold:hover {
@@ -61,7 +65,7 @@
   padding: 8px 24px;
   border: 3px solid rgba(255, 255, 255, 0.6);
   border-radius: 8px;
-  background: rgba(239, 68, 68, 0.7);
+  background: rgba(255, 107, 53, 0.85);
 }
 
 /* Badge */

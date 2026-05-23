@@ -36,6 +36,7 @@ import MessagesTab from '../../components/MessagesTab/MessagesTab';
 import authService from '../../services/authService';
 import userService from '../../services/userService';
 import postService from '../../services/postService';
+import MarkAsSoldModal from '../../components/MarkAsSoldModal/MarkAsSoldModal';
 import messagingService from '../../services/messagingService';
 import cityService from '../../services/cityService';
 import { uploadFile } from '../../config/api';
@@ -74,6 +75,7 @@ const ProfilePage = () => {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [cities, setCities] = useState([]);
   const [loadingCities, setLoadingCities] = useState(false);
+  const [markSoldPostId, setMarkSoldPostId] = useState(null);
 
   // Check authentication
   useEffect(() => {
@@ -593,13 +595,13 @@ const ProfilePage = () => {
                 {userPosts.length > 0 ? (
                   <div className="user-posts-list list-view">
                     {userPosts.map(post => (
-                      <div key={post.id} className="user-post-item" onClick={() => navigate(`/product/${post.id}`)}>
+                      <div key={post.id} className={`user-post-item ${post.status === 'SOLD' ? 'post-item-sold' : ''}`} onClick={() => post.status !== 'SOLD' && navigate(`/product/${post.id}`)}>
                         <div className="post-item-image">
                           <img src={post.images?.[0]?.url || `https://via.placeholder.com/150x150/1a1f36/ff6b35?text=${encodeURIComponent(post.title)}`} alt={post.title} />
+                          {post.status === 'SOLD' && (
+                            <div className="post-item-sold-badge">{t('markAsSold.soldBadge')}</div>
+                          )}
                         </div>
-                          {/* <div className="post-type-badge">
-                            {post.type === 'SELL' ? t('productType.forSale') : t('productType.wanted')}
-                          </div> */}
                         <div className="post-item-content">
                           <div className="post-item-header">
                             <h3 className="post-item-title">{post.title}</h3>
@@ -636,31 +638,48 @@ const ProfilePage = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="post-item-actions">
-                          <button
-                            className="post-action-btn edit-btn"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/edit-product/${post.id}`);
-                            }}
-                            title={t('profile.editProduct')}
-                          >
-                            <Edit size={18} />
-                            <span>{t('common.edit')}</span>
-                          </button>
-                          <button
-                            className="post-action-btn delete-btn"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setDeleteProductId(post.id);
-                              setShowDeleteModal(true);
-                            }}
-                            title={t('profile.deleteProduct')}
-                          >
-                            <Trash2 size={18} />
-                            <span>{t('common.delete')}</span>
-                          </button>
-                        </div>
+                        {post.status !== 'SOLD' ? (
+                          <div className="post-item-actions">
+                            <button
+                              className="post-action-btn edit-btn"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/edit-product/${post.id}`);
+                              }}
+                              title={t('profile.editProduct')}
+                            >
+                              <Edit size={18} />
+                              <span>{t('common.edit')}</span>
+                            </button>
+                            <button
+                              className="post-action-btn mark-sold-btn"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setMarkSoldPostId(post.id);
+                              }}
+                              title={t('markAsSold.button')}
+                            >
+                              <Package size={18} />
+                              <span>{t('markAsSold.button')}</span>
+                            </button>
+                            <button
+                              className="post-action-btn delete-btn"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setDeleteProductId(post.id);
+                                setShowDeleteModal(true);
+                              }}
+                              title={t('profile.deleteProduct')}
+                            >
+                              <Trash2 size={18} />
+                              <span>{t('common.delete')}</span>
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="post-item-actions">
+                            <span className="post-sold-label">{t('markAsSold.soldBadge')}</span>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -792,6 +811,23 @@ const ProfilePage = () => {
         autoCloseDelay={3000}
       />
       
+      {/* Mark as Sold Modal */}
+      {markSoldPostId && (
+        <MarkAsSoldModal
+          postId={markSoldPostId}
+          onClose={() => setMarkSoldPostId(null)}
+          onSuccess={async () => {
+            // Refresh posts list
+            try {
+              const posts = await postService.getMyPosts({ size: 20 });
+              setUserPosts(posts.content || []);
+            } catch (error) {
+              console.error('Error refreshing posts:', error);
+            }
+          }}
+        />
+      )}
+
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>

@@ -427,7 +427,7 @@
 }
 
 .product-brief {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.85);
   margin: 0;
   line-height: 1.6;
   font-size: 0.95rem;
@@ -448,8 +448,8 @@
 
 .price-card-actions {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 20px;
+  right: 20px;
   display: flex;
   gap: 8px;
   z-index: 100;
@@ -457,7 +457,7 @@
 
 [dir="rtl"] .price-card-actions {
   right: auto;
-  left: 12px;
+  left: 20px;
 }
 
 .price-action-btn {
@@ -576,7 +576,7 @@
 .info-cards-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 16px;
   margin: 0;
 }
 
@@ -632,14 +632,16 @@
 }
 
 .info-card-label {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .info-card-value {
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: #fff;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* Seller Information Card */
@@ -804,6 +806,20 @@
 
 .btn-contact-seller.btn-edit-product:hover {
   background: #ff5722;
+}
+
+.btn-contact-seller.btn-mark-sold {
+  background: transparent;
+  color: #10b981;
+  border: 1.5px solid #10b981;
+  box-shadow: none;
+}
+
+.btn-contact-seller.btn-mark-sold:hover {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border-color: #34d399;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
 }
 
 /* Copy Notification */
@@ -1181,7 +1197,7 @@
   }
 
   .info-cards-row {
-    gap: 10px;
+    gap: 12px;
   }
 
   .info-card {

@@ -669,12 +669,16 @@
     "fields": {
       "username": "اسم المستخدم",
       "email": "البريد الإلكتروني",
+      "region": "المنطقة",
       "city": "المدينة"
     },
     "placeholders": {
       "username": "اختر اسم مستخدم فريد",
       "email": "أدخل بريدك الإلكتروني",
-      "city": "اختر مدينتك"
+      "region": "اختر منطقتك",
+      "city": "اختر مدينتك",
+      "searchRegion": "ابحث عن منطقة...",
+      "searchCity": "ابحث عن مدينة..."
     },
     "skipForNow": "تخطي الآن",
     "saving": "جاري الحفظ...",
@@ -720,6 +724,7 @@
       "price": "السعر (ريال)",
       "condition": "الحالة",
       "type": "نوع الإعلان",
+      "region": "المنطقة",
       "city": "المدينة",
       "images": "صور المنتج"
     },
@@ -727,7 +732,10 @@
       "title": "أدخل عنوان وصفي للمنتج",
       "description": "اكتب وصف تفصيلي للمنتج...",
       "price": "أدخل السعر",
-      "selectCity": "اختر مدينتك"
+      "selectRegion": "اختر منطقتك",
+      "selectCity": "اختر مدينتك",
+      "searchRegion": "ابحث عن منطقة...",
+      "searchCity": "ابحث عن مدينة..."
     },
     "conditions": {
       "new": "جديد تماماً",
@@ -757,6 +765,7 @@
       "priceRequired": "السعر مطلوب وصحيح",
       "priceTooLong": "السعر طويل جداً",
       "priceTooHigh": "السعر يتجاوز الحد الأقصى المسموح",
+      "regionRequired": "الرجاء اختيار منطقة",
       "cityRequired": "الرجاء اختيار مدينة",
       "typeRequired": "الرجاء اختيار نوع الإعلان",
       "categoryRequired": "الرجاء اختيار الفئة",
@@ -995,6 +1004,17 @@
     "popularKeywords": "كلمات البحث الشائعة",
     "recentKeywords": "كلمات البحث السابقة",
     "deleteAll": "حذف الكل"
+  },
+  "markAsSold": {
+    "button": "تم البيع",
+    "title": "تحديد كمباع",
+    "question": "هل تم بيع المنتج عبر منصتنا؟",
+    "yes": "نعم",
+    "no": "لا",
+    "success": "تم تحديد الإعلان كمباع بنجاح!",
+    "soldBadge": "تم البيع",
+    "confirmTitle": "هل أنت متأكد؟",
+    "confirmMessage": "لا يمكن التراجع عن هذا الإجراء."
   },
   "privacyPolicy": {
     "pageTitle": "سياسة الخصوصية وشروط الاستخدام",

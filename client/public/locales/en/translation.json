@@ -672,12 +672,16 @@
     "fields": {
       "username": "Username",
       "email": "Email",
+      "region": "Region",
       "city": "City"
     },
     "placeholders": {
       "username": "Choose a unique username",
       "email": "Enter your email address",
-      "city": "Select your city"
+      "region": "Select your region",
+      "city": "Select your city",
+      "searchRegion": "Search region...",
+      "searchCity": "Search city..."
     },
     "skipForNow": "Skip for now",
     "saving": "Saving...",
@@ -723,6 +727,7 @@
       "price": "Price (SAR)",
       "condition": "Condition",
       "type": "Listing Type",
+      "region": "Region",
       "city": "City",
       "images": "Product Images"
     },
@@ -730,7 +735,10 @@
       "title": "Enter a descriptive title for your product",
       "description": "Describe your product in detail...",
       "price": "Enter price",
-      "selectCity": "Select your city"
+      "selectRegion": "Select your region",
+      "selectCity": "Select your city",
+      "searchRegion": "Search region...",
+      "searchCity": "Search city..."
     },
     "conditions": {
       "new": "Brand New",
@@ -758,6 +766,7 @@
       "priceRequired": "Valid price is required",
       "priceTooLong": "Price is too long",
       "priceTooHigh": "Price exceeds maximum allowed value",
+      "regionRequired": "Please select a region",
       "cityRequired": "Please select a city",
       "typeRequired": "Please select a listing type",
       "categoryRequired": "Please select a category",
@@ -996,6 +1005,17 @@
     "popularKeywords": "Popular Search Keywords",
     "recentKeywords": "Recent Search Keywords",
     "deleteAll": "Delete All"
+  },
+  "markAsSold": {
+    "button": "Mark as Sold",
+    "title": "Mark as Sold",
+    "question": "Was the product sold through our platform?",
+    "yes": "Yes",
+    "no": "No",
+    "success": "Post marked as sold successfully!",
+    "soldBadge": "SOLD",
+    "confirmTitle": "Are you sure?",
+    "confirmMessage": "This action cannot be undone."
   },
   "privacyPolicy": {
     "pageTitle": "Privacy Policy & Terms of Service",

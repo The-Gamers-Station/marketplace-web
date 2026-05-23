@@ -1605,6 +1605,61 @@
   box-shadow: 0 4px 15px rgba(238, 90, 111, 0.3);
 }
 
+.post-action-btn.mark-sold-btn {
+  border-color: #ff6b35;
+  color: #ff6b35;
+  background: transparent;
+}
+
+.post-action-btn.mark-sold-btn:hover {
+  background: rgba(255, 107, 53, 0.1);
+  border-color: #ff8c42;
+  color: #ff8c42;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
+}
+
+/* Sold post item */
+.post-item-sold {
+  opacity: 0.7;
+  cursor: default !important;
+}
+
+.post-item-sold:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.post-item-sold .post-item-image img {
+  filter: grayscale(80%);
+}
+
+.post-item-sold-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(239, 68, 68, 0.85);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.post-sold-label {
+  padding: 6px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
 /* Condition Badge */
 .post-condition-badge {
   padding: 4px 10px;

@@ -283,6 +283,7 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
             originalPrice={product.originalPrice}
             condition={product.condition}
             type={product.type}
+            status={product.status}
           />
         ))}
       </div>

@@ -30,6 +30,7 @@ import OptimizedImage from '../../components/OptimizedImage/OptimizedImage';
 import userService from '../../services/userService';
 import { getTranslatedCityName } from '../../utils/cityTranslations';
 import { showError } from '../../components/ErrorNotification/ErrorNotification';
+import MarkAsSoldModal from '../../components/MarkAsSoldModal/MarkAsSoldModal';
 import './ProductDetailsPage.css';
 
 const ProductDetailsPage = () => {
@@ -49,6 +50,7 @@ const ProductDetailsPage = () => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [fullscreenImage, setFullscreenImage] = useState(false);
   const [sellerAdCount, setSellerAdCount] = useState(0);
+  const [showMarkSoldModal, setShowMarkSoldModal] = useState(false);
 
   useEffect(() => {
     fetchProductDetails();
@@ -533,18 +535,27 @@ const ProductDetailsPage = () => {
               {(() => {
                 const currentUser = authService.getCurrentUser();
                 const isOwner = currentUser && currentUser.userId === product.seller.id;
-                if (isOwner) {
+                if (isOwner && postType !== 'SOLD' && product.availability !== t('pages.productDetails.unavailable')) {
                   return (
-                    <button
-                      className="btn-contact-seller btn-edit-product"
-                      onClick={() => navigate(`/edit-product/${product.id}`)}
-                    >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      <span>{t('common.edit')}</span>
-                    </button>
+                    <>
+                      <button
+                        className="btn-contact-seller btn-edit-product"
+                        onClick={() => navigate(`/edit-product/${product.id}`)}
+                      >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span>{t('common.edit')}</span>
+                      </button>
+                      <button
+                        className="btn-contact-seller btn-mark-sold"
+                        onClick={() => setShowMarkSoldModal(true)}
+                      >
+                        <Check size={20} />
+                        <span>{t('markAsSold.button')}</span>
+                      </button>
+                    </>
                   );
                 }
                 return null;
@@ -726,6 +737,15 @@ const ProductDetailsPage = () => {
 
         <Footer />
       </div>
+
+      {/* Mark as Sold Modal */}
+      {showMarkSoldModal && (
+        <MarkAsSoldModal
+          postId={product.id}
+          onClose={() => setShowMarkSoldModal(false)}
+          onSuccess={() => fetchProductDetails()}
+        />
+      )}
 
       {/* Fullscreen Image Viewer */}
       {fullscreenImage && (

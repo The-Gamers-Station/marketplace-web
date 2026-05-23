@@ -7,9 +7,11 @@ import FormInput from "../../components/FormInput/FormInput";
 import Footer from "../../components/Footer/Footer";
 import postService from "../../services/postService";
 import cityService from "../../services/cityService";
+import regionService from "../../services/regionService";
 import authService from "../../services/authService";
 import { uploadFile } from "../../config/api";
 import { showError } from "../../components/ErrorNotification/ErrorNotification";
+import SearchableSelect from "../../components/SearchableSelect/SearchableSelect";
 import "./AddProductPage.css";
 
 // Icon components defined outside to prevent re-creation on every render
@@ -146,8 +148,11 @@ const AddProductPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [regions, setRegions] = useState([]);
   const [cities, setCities] = useState([]);
-  const [loadingCities, setLoadingCities] = useState(true);
+  const [selectedRegionId, setSelectedRegionId] = useState("");
+  const [loadingRegions, setLoadingRegions] = useState(true);
+  const [loadingCities, setLoadingCities] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
@@ -257,10 +262,19 @@ const AddProductPage = () => {
     },
   ];
 
-  // Fetch cities on mount
+  // Fetch regions on mount
   useEffect(() => {
-    fetchCities();
+    fetchRegions();
   }, []);
+
+  // Fetch cities when region changes
+  useEffect(() => {
+    if (selectedRegionId) {
+      fetchCities(selectedRegionId);
+    } else {
+      setCities([]);
+    }
+  }, [selectedRegionId]);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -269,9 +283,22 @@ const AddProductPage = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const fetchCities = async () => {
+  const fetchRegions = async () => {
     try {
-      const citiesData = await cityService.getCities();
+      const regionsData = await regionService.getRegions();
+      setRegions(regionsData);
+    } catch (error) {
+      console.error("Error fetching regions:", error);
+      showError(error);
+    } finally {
+      setLoadingRegions(false);
+    }
+  };
+
+  const fetchCities = async (regionId) => {
+    setLoadingCities(true);
+    try {
+      const citiesData = await cityService.getCities(regionId);
       setCities(citiesData);
     } catch (error) {
       console.error("Error fetching cities:", error);
@@ -380,6 +407,10 @@ const AddProductPage = () => {
       newErrors.price =
         t("addProduct.errors.priceTooHigh") ||
         "Price exceeds maximum allowed value";
+    }
+
+    if (!selectedRegionId) {
+      newErrors.regionId = t("addProduct.errors.regionRequired");
     }
 
     if (!formData.cityId) {
@@ -852,29 +883,53 @@ const AddProductPage = () => {
                   </div>
 
                   <div className="input-group">
-                    <label htmlFor="cityId">
+                    <label>
+                      <LocationIcon />
+                      {t("addProduct.fields.region")}
+                    </label>
+                    <SearchableSelect
+                      options={regions}
+                      value={selectedRegionId}
+                      onChange={(val) => {
+                        setSelectedRegionId(val);
+                        setFormData((prev) => ({ ...prev, cityId: "" }));
+                        if (errors.regionId) {
+                          setErrors((prev) => ({ ...prev, regionId: "" }));
+                        }
+                      }}
+                      placeholder={t("addProduct.placeholders.selectRegion")}
+                      searchPlaceholder={t("addProduct.placeholders.searchRegion")}
+                      disabled={loadingRegions}
+                      hasError={!!errors.regionId}
+                      getOptionLabel={(r) => i18n.language === "ar" ? r.nameAr : r.nameEn}
+                      getOptionValue={(r) => r.id}
+                    />
+                    {errors.regionId && (
+                      <span className="field-error">{errors.regionId}</span>
+                    )}
+                  </div>
+
+                  <div className="input-group">
+                    <label>
                       <LocationIcon />
                       {t("addProduct.fields.city")}
                     </label>
-                    <select
-                      id="cityId"
-                      name="cityId"
+                    <SearchableSelect
+                      options={cities}
                       value={formData.cityId}
-                      onChange={handleChange}
-                      className={`select-input ${
-                        errors.cityId ? "has-error" : ""
-                      }`}
-                      disabled={loadingCities}
-                    >
-                      <option value="">
-                        {t("addProduct.placeholders.selectCity")}
-                      </option>
-                      {cities.map((city) => (
-                        <option key={city.id} value={city.id}>
-                          {i18n.language === "ar" ? city.nameAr : city.nameEn}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(val) => {
+                        setFormData((prev) => ({ ...prev, cityId: val }));
+                        if (errors.cityId) {
+                          setErrors((prev) => ({ ...prev, cityId: "" }));
+                        }
+                      }}
+                      placeholder={t("addProduct.placeholders.selectCity")}
+                      searchPlaceholder={t("addProduct.placeholders.searchCity")}
+                      disabled={!selectedRegionId || loadingCities}
+                      hasError={!!errors.cityId}
+                      getOptionLabel={(c) => i18n.language === "ar" ? c.nameAr : c.nameEn}
+                      getOptionValue={(c) => c.id}
+                    />
                     {errors.cityId && (
                       <span className="field-error">{errors.cityId}</span>
                     )}

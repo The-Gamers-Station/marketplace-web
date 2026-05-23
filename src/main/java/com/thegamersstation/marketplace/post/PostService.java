@@ -10,6 +10,7 @@ import com.thegamersstation.marketplace.city.City;
 import com.thegamersstation.marketplace.city.CityRepository;
 import com.thegamersstation.marketplace.common.exception.ResourceNotFoundException;
 import com.thegamersstation.marketplace.common.util.ContentSanitizer;
+import com.thegamersstation.marketplace.media.MediaService;
 import com.thegamersstation.marketplace.store.Store;
 import com.thegamersstation.marketplace.store.StoreRepository;
 import com.thegamersstation.marketplace.user.repository.User;
@@ -42,6 +43,7 @@ public class PostService {
     private final StoreRepository storeRepository;
     private final PostMapper postMapper;
     private final ContentSanitizer contentSanitizer;
+    private final MediaService mediaService;
     
     @Transactional
     public PostDto createPost(CreatePostRequest request, Long userId) {
@@ -91,12 +93,13 @@ public class PostService {
             .images(new ArrayList<>())
             .build();
         
-        // Add images
+        // Add images with derived thumbnail URLs
         for (int i = 0; i < request.getImageUrls().size(); i++) {
+            String imageUrl = request.getImageUrls().get(i);
             PostImage image = PostImage.builder()
                 .post(post)
-                .url(request.getImageUrls().get(i))
-                .thumbnailUrl(request.getImageUrls().get(i)) // TODO: Generate thumbnails
+                .url(imageUrl)
+                .thumbnailUrl(mediaService.deriveThumbnailUrl(imageUrl))
                 .sortOrder(i)
                 .build();
             post.getImages().add(image);
@@ -162,12 +165,13 @@ public class PostService {
             // Flush to ensure old images are deleted before adding new ones
             postRepository.flush();
             
-            // Add new images
+            // Add new images with derived thumbnail URLs
             for (int i = 0; i < request.getImageUrls().size(); i++) {
+                String imageUrl = request.getImageUrls().get(i);
                 PostImage image = PostImage.builder()
                     .post(post)
-                    .url(request.getImageUrls().get(i))
-                    .thumbnailUrl(request.getImageUrls().get(i))
+                    .url(imageUrl)
+                    .thumbnailUrl(mediaService.deriveThumbnailUrl(imageUrl))
                     .sortOrder(i)
                     .build();
                 post.getImages().add(image);

@@ -203,12 +203,14 @@ class PostService {
   
   // Transform backend post to frontend product format
   transformPostToProduct(post) {
+    const firstImage = post.images && post.images.length > 0 ? post.images[0] : null;
     return {
       id: post.id,
       title: post.title,
       price: post.price || post.priceMin,
       originalPrice: post.priceMax, // Use priceMax as original price for discount calculation
-      image: post.images && post.images.length > 0 ? post.images[0].url : '/placeholder.jpg',
+      image: firstImage ? firstImage.url : '/placeholder.jpg',
+      thumbnailUrl: firstImage ? (firstImage.thumbnailUrl || firstImage.url) : '/placeholder.jpg',
       images: post.images || [],
       rating: 4.5, // Default rating since backend doesn't have ratings yet
       reviews: 0, // Default reviews count

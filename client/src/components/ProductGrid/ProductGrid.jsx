@@ -278,6 +278,7 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
             title={product.title}
             price={product.price}
             image={product.image}
+            thumbnailUrl={product.thumbnailUrl}
             isHighlighted={product.isNew}
             badge={product.onSale ? (i18n.language === 'ar' ? 'عرض' : 'Sale') : null}
             username={product.ownerUsername}

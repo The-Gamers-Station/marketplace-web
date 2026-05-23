@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapPin, ArrowLeft } from 'lucide-react';
 import { getTranslatedCityName } from '../../utils/cityTranslations';
+import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import './ProductCard.css';
 
 const AVATAR_COLORS = [
@@ -34,6 +35,7 @@ const ProductCard = ({
   title,
   price,
   image,
+  thumbnailUrl,
   isHighlighted,
   badge,
   username,
@@ -78,15 +80,15 @@ const ProductCard = ({
       )}
       
       <div className="product-image">
-        <img
-          src={image || '/placeholder-game.svg'}
+        <OptimizedImage
+          src={thumbnailUrl || image || '/placeholder-game.svg'}
           alt={t('imageAlt.productImage', { productName: title }) || title}
           className="product-img"
-          loading="lazy"
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = '/placeholder-game.svg';
-          }}
+          width="100%"
+          height="220px"
+          objectFit="cover"
+          placeholder="/placeholder-game.svg"
+          enableBlur={false}
         />
       </div>
 

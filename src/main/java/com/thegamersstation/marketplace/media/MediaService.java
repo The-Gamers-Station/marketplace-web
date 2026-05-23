@@ -12,6 +12,10 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
+import net.coobird.thumbnailator.Thumbnails;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -56,6 +60,9 @@ public class MediaService {
             "jpg", "jpeg", "png", "webp", "gif"
     );
 
+    private static final int THUMBNAIL_WIDTH = 400;
+    private static final double THUMBNAIL_QUALITY = 0.80;
+
     /**
      * Whitelist of allowed upload folder names to prevent path traversal.
      */
@@ -94,31 +101,33 @@ public class MediaService {
     }
 
     /**
-     * Upload image file
+     * Upload image file with automatic thumbnail generation.
      * @param file Multipart file to upload
-     * @param folder Folder/path prefix (e.g., "avatars", "ads", "stores")
-     * @return Public URL of uploaded image (CloudFront URL for S3, local URL otherwise)
+     * @param folder Folder/path prefix (e.g., "avatars", "posts", "stores")
+     * @return Result containing public URLs for both the original and thumbnail image
      */
-    public String uploadImage(MultipartFile file, String folder) {
+    public ImageUploadResult uploadImage(MultipartFile file, String folder) {
         validateFolder(folder);
         validateImage(file);
 
         if ("s3".equalsIgnoreCase(storageProvider) && s3Client != null) {
             try {
-                return uploadToS3(file, folder);
+                return uploadToS3WithThumbnail(file, folder);
             } catch (BusinessRuleException ex) {
                 log.warn("S3 upload failed, falling back to local storage: {}", ex.getMessage());
-                return uploadToLocal(file, folder);
+                String localUrl = uploadToLocal(file, folder);
+                return new ImageUploadResult(localUrl, localUrl);
             }
         } else {
-            return uploadToLocal(file, folder);
+            String localUrl = uploadToLocal(file, folder);
+            return new ImageUploadResult(localUrl, localUrl);
         }
     }
 
     /**
-     * Upload multiple images
+     * Upload multiple images with thumbnail generation.
      */
-    public List<String> uploadImages(List<MultipartFile> files, String folder) {
+    public List<ImageUploadResult> uploadImages(List<MultipartFile> files, String folder) {
         if (files == null || files.isEmpty()) {
             return Collections.emptyList();
         }
@@ -126,6 +135,22 @@ public class MediaService {
         return files.stream()
                 .map(file -> uploadImage(file, folder))
                 .toList();
+    }
+
+    /**
+     * Derive the thumbnail URL from an original image URL using naming convention.
+     * e.g. "https://cdn.cloudfront.net/posts/uuid.jpg" → "https://cdn.cloudfront.net/posts/uuid-thumb.jpg"
+     * For URLs that don't follow the convention, returns the original URL as fallback.
+     */
+    public String deriveThumbnailUrl(String originalUrl) {
+        if (originalUrl == null || originalUrl.isBlank()) {
+            return originalUrl;
+        }
+        int dotIndex = originalUrl.lastIndexOf('.');
+        if (dotIndex <= 0) {
+            return originalUrl;
+        }
+        return originalUrl.substring(0, dotIndex) + "-thumb" + originalUrl.substring(dotIndex);
     }
 
     /**
@@ -302,44 +327,58 @@ public class MediaService {
     }
 
     /**
-     * Upload to AWS S3
+     * Upload original image + thumbnail to AWS S3.
      */
-    private String uploadToS3(MultipartFile file, String folder) {
+    private ImageUploadResult uploadToS3WithThumbnail(MultipartFile file, String folder) {
         try {
             // Generate unique key
             String originalFilename = file.getOriginalFilename();
             String extension = getFileExtension(originalFilename);
-            String uniqueFilename = UUID.randomUUID() + "." + extension;
-            String s3Key = folder + "/" + uniqueFilename;
+            String baseName = UUID.randomUUID().toString();
+            String s3Key = folder + "/" + baseName + "." + extension;
+            String thumbS3Key = folder + "/" + baseName + "-thumb." + extension;
 
-            // Prepare S3 metadata
             String contentType = file.getContentType();
+            byte[] originalBytes = file.getBytes();
 
-            // Upload to S3 with public-read ACL
-            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+            // 1) Upload original
+            PutObjectRequest putOriginal = PutObjectRequest.builder()
                     .bucket(s3BucketName)
                     .key(s3Key)
                     .contentType(contentType)
-                    .contentLength(file.getSize())
+                    .contentLength((long) originalBytes.length)
+                    .cacheControl("public, max-age=31536000, immutable")
                     .build();
+            s3Client.putObject(putOriginal, RequestBody.fromBytes(originalBytes));
 
-            s3Client.putObject(
-                    putObjectRequest,
-                    RequestBody.fromBytes(file.getBytes())
-            );
+            // 2) Generate and upload thumbnail
+            byte[] thumbBytes = generateThumbnail(originalBytes, extension);
+            PutObjectRequest putThumb = PutObjectRequest.builder()
+                    .bucket(s3BucketName)
+                    .key(thumbS3Key)
+                    .contentType(contentType)
+                    .contentLength((long) thumbBytes.length)
+                    .cacheControl("public, max-age=31536000, immutable")
+                    .build();
+            s3Client.putObject(putThumb, RequestBody.fromBytes(thumbBytes));
 
-            // Return CloudFront URL if configured, otherwise S3 URL
-            String publicUrl;
+            // Build public URLs
+            String originalUrl;
+            String thumbnailUrl;
             if (cloudFrontDomain != null && !cloudFrontDomain.isBlank()) {
-                publicUrl = "https://" + cloudFrontDomain + "/" + s3Key;
-                log.info("Image uploaded to S3 (via CloudFront): {}", publicUrl);
+                originalUrl = "https://" + cloudFrontDomain + "/" + s3Key;
+                thumbnailUrl = "https://" + cloudFrontDomain + "/" + thumbS3Key;
             } else {
-                publicUrl = String.format("https://%s.s3.%s.amazonaws.com/%s", 
-                        s3BucketName, s3Region, s3Key);
-                log.info("Image uploaded to S3: {}", publicUrl);
+                String base = String.format("https://%s.s3.%s.amazonaws.com/", s3BucketName, s3Region);
+                originalUrl = base + s3Key;
+                thumbnailUrl = base + thumbS3Key;
             }
 
-            return publicUrl;
+            log.info("Image uploaded to S3: original={}, thumbnail={} ({}KB → {}KB)",
+                    originalUrl, thumbnailUrl,
+                    originalBytes.length / 1024, thumbBytes.length / 1024);
+
+            return new ImageUploadResult(originalUrl, thumbnailUrl);
 
         } catch (S3Exception e) {
             log.error("Failed to upload image to S3: {}", e.awsErrorDetails().errorMessage(), e);
@@ -348,12 +387,32 @@ public class MediaService {
                 "فشل رفع الصورة. يرجى المحاولة مرة أخرى."
             );
         } catch (IOException e) {
-            log.error("Failed to read image file", e);
+            log.error("Failed to read/process image file", e);
             throw new BusinessRuleException(
                 "Failed to upload image. Please try again.",
                 "فشل رفع الصورة. يرجى المحاولة مرة أخرى."
             );
         }
+    }
+
+    /**
+     * Generate a resized thumbnail using Thumbnailator.
+     * Resizes to THUMBNAIL_WIDTH maintaining aspect ratio and compresses.
+     */
+    private byte[] generateThumbnail(byte[] originalBytes, String extension) throws IOException {
+        String outputFormat = switch (extension.toLowerCase()) {
+            case "png" -> "png";
+            case "gif" -> "gif";
+            default -> "jpeg";
+        };
+
+        ByteArrayOutputStream thumbOut = new ByteArrayOutputStream();
+        Thumbnails.of(new ByteArrayInputStream(originalBytes))
+                .width(THUMBNAIL_WIDTH)
+                .outputQuality(THUMBNAIL_QUALITY)
+                .outputFormat(outputFormat)
+                .toOutputStream(thumbOut);
+        return thumbOut.toByteArray();
     }
 
     /**
@@ -448,4 +507,9 @@ public class MediaService {
         }
         return filename.substring(filename.lastIndexOf('.') + 1);
     }
+
+    /**
+     * Result record for image upload containing both original and thumbnail URLs.
+     */
+    public record ImageUploadResult(String url, String thumbnailUrl) {}
 }

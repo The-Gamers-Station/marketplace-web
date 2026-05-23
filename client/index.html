@@ -123,13 +123,11 @@
     
     <!-- Inline Script to Remove Loader -->
     <script>
-      // Remove loader once React mounts
-      window.addEventListener('DOMContentLoaded', function() {
-        setTimeout(function() {
-          const loader = document.getElementById('initial-loader');
-          if (loader) loader.style.display = 'none';
-        }, 100);
-      });
+      // Remove loader once React mounts (called from main.jsx)
+      window.__removeInitialLoader = function() {
+        var loader = document.getElementById('initial-loader');
+        if (loader) loader.remove();
+      };
       
       // Network Information API
       if ('connection' in navigator) {

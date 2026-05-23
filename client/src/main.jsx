@@ -13,6 +13,9 @@ createRoot(document.getElementById('root')).render(
   <App />
 )
 
+// Remove the static HTML loader now that React has mounted
+if (window.__removeInitialLoader) window.__removeInitialLoader();
+
 // Register service worker for offline functionality and performance
 serviceWorkerRegistration.register({
   onSuccess: () => {

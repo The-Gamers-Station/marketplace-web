@@ -997,6 +997,17 @@
     "recentKeywords": "Recent Search Keywords",
     "deleteAll": "Delete All"
   },
+  "markAsSold": {
+    "button": "Mark as Sold",
+    "title": "Mark as Sold",
+    "question": "Was the product sold through our platform?",
+    "yes": "Yes",
+    "no": "No",
+    "success": "Post marked as sold successfully!",
+    "soldBadge": "SOLD",
+    "confirmTitle": "Are you sure?",
+    "confirmMessage": "This action cannot be undone."
+  },
   "privacyPolicy": {
     "pageTitle": "Privacy Policy & Terms of Service",
     "pageDescription": "Privacy Policy and Terms of Service for Gamers Station marketplace",

@@ -41,6 +41,7 @@ const ProductCard = ({
   username,
   location,
   condition,
+  status,
 }) => {
   const { t, i18n } = useTranslation();
   const isArabic = i18n.language === 'ar';
@@ -59,13 +60,24 @@ const ProductCard = ({
     return map[cond] || cond;
   };
 
+  const isSold = status === 'SOLD';
+
   const handleCardClick = (e) => {
+    if (isSold) {
+      e.preventDefault();
+      return;
+    }
     e.preventDefault();
     window.location.href = `/product/${id}`;
   };
 
   return (
-    <a href={`/product/${id}`} className={`product-card ${isHighlighted ? 'highlighted' : ''}`} onClick={handleCardClick} style={{ textDecoration: 'none', color: 'inherit' }}>
+    <a href={isSold ? undefined : `/product/${id}`} className={`product-card ${isHighlighted ? 'highlighted' : ''} ${isSold ? 'product-card-sold' : ''}`} onClick={handleCardClick} style={{ textDecoration: 'none', color: 'inherit' }}>
+      {isSold && (
+        <div className="sold-overlay">
+          <span className="sold-overlay-text">{t('markAsSold.soldBadge')}</span>
+        </div>
+      )}
       {badge && (
         <div className="badge-container">
           <span className="product-badge">{badge}</span>

@@ -2,6 +2,7 @@ package com.thegamersstation.marketplace.post;
 
 import com.thegamersstation.marketplace.post.dto.PostDto;
 import com.thegamersstation.marketplace.post.dto.CreatePostRequest;
+import com.thegamersstation.marketplace.post.dto.MarkAsSoldRequest;
 import com.thegamersstation.marketplace.post.dto.UpdatePostRequest;
 import com.thegamersstation.marketplace.common.dto.PageResponseDto;
 import com.thegamersstation.marketplace.security.SecurityUtil;
@@ -157,9 +158,12 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Mark Post as sold")
-    public ResponseEntity<Void> markAsSold(@PathVariable Long id) {
+    public ResponseEntity<Void> markAsSold(
+        @PathVariable Long id,
+        @Valid @RequestBody MarkAsSoldRequest request
+    ) {
         Long userId = SecurityUtil.getCurrentUserId();
-        PostService.markAsSold(id, userId);
+        PostService.markAsSold(id, userId, request.getSoldThroughPlatform());
         return ResponseEntity.noContent().build();
     }
 }

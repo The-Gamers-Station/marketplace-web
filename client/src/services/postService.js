@@ -181,9 +181,10 @@ class PostService {
   }
   
   // Mark post as sold
-  async markAsSold(id) {
+  async markAsSold(id, soldThroughPlatform) {
     const response = await apiRequest(API_ENDPOINTS.posts.markAsSold(id), {
       method: 'POST',
+      body: JSON.stringify({ soldThroughPlatform }),
     });
     return response;
   }
@@ -220,6 +221,7 @@ class PostService {
       condition: post.condition,
       type: post.type,
       status: post.status,
+      sold: post.sold || post.status === 'SOLD',
       cityName: post.cityName,
       cityId: post.cityId,
       ownerId: post.ownerId,

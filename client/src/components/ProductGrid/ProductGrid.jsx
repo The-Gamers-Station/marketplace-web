@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, ChevronDown, ArrowUpDown, Check } from 'lucide-react';
 import ProductCard from '../ProductCard/ProductCard';
 import postService from '../../services/postService';
-import { GameSpinner, SkeletonLoader } from '../Loading/Loading';
+import { SkeletonLoader } from '../Loading/Loading';
 import './ProductGrid.css';
 
 const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPrice, maxPrice, condition, sortBy: externalSortBy, direction: externalDirection, postType, hideLoadMore = false }) => {
@@ -117,9 +117,6 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
   if (loading) {
     return (
       <div className="product-grid">
-        <div className="loading-container">
-          <GameSpinner size="large" text={t('common.loading')} />
-        </div>
         <SkeletonLoader type="card" count={6} />
       </div>
     );

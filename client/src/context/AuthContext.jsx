@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, startTransition } from 'react';
 import authService from '../services/authService';
 
 const AuthContext = createContext(null);
@@ -15,8 +15,10 @@ export function AuthProvider({ children }) {
     const bootstrap = async () => {
       // No tokens stored at all → user is not logged in
       if (!authService.hasTokens()) {
-        setIsAuthenticated(false);
-        setIsLoading(false);
+        startTransition(() => {
+          setIsAuthenticated(false);
+          setIsLoading(false);
+        });
         return;
       }
 
@@ -35,18 +37,22 @@ export function AuthProvider({ children }) {
           hasEmail: data.hasEmail,
         };
         localStorage.setItem('user', JSON.stringify(freshUser));
-        setUser(freshUser);
-        setIsAuthenticated(true);
+        startTransition(() => {
+          setUser(freshUser);
+          setIsAuthenticated(true);
+        });
       } catch {
         if (cancelled) return;
 
         // Refresh failed → session is invalid, user must re-authenticate
         authService.clearTokens();
-        setUser(null);
-        setIsAuthenticated(false);
+        startTransition(() => {
+          setUser(null);
+          setIsAuthenticated(false);
+        });
       } finally {
         if (!cancelled) {
-          setIsLoading(false);
+          startTransition(() => setIsLoading(false));
         }
       }
     };

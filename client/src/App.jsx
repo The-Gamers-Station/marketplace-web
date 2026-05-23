@@ -6,6 +6,8 @@ import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import ErrorNotification, { showError } from './components/ErrorNotification/ErrorNotification';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+// LandingPage is always needed first — import directly to avoid Suspense on initial load
+import LandingPage from './pages/LandingPage/LandingPage';
 import './App.css';
 
 // Error Boundary Component
@@ -81,10 +83,7 @@ const lazyWithRetry = (componentImport) => {
   });
 };
 
-// Lazy load pages for better performance with preloading
-const LandingPage = lazyWithRetry(() =>
-  import(/* webpackChunkName: "landing" */ './pages/LandingPage/LandingPage')
-);
+// Lazy load all other pages (LandingPage is a direct import above)
 const FAQPage = lazyWithRetry(() =>
   import(/* webpackChunkName: "faq" */ './pages/FAQPage/FAQPage')
 );

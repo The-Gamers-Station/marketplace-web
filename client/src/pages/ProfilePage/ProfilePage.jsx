@@ -375,7 +375,18 @@ const ProfilePage = () => {
   };
 
   if (loading) {
-    return <PageLoader message={t('common.loading')} />;
+    return (
+      <>
+        <Header />
+        <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '100%', maxWidth: '900px', padding: '20px' }}>
+            <div className="skeleton" style={{ height: '200px', borderRadius: '16px', marginBottom: '24px' }} />
+            <div className="skeleton" style={{ height: '80px', borderRadius: '12px', marginBottom: '16px' }} />
+            <div className="skeleton" style={{ height: '400px', borderRadius: '12px' }} />
+          </div>
+        </main>
+      </>
+    );
   }
 
   // If no user data, show error

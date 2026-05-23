@@ -4,7 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import ErrorNotification, { showError } from './components/ErrorNotification/ErrorNotification';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 // LandingPage is always needed first — import directly to avoid Suspense on initial load
 import LandingPage from './pages/LandingPage/LandingPage';
@@ -146,6 +146,42 @@ const PageLoader = memo(() => {
 
 PageLoader.displayName = 'PageLoader';
 
+// Renders routes — shows PageLoader while auth bootstraps, then renders content once.
+// This gives a single clean loading state instead of multiple Suspense flickers.
+function AppContent() {
+  const { isLoading } = useAuth();
+
+  if (isLoading) return <PageLoader />;
+
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/products" element={<AllProductsPage />} />
+        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/product/:id" element={<ProductDetailsPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+
+        {/* Protected routes — require authentication */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/profile/complete" element={<ProfileCompletePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/add-product" element={<AddProductPage />} />
+          <Route path="/edit-product/:id" element={<EditProductPage />} />
+          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/chat/:chatId" element={<ChatPage />} />
+        </Route>
+
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Suspense>
+  );
+}
+
 function App() {
   const { i18n } = useTranslation();
 
@@ -232,31 +268,7 @@ function App() {
             <div className="App">
               <ScrollToTop />
               <ErrorNotification />
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  {/* Public routes */}
-                  <Route path="/" element={<LandingPage />} />
-                  <Route path="/products" element={<AllProductsPage />} />
-                  <Route path="/faq" element={<FAQPage />} />
-                  <Route path="/contact" element={<ContactPage />} />
-                  <Route path="/product/:id" element={<ProductDetailsPage />} />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/register" element={<RegisterPage />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-
-                  {/* Protected routes — require authentication */}
-                  <Route element={<ProtectedRoute />}>
-                    <Route path="/profile/complete" element={<ProfileCompletePage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
-                    <Route path="/add-product" element={<AddProductPage />} />
-                    <Route path="/edit-product/:id" element={<EditProductPage />} />
-                    <Route path="/chat" element={<ChatPage />} />
-                    <Route path="/chat/:chatId" element={<ChatPage />} />
-                  </Route>
-
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-              </Suspense>
+              <AppContent />
             </div>
           </Router>
         </AuthProvider>

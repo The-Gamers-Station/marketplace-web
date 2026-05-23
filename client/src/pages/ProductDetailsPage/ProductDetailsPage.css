@@ -806,6 +806,20 @@
   background: #ff5722;
 }
 
+.btn-contact-seller.btn-mark-sold {
+  background: transparent;
+  color: #ff6b35;
+  border: 1.5px solid #ff6b35;
+  box-shadow: none;
+}
+
+.btn-contact-seller.btn-mark-sold:hover {
+  background: rgba(255, 107, 53, 0.1);
+  color: #ff8c42;
+  border-color: #ff8c42;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
+}
+
 /* Copy Notification */
 .copy-notification {
   position: fixed;

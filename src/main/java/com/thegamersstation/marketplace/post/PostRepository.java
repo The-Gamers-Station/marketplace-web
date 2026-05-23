@@ -22,7 +22,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
     @Query("SELECT p FROM Post p WHERE p.status = :status")
     Page<Post> findByStatus(@Param("status") Post.PostStatus status, Pageable pageable);
     
-    @Query("SELECT p FROM Post p WHERE p.status = 'ACTIVE' " +
+    @Query("SELECT p FROM Post p WHERE p.status IN ('ACTIVE', 'SOLD') " +
            "AND (:categoryId IS NULL OR p.category.id = :categoryId OR " +
            "(p.category.parentId = :categoryId)) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
@@ -36,7 +36,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
         Pageable pageable
     );
     
-    @Query(value = "SELECT p FROM Post p LEFT JOIN FETCH p.owner LEFT JOIN FETCH p.category LEFT JOIN FETCH p.city WHERE p.status = 'ACTIVE' " +
+    @Query(value = "SELECT p FROM Post p LEFT JOIN FETCH p.owner LEFT JOIN FETCH p.category LEFT JOIN FETCH p.city WHERE p.status IN ('ACTIVE', 'SOLD') " +
            "AND (:categoryId IS NULL OR p.category.id = :categoryId OR " +
            "(p.category.parentId = :categoryId)) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
@@ -44,7 +44,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
            "AND (:condition IS NULL OR p.condition = :condition) " +
            "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
            "AND (:maxPrice IS NULL OR p.price <= :maxPrice)",
-           countQuery = "SELECT COUNT(p) FROM Post p WHERE p.status = 'ACTIVE' " +
+           countQuery = "SELECT COUNT(p) FROM Post p WHERE p.status IN ('ACTIVE', 'SOLD') " +
            "AND (:categoryId IS NULL OR p.category.id = :categoryId OR (p.category.parentId = :categoryId)) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
            "AND (:type IS NULL OR p.type = :type) " +
@@ -61,7 +61,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
         Pageable pageable
     );
     
-    @Query("SELECT p FROM Post p WHERE p.status = 'ACTIVE' " +
+    @Query("SELECT p FROM Post p WHERE p.status IN ('ACTIVE', 'SOLD') " +
            "AND (p.category.id IN :categoryIds) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
            "AND (:type IS NULL OR p.type = :type) " +
@@ -74,14 +74,14 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
         Pageable pageable
     );
     
-    @Query(value = "SELECT p FROM Post p LEFT JOIN FETCH p.owner LEFT JOIN FETCH p.category LEFT JOIN FETCH p.city WHERE p.status = 'ACTIVE' " +
+    @Query(value = "SELECT p FROM Post p LEFT JOIN FETCH p.owner LEFT JOIN FETCH p.category LEFT JOIN FETCH p.city WHERE p.status IN ('ACTIVE', 'SOLD') " +
            "AND (p.category.id IN :categoryIds) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
            "AND (:type IS NULL OR p.type = :type) " +
            "AND (:condition IS NULL OR p.condition = :condition) " +
            "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
            "AND (:maxPrice IS NULL OR p.price <= :maxPrice)",
-           countQuery = "SELECT COUNT(p) FROM Post p WHERE p.status = 'ACTIVE' " +
+           countQuery = "SELECT COUNT(p) FROM Post p WHERE p.status IN ('ACTIVE', 'SOLD') " +
            "AND (p.category.id IN :categoryIds) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
            "AND (:type IS NULL OR p.type = :type) " +
@@ -99,7 +99,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
     );
     
     @Query(value = "SELECT p FROM Post p LEFT JOIN FETCH p.owner LEFT JOIN FETCH p.category LEFT JOIN FETCH p.city " +
-           "WHERE p.status = 'ACTIVE' " +
+           "WHERE p.status IN ('ACTIVE', 'SOLD') " +
            "AND (:query IS NULL OR :query = '' OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(p.description) LIKE LOWER(CONCAT('%', :query, '%'))) " +
            "AND (:categoryId IS NULL OR p.category.id = :categoryId OR " +
            "(p.category.parentId = :categoryId)) " +
@@ -109,7 +109,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
            "AND (:condition IS NULL OR p.condition = :condition) " +
            "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
            "AND (:maxPrice IS NULL OR p.price <= :maxPrice)",
-           countQuery = "SELECT COUNT(p) FROM Post p WHERE p.status = 'ACTIVE' " +
+           countQuery = "SELECT COUNT(p) FROM Post p WHERE p.status IN ('ACTIVE', 'SOLD') " +
            "AND (:query IS NULL OR :query = '' OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(p.description) LIKE LOWER(CONCAT('%', :query, '%'))) " +
            "AND (:categoryId IS NULL OR p.category.id = :categoryId OR (p.category.parentId = :categoryId)) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
@@ -133,6 +133,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
     @Query("SELECT COUNT(p) FROM Post p WHERE p.owner.id = :ownerId AND p.status = 'ACTIVE'")
     long countActivePostsByOwner(@Param("ownerId") Long ownerId);
     
-    @Query("SELECT p FROM Post p WHERE p.store.id = :storeId AND p.status = 'ACTIVE'")
+    @Query("SELECT p FROM Post p WHERE p.store.id = :storeId AND p.status IN ('ACTIVE', 'SOLD')")
     Page<Post> findByStoreIdAndActive(@Param("storeId") Long storeId, Pageable pageable);
 }

@@ -1606,16 +1606,16 @@
 }
 
 .post-action-btn.mark-sold-btn {
-  border-color: #10b981;
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.05);
+  border-color: #ff6b35;
+  color: #ff6b35;
+  background: transparent;
 }
 
 .post-action-btn.mark-sold-btn:hover {
-  background: linear-gradient(135deg, #10b981, #059669);
-  border-color: #10b981;
-  color: white;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  background: rgba(255, 107, 53, 0.1);
+  border-color: #ff8c42;
+  color: #ff8c42;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
 }
 
 /* Sold post item */

@@ -121,7 +121,7 @@ const MessagesTab = ({ conversations, setConversations, loading, setLoading }) =
       {conversations.map(conversation => {
           // Determine who the other participant is
           const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-          const isUserSeller = conversation.seller?.id === currentUser?.id;
+          const isUserSeller = conversation.seller?.id === currentUser?.userId;
           const otherParticipant = isUserSeller ? conversation.buyer : conversation.seller;
 
           return (

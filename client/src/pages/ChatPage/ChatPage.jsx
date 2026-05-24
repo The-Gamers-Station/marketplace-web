@@ -554,7 +554,7 @@ const ChatPage = () => {
         <div className="chat-messages">
           <div className="messages-container">
             {/* Load more button */}
-            {/* {hasMore && !loadingMore && (
+            {hasMore && !loadingMore && (
               <button
                 className="load-more-btn"
                 onClick={() => loadMessages(true, cursor)}
@@ -567,7 +567,7 @@ const ChatPage = () => {
               <div className="loading-more">
                 <Loader2 className="spinner" size={20} />
               </div>
-            )} */}
+            )}
 
             {/* Error message */}
             {error && (

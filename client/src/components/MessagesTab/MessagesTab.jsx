@@ -146,9 +146,14 @@ const MessagesTab = ({ conversations, setConversations, loading, setLoading }) =
               <div className="conversation-content">
                 <div className="conversation-header">
                   <h4 className="conversation-username">{otherParticipant?.username || t('chat.unknownUser')}</h4>
-                  <span className="conversation-time">
-                    {formatTime(conversation.lastMessageAt)}
-                  </span>
+                  <div className="conversation-header-end">
+                    <span className="conversation-time">
+                      {formatTime(conversation.lastMessageAt)}
+                    </span>
+                    {conversation.unreadCount > 0 && (
+                      <span className="unread-badge">{conversation.unreadCount}</span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="conversation-preview">
@@ -160,9 +165,6 @@ const MessagesTab = ({ conversations, setConversations, loading, setLoading }) =
                   </p>
 
                   <div className="conversation-status">
-                    {conversation.unreadCount > 0 && (
-                      <span className="unread-badge">{conversation.unreadCount}</span>
-                    )}
                     {conversation.lastMessage?.isOwn && (
                       conversation.lastMessage?.readAt ? (
                         <CheckCheck size={16} className="read-icon" />

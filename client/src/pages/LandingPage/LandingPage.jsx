@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Header from '../../components/Header/Header';
 // import Hero from '../../components/Hero/Hero';
 import CategoryFilter from '../../components/CategoryFilter/CategoryFilter';
+import LocationFilter from '../../components/LocationFilter/LocationFilter';
 import PostTypeToggle from '../../components/PostTypeToggle/PostTypeToggle';
 import ProductGrid from '../../components/ProductGrid/ProductGrid';
 import Footer from '../../components/Footer/Footer';
@@ -18,6 +19,8 @@ const LandingPage = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedSubcategoryType, setSelectedSubcategoryType] = useState(null);
   const [selectedPostType, setSelectedPostType] = useState('SELL');
+  const [selectedRegionId, setSelectedRegionId] = useState(null);
+  const [selectedCityId, setSelectedCityId] = useState(null);
 
   // Handle category filter change
   const handleCategoryChange = (categoryId, categoryIds) => {
@@ -30,6 +33,12 @@ const LandingPage = () => {
       setSelectedCategoryId(categoryId);
       setSelectedSubcategoryType(null);
     }
+  };
+
+  // Handle location filter change
+  const handleLocationChange = ({ regionId, cityId }) => {
+    setSelectedRegionId(regionId);
+    setSelectedCityId(cityId);
   };
   // Structured data for the home page
   const homeStructuredData = {
@@ -116,10 +125,13 @@ const LandingPage = () => {
         />
         
         <CategoryFilter onFilterChange={handleCategoryChange} />
+        <LocationFilter onFilterChange={handleLocationChange} />
         <main className="main-content">
           <ProductGrid
             categoryId={selectedCategoryId}
             subcategoryType={selectedSubcategoryType}
+            regionId={selectedRegionId}
+            cityId={selectedCityId}
             postType={selectedPostType}
             hideLoadMore={false}
           />

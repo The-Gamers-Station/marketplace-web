@@ -999,6 +999,13 @@
     "Giza": "الجيزة",
     "Alexandria": "الإسكندرية"
   },
+  "locationFilter": {
+    "title": "الموقع",
+    "region": "المنطقة",
+    "city": "المدينة",
+    "allRegions": "كل المناطق",
+    "allCities": "كل المدن"
+  },
   "searchOverlay": {
     "placeholder": "ابحث باسم المنتج",
     "popularKeywords": "كلمات البحث الشائعة",

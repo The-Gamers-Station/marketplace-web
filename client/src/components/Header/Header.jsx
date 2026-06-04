@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo, useCallback, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Search, User, LogIn, MessageCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import authService from '../../services/authService';
+import { useAuth } from '../../context/AuthContext';
 import messagingService from '../../services/messagingService';
 import SearchOverlay from '../SearchOverlay/SearchOverlay';
 import './Header.css';
@@ -36,10 +36,9 @@ MobileNavLink.displayName = 'MobileNavLink';
 const Header = memo(() => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { isAuthenticated, user: currentUser, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState('/');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
   const [searchValue, setSearchValue] = useState('');
   const [mobileSearchValue, setMobileSearchValue] = useState('');
@@ -50,40 +49,6 @@ const Header = memo(() => {
   useEffect(() => {
     setActiveLink(location.pathname);
   }, [location]);
-
-  // Check authentication status
-  useEffect(() => {
-    const checkAuth = () => {
-      const authStatus = authService.isAuthenticated();
-      setIsAuthenticated(authStatus);
-      
-      if (authStatus) {
-        const user = authService.getCurrentUser();
-        setCurrentUser(user);
-      } else {
-        setCurrentUser(null);
-      }
-    };
-
-    checkAuth();
-    
-    // Listen for storage changes (login/logout in other tabs)
-    window.addEventListener('storage', checkAuth);
-    
-    // Listen for custom auth events
-    const handleAuthChange = (event) => {
-      if (event.detail && event.detail.type === 'login') {
-        checkAuth();
-      }
-    };
-    
-    window.addEventListener('authStateChanged', handleAuthChange);
-    
-    return () => {
-      window.removeEventListener('storage', checkAuth);
-      window.removeEventListener('authStateChanged', handleAuthChange);
-    };
-  }, []);
 
   // Fetch unread messages count
   useEffect(() => {
@@ -156,12 +121,10 @@ const Header = memo(() => {
     toggleMobileMenu();
   }, [toggleMobileMenu]);
 
-  const handleLogout = useCallback(() => {
-    authService.logout();
-    setIsAuthenticated(false);
-    setCurrentUser(null);
+  const handleLogout = useCallback(async () => {
+    await logout();
     navigate('/');
-  }, [navigate]);
+  }, [logout, navigate]);
 
   // Handle search submission
   const handleSearchSubmit = useCallback((e, isMobile = false) => {

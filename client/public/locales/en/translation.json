@@ -1000,6 +1000,13 @@
     "Giza": "Giza",
     "Alexandria": "Alexandria"
   },
+  "locationFilter": {
+    "title": "Location",
+    "region": "Region",
+    "city": "City",
+    "allRegions": "All Regions",
+    "allCities": "All Cities"
+  },
   "searchOverlay": {
     "placeholder": "Search by product name",
     "popularKeywords": "Popular Search Keywords",

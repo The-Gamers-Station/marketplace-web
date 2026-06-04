@@ -6,7 +6,7 @@ import postService from '../../services/postService';
 import { SkeletonLoader } from '../Loading/Loading';
 import './ProductGrid.css';
 
-const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPrice, maxPrice, condition, sortBy: externalSortBy, direction: externalDirection, postType, hideLoadMore = false }) => {
+const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityId, minPrice, maxPrice, condition, sortBy: externalSortBy, direction: externalDirection, postType, hideLoadMore = false }) => {
   const { t, i18n } = useTranslation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,6 +41,9 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
       } else if (subcategoryType && Array.isArray(subcategoryType)) {
         // Handle multiple category IDs for cross-platform subcategory search
         params.categoryIds = subcategoryType.join(',');
+      }
+      if (regionId) {
+        params.regionId = regionId;
       }
       if (cityId) {
         params.cityId = cityId;
@@ -110,7 +113,7 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, cityId, minPric
   // Fetch products on mount and when filters change
   useEffect(() => {
     fetchProducts(0, false);
-  }, [categoryId, subcategoryType, searchQuery, cityId, minPrice, maxPrice, condition, sortBy, direction, postType]);
+  }, [categoryId, subcategoryType, searchQuery, regionId, cityId, minPrice, maxPrice, condition, sortBy, direction, postType]);
 
 
   // Loading state

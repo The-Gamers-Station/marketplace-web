@@ -41,6 +41,9 @@ public abstract class AbstractOtpService implements OtpService {
     @Value("${rate-limit.otp.per-ip}")
     protected int perIpRateLimit;
 
+    @Value("${otp.max-verify-attempts}")
+    protected int maxVerifyAttempts;
+
     protected AbstractOtpService(OtpLogRepository otpLogRepository) {
         this.otpLogRepository = otpLogRepository;
     }
@@ -105,23 +108,55 @@ public abstract class AbstractOtpService implements OtpService {
 
     /**
      * Verify an OTP code against the database.
+     * Enforces a maximum number of verification attempts per OTP to prevent brute-force attacks.
      */
     protected boolean verifyOtpFromDb(String phoneNumber, String code) {
         if (code == null || code.isBlank()) {
             return false;
         }
 
+        // Find the latest active (non-expired) OTP for this phone
+        OtpLog activeOtp = otpLogRepository.findLatestActiveOtp(phoneNumber, Instant.now());
+        if (activeOtp == null) {
+            log.warn("No active OTP found for phone: {}", phoneNumber);
+            return false;
+        }
+
+        // Check if max verification attempts exceeded
+        if (activeOtp.getVerificationAttempts() >= maxVerifyAttempts) {
+            // Invalidate the OTP
+            activeOtp.setExpiresAt(Instant.now());
+            otpLogRepository.save(activeOtp);
+            log.warn("Max verification attempts ({}) exceeded for phone: {}. OTP invalidated.", maxVerifyAttempts, phoneNumber);
+            throw new RateLimitExceededException(
+                    "Too many incorrect attempts. Please request a new OTP.", (long) resendCooldownSeconds
+            );
+        }
+
+        // Increment verification attempts
+        activeOtp.setVerificationAttempts(activeOtp.getVerificationAttempts() + 1);
+
+        // Check if code matches
         String hashedCode = hashOtpCode(code.trim());
-        OtpLog validOtp = otpLogRepository.findValidOtp(phoneNumber, hashedCode, Instant.now());
-        if (validOtp != null) {
+        if (hashedCode.equals(activeOtp.getCode())) {
             // Invalidate the OTP after successful verification
-            validOtp.setExpiresAt(Instant.now());
-            otpLogRepository.save(validOtp);
+            activeOtp.setExpiresAt(Instant.now());
+            otpLogRepository.save(activeOtp);
             log.info("OTP verified successfully via DB for phone: {}", phoneNumber);
             return true;
         }
 
-        log.warn("No valid OTP found in DB for phone: {}", phoneNumber);
+        // Wrong code — save the incremented attempt count
+        otpLogRepository.save(activeOtp);
+
+        // If this attempt hit the limit, invalidate immediately
+        if (activeOtp.getVerificationAttempts() >= maxVerifyAttempts) {
+            activeOtp.setExpiresAt(Instant.now());
+            otpLogRepository.save(activeOtp);
+            log.warn("Max verification attempts reached after failed try for phone: {}. OTP invalidated.", phoneNumber);
+        }
+
+        log.warn("Invalid OTP attempt ({}/{}) for phone: {}", activeOtp.getVerificationAttempts(), maxVerifyAttempts, phoneNumber);
         return false;
     }
 

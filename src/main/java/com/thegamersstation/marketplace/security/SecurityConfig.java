@@ -60,10 +60,11 @@ public class SecurityConfig {
                     "/actuator/info"
                 ).permitAll()
                 
-                // Public endpoints - Read-only access to categories and cities
+                // Public endpoints - Read-only access to categories, cities and regions
                 .requestMatchers(HttpMethod.GET, 
                     "/categories/**",
-                    "/cities/**"
+                    "/cities/**",
+                    "/regions/**"
                 ).permitAll()
                 
                 // Public endpoints - Read posts (search, browse)

@@ -215,6 +215,7 @@ public class PostService {
     public PageResponseDto<PostDto> searchPosts(
         Long categoryId,
         String categoryIds,
+        Long regionId,
         Long cityId,
         Post.PostType type,
         Post.PostCondition condition,
@@ -232,9 +233,9 @@ public class PostService {
         
         Page<Post> postsPage;
         if (categoryIdList != null) {
-            postsPage = postRepository.searchPostsWithMultipleCategoriesAndPrice(categoryIdList, cityId, type, condition, minPrice, maxPrice, pageable);
+            postsPage = postRepository.searchPostsWithMultipleCategoriesAndPrice(categoryIdList, regionId, cityId, type, condition, minPrice, maxPrice, pageable);
         } else {
-            postsPage = postRepository.searchPostsWithPrice(categoryId, cityId, type, condition, minPrice, maxPrice, pageable);
+            postsPage = postRepository.searchPostsWithPrice(categoryId, regionId, cityId, type, condition, minPrice, maxPrice, pageable);
         }
         return PageResponseDto.of(postsPage.map(postMapper::toDto));
     }

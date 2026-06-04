@@ -552,7 +552,9 @@
     "optional": "اختياري",
     "showAllProducts": "عرض جميع المنتجات",
     "deleting": "جاري الحذف...",
-    "clear": "مسح"
+    "clear": "مسح",
+    "apply": "تطبيق",
+    "reset": "إعادة تعيين"
   },
   "auth": {
     "login": {

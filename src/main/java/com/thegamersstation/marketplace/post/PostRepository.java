@@ -39,6 +39,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
     @Query(value = "SELECT p FROM Post p LEFT JOIN FETCH p.owner LEFT JOIN FETCH p.category LEFT JOIN FETCH p.city WHERE p.status IN ('ACTIVE', 'SOLD') " +
            "AND (:categoryId IS NULL OR p.category.id = :categoryId OR " +
            "(p.category.parentId = :categoryId)) " +
+           "AND (:regionId IS NULL OR p.city.region.id = :regionId) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
            "AND (:type IS NULL OR p.type = :type) " +
            "AND (:condition IS NULL OR p.condition = :condition) " +
@@ -46,6 +47,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
            "AND (:maxPrice IS NULL OR p.price <= :maxPrice)",
            countQuery = "SELECT COUNT(p) FROM Post p WHERE p.status IN ('ACTIVE', 'SOLD') " +
            "AND (:categoryId IS NULL OR p.category.id = :categoryId OR (p.category.parentId = :categoryId)) " +
+           "AND (:regionId IS NULL OR p.city.region.id = :regionId) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
            "AND (:type IS NULL OR p.type = :type) " +
            "AND (:condition IS NULL OR p.condition = :condition) " +
@@ -53,6 +55,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
            "AND (:maxPrice IS NULL OR p.price <= :maxPrice)")
     Page<Post> searchPostsWithPrice(
         @Param("categoryId") Long categoryId,
+        @Param("regionId") Long regionId,
         @Param("cityId") Long cityId,
         @Param("type") Post.PostType type,
         @Param("condition") Post.PostCondition condition,
@@ -76,6 +79,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
     
     @Query(value = "SELECT p FROM Post p LEFT JOIN FETCH p.owner LEFT JOIN FETCH p.category LEFT JOIN FETCH p.city WHERE p.status IN ('ACTIVE', 'SOLD') " +
            "AND (p.category.id IN :categoryIds) " +
+           "AND (:regionId IS NULL OR p.city.region.id = :regionId) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
            "AND (:type IS NULL OR p.type = :type) " +
            "AND (:condition IS NULL OR p.condition = :condition) " +
@@ -83,6 +87,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
            "AND (:maxPrice IS NULL OR p.price <= :maxPrice)",
            countQuery = "SELECT COUNT(p) FROM Post p WHERE p.status IN ('ACTIVE', 'SOLD') " +
            "AND (p.category.id IN :categoryIds) " +
+           "AND (:regionId IS NULL OR p.city.region.id = :regionId) " +
            "AND (:cityId IS NULL OR p.city.id = :cityId) " +
            "AND (:type IS NULL OR p.type = :type) " +
            "AND (:condition IS NULL OR p.condition = :condition) " +
@@ -90,6 +95,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
            "AND (:maxPrice IS NULL OR p.price <= :maxPrice)")
     Page<Post> searchPostsWithMultipleCategoriesAndPrice(
         @Param("categoryIds") java.util.List<Long> categoryIds,
+        @Param("regionId") Long regionId,
         @Param("cityId") Long cityId,
         @Param("type") Post.PostType type,
         @Param("condition") Post.PostCondition condition,

@@ -32,6 +32,10 @@ public class OtpLog {
     @Column(name = "expires_at")
     private Instant expiresAt;
 
+    @Column(name = "verification_attempts", nullable = false)
+    @Builder.Default
+    private Integer verificationAttempts = 0;
+
     @Column(name = "success", nullable = false)
     private Boolean success;
 

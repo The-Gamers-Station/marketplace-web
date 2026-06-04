@@ -40,6 +40,12 @@ public interface OtpLogRepository extends JpaRepository<OtpLog, Long> {
     OtpLog findValidOtp(@Param("phone") String phoneNumber, @Param("code") String code, @Param("now") Instant now);
 
     /**
+     * Find the latest non-expired OTP for a phone number (regardless of code match)
+     */
+    @Query("SELECT o FROM OtpLog o WHERE o.phoneNumber = :phone AND o.code IS NOT NULL AND o.expiresAt > :now ORDER BY o.attemptedAt DESC LIMIT 1")
+    OtpLog findLatestActiveOtp(@Param("phone") String phoneNumber, @Param("now") Instant now);
+
+    /**
      * Delete expired OTP entries for cleanup
      */
     @Modifying

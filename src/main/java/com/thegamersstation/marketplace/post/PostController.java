@@ -68,6 +68,7 @@ public class PostController {
     public ResponseEntity<PageResponseDto<PostDto>> searchPosts(
         @RequestParam(required = false) Long categoryId,
         @RequestParam(required = false) String categoryIds,
+        @RequestParam(required = false) Long regionId,
         @RequestParam(required = false) Long cityId,
         @RequestParam(required = false) Post.PostType type,
         @RequestParam(required = false) Post.PostCondition condition,
@@ -81,7 +82,7 @@ public class PostController {
         int safeSize = Math.min(Math.max(size, 1), 50);
         String safeSortBy = ALLOWED_SORT_FIELDS.contains(sortBy) ? sortBy : "createdAt";
         Pageable pageable = PageRequest.of(page, safeSize, Sort.by(direction, safeSortBy));
-        PageResponseDto<PostDto> ads = PostService.searchPosts(categoryId, categoryIds, cityId, type, condition, minPrice, maxPrice, pageable);
+        PageResponseDto<PostDto> ads = PostService.searchPosts(categoryId, categoryIds, regionId, cityId, type, condition, minPrice, maxPrice, pageable);
         return ResponseEntity.ok(ads);
     }
     

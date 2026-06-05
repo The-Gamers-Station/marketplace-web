@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, ChevronDown, ArrowUpDown, Check } from 'luci
 import ProductCard from '../ProductCard/ProductCard';
 import postService from '../../services/postService';
 import { SkeletonLoader } from '../Loading/Loading';
+import LocationFilter from '../LocationFilter/LocationFilter';
 import './ProductGrid.css';
 
 const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityId, minPrice, maxPrice, condition, sortBy: externalSortBy, direction: externalDirection, postType, hideLoadMore = false, initialPage = 0, onPageChange }) => {
@@ -19,6 +20,19 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
   const [sortBy, setSortBy] = useState(externalSortBy || 'createdAt');
   const [direction, setDirection] = useState(externalDirection || 'DESC');
   const [showSortModal, setShowSortModal] = useState(false);
+
+  // Internal location filter state (used when no regionId/cityId props are passed)
+  const [internalRegionId, setInternalRegionId] = useState(null);
+  const [internalCityId, setInternalCityId] = useState(null);
+
+  const handleInternalLocationChange = ({ regionId: rId, cityId: cId }) => {
+    setInternalRegionId(rId || null);
+    setInternalCityId(cId || null);
+  };
+
+  // Resolve: prop takes precedence over internal state
+  const activeRegionId = regionId ?? internalRegionId;
+  const activeCityId   = cityId   ?? internalCityId;
 
   // Fetch products from backend
   const fetchProducts = async (pageNumber = 0, append = false) => {
@@ -42,11 +56,11 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
         // Handle multiple category IDs for cross-platform subcategory search
         params.categoryIds = subcategoryType.join(',');
       }
-      if (regionId) {
-        params.regionId = regionId;
+      if (activeRegionId) {
+        params.regionId = activeRegionId;
       }
-      if (cityId) {
-        params.cityId = cityId;
+      if (activeCityId) {
+        params.cityId = activeCityId;
       }
       if (minPrice) {
         params.minPrice = minPrice;
@@ -128,7 +142,7 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
       // On filter changes, always reset to page 0
       fetchProducts(0, false);
     }
-  }, [categoryId, subcategoryType, searchQuery, regionId, cityId, minPrice, maxPrice, condition, sortBy, direction, postType]);
+  }, [categoryId, subcategoryType, searchQuery, activeRegionId, activeCityId, minPrice, maxPrice, condition, sortBy, direction, postType]);
 
 
 
@@ -176,12 +190,16 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
 
   return (
     <div className="product-grid">
-      {/* Section Header with Sort */}
+      {/* Section Header with Location Filter */}
       <div className="grid-section-header">
         <h2 className="grid-section-title">{t('common.products', 'المنتجات')}</h2>
-        
 
-        {/* Sort Button - Mobile */}
+        {/* Location Filter - replaces sort button */}
+        {!regionId && !cityId && (
+          <LocationFilter onFilterChange={handleInternalLocationChange} />
+        )}
+
+        {/* Sort Button - commented out, replaced by location filter
         <button 
           className="sort-mobile-btn mobile-sort"
           onClick={() => setShowSortModal(true)}
@@ -189,9 +207,10 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
           <ArrowUpDown size={16} />
           <span>{getCurrentSortLabel()}</span>
         </button>
+        */}
       </div>
-      
-      {/* Mobile Sort Modal */}
+
+      {/* Mobile Sort Modal - commented out
       {showSortModal && (
         <div 
           className="sort-modal-overlay mobile-sort" 
@@ -221,70 +240,49 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
               <div className="sort-modal-handle" />
               <h3>{t('allProducts.sortBy')}</h3>
             </div>
-            
             <div className="sort-modal-options">
               <label className="sort-modal-option">
-                <input
-                  type="radio"
-                  name="sort"
+                <input type="radio" name="sort"
                   checked={sortBy === 'createdAt' && direction === 'DESC'}
-                  onChange={() => handleSortChange('createdAt', 'DESC')}
-                />
+                  onChange={() => handleSortChange('createdAt', 'DESC')} />
                 <span>{t('allProducts.sortNewest')}</span>
                 {sortBy === 'createdAt' && direction === 'DESC' && <Check size={20} className="check-icon" />}
               </label>
-              
               <label className="sort-modal-option">
-                <input
-                  type="radio"
-                  name="sort"
+                <input type="radio" name="sort"
                   checked={sortBy === 'createdAt' && direction === 'ASC'}
-                  onChange={() => handleSortChange('createdAt', 'ASC')}
-                />
+                  onChange={() => handleSortChange('createdAt', 'ASC')} />
                 <span>{t('allProducts.sortOldest')}</span>
                 {sortBy === 'createdAt' && direction === 'ASC' && <Check size={20} className="check-icon" />}
               </label>
-              
               <label className="sort-modal-option">
-                <input
-                  type="radio"
-                  name="sort"
+                <input type="radio" name="sort"
                   checked={sortBy === 'price' && direction === 'ASC'}
-                  onChange={() => handleSortChange('price', 'ASC')}
-                />
+                  onChange={() => handleSortChange('price', 'ASC')} />
                 <span>{t('allProducts.sortPriceLow')}</span>
                 {sortBy === 'price' && direction === 'ASC' && <Check size={20} className="check-icon" />}
               </label>
-              
               <label className="sort-modal-option">
-                <input
-                  type="radio"
-                  name="sort"
+                <input type="radio" name="sort"
                   checked={sortBy === 'price' && direction === 'DESC'}
-                  onChange={() => handleSortChange('price', 'DESC')}
-                />
+                  onChange={() => handleSortChange('price', 'DESC')} />
                 <span>{t('allProducts.sortPriceHigh')}</span>
                 {sortBy === 'price' && direction === 'DESC' && <Check size={20} className="check-icon" />}
               </label>
             </div>
-            
             <div className="sort-modal-actions">
               <button className="sort-modal-apply" onClick={() => setShowSortModal(false)}>
                 {t('common.apply', 'Apply')}
               </button>
-              <button 
-                className="sort-modal-reset" 
-                onClick={() => {
-                  handleSortChange('createdAt', 'DESC');
-                  setShowSortModal(false);
-                }}
-              >
+              <button className="sort-modal-reset"
+                onClick={() => { handleSortChange('createdAt', 'DESC'); setShowSortModal(false); }}>
                 {t('common.reset', 'Reset')}
               </button>
             </div>
           </div>
         </div>
       )}
+      */}
 
       <div className="grid-container">
         {products.map(product => (

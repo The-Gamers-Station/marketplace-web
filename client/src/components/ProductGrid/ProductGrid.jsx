@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, ChevronDown, ArrowUpDown, Check } from 'lucide-react';
 import ProductCard from '../ProductCard/ProductCard';
@@ -110,9 +110,19 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
     return t('allProducts.sortNewest');
   };
 
+  // Track whether this is the initial mount
+  const isFirstRender = useRef(true);
+
   // Fetch products on mount and when filters change
   useEffect(() => {
-    fetchProducts(initialPage, false);
+    if (isFirstRender.current) {
+      // On first render, use the page from URL (initialPage)
+      isFirstRender.current = false;
+      fetchProducts(initialPage, false);
+    } else {
+      // On filter changes, always reset to page 0
+      fetchProducts(0, false);
+    }
   }, [categoryId, subcategoryType, searchQuery, regionId, cityId, minPrice, maxPrice, condition, sortBy, direction, postType]);
 
   // Notify parent of page changes

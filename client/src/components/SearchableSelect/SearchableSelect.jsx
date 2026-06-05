@@ -30,12 +30,12 @@ const SearchableSelect = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Focus search input when dropdown opens
-  useEffect(() => {
-    if (isOpen && searchInputRef.current) {
-      searchInputRef.current.focus();
-    }
-  }, [isOpen]);
+  // Auto-focus disabled — triggers mobile keyboard on touch devices
+  // useEffect(() => {
+  //   if (isOpen && searchInputRef.current) {
+  //     searchInputRef.current.focus();
+  //   }
+  // }, [isOpen]);
 
   const filteredOptions = options.filter((opt) => {
     const label = getOptionLabel(opt);

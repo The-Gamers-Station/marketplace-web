@@ -77,6 +77,11 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
       setPage(pageNumber);
       setTotalPages(response.totalPages || 0);
       setTotalElements(response.totalElements || 0);
+
+      // Notify parent immediately so URL stays in sync
+      if (onPageChange) {
+        onPageChange(pageNumber);
+      }
       
       // Debug logging
       // console.log('Pagination Debug:', {
@@ -125,12 +130,6 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
     }
   }, [categoryId, subcategoryType, searchQuery, regionId, cityId, minPrice, maxPrice, condition, sortBy, direction, postType]);
 
-  // Notify parent of page changes
-  useEffect(() => {
-    if (onPageChange) {
-      onPageChange(page);
-    }
-  }, [page, onPageChange]);
 
 
   // Loading state

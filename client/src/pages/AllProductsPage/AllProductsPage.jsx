@@ -68,8 +68,9 @@ const AllProductsPage = () => {
   // Page state from URL
   const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || '0', 10));
 
-  // Update URL params when filters change
-  useEffect(() => {
+  // Build URL params from current state
+  const syncUrlParams = useCallback((overridePage) => {
+    const pageToUse = overridePage !== undefined ? overridePage : currentPage;
     const params = new URLSearchParams();
     if (searchQuery) params.set('q', searchQuery);
     if (filters.categoryId) params.set('category', filters.categoryId);
@@ -80,15 +81,27 @@ const AllProductsPage = () => {
     if (filters.sortBy !== 'createdAt') params.set('sortBy', filters.sortBy);
     if (filters.direction !== 'DESC') params.set('direction', filters.direction);
     if (filters.postType) params.set('postType', filters.postType);
-    if (currentPage > 0) params.set('page', currentPage.toString());
-    
+    if (pageToUse > 0) params.set('page', pageToUse.toString());
     setSearchParams(params, { replace: true });
   }, [searchQuery, filters, currentPage, setSearchParams]);
 
-  // Handle page change from ProductGrid
+  // Update URL when filters change
+  useEffect(() => {
+    syncUrlParams();
+  }, [syncUrlParams]);
+
+  // Handle page change from ProductGrid — update state AND URL immediately
   const handlePageChange = useCallback((page) => {
     setCurrentPage(page);
-  }, []);
+    // Update URL right away without waiting for state + effect cycle
+    const params = new URLSearchParams(searchParams);
+    if (page > 0) {
+      params.set('page', page.toString());
+    } else {
+      params.delete('page');
+    }
+    setSearchParams(params, { replace: true });
+  }, [searchParams, setSearchParams]);
 
   // Handle search
   const handleSearch = useCallback((value) => {

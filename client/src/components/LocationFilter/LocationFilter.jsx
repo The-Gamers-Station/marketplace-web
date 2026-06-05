@@ -80,10 +80,10 @@ const LocationFilter = ({ onFilterChange }) => {
               value={selectedRegionId}
               onChange={handleRegionChange}
               placeholder={t('locationFilter.allRegions', 'كل المناطق')}
-              searchPlaceholder={t('addProduct.placeholders.searchRegion', 'ابحث عن منطقة...')}
               icon={<MapPin size={16} />}
               getOptionLabel={(opt) => isArabic ? opt.nameAr : opt.nameEn}
               getOptionValue={(opt) => opt.id}
+              showSearch={false}
             />
           </div>
 
@@ -95,10 +95,10 @@ const LocationFilter = ({ onFilterChange }) => {
                 value={selectedCityId}
                 onChange={handleCityChange}
                 placeholder={loadingCities ? t('common.loading', 'Loading...') : t('locationFilter.allCities', 'كل المدن')}
-                searchPlaceholder={t('addProduct.placeholders.searchCity', 'ابحث عن مدينة...')}
                 disabled={loadingCities}
                 getOptionLabel={(opt) => isArabic ? opt.nameAr : opt.nameEn}
                 getOptionValue={(opt) => opt.id}
+                showSearch={false}
               />
             </div>
           )}

@@ -12,6 +12,7 @@ const SearchableSelect = ({
   icon,
   getOptionLabel,
   getOptionValue,
+  showSearch = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -94,27 +95,29 @@ const SearchableSelect = ({
 
       {isOpen && (
         <div className="searchable-select-dropdown">
-          <div className="searchable-select-search-wrapper">
-            <svg
-              className="searchable-select-search-icon"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" />
-              <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-            <input
-              ref={searchInputRef}
-              type="text"
-              className="searchable-select-search"
-              placeholder={searchPlaceholder || '...'}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+          {showSearch && (
+            <div className="searchable-select-search-wrapper">
+              <svg
+                className="searchable-select-search-icon"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" />
+                <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+              <input
+                ref={searchInputRef}
+                type="text"
+                className="searchable-select-search"
+                placeholder={searchPlaceholder || '...'}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          )}
 
           <div className="searchable-select-options">
             {filteredOptions.length === 0 ? (

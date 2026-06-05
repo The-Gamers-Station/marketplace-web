@@ -146,51 +146,11 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
 
 
 
-  // Loading state
-  if (loading) {
-    return (
-      <div className="product-grid">
-        <SkeletonLoader type="card" count={6} />
-      </div>
-    );
-  }
-
-  // Error state
-  if (error) {
-    return (
-      <div className="product-grid">
-        <div className="error-container">
-          <p className="error-message">{error}</p>
-          <button onClick={() => fetchProducts(0, false)} className="retry-button">
-            {t('common.retry')}
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Empty state
-  if (products.length === 0) {
-    return (
-      <div className="product-grid">
-        <div className="empty-state">
-          <svg className="empty-icon" width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 2L3 9H8V22H10V9H15L9 2Z" fill="currentColor" opacity="0.3"/>
-            <path d="M15 22L21 15H16V2H14V15H9L15 22Z" fill="currentColor" opacity="0.3"/>
-          </svg>
-          <h3>{t('common.noResults')}</h3>
-          <p>{searchQuery 
-            ? t('productGrid.noSearchResults', { query: searchQuery })
-            : t('productGrid.noProducts')
-          }</p>
-        </div>
-      </div>
-    );
-  }
-
+  // Single return keeps LocationFilter always mounted so its selection is never lost
   return (
     <div className="product-grid">
-      {/* Section Header with Location Filter */}
+
+      {/* Section Header with Location Filter — always rendered */}
       <div className="grid-section-header">
         <h2 className="grid-section-title">{t('common.products', 'المنتجات')}</h2>
 
@@ -200,7 +160,7 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
         )}
 
         {/* Sort Button - commented out, replaced by location filter
-        <button 
+        <button
           className="sort-mobile-btn mobile-sort"
           onClick={() => setShowSortModal(true)}
         >
@@ -211,99 +171,60 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
       </div>
 
       {/* Mobile Sort Modal - commented out
-      {showSortModal && (
-        <div 
-          className="sort-modal-overlay mobile-sort" 
-          onClick={(e) => {
-            if (e.target.classList.contains('sort-modal-overlay')) {
-              setShowSortModal(false);
-            }
-          }}
-          onTouchStart={(e) => {
-            const touchStartY = e.touches[0].clientY;
-            const handleTouchMove = (moveEvent) => {
-              const touchEndY = moveEvent.touches[0].clientY;
-              const deltaY = touchEndY - touchStartY;
-              if (deltaY > 100) {
-                setShowSortModal(false);
-                document.removeEventListener('touchmove', handleTouchMove);
-              }
-            };
-            document.addEventListener('touchmove', handleTouchMove);
-            document.addEventListener('touchend', () => {
-              document.removeEventListener('touchmove', handleTouchMove);
-            }, { once: true });
-          }}
-        >
-          <div className="sort-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="sort-modal-header">
-              <div className="sort-modal-handle" />
-              <h3>{t('allProducts.sortBy')}</h3>
-            </div>
-            <div className="sort-modal-options">
-              <label className="sort-modal-option">
-                <input type="radio" name="sort"
-                  checked={sortBy === 'createdAt' && direction === 'DESC'}
-                  onChange={() => handleSortChange('createdAt', 'DESC')} />
-                <span>{t('allProducts.sortNewest')}</span>
-                {sortBy === 'createdAt' && direction === 'DESC' && <Check size={20} className="check-icon" />}
-              </label>
-              <label className="sort-modal-option">
-                <input type="radio" name="sort"
-                  checked={sortBy === 'createdAt' && direction === 'ASC'}
-                  onChange={() => handleSortChange('createdAt', 'ASC')} />
-                <span>{t('allProducts.sortOldest')}</span>
-                {sortBy === 'createdAt' && direction === 'ASC' && <Check size={20} className="check-icon" />}
-              </label>
-              <label className="sort-modal-option">
-                <input type="radio" name="sort"
-                  checked={sortBy === 'price' && direction === 'ASC'}
-                  onChange={() => handleSortChange('price', 'ASC')} />
-                <span>{t('allProducts.sortPriceLow')}</span>
-                {sortBy === 'price' && direction === 'ASC' && <Check size={20} className="check-icon" />}
-              </label>
-              <label className="sort-modal-option">
-                <input type="radio" name="sort"
-                  checked={sortBy === 'price' && direction === 'DESC'}
-                  onChange={() => handleSortChange('price', 'DESC')} />
-                <span>{t('allProducts.sortPriceHigh')}</span>
-                {sortBy === 'price' && direction === 'DESC' && <Check size={20} className="check-icon" />}
-              </label>
-            </div>
-            <div className="sort-modal-actions">
-              <button className="sort-modal-apply" onClick={() => setShowSortModal(false)}>
-                {t('common.apply', 'Apply')}
-              </button>
-              <button className="sort-modal-reset"
-                onClick={() => { handleSortChange('createdAt', 'DESC'); setShowSortModal(false); }}>
-                {t('common.reset', 'Reset')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {showSortModal && ( ... )}
       */}
 
-      <div className="grid-container">
-        {products.map(product => (
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            title={product.title}
-            price={product.price}
-            image={product.image}
-            thumbnailUrl={product.thumbnailUrl}
-            isHighlighted={product.isNew}
-            badge={product.onSale ? (i18n.language === 'ar' ? 'عرض' : 'Sale') : null}
-            username={product.ownerUsername}
-            location={product.cityName}
-            originalPrice={product.originalPrice}
-            condition={product.condition}
-            type={product.type}
-            status={product.status}
-          />
-        ))}
-      </div>
+      {/* Loading state */}
+      {loading && <SkeletonLoader type="card" count={6} />}
+
+      {/* Error state */}
+      {!loading && error && (
+        <div className="error-container">
+          <p className="error-message">{error}</p>
+          <button onClick={() => fetchProducts(0, false)} className="retry-button">
+            {t('common.retry')}
+          </button>
+        </div>
+      )}
+
+      {/* Empty state */}
+      {!loading && !error && products.length === 0 && (
+        <div className="empty-state">
+          <svg className="empty-icon" width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 2L3 9H8V22H10V9H15L9 2Z" fill="currentColor" opacity="0.3"/>
+            <path d="M15 22L21 15H16V2H14V15H9L15 22Z" fill="currentColor" opacity="0.3"/>
+          </svg>
+          <h3>{t('common.noResults')}</h3>
+          <p>{searchQuery
+            ? t('productGrid.noSearchResults', { query: searchQuery })
+            : t('productGrid.noProducts')
+          }</p>
+        </div>
+      )}
+
+      {/* Products grid */}
+      {!loading && !error && products.length > 0 && (
+        <div className="grid-container">
+          {products.map(product => (
+            <ProductCard
+              key={product.id}
+              id={product.id}
+              title={product.title}
+              price={product.price}
+              image={product.image}
+              thumbnailUrl={product.thumbnailUrl}
+              isHighlighted={product.isNew}
+              badge={product.onSale ? (i18n.language === 'ar' ? 'عرض' : 'Sale') : null}
+              username={product.ownerUsername}
+              location={product.cityName}
+              originalPrice={product.originalPrice}
+              condition={product.condition}
+              type={product.type}
+              status={product.status}
+            />
+          ))}
+        </div>
+      )}
       
       {/* Pagination */}
       {!hideLoadMore && (

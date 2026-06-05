@@ -52,6 +52,8 @@ const ChatPage = () => {
     }
   }, [navigate, location, conversationId]);
 
+  const messagesContainerRef = useRef(null);
+
   // Scroll to bottom function
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -307,10 +309,36 @@ const ChatPage = () => {
     };
   }, []);
 
-  // Scroll to bottom when messages change
+  // Scroll to bottom only for new messages (not when loading older ones)
+  const isLoadingMoreRef = useRef(false);
   useEffect(() => {
-    scrollToBottom();
+    if (!isLoadingMoreRef.current) {
+      scrollToBottom();
+    }
+    isLoadingMoreRef.current = false;
   }, [messages]);
+
+  // Auto-load earlier messages when scrolling to top
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      if (container.scrollTop < 100 && hasMore && !loadingMore) {
+        isLoadingMoreRef.current = true;
+        const prevScrollHeight = container.scrollHeight;
+        loadMessages(true, cursor).then(() => {
+          // Maintain scroll position after prepending messages
+          requestAnimationFrame(() => {
+            container.scrollTop = container.scrollHeight - prevScrollHeight;
+          });
+        });
+      }
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [hasMore, loadingMore, cursor]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -551,7 +579,7 @@ const ChatPage = () => {
         )}
 
         {/* Messages Area */}
-        <div className="chat-messages">
+        <div className="chat-messages" ref={messagesContainerRef}>
           <div className="messages-container">
             {/* Load more button */}
             {hasMore && !loadingMore && (

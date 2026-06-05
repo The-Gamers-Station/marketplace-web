@@ -65,6 +65,9 @@ const AllProductsPage = () => {
     loadData();
   }, []);
 
+  // Page state from URL
+  const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || '0', 10));
+
   // Update URL params when filters change
   useEffect(() => {
     const params = new URLSearchParams();
@@ -77,9 +80,15 @@ const AllProductsPage = () => {
     if (filters.sortBy !== 'createdAt') params.set('sortBy', filters.sortBy);
     if (filters.direction !== 'DESC') params.set('direction', filters.direction);
     if (filters.postType) params.set('postType', filters.postType);
+    if (currentPage > 0) params.set('page', currentPage.toString());
     
-    setSearchParams(params);
-  }, [searchQuery, filters, setSearchParams]);
+    setSearchParams(params, { replace: true });
+  }, [searchQuery, filters, currentPage, setSearchParams]);
+
+  // Handle page change from ProductGrid
+  const handlePageChange = useCallback((page) => {
+    setCurrentPage(page);
+  }, []);
 
   // Handle search
   const handleSearch = useCallback((value) => {
@@ -477,6 +486,8 @@ const AllProductsPage = () => {
                 sortBy={filters.sortBy}
                 direction={filters.direction}
                 postType={filters.postType || null}
+                initialPage={currentPage}
+                onPageChange={handlePageChange}
               />
             </main>
           </div>

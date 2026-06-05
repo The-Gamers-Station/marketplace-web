@@ -212,22 +212,45 @@ const ProductDetailsPage = () => {
     }
   };
 
-  const handleShare = (platform) => {
+  const handleShare = async (platform) => {
     const url = window.location.href;
     const title = product.name;
+
+    // Use native Web Share API if available and no specific platform requested
+    if (!platform && navigator.share) {
+      try {
+        await navigator.share({ title, url });
+        setShowShareMenu(false);
+        return;
+      } catch {
+        // User cancelled or share failed, fall through
+      }
+    }
     
     switch (platform) {
-      case 'whatsapp':
-        window.open(`https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`, '_blank');
+      case 'whatsapp': {
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`;
+        window.location.href = whatsappUrl;
         break;
+      }
       case 'facebook':
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+        window.location.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
         break;
       case 'twitter':
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`, '_blank');
+        window.location.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
         break;
       case 'copy':
-        navigator.clipboard.writeText(url);
+        try {
+          await navigator.clipboard.writeText(url);
+        } catch {
+          // Fallback for older browsers
+          const textArea = document.createElement('textarea');
+          textArea.value = url;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+        }
         setShowCopyNotification(true);
         setTimeout(() => setShowCopyNotification(false), 3000);
         break;
@@ -415,7 +438,13 @@ const ProductDetailsPage = () => {
               <div className="price-card-actions">
                 <button
                   className="price-action-btn"
-                  onClick={() => setShowShareMenu(!showShareMenu)}
+                  onClick={() => {
+                    if (navigator.share) {
+                      handleShare();
+                    } else {
+                      setShowShareMenu(!showShareMenu);
+                    }
+                  }}
                   aria-label={t('pages.productDetails.share')}
                 >
                   <Share2 size={20} />

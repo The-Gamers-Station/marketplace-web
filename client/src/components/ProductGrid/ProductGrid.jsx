@@ -6,12 +6,12 @@ import postService from '../../services/postService';
 import { SkeletonLoader } from '../Loading/Loading';
 import './ProductGrid.css';
 
-const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityId, minPrice, maxPrice, condition, sortBy: externalSortBy, direction: externalDirection, postType, hideLoadMore = false }) => {
+const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityId, minPrice, maxPrice, condition, sortBy: externalSortBy, direction: externalDirection, postType, hideLoadMore = false, initialPage = 0, onPageChange }) => {
   const { t, i18n } = useTranslation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   
@@ -112,8 +112,15 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
 
   // Fetch products on mount and when filters change
   useEffect(() => {
-    fetchProducts(0, false);
+    fetchProducts(initialPage, false);
   }, [categoryId, subcategoryType, searchQuery, regionId, cityId, minPrice, maxPrice, condition, sortBy, direction, postType]);
+
+  // Notify parent of page changes
+  useEffect(() => {
+    if (onPageChange) {
+      onPageChange(page);
+    }
+  }, [page, onPageChange]);
 
 
   // Loading state

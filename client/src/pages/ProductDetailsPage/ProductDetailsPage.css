@@ -327,15 +327,7 @@
   right: 16px;
 }
 
-[dir="rtl"] .fullscreen-prev {
-  left: auto;
-  right: 16px;
-}
-
-[dir="rtl"] .fullscreen-next {
-  right: auto;
-  left: 16px;
-}
+/* No RTL swap for fullscreen nav — arrows stay directional (left=prev, right=next) */
 
 .fullscreen-counter {
   position: absolute;

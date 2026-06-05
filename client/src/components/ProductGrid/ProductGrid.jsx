@@ -36,6 +36,9 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
 
   // Fetch products from backend
   const fetchProducts = async (pageNumber = 0, append = false) => {
+    // Stamp this request; if a newer one starts before this finishes, discard result
+    const gen = ++fetchGenRef.current;
+
     try {
       if (!append) {
         setLoading(true);
@@ -80,12 +83,17 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
         ? await postService.searchPosts({ ...params, q: searchQuery })
         : await postService.getPosts(params);
 
+      // Discard stale response — a newer fetch has already started
+      if (gen !== fetchGenRef.current) return;
+
       const transformedProducts = postService.transformPosts(response.content || []);
       
       if (append) {
         setProducts(prev => [...prev, ...transformedProducts]);
       } else {
         setProducts(transformedProducts);
+        // Bump grid key so the stagger animation replays for the new result set
+        setGridKey(k => k + 1);
       }
 
       setPage(pageNumber);
@@ -106,9 +114,11 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
       //   hideLoadMore
       // });
     } catch (err) {
+      if (gen !== fetchGenRef.current) return;
       console.error('Error fetching products:', err);
       setError(err.message || t('common.error'));
     } finally {
+      if (gen !== fetchGenRef.current) return;
       setLoading(false);
     }
   };
@@ -128,6 +138,11 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
     if (sortBy === 'price' && direction === 'DESC') return t('allProducts.sortPriceHigh');
     return t('allProducts.sortNewest');
   };
+
+  // Generation counter — each new fetch increments this; stale responses are discarded
+  const fetchGenRef = useRef(0);
+  // Key to force grid-container remount so stagger animation replays on new results
+  const [gridKey, setGridKey] = useState(0);
 
   // Track whether this is the initial mount
   const isFirstRender = useRef(true);
@@ -202,9 +217,9 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
         </div>
       )}
 
-      {/* Products grid */}
+      {/* Products grid — key changes on every new result set, replaying stagger animation */}
       {!loading && !error && products.length > 0 && (
-        <div className="grid-container">
+        <div className="grid-container" key={gridKey}>
           {products.map(product => (
             <ProductCard
               key={product.id}

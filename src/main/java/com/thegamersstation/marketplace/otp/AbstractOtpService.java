@@ -75,9 +75,9 @@ public abstract class AbstractOtpService implements OtpService {
      */
     protected String buildOtpMessage(String code, String language) {
         if ("en".equalsIgnoreCase(language)) {
-            return String.format("Your verification code: %s  For login thegamersstation.com", code);
+            return String.format("Your verification code: %s  For login gamers-station.com", code);
         }
-        return String.format("رمز التحقق:%s لدخول منصة thegamersstation.com", code);
+        return String.format("رمز التحقق:%s لدخول منصة gamers-station.com", code);
     }
 
     /**

@@ -31,7 +31,7 @@ const AllProductsPage = () => {
     minPrice: searchParams.get('minPrice') || '',
     maxPrice: searchParams.get('maxPrice') || '',
     condition: searchParams.get('condition') || '',
-    sortBy: searchParams.get('sortBy') || 'createdAt',
+    sortBy: searchParams.get('sortBy') || 'refreshedAt',
     direction: searchParams.get('direction') || 'DESC',
     postType: searchParams.get('postType') || ''
   });
@@ -78,7 +78,7 @@ const AllProductsPage = () => {
     if (filters.minPrice) params.set('minPrice', filters.minPrice);
     if (filters.maxPrice) params.set('maxPrice', filters.maxPrice);
     if (filters.condition) params.set('condition', filters.condition);
-    if (filters.sortBy !== 'createdAt') params.set('sortBy', filters.sortBy);
+    if (filters.sortBy !== 'refreshedAt') params.set('sortBy', filters.sortBy);
     if (filters.direction !== 'DESC') params.set('direction', filters.direction);
     if (filters.postType) params.set('postType', filters.postType);
     if (pageToUse > 0) params.set('page', pageToUse.toString());
@@ -124,7 +124,7 @@ const AllProductsPage = () => {
       minPrice: '',
       maxPrice: '',
       condition: '',
-      sortBy: 'createdAt',
+      sortBy: 'refreshedAt',
       direction: 'DESC',
       postType: ''
     });
@@ -148,7 +148,7 @@ const AllProductsPage = () => {
   };
 
   // Count active filters
-  const activeFiltersCount = Object.entries(filters).filter(([key, v]) => v && v !== 'createdAt' && v !== 'DESC' && key !== 'postType').length + (searchQuery ? 1 : 0);
+  const activeFiltersCount = Object.entries(filters).filter(([key, v]) => v && v !== 'refreshedAt' && v !== 'DESC' && key !== 'postType').length + (searchQuery ? 1 : 0);
 
   // Close filters on mobile when clicking outside
   useEffect(() => {
@@ -479,8 +479,8 @@ const AllProductsPage = () => {
                       handleFilterChange('direction', direction);
                     }}
                   >
-                    <option value="createdAt-DESC">{t('allProducts.sortNewest')}</option>
-                    <option value="createdAt-ASC">{t('allProducts.sortOldest')}</option>
+                    <option value="refreshedAt-DESC">{t('allProducts.sortNewest')}</option>
+                    <option value="refreshedAt-ASC">{t('allProducts.sortOldest')}</option>
                     <option value="price-ASC">{t('allProducts.sortPriceLow')}</option>
                     <option value="price-DESC">{t('allProducts.sortPriceHigh')}</option>
                     <option value="views-DESC">{t('allProducts.sortMostViewed')}</option>

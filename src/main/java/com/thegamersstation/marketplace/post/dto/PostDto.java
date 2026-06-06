@@ -40,6 +40,7 @@ public class PostDto {
     private List<PostImageDto> images;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private LocalDateTime refreshedAt;
     
     @Data
     @NoArgsConstructor

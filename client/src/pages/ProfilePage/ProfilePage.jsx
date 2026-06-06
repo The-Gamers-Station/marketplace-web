@@ -27,6 +27,8 @@ import {
   Clock,
   Tag,
   HandCoins,
+  ArrowUpCircle,
+  Info,
 } from 'lucide-react';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -50,6 +52,10 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
+  const [postsPage, setPostsPage] = useState(0);
+  const [hasMorePosts, setHasMorePosts] = useState(false);
+  const [loadingMorePosts, setLoadingMorePosts] = useState(false);
+  const [totalPosts, setTotalPosts] = useState(0);
   const [activeTab, setActiveTab] = useState('posts');
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({});
@@ -76,6 +82,7 @@ const ProfilePage = () => {
   const [cities, setCities] = useState([]);
   const [loadingCities, setLoadingCities] = useState(false);
   const [markSoldPostId, setMarkSoldPostId] = useState(null);
+  const [refreshingPostId, setRefreshingPostId] = useState(null);
 
   // Check authentication
   useEffect(() => {
@@ -103,10 +110,15 @@ const ProfilePage = () => {
         
         // Get user posts
         let fetchedPosts = [];
+        let fetchedTotalPosts = 0;
         try {
-          const posts = await postService.getMyPosts({ size: 20 });
-          fetchedPosts = posts.content || [];
+          const postsResponse = await postService.getMyPosts({ page: 0, size: 20 });
+          fetchedPosts = postsResponse.content || [];
+          fetchedTotalPosts = postsResponse.totalElements || fetchedPosts.length;
           setUserPosts(fetchedPosts);
+          setPostsPage(0);
+          setTotalPosts(fetchedTotalPosts);
+          setHasMorePosts(!postsResponse.last);
         } catch (error) {
           console.error('Error fetching user posts:', error);
           showError(error);
@@ -118,7 +130,7 @@ const ProfilePage = () => {
         const totalLikes = fetchedPosts.reduce((sum, post) => sum + (post.likes || 0), 0);
         
         setStats({
-          totalPosts: fetchedPosts.length,
+          totalPosts: fetchedTotalPosts,
           totalViews,
           totalLikes,
           rating: userProfile.rating || 4.5,
@@ -373,6 +385,55 @@ const ProfilePage = () => {
       setShowDeleteModal(false);
     } finally {
       setDeleteLoading(false);
+    }
+  };
+
+  // Load more posts
+  const handleLoadMorePosts = async () => {
+    try {
+      setLoadingMorePosts(true);
+      const nextPage = postsPage + 1;
+      const postsResponse = await postService.getMyPosts({ page: nextPage, size: 20 });
+      const newPosts = postsResponse.content || [];
+      setUserPosts(prev => [...prev, ...newPosts]);
+      setPostsPage(nextPage);
+      setHasMorePosts(!postsResponse.last);
+    } catch (error) {
+      console.error('Error loading more posts:', error);
+      showError(error);
+    } finally {
+      setLoadingMorePosts(false);
+    }
+  };
+
+  // Check if post can be refreshed (24h cooldown)
+  const canRefreshPost = (post) => {
+    if (!post.refreshedAt) return true;
+    const lastRefresh = new Date(post.refreshedAt);
+    const now = new Date();
+    const hoursSinceLastRefresh = (now - lastRefresh) / (1000 * 60 * 60);
+    return hoursSinceLastRefresh >= 24;
+  };
+
+  // Handle refresh post
+  const handleRefreshPost = async (postId) => {
+    try {
+      setRefreshingPostId(postId);
+      const updatedPost = await postService.refreshPost(postId);
+      
+      // Update the post in the list with new refreshedAt
+      setUserPosts(prev => prev.map(p => 
+        p.id === postId ? { ...p, refreshedAt: updatedPost.refreshedAt } : p
+      ));
+      
+      setPopupTitle(t('profile.refreshSuccessTitle') || 'Post Updated!');
+      setPopupMessage(t('profile.refreshSuccess') || 'Your post has been moved to the first page.');
+      setShowSuccessPopup(true);
+    } catch (error) {
+      console.error('Error refreshing post:', error);
+      showError(error);
+    } finally {
+      setRefreshingPostId(null);
     }
   };
 
@@ -651,6 +712,26 @@ const ProfilePage = () => {
                               <Edit size={18} />
                               <span>{t('common.edit')}</span>
                             </button>
+                            <div className="refresh-btn-wrapper">
+                              <button
+                                className={`post-action-btn refresh-btn ${!canRefreshPost(post) ? 'disabled' : ''}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (canRefreshPost(post)) {
+                                    handleRefreshPost(post.id);
+                                  }
+                                }}
+                                disabled={refreshingPostId === post.id || !canRefreshPost(post)}
+                                title={t('profile.refreshPost')}
+                              >
+                                <ArrowUpCircle size={18} />
+                                <span>{refreshingPostId === post.id ? t('profile.refreshing') : t('profile.refreshPost')}</span>
+                              </button>
+                              <div className="refresh-tooltip">
+                                <Info size={14} />
+                                <span>{canRefreshPost(post) ? t('profile.refreshTooltip') : t('profile.refreshCooldown')}</span>
+                              </div>
+                            </div>
                             <button
                               className="post-action-btn mark-sold-btn"
                               onClick={(e) => {
@@ -689,6 +770,17 @@ const ProfilePage = () => {
                     <p>{t('profile.noPosts')}</p>
                     <button className="add-post-btn" onClick={() => navigate('/add-product')}>
                       {t('profile.addFirstPost')}
+                    </button>
+                  </div>
+                )}
+                {hasMorePosts && (
+                  <div className="load-more-container">
+                    <button
+                      className="load-more-btn"
+                      onClick={handleLoadMorePosts}
+                      disabled={loadingMorePosts}
+                    >
+                      {loadingMorePosts ? t('common.loading') || 'Loading...' : t('productGrid.loadMore')}
                     </button>
                   </div>
                 )}

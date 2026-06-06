@@ -862,7 +862,13 @@
     "deleteSuccessTitle": "Product Deleted!",
     "deleteError": "Failed to delete product. Please try again.",
     "deleteErrorTitle": "Delete Failed",
-    "notLoggedIn": "Please log in to view your profile"
+    "notLoggedIn": "Please log in to view your profile",
+    "refreshPost": "Update Post",
+    "refreshing": "Updating...",
+    "refreshTooltip": "Move your post to the first page. Can be used once every 24 hours.",
+    "refreshCooldown": "You can update this post again after 24 hours.",
+    "refreshSuccessTitle": "Post Updated!",
+    "refreshSuccess": "Your post has been moved to the first page."
   },
   "chat": {
     "online": "Online",

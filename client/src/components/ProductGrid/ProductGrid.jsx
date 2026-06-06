@@ -17,7 +17,7 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
   const [totalElements, setTotalElements] = useState(0);
   
   // Sort state
-  const [sortBy, setSortBy] = useState(externalSortBy || 'createdAt');
+  const [sortBy, setSortBy] = useState(externalSortBy || 'refreshedAt');
   const [direction, setDirection] = useState(externalDirection || 'DESC');
   const [showSortModal, setShowSortModal] = useState(false);
 
@@ -48,7 +48,7 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
       const params = {
         page: pageNumber,
         size: 10, // Reduced from 20 to 10 to show pagination with fewer products
-        sortBy: sortBy || 'createdAt',
+        sortBy: sortBy || 'refreshedAt',
         direction: direction || 'DESC',
       };
 
@@ -132,8 +132,8 @@ const ProductGrid = ({ categoryId, subcategoryType, searchQuery, regionId, cityI
 
   // Get current sort option label
   const getCurrentSortLabel = () => {
-    if (sortBy === 'createdAt' && direction === 'DESC') return t('allProducts.sortNewest');
-    if (sortBy === 'createdAt' && direction === 'ASC') return t('allProducts.sortOldest');
+    if ((sortBy === 'refreshedAt' || sortBy === 'createdAt') && direction === 'DESC') return t('allProducts.sortNewest');
+    if ((sortBy === 'refreshedAt' || sortBy === 'createdAt') && direction === 'ASC') return t('allProducts.sortOldest');
     if (sortBy === 'price' && direction === 'ASC') return t('allProducts.sortPriceLow');
     if (sortBy === 'price' && direction === 'DESC') return t('allProducts.sortPriceHigh');
     return t('allProducts.sortNewest');

@@ -128,6 +128,16 @@ public class Post {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "refreshed_at")
+    private LocalDateTime refreshedAt;
+
+    @PrePersist
+    private void initRefreshedAt() {
+        if (refreshedAt == null) {
+            refreshedAt = LocalDateTime.now();
+        }
+    }
+
     public enum PostType {
         SELL, ASK
     }

@@ -22,6 +22,7 @@ export const API_ENDPOINTS = {
     delete: (id) => `/posts/${id}`,
     myPosts: '/posts/my-ads',
     markAsSold: (id) => `/posts/${id}/mark-sold`,
+    refresh: (id) => `/posts/${id}/refresh`,
   },
   
   // Categories

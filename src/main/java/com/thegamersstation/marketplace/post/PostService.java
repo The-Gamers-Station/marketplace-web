@@ -314,6 +314,36 @@ public class PostService {
             .build();
         surveyResponseRepository.save(response);
     }
+    
+    @Transactional
+    public PostDto refreshPost(Long postId, Long userId) {
+        Post post = postRepository.findByIdAndNotDeleted(postId)
+            .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
+        
+        if (!post.getOwner().getId().equals(userId)) {
+            throw new AccessDeniedException("You can only refresh your own posts");
+        }
+        
+        if (post.getStatus() != Post.PostStatus.ACTIVE) {
+            throw new BusinessRuleException(
+                "Only active posts can be refreshed",
+                "يمكن تحديث الإعلانات النشطة فقط"
+            );
+        }
+        
+        // Check 24-hour cooldown
+        LocalDateTime lastRefresh = post.getRefreshedAt();
+        if (lastRefresh != null && lastRefresh.plusHours(24).isAfter(LocalDateTime.now())) {
+            throw new BusinessRuleException(
+                "You can only refresh a post once every 24 hours",
+                "يمكنك تحديث الإعلان مرة واحدة فقط كل 24 ساعة"
+            );
+        }
+        
+        post.setRefreshedAt(LocalDateTime.now());
+        Post saved = postRepository.save(post);
+        return postMapper.toDto(saved);
+    }
 }
 
 

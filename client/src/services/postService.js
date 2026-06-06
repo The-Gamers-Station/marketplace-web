@@ -189,6 +189,14 @@ class PostService {
     return response;
   }
   
+  // Refresh post to move it to the first page
+  async refreshPost(id) {
+    const response = await apiRequest(API_ENDPOINTS.posts.refresh(id), {
+      method: 'POST',
+    });
+    return response;
+  }
+  
   // Map category IDs to display names using cached API data
   getCategoryDisplayName(categoryId) {
     const cached = categoryService.categoriesCache;

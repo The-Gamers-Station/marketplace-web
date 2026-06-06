@@ -28,7 +28,7 @@ import java.util.Set;
 public class PostController {
     
     private static final Set<String> ALLOWED_SORT_FIELDS = Set.of(
-        "createdAt", "price", "title", "updatedAt"
+        "createdAt", "price", "title", "updatedAt", "refreshedAt"
     );
     
     private final PostService PostService;
@@ -76,11 +76,11 @@ public class PostController {
         @RequestParam(required = false) java.math.BigDecimal maxPrice,
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "createdAt") String sortBy,
+        @RequestParam(defaultValue = "refreshedAt") String sortBy,
         @RequestParam(defaultValue = "DESC") Sort.Direction direction
     ) {
         int safeSize = Math.min(Math.max(size, 1), 50);
-        String safeSortBy = ALLOWED_SORT_FIELDS.contains(sortBy) ? sortBy : "createdAt";
+        String safeSortBy = ALLOWED_SORT_FIELDS.contains(sortBy) ? sortBy : "refreshedAt";
         Pageable pageable = PageRequest.of(page, safeSize, Sort.by(direction, safeSortBy));
         PageResponseDto<PostDto> ads = PostService.searchPosts(categoryId, categoryIds, regionId, cityId, type, condition, minPrice, maxPrice, pageable);
         return ResponseEntity.ok(ads);
@@ -118,12 +118,12 @@ public class PostController {
     
     private Sort parseSortParameter(String sort) {
         return switch (sort.toLowerCase()) {
-            case "newest" -> Sort.by(Sort.Direction.DESC, "createdAt");
-            case "oldest" -> Sort.by(Sort.Direction.ASC, "createdAt");
+            case "newest" -> Sort.by(Sort.Direction.DESC, "refreshedAt");
+            case "oldest" -> Sort.by(Sort.Direction.ASC, "refreshedAt");
             case "price_asc", "priceasc", "cheapest" -> Sort.by(Sort.Direction.ASC, "price");
             case "price_desc", "pricedesc", "expensive" -> Sort.by(Sort.Direction.DESC, "price");
             case "title" -> Sort.by(Sort.Direction.ASC, "title");
-            default -> Sort.by(Sort.Direction.DESC, "createdAt");
+            default -> Sort.by(Sort.Direction.DESC, "refreshedAt");
         };
     }
     
@@ -166,5 +166,15 @@ public class PostController {
         Long userId = SecurityUtil.getCurrentUserId();
         PostService.markAsSold(id, userId, request.getSoldThroughPlatform());
         return ResponseEntity.noContent().build();
+    }
+    
+    @PostMapping("/{id}/refresh")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Refresh post to move it to the first page", description = "Updates the post's refresh timestamp so it appears at the top of listings. Can only be used once every 24 hours.")
+    public ResponseEntity<PostDto> refreshPost(@PathVariable Long id) {
+        Long userId = SecurityUtil.getCurrentUserId();
+        PostDto post = PostService.refreshPost(id, userId);
+        return ResponseEntity.ok(post);
     }
 }

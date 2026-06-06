@@ -106,7 +106,7 @@ const ContactPage = () => {
         title={t('pages.contact.title', 'تواصل معنا')}
         description={t('pages.contact.subtitle', 'نحن هنا لمساعدتك')}
         keywords="اتصل بنا, دعم العملاء, خدمة العملاء, GamersStation, تواصل معنا"
-        url="https://gamersstation.eg/contact"
+        url="https://gamers-station.com/"
       />
       <Header />
       

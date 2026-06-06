@@ -47,17 +47,17 @@ const LandingPage = () => {
       {
         "@type": "WebSite",
         "@id": "https://gamersstation.eg/#website",
-        "url": "https://gamersstation.eg/",
+        "url": "https://gamers-station.com/",
         "name": "GamersStation",
         "description": "أكبر سوق للألعاب الإلكترونية في السعودية",
         "publisher": {
-          "@id": "https://gamersstation.eg/#organization"
+          "@id": "https://gamers-station.com/#organization"
         },
         "potentialAction": {
           "@type": "SearchAction",
           "target": {
             "@type": "EntryPoint",
-            "urlTemplate": "https://gamersstation.eg/search?q={search_term_string}"
+            "urlTemplate": "https://gamers-station.com/search?q={search_term_string}"
           },
           "query-input": "required name=search_term_string"
         },
@@ -65,18 +65,18 @@ const LandingPage = () => {
       },
       {
         "@type": "Organization",
-        "@id": "https://gamersstation.eg/#organization",
+        "@id": "https://gamers-station.com/#organization",
         "name": "GamersStation",
-        "url": "https://gamersstation.eg/",
+        "url": "https://gamers-station.com/",
         "logo": {
           "@type": "ImageObject",
-          "@id": "https://gamersstation.eg/#logo",
-          "url": "https://gamersstation.eg/logo.svg",
-          "contentUrl": "https://gamersstation.eg/logo.svg",
+          "@id": "https://gamers-station.com/#logo",
+          "url": "https://gamers-station.com/logo.svg",
+          "contentUrl": "https://gamers-station.com/logo.svg",
           "caption": "GamersStation"
         },
         "image": {
-          "@id": "https://gamersstation.eg/#logo"
+          "@id": "https://gamers-station.com/#logo"
         },
         "sameAs": [
           "https://www.facebook.com/GamerStationApp",
@@ -92,13 +92,13 @@ const LandingPage = () => {
       },
       {
         "@type": "BreadcrumbList",
-        "@id": "https://gamersstation.eg/#breadcrumb",
+        "@id": "https://gamers-station.com/#breadcrumb",
         "itemListElement": [
           {
             "@type": "ListItem",
             "position": 1,
             "name": "الرئيسية",
-            "item": "https://gamersstation.eg/"
+            "item": "https://gamers-station.com/"
           }
         ]
       }

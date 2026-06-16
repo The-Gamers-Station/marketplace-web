@@ -13,11 +13,44 @@ const SEO = ({
   canonicalUrl = null,
   alternateLinks = [],
   noindex = false,
-  nofollow = false
+  nofollow = false,
+  dynamicAdMeta = null
 }) => {
+  const META_DESCRIPTION_SUFFIX = ' (تصفح المزيد من عروض الجيمرز على موقع جيمرز ستيشن)';
+  const DEFAULT_WEBSITE_NAME = 'Gamers Station';
+  
+  const truncateByCodePoints = (value, maxChars) => {
+    if (!value) return '';
+    const normalized = String(value).replace(/\s+/g, ' ').trim();
+    const codePoints = Array.from(normalized);
+    if (codePoints.length <= maxChars) return normalized;
+    return codePoints.slice(0, maxChars).join('').trim();
+  };
+  
+  const adTitle = dynamicAdMeta?.title?.trim();
+  const adCity = dynamicAdMeta?.city?.trim();
+  const adDescription = dynamicAdMeta?.description;
+  const adWebsiteName = dynamicAdMeta?.websiteName?.trim() || DEFAULT_WEBSITE_NAME;
+  const adSuffix = dynamicAdMeta?.descriptionSuffix ?? META_DESCRIPTION_SUFFIX;
+  const hasDynamicAdMeta = Boolean(adTitle && adCity);
+  
+  const generatedAdMetaTitle = hasDynamicAdMeta
+    ? `${adTitle} | ${adCity} | ${adWebsiteName}`
+    : '';
+  const generatedAdMetaDescription = hasDynamicAdMeta
+    ? `${truncateByCodePoints(adDescription, 150)}${adSuffix}`
+    : '';
+  
   const siteTitle = 'GamersStation - أكبر سوق للألعاب الإلكترونية في السعودية';
-  const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
+  const fullTitle = hasDynamicAdMeta
+    ? generatedAdMetaTitle
+    : (title ? `${title} | ${siteTitle}` : siteTitle);
+  const finalDescription = hasDynamicAdMeta
+    ? generatedAdMetaDescription
+    : description;
   const currentUrl = canonicalUrl || `${url}${typeof window !== 'undefined' ? window.location.pathname : ''}`;
+  const robotsContent = `${noindex ? 'noindex' : 'index'}, ${nofollow ? 'nofollow' : 'follow'}, max-image-preview:large, max-snippet:-1, max-video-preview:-1`;
+  const englishAlternateUrl = `${url}/en${typeof window !== 'undefined' ? window.location.pathname : ''}`;
   
   // Default structured data for Organization
   const defaultStructuredData = {
@@ -51,52 +84,46 @@ const SEO = ({
   return (
     <Helmet>
       {/* Basic Meta Tags */}
-      <title>{fullTitle}</title>
-      <meta name="description" content={description} />
-      <meta name="keywords" content={keywords} />
-      <meta name="author" content={author} />
+      {fullTitle && <title>{fullTitle}</title>}
+      {finalDescription && <meta name="description" content={finalDescription} />}
+      {keywords && <meta name="keywords" content={keywords} />}
+      {author && <meta name="author" content={author} />}
       
       {/* Robots Meta Tags */}
-      <meta 
-        name="robots" 
-        content={`${noindex ? 'noindex' : 'index'}, ${nofollow ? 'nofollow' : 'follow'}, max-image-preview:large, max-snippet:-1, max-video-preview:-1`} 
-      />
-      <meta 
-        name="googlebot" 
-        content={`${noindex ? 'noindex' : 'index'}, ${nofollow ? 'nofollow' : 'follow'}, max-image-preview:large, max-snippet:-1, max-video-preview:-1`} 
-      />
+      {robotsContent && <meta name="robots" content={robotsContent} />}
+      {robotsContent && <meta name="googlebot" content={robotsContent} />}
       
       {/* Canonical URL */}
-      <link rel="canonical" href={currentUrl} />
+      {currentUrl && <link rel="canonical" href={currentUrl} />}
       
       {/* Alternate Language Links */}
-      <link rel="alternate" hreflang="ar-SA" href={currentUrl} />
-      <link rel="alternate" hreflang="en-SA" href={`${url}/en${typeof window !== 'undefined' ? window.location.pathname : ''}`} />
+      {currentUrl && <link rel="alternate" hreflang="ar-SA" href={currentUrl} />}
+      {englishAlternateUrl && <link rel="alternate" hreflang="en-SA" href={englishAlternateUrl} />}
       {alternateLinks.map((link, index) => (
         <link key={index} rel="alternate" hreflang={link.hreflang} href={link.href} />
       ))}
       
       {/* Open Graph Meta Tags */}
-      <meta property="og:type" content={type} />
-      <meta property="og:url" content={currentUrl} />
-      <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
+      {type && <meta property="og:type" content={type} />}
+      {currentUrl && <meta property="og:url" content={currentUrl} />}
+      {fullTitle && <meta property="og:title" content={fullTitle} />}
+      {finalDescription && <meta property="og:description" content={finalDescription} />}
+      {image && <meta property="og:image" content={image} />}
+      {image && <meta property="og:image:width" content="1200" />}
+      {image && <meta property="og:image:height" content="630" />}
       <meta property="og:locale" content="ar_SA" />
       <meta property="og:locale:alternate" content="en_SA" />
       <meta property="og:site_name" content="GamersStation" />
       
       {/* Twitter Card Meta Tags */}
-      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
       <meta name="twitter:site" content="@GamersStationApp" />
       <meta name="twitter:creator" content="@GamersStationApp" />
-      <meta name="twitter:url" content={currentUrl} />
-      <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
-      <meta name="twitter:image:alt" content={title || 'GamersStation'} />
+      {currentUrl && <meta name="twitter:url" content={currentUrl} />}
+      {fullTitle && <meta name="twitter:title" content={fullTitle} />}
+      {finalDescription && <meta name="twitter:description" content={finalDescription} />}
+      {image && <meta name="twitter:image" content={image} />}
+      {(title || fullTitle) && <meta name="twitter:image:alt" content={title || fullTitle || 'GamersStation'} />}
       
       {/* Article Meta Tags (for blog posts or product pages) */}
       {type === 'article' && (

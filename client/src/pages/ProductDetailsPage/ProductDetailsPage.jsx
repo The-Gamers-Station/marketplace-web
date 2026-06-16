@@ -29,12 +29,13 @@ import authService from '../../services/authService';
 import OptimizedImage from '../../components/OptimizedImage/OptimizedImage';
 import userService from '../../services/userService';
 import { getTranslatedCityName } from '../../utils/cityTranslations';
+import { buildAdDynamicMeta } from '../../utils/seoMeta';
 import { showError } from '../../components/ErrorNotification/ErrorNotification';
 import MarkAsSoldModal from '../../components/MarkAsSoldModal/MarkAsSoldModal';
 import './ProductDetailsPage.css';
 
 const ProductDetailsPage = () => {
-  const { id } = useParams();
+  const { id, slug } = useParams();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const currentLang = i18n.language;
@@ -51,10 +52,11 @@ const ProductDetailsPage = () => {
   const [fullscreenImage, setFullscreenImage] = useState(false);
   const [sellerAdCount, setSellerAdCount] = useState(0);
   const [showMarkSoldModal, setShowMarkSoldModal] = useState(false);
+  const getAdPath = (postSlug, postId) => postSlug ? `/ad/${encodeURIComponent(postSlug)}` : `/product/${postId}`;
 
   useEffect(() => {
     fetchProductDetails();
-  }, [id, currentLang]);
+  }, [id, slug, currentLang]);
 
   const fetchProductDetails = async () => {
     try {
@@ -62,7 +64,13 @@ const ProductDetailsPage = () => {
       setError(null);
       
       // Fetch product details
-      const postData = await postService.getPostById(id);
+      const postData = slug
+        ? await postService.getPostBySlug(slug)
+        : await postService.getPostById(id);
+      
+      if (!slug && postData?.slug) {
+        navigate(getAdPath(postData.slug, postData.id), { replace: true });
+      }
       
       // Save post type
       setPostType(postData.type);
@@ -70,6 +78,7 @@ const ProductDetailsPage = () => {
       // Transform Post data to Product format
       const transformedProduct = {
         id: postData.id,
+        slug: postData.slug,
         name: postData.localizedTitle?.[currentLang] || postData.title || 'Untitled Product',
         arabicName: postData.localizedTitle?.ar || postData.title || 'منتج بدون اسم',
         price: postData.price || 0,
@@ -162,6 +171,7 @@ const ProductDetailsPage = () => {
               .filter(post => post.id !== postData.id)
               .map(post => ({
                 id: post.id,
+                slug: post.slug,
                 name: post.localizedTitle?.[currentLang] || post.title || 'Untitled',
                 price: post.price || 0,
                 image: post.images?.[0]?.url || '/placeholder-game.svg'
@@ -187,6 +197,7 @@ const ProductDetailsPage = () => {
               .filter(post => post.id !== postData.id && !transformedRelated.find(p => p.id === post.id))
               .map(post => ({
                 id: post.id,
+                slug: post.slug,
                 name: post.localizedTitle?.[currentLang] || post.title || 'Untitled',
                 price: post.price || 0,
                 image: post.images?.[0]?.url || '/placeholder-game.svg'
@@ -316,7 +327,7 @@ const ProductDetailsPage = () => {
     "category": product.category,
     "offers": {
       "@type": "Offer",
-      "url": `${window.location.origin}/product/${product.id}`,
+      "url": `${window.location.origin}${getAdPath(product.slug, product.id)}`,
       "priceCurrency": "SAR",
       "price": product.price,
       "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -331,11 +342,15 @@ const ProductDetailsPage = () => {
   return (
     <>
       <SEO
-        title={`${product.name} - ${product.arabicName}`}
-        description={`${t('pages.productDetails.buyNow')} ${product.name} ${t('productCard.sar')} ${product.price}. ${product.description}`}
+        dynamicAdMeta={buildAdDynamicMeta({
+          title: product.name,
+          city: product.specifications[t('pages.productDetails.city')] || product.seller?.city,
+          description: product.description,
+        })}
         keywords={`${product.name}, ${product.arabicName}, ${product.brand}, ${product.category}, GamersStation`}
         type="product"
         image={Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : undefined}
+        canonicalUrl={`${window.location.origin}${getAdPath(product.slug, product.id)}`}
         structuredData={productStructuredData}
       />
       <div className="product-details-page gaming-theme">
@@ -600,7 +615,7 @@ const ProductDetailsPage = () => {
                   onClick={async () => {
                     if (!authService.isAuthenticated()) {
                       navigate('/login', {
-                        state: { redirectTo: `/product/${product.id}` }
+                        state: { redirectTo: getAdPath(product.slug, product.id) }
                       });
                       return;
                     }
@@ -638,7 +653,7 @@ const ProductDetailsPage = () => {
                         errorMessage = t('chat.authenticationError') || 'Authentication error. Please login again.';
                         authService.clearTokens();
                         navigate('/login', {
-                          state: { redirectTo: `/product/${product.id}` }
+                          state: { redirectTo: getAdPath(product.slug, product.id) }
                         });
                         return;
                       } else if (error.message.includes('[404]')) {
@@ -689,7 +704,7 @@ const ProductDetailsPage = () => {
                     key={item.id}
                     className="related-card modern-card"
                     style={{ animationDelay: `${index * 0.1}s`, cursor: 'pointer' }}
-                    onClick={() => navigate(`/product/${item.id}`)}
+                    onClick={() => navigate(getAdPath(item.slug, item.id))}
                   >
                     <div className="card-glow-effect"></div>
                     
@@ -714,7 +729,7 @@ const ProductDetailsPage = () => {
                         className="quick-view-btn"
                         onClick={(e) => {
                           e.preventDefault();
-                          navigate(`/product/${item.id}`);
+                          navigate(getAdPath(item.slug, item.id));
                         }}
                         aria-label={t('pages.productDetails.viewProduct')}
                       >
@@ -738,7 +753,7 @@ const ProductDetailsPage = () => {
                         className="view-product-btn"
                         onClick={(e) => {
                           e.preventDefault();
-                          navigate(`/product/${item.id}`);
+                          navigate(getAdPath(item.slug, item.id));
                         }}
                       >
                         <span>{t('pages.productDetails.viewDetails') || 'View Details'}</span>

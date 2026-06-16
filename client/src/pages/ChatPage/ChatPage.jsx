@@ -571,7 +571,7 @@ const ChatPage = () => {
             </div>
             <button
               className="view-product-btn"
-              onClick={() => navigate(`/product/${chatInfo.productId}`)}
+              onClick={() => navigate(chatInfo.productSlug ? `/ad/${encodeURIComponent(chatInfo.productSlug)}` : `/product/${chatInfo.productId}`)}
             >
               {t("chat.viewProduct")}
             </button>

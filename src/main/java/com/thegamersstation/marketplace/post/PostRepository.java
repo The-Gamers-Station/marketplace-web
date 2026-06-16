@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import java.util.Optional;
 
@@ -16,11 +17,20 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
     @Query("SELECT p FROM Post p WHERE p.id = :id AND p.status <> 'DELETED'")
     Optional<Post> findByIdAndNotDeleted(@Param("id") Long id);
     
+    @Query("SELECT p FROM Post p WHERE p.slug = :slug AND p.status <> 'DELETED'")
+    Optional<Post> findBySlugAndNotDeleted(@Param("slug") String slug);
+    
+    boolean existsBySlug(String slug);
+    
+    boolean existsBySlugAndIdNot(String slug, Long id);
+    
     @Query("SELECT p FROM Post p WHERE p.owner.id = :ownerId AND p.status <> 'DELETED'")
     Page<Post> findByOwnerIdAndNotDeleted(@Param("ownerId") Long ownerId, Pageable pageable);
     
     @Query("SELECT p FROM Post p WHERE p.status = :status")
     Page<Post> findByStatus(@Param("status") Post.PostStatus status, Pageable pageable);
+    
+    List<Post> findAllByStatusOrderByCreatedAtAsc(Post.PostStatus status);
     
     @Query("SELECT p FROM Post p WHERE p.status IN ('ACTIVE', 'SOLD') " +
            "AND (:categoryId IS NULL OR p.category.id = :categoryId OR " +

@@ -24,6 +24,3 @@ Disallow: /
 
 # Main Sitemaps (Ensure correct .com domain)
 Sitemap: https://gamers-station.com/sitemap.xml
-Sitemap: https://gamers-station.com/sitemap-products.xml
-Sitemap: https://gamers-station.com/sitemap-categories.xml
-Sitemap: https://gamers-station.com/sitemap-merchants.xml

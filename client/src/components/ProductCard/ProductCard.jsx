@@ -32,6 +32,7 @@ const getAvatarColor = (name) => {
 
 const ProductCard = ({
   id,
+  slug,
   title,
   price,
   image,
@@ -61,6 +62,7 @@ const ProductCard = ({
   };
 
   const isSold = status === 'SOLD';
+  const adPath = slug ? `/ad/${encodeURIComponent(slug)}` : `/product/${id}`;
 
   const handleCardClick = (e) => {
     if (isSold) {
@@ -68,11 +70,11 @@ const ProductCard = ({
       return;
     }
     e.preventDefault();
-    window.location.href = `/product/${id}`;
+    window.location.href = adPath;
   };
 
   return (
-    <a href={isSold ? undefined : `/product/${id}`} className={`product-card ${isHighlighted ? 'highlighted' : ''} ${isSold ? 'product-card-sold' : ''}`} onClick={handleCardClick} style={{ textDecoration: 'none', color: 'inherit' }}>
+    <a href={isSold ? undefined : adPath} className={`product-card ${isHighlighted ? 'highlighted' : ''} ${isSold ? 'product-card-sold' : ''}`} onClick={handleCardClick} style={{ textDecoration: 'none', color: 'inherit' }}>
       {isSold && (
         <div className="sold-overlay">
           <span className="sold-overlay-text">{t('markAsSold.soldBadge')}</span>

@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 
 public class SlugUtil {
     
-    private static final Pattern NONLATIN = Pattern.compile("[^\\w-]");
-    private static final Pattern WHITESPACE = Pattern.compile("[\\s]");
+    private static final Pattern NONLATIN = Pattern.compile("[^\\p{L}\\p{N}-]");
+    private static final Pattern WHITESPACE = Pattern.compile("[\\s_]+");
     private static final Pattern DUPLICATEHYPHEN = Pattern.compile("-{2,}");
     
     /**
@@ -19,8 +19,8 @@ public class SlugUtil {
             return "";
         }
         
-        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
-        String slug = normalized.toLowerCase(Locale.ENGLISH);
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFC);
+        String slug = normalized.toLowerCase(Locale.ROOT);
         slug = WHITESPACE.matcher(slug).replaceAll("-");
         slug = NONLATIN.matcher(slug).replaceAll("");
         slug = DUPLICATEHYPHEN.matcher(slug).replaceAll("-");

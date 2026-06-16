@@ -656,7 +656,7 @@ const ProfilePage = () => {
                 {userPosts.length > 0 ? (
                   <div className="user-posts-list list-view">
                     {userPosts.map(post => (
-                      <div key={post.id} className={`user-post-item ${post.status === 'SOLD' ? 'post-item-sold' : ''}`} onClick={() => post.status !== 'SOLD' && navigate(`/product/${post.id}`)}>
+                      <div key={post.id} className={`user-post-item ${post.status === 'SOLD' ? 'post-item-sold' : ''}`} onClick={() => post.status !== 'SOLD' && navigate(post.slug ? `/ad/${encodeURIComponent(post.slug)}` : `/product/${post.id}`)}>
                         <div className="post-item-image">
                           <img src={post.images?.[0]?.url || `https://via.placeholder.com/150x150/1a1f36/ff6b35?text=${encodeURIComponent(post.title)}`} alt={post.title} />
                           {post.status === 'SOLD' && (

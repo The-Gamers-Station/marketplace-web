@@ -10,6 +10,7 @@ import com.thegamersstation.marketplace.city.City;
 import com.thegamersstation.marketplace.city.CityRepository;
 import com.thegamersstation.marketplace.common.exception.ResourceNotFoundException;
 import com.thegamersstation.marketplace.common.util.ContentSanitizer;
+import com.thegamersstation.marketplace.common.util.SlugUtil;
 import com.thegamersstation.marketplace.media.MediaService;
 import com.thegamersstation.marketplace.security.SecurityUtil;
 import com.thegamersstation.marketplace.store.Store;
@@ -77,6 +78,7 @@ public class PostService {
         String sanitizedDescription = contentSanitizer.maskPhoneNumbers(
             contentSanitizer.sanitize(request.getDescription())
         );
+        String slug = generateUniqueSlug(sanitizedTitle, city, null);
         
         // Link to store if user is a store manager
         Store store = null;
@@ -89,6 +91,7 @@ public class PostService {
             .store(store)
             .type(request.getType())
             .title(sanitizedTitle)
+            .slug(slug)
             .description(sanitizedDescription)
             .price(request.getPrice())
             .priceMin(request.getPriceMin())
@@ -120,6 +123,7 @@ public class PostService {
     public PostDto updatePost(Long adId, UpdatePostRequest request, Long userId) {
         Post post = postRepository.findByIdAndNotDeleted(adId)
             .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
+        boolean shouldRegenerateSlug = false;
         
         if (!post.getOwner().getId().equals(userId)) {
             throw new AccessDeniedException("You can only update your own ads");
@@ -134,6 +138,7 @@ public class PostService {
         
         if (request.getTitle() != null) {
             post.setTitle(contentSanitizer.sanitize(request.getTitle()));
+            shouldRegenerateSlug = true;
         }
         
         if (request.getDescription() != null) {
@@ -162,6 +167,11 @@ public class PostService {
             City city = cityRepository.findById(request.getCityId())
                 .orElseThrow(() -> new ResourceNotFoundException("City not found"));
             post.setCity(city);
+            shouldRegenerateSlug = true;
+        }
+        
+        if (shouldRegenerateSlug) {
+            post.setSlug(generateUniqueSlug(post.getTitle(), post.getCity(), post.getId()));
         }
         
         if (request.getImageUrls() != null) {
@@ -193,7 +203,17 @@ public class PostService {
     public PostDto getPostById(Long adId) {
         Post post = postRepository.findByIdAndNotDeleted(adId)
             .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
-        
+        return mapVisiblePost(post);
+    }
+    
+    @Transactional(readOnly = true)
+    public PostDto getPostBySlug(String slug) {
+        Post post = postRepository.findBySlugAndNotDeleted(slug)
+            .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
+        return mapVisiblePost(post);
+    }
+    
+    private PostDto mapVisiblePost(Post post) {
         if (post.getStatus() == Post.PostStatus.ACTIVE) {
             return postMapper.toDto(post);
         }
@@ -209,6 +229,51 @@ public class PostService {
         }
         
         throw new ResourceNotFoundException("Post not found");
+    }
+    
+    private String generateUniqueSlug(String title, City city, Long excludePostId) {
+        String titleSlug = SlugUtil.toSlug(title);
+        String citySlug = SlugUtil.toSlug(resolveCityName(city));
+        String baseSlug = (titleSlug + "-" + citySlug)
+            .replaceAll("-{2,}", "-")
+            .replaceAll("^-+", "")
+            .replaceAll("-+$", "");
+        
+        if (baseSlug.isBlank()) {
+            baseSlug = "ad";
+        }
+        
+        String candidate = baseSlug;
+        int attempt = 2;
+        
+        while (isSlugTaken(candidate, excludePostId)) {
+            candidate = baseSlug + "-" + attempt++;
+        }
+        
+        return candidate;
+    }
+    
+    private boolean isSlugTaken(String slug, Long excludePostId) {
+        if (excludePostId == null) {
+            return postRepository.existsBySlug(slug);
+        }
+        return postRepository.existsBySlugAndIdNot(slug, excludePostId);
+    }
+    
+    private String resolveCityName(City city) {
+        if (city == null) {
+            return "";
+        }
+        
+        if (city.getNameAr() != null && !city.getNameAr().isBlank()) {
+            return city.getNameAr();
+        }
+        
+        if (city.getNameEn() != null && !city.getNameEn().isBlank()) {
+            return city.getNameEn();
+        }
+        
+        return "";
     }
     
     @Transactional(readOnly = true)

@@ -161,6 +161,7 @@ function AppContent() {
         <Route path="/products" element={<AllProductsPage />} />
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/ad/:slug" element={<ProductDetailsPage />} />
         <Route path="/product/:id" element={<ProductDetailsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />

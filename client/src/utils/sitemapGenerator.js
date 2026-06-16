@@ -59,7 +59,9 @@ async function fetchProductUrls(limit = 1000) {
     if (!data || !data.content) return [];
     
     return data.content.map(product => ({
-      loc: `${SITE_URL}/product/${product.id}`,
+      loc: product.slug
+        ? `${SITE_URL}/ad/${encodeURIComponent(product.slug)}`
+        : `${SITE_URL}/product/${product.id}`,
       lastmod: new Date(product.updatedAt || product.createdAt).toISOString().split('T')[0],
       changefreq: CHANGEFREQ_MAP.product,
       priority: PRIORITY_MAP.product

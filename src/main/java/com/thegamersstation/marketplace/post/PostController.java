@@ -63,6 +63,13 @@ public class PostController {
         return ResponseEntity.ok(Post);
     }
     
+    @GetMapping("/slug/{slug}")
+    @Operation(summary = "Get Post by Slug")
+    public ResponseEntity<PostDto> getPostBySlug(@PathVariable String slug) {
+        PostDto Post = PostService.getPostBySlug(slug);
+        return ResponseEntity.ok(Post);
+    }
+    
     @GetMapping
     @Operation(summary = "Search posts with filters")
     public ResponseEntity<PageResponseDto<PostDto>> searchPosts(

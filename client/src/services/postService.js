@@ -64,6 +64,14 @@ class PostService {
     return response;
   }
   
+  // Get post by slug
+  async getPostBySlug(slug) {
+    const response = await apiRequest(API_ENDPOINTS.posts.getBySlug(slug), {
+      method: 'GET',
+    });
+    return response;
+  }
+  
   // Create a new post
   async createPost(data) {
     // Normalize enum values and types to match backend requirements
@@ -215,6 +223,7 @@ class PostService {
     const firstImage = post.images && post.images.length > 0 ? post.images[0] : null;
     return {
       id: post.id,
+      slug: post.slug,
       title: post.title,
       price: post.price || post.priceMin,
       originalPrice: post.priceMax, // Use priceMax as original price for discount calculation

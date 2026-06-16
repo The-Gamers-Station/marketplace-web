@@ -75,10 +75,7 @@ Allow: /*.ttf
 Allow: /*.eot
 
 # Sitemap location
-Sitemap: https://gamersstation.eg/sitemap.xml
-Sitemap: https://gamersstation.eg/sitemap-products.xml
-Sitemap: https://gamersstation.eg/sitemap-categories.xml
-Sitemap: https://gamersstation.eg/sitemap-merchants.xml
+Sitemap: https://gamers-station.com/sitemap.xml
 
 # Cache control for crawlers
 # Visit-time: 0000-0600

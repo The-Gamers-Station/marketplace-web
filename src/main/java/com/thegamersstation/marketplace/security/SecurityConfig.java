@@ -60,6 +60,11 @@ public class SecurityConfig {
                     "/actuator/info"
                 ).permitAll()
                 
+                // Public endpoints - Sitemap
+                .requestMatchers(
+                    "/sitemap.xml"
+                ).permitAll()
+                
                 // Public endpoints - Read-only access to categories, cities and regions
                 .requestMatchers(HttpMethod.GET, 
                     "/categories/**",

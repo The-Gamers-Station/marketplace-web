@@ -25,6 +25,7 @@ public class PostDto {
     
     private Post.PostType type;
     private String title;
+    private String slug;
     private String description;
     private BigDecimal price;
     private BigDecimal priceMin;

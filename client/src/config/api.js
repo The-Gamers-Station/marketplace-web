@@ -17,6 +17,7 @@ export const API_ENDPOINTS = {
     list: '/posts',
     search: '/posts/search',
     getById: (id) => `/posts/${id}`,
+    getBySlug: (slug) => `/posts/slug/${encodeURIComponent(slug)}`,
     create: '/posts',
     update: (id) => `/posts/${id}`,
     delete: (id) => `/posts/${id}`,

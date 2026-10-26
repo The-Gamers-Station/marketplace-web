@@ -51,6 +51,9 @@ otp:
   resend-cooldown-seconds: 60
   max-attempts-per-day: 5
   max-verify-attempts: 5
+  fixed-admin:
+    enabled: ${FIXED_ADMIN_OTP_ENABLED:false}
+    code: ${FIXED_ADMIN_OTP_CODE:}
   sms:
     auth-token: ${SMS_AUTH_TOKEN}
     sender: GStation

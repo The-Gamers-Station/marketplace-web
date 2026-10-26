@@ -7,6 +7,7 @@ import com.thegamersstation.marketplace.auth.dto.OtpVerifyDto;
 import com.thegamersstation.marketplace.common.exception.BusinessRuleException;
 import com.thegamersstation.marketplace.common.validation.PhoneValidator;
 import com.thegamersstation.marketplace.otp.OtpService;
+import com.thegamersstation.marketplace.otp.FixedAdminOtpService;
 import com.thegamersstation.marketplace.user.repository.User;
 import com.thegamersstation.marketplace.user.repository.UsersRepository;
 import com.thegamersstation.marketplace.security.JwtUtil;
@@ -29,6 +30,7 @@ import java.util.UUID;
 public class AuthService {
 
     private final OtpService otpService;
+    private final FixedAdminOtpService fixedAdminOtpService;
     private final UsersRepository usersRepository;
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -54,10 +56,15 @@ public class AuthService {
         
         log.info("OTP requested for phone: {} with language: {}", phoneNumber, language);
 
-        otpService.sendOtp(phoneNumber, ipAddress, language);
+        boolean fixedAdmin = fixedAdminOtpService.handles(phoneNumber);
+        if (fixedAdmin) {
+            fixedAdminOtpService.requestChallenge(phoneNumber, ipAddress);
+        } else {
+            otpService.sendOtp(phoneNumber, ipAddress, language);
+        }
 
         return OtpResponseDto.builder()
-                .message("OTP sent successfully")
+                .message(fixedAdmin ? "Verification challenge created" : "OTP sent successfully")
                 .expiresIn(otpTtlMinutes * 60) // Convert minutes to seconds
                 .resendAfter(resendCooldownSeconds)
                 .build();
@@ -80,7 +87,10 @@ public class AuthService {
         log.info("OTP verification attempt for phone: {}", phoneNumber);
 
         // Verify OTP
-        boolean isValid = otpService.verifyOtp(phoneNumber, request.getCode());
+        boolean fixedAdmin = fixedAdminOtpService.handles(phoneNumber);
+        boolean isValid = fixedAdmin
+                ? fixedAdminOtpService.verifyChallenge(phoneNumber, request.getCode())
+                : otpService.verifyOtp(phoneNumber, request.getCode());
         
         if (!isValid) {
             throw new BusinessRuleException(
@@ -90,8 +100,14 @@ public class AuthService {
         }
 
         // Find or create user
-        User user = usersRepository.findByPhoneNumber(phoneNumber)
-                .orElseGet(() -> createNewUser(phoneNumber));
+        User user = fixedAdmin
+                ? usersRepository.findByPhoneNumber(phoneNumber)
+                    .orElseThrow(() -> new BusinessRuleException("Invalid verification request", "طلب التحقق غير صالح"))
+                : usersRepository.findByPhoneNumber(phoneNumber).orElseGet(() -> createNewUser(phoneNumber));
+
+        if (fixedAdmin && user.getRole() != User.UserRole.ADMIN) {
+            throw new BusinessRuleException("Invalid verification request", "طلب التحقق غير صالح");
+        }
 
         // Check if user is active
         if (!user.getIsActive()) {

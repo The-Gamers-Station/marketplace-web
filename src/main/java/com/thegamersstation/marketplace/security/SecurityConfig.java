@@ -107,7 +107,8 @@ public class SecurityConfig {
             "https://thegamersstation.com",
             "https://www.thegamersstation.com",
             "https://gamers-station.com",
-            "https://www.gamers-station.com"
+            "https://www.gamers-station.com",
+            "https://marketplace-admin-ejc.pages.dev"
         ));
         if (additionalCorsOrigins != null && !additionalCorsOrigins.isBlank()) {
             origins.addAll(Arrays.asList(additionalCorsOrigins.split(",")));

@@ -2,6 +2,22 @@
 
 ## Overview
 The Ad module manages marketplace advertisements where users can post items for sale or requests to buy.
+## Admin search API
+
+The admin panel uses the existing protected list endpoints, with all paths below relative to `/api/v1`:
+
+- `GET /admin/posts?q=console&status=BLOCKED&page=0&size=25&sortBy=createdAt&direction=DESC`
+- `GET /api/admin/users?q=player&page=0&size=25`
+
+Both routes require the ADMIN role. The optional `q` parameter is trimmed and limited to 200 characters; invalid lengths return the normal bilingual business-rule response with status 400. Missing or blank `q` retains the old list behavior, including dashboard totals.
+
+Post search matches title/description case-insensitively and also matches an exact ID for numeric queries. It is combined with the selected post status, without restricting results to public ACTIVE posts. User search matches username/email/phone case-insensitively and exact numeric IDs; phone terms also normalize common separators, plus signs and complete local Saudi numbers. User results retain newest-first ordering.
+
+Queries use JPA Specifications and literal LIKE escaping, so `%`, `_` and `!` are treated as text. Values are query parameters, not concatenated SQL. Filtering and `totalElements` calculation happen before database pagination. The response remains `PageResponseDto` with `content`, `totalElements` and page metadata.
+
+No production schema migration or public-search behavior is changed. Substring matches can scan rows at large scale. Repository regressions use only an isolated H2 database; controller tests cover admin authorization and query forwarding. Run `mvn test` to include these tests alongside OTP and CORS regressions.
+
+Roll out this backend before the corresponding admin frontend: older backend versions do not interpret `q`. Rebuild only the backend app service using the normal deployment procedure; do not reset MySQL or its volumes for this change.
 
 ## Ad-User Relationship
 

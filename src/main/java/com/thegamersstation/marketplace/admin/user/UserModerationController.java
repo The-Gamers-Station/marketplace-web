@@ -2,6 +2,7 @@ package com.thegamersstation.marketplace.admin.user;
 
 import com.thegamersstation.marketplace.common.dto.PageRequestDto;
 import com.thegamersstation.marketplace.common.dto.PageResponseDto;
+import com.thegamersstation.marketplace.admin.search.AdminSearchQuery;
 import com.thegamersstation.marketplace.user.dto.UserProfileDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,7 +28,7 @@ public class UserModerationController {
     @GetMapping
     @Operation(
         summary = "Get all users (Admin)",
-        description = "Returns paginated list of all users with complete profiles"
+        description = "Returns paginated users, optionally matching q against username, email, phone or exact numeric ID (maximum 200 characters)."
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Users retrieved successfully"),
@@ -35,8 +36,9 @@ public class UserModerationController {
         @ApiResponse(responseCode = "403", description = "Not authorized (admin only)")
     })
     public ResponseEntity<PageResponseDto<UserProfileDto>> getAllUsers(
-            @Valid @ModelAttribute PageRequestDto pageRequest) {
-        PageResponseDto<UserProfileDto> users = userModerationService.getAllUsers(pageRequest);
+            @Valid @ModelAttribute PageRequestDto pageRequest,
+            @RequestParam(required = false) String q) {
+        PageResponseDto<UserProfileDto> users = userModerationService.getAllUsers(pageRequest, AdminSearchQuery.normalize(q));
         return ResponseEntity.ok(users);
     }
 

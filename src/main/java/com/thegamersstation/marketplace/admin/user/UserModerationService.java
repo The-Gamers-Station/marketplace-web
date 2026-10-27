@@ -3,6 +3,7 @@ package com.thegamersstation.marketplace.admin.user;
 import com.thegamersstation.marketplace.common.dto.PageRequestDto;
 import com.thegamersstation.marketplace.common.dto.PageResponseDto;
 import com.thegamersstation.marketplace.common.exception.ResourceNotFoundException;
+import com.thegamersstation.marketplace.admin.search.AdminSearchSpecifications;
 import com.thegamersstation.marketplace.user.repository.User;
 import com.thegamersstation.marketplace.user.repository.UsersRepository;
 import com.thegamersstation.marketplace.user.dto.UserProfileDto;
@@ -26,14 +27,14 @@ public class UserModerationService {
     private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
-    public PageResponseDto<UserProfileDto> getAllUsers(PageRequestDto pageRequest) {
+    public PageResponseDto<UserProfileDto> getAllUsers(PageRequestDto pageRequest, String query) {
         PageRequest springPageRequest = PageRequest.of(
                 pageRequest.getPage(),
                 pageRequest.getSize(),
                 Sort.by(Sort.Direction.DESC, "createdAt")
         );
 
-        Page<User> usersPage = usersRepository.findAll(springPageRequest);
+        Page<User> usersPage = usersRepository.findAll(AdminSearchSpecifications.users(query), springPageRequest);
         List<UserProfileDto> users = usersPage.getContent().stream()
                 .map(userMapper::toProfileDto)
                 .toList();

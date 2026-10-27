@@ -3,6 +3,7 @@ package com.thegamersstation.marketplace.admin.post;
 import com.thegamersstation.marketplace.post.Post;
 import com.thegamersstation.marketplace.post.dto.PostDto;
 import com.thegamersstation.marketplace.common.dto.PageResponseDto;
+import com.thegamersstation.marketplace.admin.search.AdminSearchQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,16 +39,18 @@ public class PostModerationController {
     }
     
     @GetMapping
-    @Operation(summary = "Get all posts with optional status filter")
+    @Operation(summary = "Get all posts with optional status and text search",
+        description = "Search title, description or exact numeric ID using q (maximum 200 characters).")
     public ResponseEntity<PageResponseDto<PostDto>> getAllPosts(
         @RequestParam(required = false) Post.PostStatus status,
+        @RequestParam(required = false) String q,
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "20") int size,
         @RequestParam(defaultValue = "createdAt") String sortBy,
         @RequestParam(defaultValue = "DESC") Sort.Direction direction
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-        PageResponseDto<PostDto> posts = postModerationService.getAllPosts(status, pageable);
+        PageResponseDto<PostDto> posts = postModerationService.getAllPosts(status, AdminSearchQuery.normalize(q), pageable);
         return ResponseEntity.ok(posts);
     }
     

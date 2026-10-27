@@ -6,6 +6,7 @@ import com.thegamersstation.marketplace.post.PostMapper;
 import com.thegamersstation.marketplace.post.dto.PostDto;
 import com.thegamersstation.marketplace.common.dto.PageResponseDto;
 import com.thegamersstation.marketplace.common.exception.ResourceNotFoundException;
+import com.thegamersstation.marketplace.admin.search.AdminSearchSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,13 +27,8 @@ public class PostModerationService {
     }
     
     @Transactional(readOnly = true)
-    public PageResponseDto<PostDto> getAllPosts(Post.PostStatus status, Pageable pageable) {
-        Page<Post> postsPage;
-        if (status != null) {
-            postsPage = postRepository.findByStatus(status, pageable);
-        } else {
-            postsPage = postRepository.findAll(pageable);
-        }
+    public PageResponseDto<PostDto> getAllPosts(Post.PostStatus status, String query, Pageable pageable) {
+        Page<Post> postsPage = postRepository.findAll(AdminSearchSpecifications.posts(query, status), pageable);
         return PageResponseDto.of(postsPage.map(postMapper::toDto));
     }
     
